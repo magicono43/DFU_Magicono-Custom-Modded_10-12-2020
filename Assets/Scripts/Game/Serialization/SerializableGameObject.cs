@@ -272,6 +272,12 @@ namespace DaggerfallWorkshop.Game.Serialization
         public int hits1;
         public int hits2;
         public int hits3;
+        public int density;
+        public int shear;
+        public int fracture;
+        public int meltingPoint;
+        public int conductivity;
+        public int brittleness;
         public int stackCount;
         public int enchantmentPoints;
         public int message;

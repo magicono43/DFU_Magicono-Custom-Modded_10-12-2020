@@ -42,6 +42,12 @@ namespace DaggerfallWorkshop.Game.Items
         public ushort flags;
         public int currentCondition;
         public int maxCondition;
+        public int density;
+        public int shear;
+        public int fracture;
+        public int meltingPoint;
+        public int conductivity;
+        public int brittleness;
         public byte unknown2;
         public byte typeDependentData;
         public int enchantmentPoints;
@@ -544,6 +550,12 @@ namespace DaggerfallWorkshop.Game.Items
             flags = 0;
             currentCondition = itemTemplate.hitPoints;
             maxCondition = itemTemplate.hitPoints;
+            density = itemTemplate.baseDensity;
+            shear = itemTemplate.baseShear;
+            fracture = itemTemplate.baseFracture;
+            meltingPoint = itemTemplate.baseMeltingPoint;
+            conductivity = itemTemplate.baseConductivity;
+            brittleness = itemTemplate.baseBrittleness;
             unknown2 = 0;
             typeDependentData = 0;
             enchantmentPoints = itemTemplate.enchantmentPoints;
@@ -595,6 +607,12 @@ namespace DaggerfallWorkshop.Game.Items
             flags = artifactMask | identifiedMask;      // Set as artifact & identified.
             currentCondition = magicItemTemplate.uses;
             maxCondition = magicItemTemplate.uses;
+            density = itemTemplate.baseDensity;
+            shear = itemTemplate.baseShear;
+            fracture = itemTemplate.baseFracture;
+            meltingPoint = itemTemplate.baseMeltingPoint;
+            conductivity = itemTemplate.baseConductivity;
+            brittleness = itemTemplate.baseBrittleness;
             unknown2 = 0;
             typeDependentData = 0;
             enchantmentPoints = 0;
@@ -754,6 +772,12 @@ namespace DaggerfallWorkshop.Game.Items
             data.hits1 = currentCondition;
             data.hits2 = maxCondition;
             data.hits3 = (unknown2 & 0xff) | (typeDependentData << 8);
+            data.density = density;
+            data.shear = shear;
+            data.fracture = fracture;
+            data.meltingPoint = meltingPoint;
+            data.conductivity = conductivity;
+            data.brittleness = brittleness;
             data.enchantmentPoints = enchantmentPoints;
             data.message = message;
             if (legacyMagic != null)
@@ -941,6 +965,36 @@ namespace DaggerfallWorkshop.Game.Items
             return (DFCareer.Skills)GetWeaponSkillIDAsShort();
         }
 
+        public virtual int GetBaseBludgeoningDamageMin()
+        {
+            return FormulaHelper.CalcWeaponMinDamBaseBludgeoning((Weapons)TemplateIndex);
+        }
+
+        public virtual int GetBaseBludgeoningDamageMax()
+        {
+            return FormulaHelper.CalcWeaponMaxDamBaseBludgeoning((Weapons)TemplateIndex);
+        }
+
+        public virtual int GetBaseSlashingDamageMin()
+        {
+            return FormulaHelper.CalcWeaponMinDamBaseSlashing((Weapons)TemplateIndex);
+        }
+
+        public virtual int GetBaseSlashingDamageMax()
+        {
+            return FormulaHelper.CalcWeaponMaxDamBaseSlashing((Weapons)TemplateIndex);
+        }
+
+        public virtual int GetBasePiercingDamageMin()
+        {
+            return FormulaHelper.CalcWeaponMinDamBasePiercing((Weapons)TemplateIndex);
+        }
+
+        public virtual int GetBasePiercingDamageMax()
+        {
+            return FormulaHelper.CalcWeaponMaxDamBasePiercing((Weapons)TemplateIndex);
+        }
+
         public virtual int GetBaseDamageMin()
         {
             return FormulaHelper.CalculateWeaponMinDamage((Weapons)TemplateIndex);
@@ -949,6 +1003,27 @@ namespace DaggerfallWorkshop.Game.Items
         public virtual int GetBaseDamageMax()
         {
             return FormulaHelper.CalculateWeaponMaxDamage((Weapons)TemplateIndex);
+        }
+
+        public int GetWeaponMaterialModDensity()
+        {
+            float mainMatMod = (density - 300) / 50;
+            float weightDamMod = Mathf.Clamp((weightInKg - 4) / 5, 0, 100);
+            return (int)Mathf.Round(mainMatMod + weightDamMod);
+        }
+
+        public int GetWeaponMaterialModShear()
+        {
+            float mainMatMod = (shear - 300) / 50;
+            float weightDamMod = Mathf.Clamp((weightInKg - 4) / 8, 0, 100);
+            return (int)Mathf.Round(mainMatMod + weightDamMod);
+        }
+
+        public int GetWeaponMaterialModFracture()
+        {
+            float mainMatMod = (fracture - 300) / 50;
+            float weightDamMod = Mathf.Clamp((weightInKg - 4) / 7, 0, 100);
+            return (int)Mathf.Round(mainMatMod + weightDamMod);
         }
 
         public int GetWeaponMaterialModifier()
@@ -987,37 +1062,37 @@ namespace DaggerfallWorkshop.Game.Items
                 switch (nativeMaterialValue)
                 {
                     case (int)ArmorMaterialTypes.Leather:
-                        result = 3;
+                        result = 17;
                         break;
                     case (int)ArmorMaterialTypes.Chain:
                     case (int)ArmorMaterialTypes.Chain2:
-                        result = 6;
+                        result = 19;
                         break;
                     case (int)ArmorMaterialTypes.Iron:
-                        result = 7;
+                        result = 14;
                         break;
                     case (int)ArmorMaterialTypes.Steel:
                     case (int)ArmorMaterialTypes.Silver:
-                        result = 9;
+                        result = 22;
                         break;
                     case (int)ArmorMaterialTypes.Elven:
-                        result = 11;
+                        result = 27;
                         break;
                     case (int)ArmorMaterialTypes.Dwarven:
-                        result = 13;
+                        result = 35;
                         break;
                     case (int)ArmorMaterialTypes.Mithril:
                     case (int)ArmorMaterialTypes.Adamantium:
-                        result = 15;
+                        result = 42;
                         break;
                     case (int)ArmorMaterialTypes.Ebony:
-                        result = 17;
+                        result = 49;
                         break;
                     case (int)ArmorMaterialTypes.Orcish:
-                        result = 19;
+                        result = 58;
                         break;
                     case (int)ArmorMaterialTypes.Daedric:
-                        result = 21;
+                        result = 65;
                         break;
                 }
             }

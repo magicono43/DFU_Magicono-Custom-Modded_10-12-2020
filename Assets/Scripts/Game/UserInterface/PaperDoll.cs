@@ -16,6 +16,8 @@ using DaggerfallWorkshop.Utility;
 using DaggerfallWorkshop.Game.Utility;
 using DaggerfallWorkshop.Game.Entity;
 using DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects;
+using DaggerfallWorkshop.Game.Formulas;
+using DaggerfallWorkshop.Game.Items;
 
 namespace DaggerfallWorkshop.Game.UserInterface
 {
@@ -46,7 +48,9 @@ namespace DaggerfallWorkshop.Game.UserInterface
         readonly Panel characterPanel = new Panel();
 
         readonly TextLabel[] armourLabels = new TextLabel[DaggerfallEntity.NumberBodyParts];
-        readonly Vector2[] armourLabelPos = new Vector2[] { new Vector2(70, 12), new Vector2(20, 38), new Vector2(86, 38), new Vector2(12, 58), new Vector2(6, 90), new Vector2(18, 120), new Vector2(22, 168) };
+        readonly Vector2[] armourLabelPos = new Vector2[] { new Vector2(70, 12), new Vector2(5, 38), new Vector2(88, 38), new Vector2(5, 58), new Vector2(1, 90), new Vector2(10, 120), new Vector2(14, 168) };
+        readonly TextLabel[] shieldLabels = new TextLabel[DaggerfallEntity.NumberBodyParts];
+        readonly Vector2[] shieldLabelsPos = new Vector2[] { new Vector2(70, 18), new Vector2(5, 44), new Vector2(88, 44), new Vector2(5, 64), new Vector2(1, 96), new Vector2(10, 126), new Vector2(14, 174) };
 
         string lastBackgroundName = string.Empty;
 
@@ -81,6 +85,8 @@ namespace DaggerfallWorkshop.Game.UserInterface
             {
                 armourLabels[bpIdx] = DaggerfallUI.AddDefaultShadowedTextLabel(armourLabelPos[bpIdx], characterPanel);
                 armourLabels[bpIdx].Text = "0";
+                shieldLabels[bpIdx] = DaggerfallUI.AddDefaultShadowedTextLabel(shieldLabelsPos[bpIdx], characterPanel);
+                shieldLabels[bpIdx].Text = "";
             }
         }
 
@@ -147,21 +153,66 @@ namespace DaggerfallWorkshop.Game.UserInterface
 
         // Refresh armour value labels
         void RefreshArmourValues(PlayerEntity playerEntity, bool suppress = false)
-        { 
+        {
+            float natDamRes = FormulaHelper.NaturalDamageResist(playerEntity);
+            DaggerfallUnityItem shield = playerEntity.ItemEquipTable.GetItem(EquipSlots.LeftHand); // Checks if character is using a shield or not.
+            bool hasShield = (shield != null) ? true : false; // if shield has a value, then true, if not, false.
+            int[] shieldCovered = { 0, 0, 0, 0, 0, 0, 0 }; // shield's effect on the 7 armor values
+            if (hasShield)
+            {
+                int armorBonus = shield.GetShieldArmorValue();
+                BodyParts[] protectedBodyParts = shield.GetShieldProtectedBodyParts();
+
+                foreach (var BodyPart in protectedBodyParts)
+                {
+                    shieldCovered[(int)BodyPart] = armorBonus;
+                }
+            }
+
+
             for (int bpIdx = 0; bpIdx < DaggerfallEntity.NumberBodyParts; bpIdx++)
             {
                 int armorMod = playerEntity.DecreasedArmorValueModifier - playerEntity.IncreasedArmorValueModifier;
 
                 sbyte av = playerEntity.ArmorValues[bpIdx];
-                int bpAv = (100 - av) / 5 + armorMod;
-                armourLabels[bpIdx].Text = (!suppress) ? bpAv.ToString() : string.Empty;
+                float bpAv = (av) - armorMod + natDamRes;
+                string bpAvTest = bpAv + "%";
+                armourLabels[bpIdx].Text = (!suppress) ? bpAvTest : string.Empty;
 
-                if (armorMod < 0)
-                    armourLabels[bpIdx].TextColor = DaggerfallUI.DaggerfallUnityStatDrainedTextColor;
-                else if (armorMod > 0)
-                    armourLabels[bpIdx].TextColor = DaggerfallUI.DaggerfallUnityStatIncreasedTextColor;
+                if (bpAv < 0)
+                {
+                    armourLabels[bpIdx].TextColor = DaggerfallUI.DaggerfallUnityStatDrainedTextColor2;
+                }
+                else if (bpAv > 0)
+                {
+                    armourLabels[bpIdx].TextColor = DaggerfallUI.DaggerfallUnityStatIncreasedTextColor2;
+                }
                 else
+                {
                     armourLabels[bpIdx].TextColor = DaggerfallUI.DaggerfallDefaultTextColor;
+                }
+
+                if (hasShield)
+                {
+                    bool covered = (shieldCovered[bpIdx] > 0) ? true : false;
+                    float shieldBlockChan = FormulaHelper.ShieldBlockChance(shield, playerEntity, covered);
+                    float shieldDamReduc = FormulaHelper.PercentageDamageReductionCalculation(shield, true, 1f, 1);
+                    float finalDamDisp = (shieldDamReduc - natDamRes -100) * -1;
+                    string shieldText = finalDamDisp + "%" + "|" + shieldBlockChan + "%";
+
+                    if (covered)
+                    {
+                        shieldLabels[bpIdx].Text = (!suppress) ? shieldText : string.Empty;
+                        shieldLabels[bpIdx].TextColor = DaggerfallUI.DaggerfallDefaultTextColor;
+                    }
+                    else
+                    {
+                        shieldLabels[bpIdx].Text = (!suppress) ? shieldText : string.Empty;
+                        shieldLabels[bpIdx].TextColor = DaggerfallUI.DaggerfallDefaultTextColor;
+                    }
+                }
+                else
+                    shieldLabels[bpIdx].Text = "";
             }
         }
 

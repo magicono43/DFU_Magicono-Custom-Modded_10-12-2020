@@ -84,7 +84,7 @@ namespace DaggerfallWorkshop.Game.Player
             skillsRaisedThisLevel2 = 0;
             for (int i = 0; i < armorValues.Length; i++)
             {
-                armorValues[i] = 100;
+                armorValues[i] = 0;
             }
         }
 

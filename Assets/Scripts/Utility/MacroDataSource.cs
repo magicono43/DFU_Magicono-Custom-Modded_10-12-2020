@@ -130,6 +130,51 @@ namespace DaggerfallWorkshop.Utility
             throw new NotImplementedException();
         }
 
+        public virtual string Density()
+        {   // %den
+            throw new NotImplementedException();
+        }
+
+        public virtual string Shear()
+        {   // %she
+            throw new NotImplementedException();
+        }
+
+        public virtual string Fracture()
+        {   // %fra
+            throw new NotImplementedException();
+        }
+
+        public virtual string MeltingPoint()
+        {   // %mpo
+            throw new NotImplementedException();
+        }
+
+        public virtual string Conductivity()
+        {   // %con
+            throw new NotImplementedException();
+        }
+
+        public virtual string Brittleness()
+        {   // %bri
+            throw new NotImplementedException();
+        }
+
+        public virtual string WeaponDamageBludgeoning()
+        {   // %wdmb
+            throw new NotImplementedException();
+        }
+
+        public virtual string WeaponDamageSlashing()
+        {   // %wdms
+            throw new NotImplementedException();
+        }
+
+        public virtual string WeaponDamagePiercing()
+        {   // %wdmp
+            throw new NotImplementedException();
+        }
+
         public virtual string WeaponDamage()
         {   // %wdm
             throw new NotImplementedException();

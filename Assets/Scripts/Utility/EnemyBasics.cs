@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using DaggerfallWorkshop.Game;
+using DaggerfallWorkshop.Game.Entity;
 using DaggerfallWorkshop.Game.Items;
 using UnityEngine;
 
@@ -2214,6 +2215,1034 @@ namespace DaggerfallWorkshop.Utility
                 Team = MobileTeams.CityWatch,
             },
         };
+
+        #endregion
+
+        #region Enemy Damage Type Resistance
+
+        public static float HumanClassPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                if (armor != null && armor.density >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float RatPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float GiantBatPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float GrizzlyBearPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float SabertoothTigerPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float SpiderPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 0.65f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float SlaughterfishPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 1f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float GiantScorpionPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 0.65f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float ImpPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                if (armor != null && armor.density >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float SprigganPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 0.65f;
+            }
+            else if (damType == 2)
+            {
+                return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 0.32f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float CentaurPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                if (armor != null && armor.density >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float NymphTigerPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                if (armor != null && armor.density >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float HarpyPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float GiantPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                if (armor != null && armor.density >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float GargoylePhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 2f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 0.32f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float DragonlingPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float LargeDragonlingPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float DreughPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 1f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float LamiaPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float OrcPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 1f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float OrcSergeantPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 1f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float OrcShamanPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                if (armor != null && armor.density >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float OrcWarlordPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 1f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float WerewolfPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float WereboarPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float FireAtronachPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 1f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float IronAtronachPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 0.32f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 0.65f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float FleshAtronachPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float IceAtronachPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 2f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 0.65f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float SkeletalWarriorPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 2f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 0.32f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float ZombiePhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 0.65f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float GhostPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 0.65f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 0.65f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float MummyPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                return 0.65f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float WraithPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 0.65f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 0.65f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float VampirePhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                if (armor != null && armor.density >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float VampireAncientPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                if (armor != null && armor.density >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float LichPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 2f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 0.32f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float AncientLichPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 2f;
+            }
+            else if (damType == 2)
+            {
+                return 1f;
+            }
+            else if (damType == 3)
+            {
+                return 0.32f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float FrostDaedraPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 1f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float FireDaedraPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 0.65f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 1f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float DaedrothPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 1f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float DaedraSeducerPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                if (armor != null && armor.density >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
+
+        public static float DaedraLordPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            
+
+            if (damType == 1)
+            {
+                return 0.65f;
+            }
+            else if (damType == 2)
+            {
+                return 0.65f;
+            }
+            else if (damType == 3)
+            {
+                return 1f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
 
         #endregion
 

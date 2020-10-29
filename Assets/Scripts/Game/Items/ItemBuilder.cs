@@ -42,13 +42,34 @@ namespace DaggerfallWorkshop.Game.Items
         public static readonly byte[] materialsByModifier = { 64, 128, 10, 21, 13, 8, 5, 3, 2, 5 };
 
         // Weight multipliers by material type. Iron through Daedric. Weight is baseWeight * value / 4.
-        static readonly short[] weightMultipliersByMaterial = { 4, 5, 4, 4, 3, 4, 4, 2, 4, 5 };
+        //static readonly short[] weightMultipliersByMaterial = { 4, 5, 4, 4, 3, 4, 4, 2, 4, 5 };
+        public static readonly short[] weightMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
         // Value multipliers by material type. Iron through Daedric. Value is baseValue * ( 3 * value).
-        static readonly short[] valueMultipliersByMaterial = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 };
+        //static readonly short[] valueMultipliersByMaterial = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 };
+        static readonly short[] valueMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
         // Condition multipliers by material type. Iron through Daedric. MaxCondition is baseMaxCondition * value / 4.
-        static readonly short[] conditionMultipliersByMaterial = { 4, 6, 6, 8, 12, 16, 20, 24, 28, 32 };
+        //static readonly short[] conditionMultipliersByMaterial = { 4, 6, 6, 8, 12, 16, 20, 24, 28, 32 };
+        static readonly short[] conditionMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+        // Blunt
+        static readonly short[] densityMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+        // Slashing/Cutting
+        static readonly short[] shearMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+        // Piercing
+        static readonly short[] fractureMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+        // Extra condition/damage from fire if low
+        static readonly short[] meltingPointMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+        // Extra damage from electrical attacks if high
+        static readonly short[] conductivityMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+        // Extra condition/damage from ice attacks when high
+        static readonly short[] brittlenessMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
         // Enchantment point/gold value data for item powers
         static readonly int[] extraSpellPtsEnchantPts = { 0x1F4, 0x1F4, 0x1F4, 0x1F4, 0xC8, 0xC8, 0xC8, 0x2BC, 0x320, 0x384, 0x3E8 };
@@ -645,6 +666,12 @@ namespace DaggerfallWorkshop.Game.Items
             item.weightInKg = CalculateWeightForMaterial(item, material);
             item.maxCondition = item.maxCondition * conditionMultipliersByMaterial[(int)material] / 4;
             item.currentCondition = item.maxCondition;
+            item.density *= densityMultipliersByMaterial[(int)material];
+            item.shear *= shearMultipliersByMaterial[(int)material];
+            item.fracture *= fractureMultipliersByMaterial[(int)material];
+            item.meltingPoint *= meltingPointMultipliersByMaterial[(int)material];
+            item.conductivity *= conductivityMultipliersByMaterial[(int)material];
+            item.brittleness *= brittlenessMultipliersByMaterial[(int)material];
 
             return item;
         }

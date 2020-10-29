@@ -345,7 +345,7 @@ namespace DaggerfallWorkshop.Game.Serialization
             // Initialize body part armor values to 100 (no armor)
             for (int i = 0; i < entity.ArmorValues.Length; i++)
             {
-                entity.ArmorValues[i] = 100;
+                entity.ArmorValues[i] = 0;
             }
 
             // Apply armor values from equipped armor

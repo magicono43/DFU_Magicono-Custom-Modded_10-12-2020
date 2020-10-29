@@ -58,6 +58,7 @@ namespace DaggerfallWorkshop.Game.Formulas
         {
             public int damageMod;
             public int toHitMod;
+            public int damType;
         }
 
         #region Basic Formulas
@@ -434,6 +435,239 @@ namespace DaggerfallWorkshop.Game.Formulas
             return (handToHandSkill / 5) + 1;
         }
 
+        public static int CalcWeaponMinDamBaseBludgeoning(Weapons weapon)
+        {
+            Func<Weapons, int> del;
+            if (TryGetOverride("CalculateWeaponMinDamage", out del))
+                return del(weapon);
+
+            switch (weapon)
+            {
+                case Weapons.Dagger:
+                case Weapons.Tanto:
+                case Weapons.Katana:
+                case Weapons.Longsword:
+                case Weapons.Long_Bow:
+                case Weapons.Short_Bow:
+                    return 0;
+                case Weapons.Shortsword:
+                case Weapons.Wakazashi:
+                case Weapons.Dai_Katana:
+                case Weapons.War_Axe:
+                    return 1;
+                case Weapons.Broadsword:
+                case Weapons.Claymore:
+                case Weapons.Battle_Axe:
+                    return 2;
+                case Weapons.Saber:
+                case Weapons.Staff:
+                    return 3;
+                case Weapons.Flail:
+                case Weapons.Mace:
+                    return 5;
+                case Weapons.Warhammer:
+                    return 6;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int CalcWeaponMaxDamBaseBludgeoning(Weapons weapon)
+        {
+            Func<Weapons, int> del;
+            if (TryGetOverride("CalculateWeaponMaxDamage", out del))
+                return del(weapon);
+
+            switch (weapon)
+            {
+                case Weapons.Long_Bow:
+                case Weapons.Short_Bow:
+                    return 0;
+                case Weapons.Dagger:
+                case Weapons.Tanto:
+                    return 1;
+                case Weapons.Katana:
+                case Weapons.Wakazashi:
+                    return 2;
+                case Weapons.Shortsword:
+                case Weapons.Dai_Katana:
+                case Weapons.Longsword:
+                case Weapons.War_Axe:
+                    return 3;
+                case Weapons.Broadsword:
+                case Weapons.Saber:
+                    return 4;
+                case Weapons.Battle_Axe:
+                    return 5;
+                case Weapons.Claymore:
+                    return 6;
+                case Weapons.Staff:
+                    return 7;
+                case Weapons.Mace:
+                    return 10;
+                case Weapons.Flail:
+                case Weapons.Warhammer:
+                    return 13;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int CalcWeaponMinDamBaseSlashing(Weapons weapon)
+        {
+            Func<Weapons, int> del;
+            if (TryGetOverride("CalculateWeaponMinDamage", out del))
+                return del(weapon);
+
+            switch (weapon)
+            {
+                case Weapons.Dagger:
+                case Weapons.Tanto:
+                case Weapons.Flail:
+                case Weapons.Mace:
+                case Weapons.Staff:
+                case Weapons.Warhammer:
+                case Weapons.Long_Bow:
+                case Weapons.Short_Bow:
+                    return 0;
+                case Weapons.Shortsword:
+                case Weapons.Wakazashi:
+                case Weapons.Broadsword:
+                case Weapons.Longsword:
+                    return 2;
+                case Weapons.Dai_Katana:
+                case Weapons.Katana:
+                case Weapons.Saber:
+                    return 3;
+                case Weapons.Claymore:
+                case Weapons.Battle_Axe:
+                    return 4;
+                case Weapons.War_Axe:
+                    return 5;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int CalcWeaponMaxDamBaseSlashing(Weapons weapon)
+        {
+            Func<Weapons, int> del;
+            if (TryGetOverride("CalculateWeaponMaxDamage", out del))
+                return del(weapon);
+
+            switch (weapon)
+            {
+                case Weapons.Long_Bow:
+                case Weapons.Short_Bow:
+                    return 0;
+                case Weapons.Flail:
+                case Weapons.Mace:
+                case Weapons.Staff:
+                case Weapons.Warhammer:
+                    return 1;
+                case Weapons.Tanto:
+                    return 2;
+                case Weapons.Dagger:
+                    return 4;
+                case Weapons.Shortsword:
+                    return 5;
+                case Weapons.Longsword:
+                    return 6;
+                case Weapons.Wakazashi:
+                case Weapons.Broadsword:
+                case Weapons.Saber:
+                    return 7;
+                case Weapons.Claymore:
+                case Weapons.Battle_Axe:
+                    return 9;
+                case Weapons.Katana:
+                    return 10;
+                case Weapons.War_Axe:
+                    return 11;
+                case Weapons.Dai_Katana:
+                    return 13;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int CalcWeaponMinDamBasePiercing(Weapons weapon)
+        {
+            Func<Weapons, int> del;
+            if (TryGetOverride("CalculateWeaponMinDamage", out del))
+                return del(weapon);
+
+            switch (weapon)
+            {
+                case Weapons.Saber:
+                case Weapons.Battle_Axe:
+                    return 0;
+                case Weapons.Wakazashi:
+                case Weapons.Broadsword:
+                case Weapons.Claymore:
+                case Weapons.Katana:
+                case Weapons.War_Axe:
+                case Weapons.Mace:
+                    return 1;
+                case Weapons.Shortsword:
+                case Weapons.Dai_Katana:
+                case Weapons.Flail:
+                case Weapons.Staff:
+                case Weapons.Warhammer:
+                    return 2;
+                case Weapons.Dagger:
+                case Weapons.Tanto:
+                case Weapons.Longsword:
+                    return 3;
+                case Weapons.Long_Bow:
+                    return 5;
+                case Weapons.Short_Bow:
+                    return 7;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int CalcWeaponMaxDamBasePiercing(Weapons weapon)
+        {
+            Func<Weapons, int> del;
+            if (TryGetOverride("CalculateWeaponMaxDamage", out del))
+                return del(weapon);
+
+            switch (weapon)
+            {
+                case Weapons.Battle_Axe:
+                    return 1;
+                case Weapons.Saber:
+                    return 2;
+                case Weapons.Shortsword:
+                case Weapons.Wakazashi:
+                case Weapons.Broadsword:
+                case Weapons.Claymore:
+                case Weapons.Katana:
+                case Weapons.Mace:
+                    return 3;
+                case Weapons.Dai_Katana:
+                case Weapons.Flail:
+                case Weapons.Warhammer:
+                    return 4;
+                case Weapons.Dagger:
+                case Weapons.War_Axe:
+                    return 5;
+                case Weapons.Longsword:
+                case Weapons.Staff:
+                    return 6;
+                case Weapons.Tanto:
+                    return 7;
+                case Weapons.Short_Bow:
+                    return 11;
+                case Weapons.Long_Bow:
+                    return 14;
+                default:
+                    return 0;
+            }
+        }
+
         public static int CalculateWeaponMinDamage(Weapons weapon)
         {
             Func<Weapons, int> del;
@@ -517,7 +751,7 @@ namespace DaggerfallWorkshop.Game.Formulas
         /// <param name="weaponAnimTime">Time the weapon animation lasted before the attack in ms, used for bow drawing </param>
         /// <param name="weapon">The weapon item being used</param>
         /// <returns>Damage inflicted to target, can be 0 for a miss or ineffective hit</returns>
-        public static int CalculateAttackDamage(DaggerfallEntity attacker, DaggerfallEntity target, int enemyAnimStateRecord, int weaponAnimTime, DaggerfallUnityItem weapon)
+        public static int CalculateAttackDamage(DaggerfallEntity attacker, DaggerfallEntity target, int enemyAnimStateRecord, int weaponAnimTime, DaggerfallUnityItem weapon, int enemyDamType = 0)
         {
             if (attacker == null || target == null)
                 return 0;
@@ -532,13 +766,20 @@ namespace DaggerfallWorkshop.Game.Formulas
             int backstabChance = 0;
             PlayerEntity player = GameManager.Instance.PlayerEntity;
             short skillID = 0;
+            bool specialMonsterWeapon = false;
+            bool specialMonsterShield = false;
+            float matResistMod = 1f;
+            float damTypeResistMod = 1f;
+            int playerDamType = 0;
+            bool critSuccess = false;
+            float critDamMulti = 1f;
+            float critDamPen = 0;
+            bool critIgnoreShield = false;
 
-            // Choose whether weapon-wielding enemies use their weapons or weaponless attacks.
-            // In classic, weapon-wielding enemies use the damage values of their weapons
-            // instead of their weaponless values.
-            // For some enemies this gives lower damage than similar-tier monsters
-            // and the weaponless values seems more appropriate, so here
-            // enemies will choose to use their weaponless attack if it is more damaging.
+            EnemyEntity AITarget = null;
+            AITarget = target as EnemyEntity;
+
+            // Enemies will choose to use their weaponless attack if it is more damaging.
             EnemyEntity AIAttacker = attacker as EnemyEntity;
             if (AIAttacker != null && weapon != null)
             {
@@ -554,15 +795,13 @@ namespace DaggerfallWorkshop.Game.Formulas
 
             if (weapon != null)
             {
-                // If the attacker is using a weapon, check if the material is high enough to damage the target
-                if (target.MinMetalToHit > (WeaponMaterialTypes)weapon.NativeMaterialValue)
-                {
-                    if (attacker == player)
-                    {
-                        DaggerfallUI.Instance.PopupMessage(TextManager.Instance.GetLocalizedText("materialIneffective"));
-                    }
-                    return 0;
-                }
+                int weaponMatValue = weapon.NativeMaterialValue;
+
+                matResistMod = DaggerfallEntity.EntityMaterialResistanceCalculator(target, weaponMatValue);
+
+                //if (attacker == player)
+                //Debug.LogFormat("1. matResistMod = {0}", matResistMod);
+
                 // Get weapon skill used
                 skillID = weapon.GetWeaponSkillIDAsShort();
             }
@@ -571,22 +810,41 @@ namespace DaggerfallWorkshop.Game.Formulas
                 skillID = (short)DFCareer.Skills.HandToHand;
             }
 
-            chanceToHitMod = attacker.Skills.GetLiveSkillValue(skillID);
+            if (attacker == player)
+            {
+                int playerWeaponSkill = attacker.Skills.GetLiveSkillValue(skillID);
+                playerWeaponSkill = (int)Mathf.Ceil(playerWeaponSkill * 1.5f); // Makes it so player weapon skill has 150% of the effect it normally would on hit chance. So now instead of 50 weapon skill adding +50 to the end, 50 will now add +75.
+                chanceToHitMod = playerWeaponSkill;
+            }
+            else
+                chanceToHitMod = attacker.Skills.GetLiveSkillValue(skillID);
 
             if (attacker == player)
             {
-                // Apply swing modifiers
-                ToHitAndDamageMods swingMods = CalculateSwingModifiers(GameManager.Instance.WeaponManager.ScreenWeapon);
-                damageModifiers += swingMods.damageMod;
-                chanceToHitMod += swingMods.toHitMod;
+                if (weapon != null) // When a weapon is being used
+                {
+                    // Apply swing modifiers
+                    ToHitAndDamageMods swingMods = CalculateSwingModifiers(GameManager.Instance.WeaponManager.ScreenWeapon, weapon);
+                    damageModifiers += swingMods.damageMod;
+                    chanceToHitMod += swingMods.toHitMod;
+                    playerDamType = swingMods.damType;
+                }
+                else // When unarmed is being used
+                {
+                    // Apply swing modifiers
+                    ToHitAndDamageMods swingMods = CalculateSwingModifiers(GameManager.Instance.WeaponManager.ScreenWeapon);
+                    damageModifiers += swingMods.damageMod;
+                    chanceToHitMod += swingMods.toHitMod;
+                    playerDamType = swingMods.damType;
+                }
 
                 // Apply proficiency modifiers
-                ToHitAndDamageMods proficiencyMods = CalculateProficiencyModifiers(attacker, weapon);
+                ToHitAndDamageMods proficiencyMods = CalculateProficiencyModifiers(attacker, weapon); // Will likely have to balance this out later.
                 damageModifiers += proficiencyMods.damageMod;
                 chanceToHitMod += proficiencyMods.toHitMod;
 
                 // Apply racial bonuses
-                ToHitAndDamageMods racialMods = CalculateRacialModifiers(attacker, weapon, player);
+                ToHitAndDamageMods racialMods = CalculateRacialModifiers(attacker, weapon, player); // Will likely have to balance this out later.
                 damageModifiers += racialMods.damageMod;
                 chanceToHitMod += racialMods.toHitMod;
 
@@ -594,8 +852,116 @@ namespace DaggerfallWorkshop.Game.Formulas
                 chanceToHitMod += backstabChance;
             }
 
+            int mainDamType = Mathf.Max(playerDamType, enemyDamType); // Takes the damage types and picks whatever what is largest, to keep it simple over rest of method.
+
+            if (attacker == player) // Crit modifiers, if true, for the player.
+            {
+                critSuccess = CriticalStrikeHandler(attacker); // Rolls for if the attacker is sucessful with a critical strike, if yes, critSuccess is set to 'true'.
+
+                if (critSuccess)
+                {
+                    if (mainDamType == 1) // Bludgeoning Crit
+                    {
+                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (critDamMulti * .05f) + 1;
+                        critIgnoreShield = true;
+                        critDamPen = 0.15f;
+                    }
+                    else if (mainDamType == 2) // Slashing Crit
+                    {
+                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (critDamMulti * .0625f) + 1;
+                    }
+                    else if (mainDamType == 3) // Piercing Crit
+                    {
+                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (critDamMulti * .05f) + 1;
+                        critDamPen = 0.40f;
+                    }
+                    else // Undefined Type Crit
+                    {
+                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (critDamMulti * .05f) + 1;
+                    }
+                    //Debug.LogFormat("1. critDamMulti From PLAYER Skills = {0}", critDamMulti);
+                    //Debug.LogFormat("2. Final critDamMulti From PLAYER Skills = {0}", critDamMulti);
+                }
+            }
+            else // Crit modifiers, if true, for monsters/enemies.
+            {
+                critSuccess = CriticalStrikeHandler(attacker); // Rolls for if the attacker is sucessful with a critical strike, if yes, critSuccess is set to 'true'.
+
+                if (critSuccess)
+                {
+                    if (mainDamType == 1) // Bludgeoning Crit
+                    {
+                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (critDamMulti * .025f) + 1;
+                        critIgnoreShield = true;
+                        critDamPen = 0.10f;
+                    }
+                    else if (mainDamType == 2) // Slashing Crit
+                    {
+                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (critDamMulti * .0325f) + 1;
+                    }
+                    else if (mainDamType == 3) // Piercing Crit
+                    {
+                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (critDamMulti * .025f) + 1;
+                        critDamPen = 0.30f;
+                    }
+                    else if (mainDamType == 4) // Special Crit
+                    {
+                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (critDamMulti * .0125f) + 1;
+                        critIgnoreShield = true;
+                    }
+                    else // Undefined Type Crit
+                    {
+                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (critDamMulti * .025f) + 1;
+                    }
+                    //Debug.LogFormat("1. critDamMulti From MONSTER Skills = {0}", critDamMulti);
+                    //Debug.LogFormat("2. Final critDamMulti From MONSTER Skills = {0}", critDamMulti);
+                }
+            }
+
             // Choose struck body part
             int struckBodyPart = CalculateStruckBodyPart();
+            EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
+            DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
+            DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand); // Checks if target is using a shield or not.
+
+            if (AITarget != null) // target is a monster
+            {
+                specialMonsterShield = EnemyEntity.SpecialShieldCheckForMonsters(target);
+
+                if (specialMonsterShield)
+                    shield = EnemyEntity.MonsterShieldAssign(target);
+            }
+
+            bool shieldStrongSpot = false;
+            bool shieldBlockSuccess = false;
+            if (shield != null)
+            {
+                BodyParts[] protectedBodyParts = shield.GetShieldProtectedBodyParts();
+
+                for (int i = 0; (i < protectedBodyParts.Length) && !shieldStrongSpot; i++)
+                {
+                    if (protectedBodyParts[i] == (BodyParts)struckBodyPart)
+                        shieldStrongSpot = true;
+                }
+                shieldBlockSuccess = ShieldBlockChanceCalculation(target, shieldStrongSpot, shield);
+
+                if (shieldBlockSuccess)
+                    shieldBlockSuccess = CompareShieldToUnderArmor(attacker, target, mainDamType, struckBodyPart, critDamPen);
+            }
+
+            if (critIgnoreShield)
+                shieldBlockSuccess = false;
+
+            damTypeResistMod = DaggerfallEntity.EntityDamageTypeResistanceCalculator(target, mainDamType, struckBodyPart, shieldBlockSuccess, armor);
 
             // Get damage for weaponless attacks
             if (skillID == (short)DFCareer.Skills.HandToHand)
@@ -604,79 +970,91 @@ namespace DaggerfallWorkshop.Game.Formulas
                 {
                     if (CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart))
                     {
-                        damage = CalculateHandToHandAttackDamage(attacker, target, damageModifiers, attacker == player);
+                        damage = CalculateHandToHandAttackDamage(attacker, target, damageModifiers, matResistMod, critDamMulti, attacker == player);
 
-                        damage = CalculateBackstabDamage(damage, backstabChance);
+                        damage = CalculateBackstabDamage(damage, mainDamType, backstabChance);
                     }
                 }
                 else if (AIAttacker != null) // attacker is a monster
                 {
-                    // Handle multiple attacks by AI
-                    int minBaseDamage = 0;
-                    int maxBaseDamage = 0;
-                    int attackNumber = 0;
-                    while (attackNumber < 3) // Classic supports up to 5 attacks but no monster has more than 3
+                    specialMonsterWeapon = EnemyEntity.SpecialWeaponCheckForMonsters(attacker);
+
+                    if (specialMonsterWeapon)
+                        weapon = EnemyEntity.MonsterWeaponAssign(attacker);
+
+                    // Handle attacks by AI
+                    int minBaseDamage = AIAttacker.MobileEnemy.MinDamage;
+                    int maxBaseDamage = AIAttacker.MobileEnemy.MaxDamage;
+
+                    int reflexesChance = 50 - (10 * ((int)player.Reflexes - 2)); // I'll leave this roll part for now, but after some testing I may remove it and see how it feels/works out.
+
+                    if (DFRandom.rand() % 100 < reflexesChance && minBaseDamage > 0 && CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart))
                     {
-                        if (attackNumber == 0)
-                        {
-                            minBaseDamage = AIAttacker.MobileEnemy.MinDamage;
-                            maxBaseDamage = AIAttacker.MobileEnemy.MaxDamage;
-                        }
-                        else if (attackNumber == 1)
-                        {
-                            minBaseDamage = AIAttacker.MobileEnemy.MinDamage2;
-                            maxBaseDamage = AIAttacker.MobileEnemy.MaxDamage2;
-                        }
-                        else if (attackNumber == 2)
-                        {
-                            minBaseDamage = AIAttacker.MobileEnemy.MinDamage3;
-                            maxBaseDamage = AIAttacker.MobileEnemy.MaxDamage3;
-                        }
+                        int hitDamage = UnityEngine.Random.Range(minBaseDamage, maxBaseDamage + 1);
+                        // Apply special monster attack effects
+                        if (hitDamage > 0)
+                            FormulaHelper.OnMonsterHit(AIAttacker, target, hitDamage); // I'm very likely going to mess with and tweek around with this later.
 
-                        int reflexesChance = 50 - (10 * ((int)player.Reflexes - 2));
-
-                        if (DFRandom.rand() % 100 < reflexesChance && minBaseDamage > 0 && CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart))
-                        {
-                            int hitDamage = UnityEngine.Random.Range(minBaseDamage, maxBaseDamage + 1);
-                            // Apply special monster attack effects
-                            if (hitDamage > 0)
-                                OnMonsterHit(AIAttacker, target, hitDamage);
-
-                            damage += hitDamage;
-                        }
-
-                        damage += GetBonusOrPenaltyByEnemyType(attacker, target);
-                        ++attackNumber;
+                        damage += hitDamage;
                     }
+
+                    if (damage >= 1)
+                        damage = CalculateHandToHandAttackDamage(attacker, target, damage, matResistMod, critDamMulti, attacker == player); // Added my own, non-overriden version of this method for modification.
                 }
             }
             // Handle weapon attacks
             else if (weapon != null)
             {
-                // Apply weapon material modifier.
-                chanceToHitMod += CalculateWeaponToHit(weapon);
+                //chanceToHitMod += CalculateWeaponToHit(weapon); // Apply weapon material modifier. I'm removing this for now, possibly forever, don't like how it works really.
 
-                // Mod hook for adjusting final hit chance mod and adding new elements to calculation. (no-op in DFU)
-                chanceToHitMod = AdjustWeaponHitChanceMod(attacker, target, chanceToHitMod, weaponAnimTime, weapon);
+                // Mod hook for adjusting final hit chance mod. (is a no-op in DFU)
+                chanceToHitMod = AdjustWeaponHitChanceMod(attacker, target, chanceToHitMod, weaponAnimTime, weapon); // Does Nothing
 
                 if (CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart))
                 {
-                    damage = CalculateWeaponAttackDamage(attacker, target, damageModifiers, weaponAnimTime, weapon);
+                    damage = CalculateWeaponAttackDamage(attacker, target, damageModifiers, weaponAnimTime, weapon, mainDamType, matResistMod, critDamMulti, damTypeResistMod);
 
-                    damage = CalculateBackstabDamage(damage, backstabChance);
+                    damage = CalculateBackstabDamage(damage, backstabChance, mainDamType, weapon);
                 }
 
                 // Handle poisoned weapons
                 if (damage > 0 && weapon.poisonType != Poisons.None)
                 {
-                    InflictPoison(target, weapon.poisonType, false);
+                    FormulaHelper.InflictPoison(target, weapon.poisonType, false); // Will likely play around with this later on.
                     weapon.poisonType = Poisons.None;
                 }
             }
 
-            damage = Mathf.Max(0, damage);
+            damage = Mathf.Max(0, damage); // I think this is just here to keep damage from outputting a negative value.
 
-            DamageEquipment(attacker, target, damage, weapon, struckBodyPart);
+            if (damage < 1) // Cut off the execution if the damage is still not anything higher than 1 at this point in the method.
+                return 0;
+
+            if (attacker == player)
+            {
+                if (matResistMod <= 0.5f) // Probably add a book to the game that describes these resistances and weaknesses of monsters. Maybe title "Know Thy Enemy" or something.
+                    DaggerfallUI.AddHUDText("This Weapon Is Not Very Effective Against This Creature.", 1.00f);
+            }
+
+            //Debug.Log("------------------------------------------------------------------------------------------");
+            //Debug.LogFormat("Here is damage value before armor reduction is applied = {0}", damage);
+            int damBefore = damage;
+
+            damage = CalculateArmorDamageReduction(attacker, target, damage, mainDamType, struckBodyPart, shieldBlockSuccess, critDamPen, weapon);
+
+            int damAfter = damage;
+            //Debug.LogFormat("Here is damage value after armor reduction = {0}", damage);
+            if (damBefore > 0)
+            {
+                int damReduPercent = ((100 * damAfter / damBefore) - 100) * -1;
+                //Debug.LogFormat("Here is damage reduction percent = {0}%", damReduPercent);
+            }
+            //Debug.Log("------------------------------------------------------------------------------------------");
+
+            DamageEquipment(attacker, target, struckBodyPart, shieldBlockSuccess, mainDamType, damBefore, damAfter, weapon);
+
+            if (damage < 1) // Cut off the execution if the damage is still not anything higher than 1 at this point in the method.
+                return 0;
 
             // Apply Ring of Namira effect
             if (target == player)
@@ -695,6 +1073,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                     }
                 }
             }
+
             //Debug.LogFormat("Damage {0} applied, animTime={1}  ({2})", damage, weaponAnimTime, GameManager.Instance.WeaponManager.ScreenWeapon.WeaponState);
 
             return damage;
@@ -705,100 +1084,113 @@ namespace DaggerfallWorkshop.Game.Formulas
             return item != null && item.ContainsEnchantment(DaggerfallConnect.FallExe.EnchantmentTypes.SpecialArtifactEffect, (int)ArtifactsSubTypes.Ring_of_Namira);
         }
 
-        public static int CalculateWeaponAttackDamage(DaggerfallEntity attacker, DaggerfallEntity target, int damageModifier, int weaponAnimTime, DaggerfallUnityItem weapon)
+        public static int CalculateWeaponAttackDamage(DaggerfallEntity attacker, DaggerfallEntity target, int damageModifier, int weaponAnimTime, DaggerfallUnityItem weapon, int mainDamType, float matResistMod, float critDamMulti, float damTypeResistMod)
         {
-            Func<DaggerfallEntity, DaggerfallEntity, int, int, DaggerfallUnityItem, int> del;
-            if (TryGetOverride("CalculateWeaponAttackDamage", out del))
-                return del(attacker, target, damageModifier, weaponAnimTime, weapon);
+            int damage = 0;
+            float conditionMulti = 1f;
 
-            int damage = UnityEngine.Random.Range(weapon.GetBaseDamageMin(), weapon.GetBaseDamageMax() + 1) + damageModifier;
-
-            if (target != GameManager.Instance.PlayerEntity)
+            if (attacker == GameManager.Instance.PlayerEntity) // Only the player has weapon damage effected by condition value.
             {
-                if ((target as EnemyEntity).CareerIndex == (int)MonsterCareers.SkeletalWarrior)
-                {
-                    // Apply edged-weapon damage modifier for Skeletal Warrior
-                    if ((weapon.flags & 0x10) == 0)
-                        damage /= 2;
-
-                    // Apply silver weapon damage modifier for Skeletal Warrior
-                    // Arena applies a silver weapon damage bonus for undead enemies, which is probably where this comes from.
-                    if (weapon.NativeMaterialValue == (int)WeaponMaterialTypes.Silver)
-                        damage *= 2;
-                }
+                conditionMulti = AlterDamageBasedOnWepCondition(weapon, mainDamType);
+                //Debug.LogFormat("Damage Multiplier Due To Weapon Condition = {0}", conditionMulti);
             }
-            // TODO: Apply strength bonus from Mace of Molag Bal
+
+            if (mainDamType == 1)
+                damage = UnityEngine.Random.Range(Mathf.Clamp((int)Mathf.Round((weapon.GetBaseBludgeoningDamageMin() + weapon.GetWeaponMaterialModDensity()) * conditionMulti * damTypeResistMod), 0, 1000), Mathf.Clamp((int)Mathf.Round((weapon.GetBaseBludgeoningDamageMax() + weapon.GetWeaponMaterialModDensity()) * conditionMulti * damTypeResistMod), 1, 1000)) + damageModifier;
+            else if (mainDamType == 2)
+                damage = UnityEngine.Random.Range(Mathf.Clamp((int)Mathf.Round((weapon.GetBaseSlashingDamageMin() + weapon.GetWeaponMaterialModShear()) * conditionMulti * damTypeResistMod), 0, 1000), Mathf.Clamp((int)Mathf.Round((weapon.GetBaseSlashingDamageMax() + weapon.GetWeaponMaterialModShear()) * conditionMulti * damTypeResistMod), 1, 1000)) + damageModifier;
+            else if (mainDamType == 3)
+                damage = UnityEngine.Random.Range(Mathf.Clamp((int)Mathf.Round((weapon.GetBasePiercingDamageMin() + weapon.GetWeaponMaterialModFracture()) * conditionMulti * damTypeResistMod), 0, 1000), Mathf.Clamp((int)Mathf.Round((weapon.GetBasePiercingDamageMax() + weapon.GetWeaponMaterialModFracture()) * conditionMulti * damTypeResistMod), 1, 1000)) + damageModifier;
+            else
+                damage = UnityEngine.Random.Range(weapon.GetBaseDamageMin(), weapon.GetBaseDamageMax() + 1) + damageModifier;
 
             // Apply strength modifier
-            damage += DamageModifier(attacker.Stats.LiveStrength);
+            if (ItemEquipTable.GetItemHands(weapon) == ItemHands.Both && weapon.TemplateIndex != (int)Weapons.Short_Bow && weapon.TemplateIndex != (int)Weapons.Long_Bow)
+                damage += (DamageModifier(attacker.Stats.LiveStrength)) * 2; // Multiplying by 2, so that two-handed weapons gets double the damage mod from Strength, except bows.
+            else
+                damage += DamageModifier(attacker.Stats.LiveStrength);
 
-            // Apply material modifier.
-            // The in-game display in Daggerfall of weapon damages with material modifiers is incorrect. The material modifier is half of what the display suggests.
-            damage += weapon.GetWeaponMaterialModifier();
             if (damage < 1)
                 damage = 0;
 
-            damage += GetBonusOrPenaltyByEnemyType(attacker, target);
+            if (damage >= 1)
+                damage += GetBonusOrPenaltyByEnemyType(attacker, target);
 
-            // Mod hook for adjusting final weapon damage. (no-op in DFU)
+            damage = (int)Mathf.Round(damage * critDamMulti);
+            damage = (int)Mathf.Round(damage * matResistMod);
+            if (damage < 1)
+                damage = 0;
+
+            // Mod hook for adjusting final damage. (is a no-op in DFU)
             damage = AdjustWeaponAttackDamage(attacker, target, damage, weaponAnimTime, weapon);
 
             return damage;
         }
 
-        public static int CalculateHandToHandAttackDamage(DaggerfallEntity attacker, DaggerfallEntity target, int damageModifier, bool player)
+        public static int CalculateHandToHandAttackDamage(DaggerfallEntity attacker, DaggerfallEntity target, int damageModifier, float matResistMod, float critDamMulti, bool player)
         {
-            Func<DaggerfallEntity, DaggerfallEntity, int, int> del;
-            if (TryGetOverride("CalculateHandToHandAttackDamage", out del))
-                return del(attacker, target, damageModifier);
+            int damage = 0;
 
-            int minBaseDamage = CalculateHandToHandMinDamage(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.HandToHand));
-            int maxBaseDamage = CalculateHandToHandMaxDamage(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.HandToHand));
-            int damage = UnityEngine.Random.Range(minBaseDamage, maxBaseDamage + 1);
-
-            // Apply damage modifiers.
-            damage += damageModifier;
-
-            // Apply strength modifier for players. It is not applied in classic despite what the in-game description for the Strength attribute says.
             if (player)
-                damage += DamageModifier(attacker.Stats.LiveStrength);
+            {
+                int minBaseDamage = FormulaHelper.CalculateHandToHandMinDamage(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.HandToHand));
+                int maxBaseDamage = FormulaHelper.CalculateHandToHandMaxDamage(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.HandToHand));
+                damage = UnityEngine.Random.Range(minBaseDamage, maxBaseDamage + 1);
 
-            damage += GetBonusOrPenaltyByEnemyType(attacker, target);
+                // Apply damage modifiers.
+                damage += damageModifier;
+
+                // Apply strength modifier for players. It is not applied in classic despite what the in-game description for the Strength attribute says.
+                damage += (DamageModifier(attacker.Stats.LiveStrength)) * 2;
+            }
+            else
+                damage += damageModifier;
+
+            if (damage < 1)
+                damage = 0;
+
+            if (damage >= 1)
+                damage += GetBonusOrPenaltyByEnemyType(attacker, target);
+
+            damage = (int)Mathf.Round(damage * critDamMulti);
+            damage = (int)Mathf.Round(damage * matResistMod);
+            if (damage < 1)
+                damage = 0;
 
             return damage;
         }
 
-        /// <summary>
         /// Calculates whether an attack on a target is successful or not.
-        /// </summary>
-        public static bool CalculateSuccessfulHit(DaggerfallEntity attacker, DaggerfallEntity target, int chanceToHitMod, int struckBodyPart)
-        {
-            if (attacker == null || target == null)
+		private static bool CalculateSuccessfulHit(DaggerfallEntity attacker, DaggerfallEntity target, int chanceToHitMod, int struckBodyPart)
+		{
+			PlayerEntity player = GameManager.Instance.PlayerEntity;
+			
+			if (attacker == null || target == null)
                 return false;
 
-            Func<DaggerfallEntity, DaggerfallEntity, int, int, bool> del;
-            if (TryGetOverride("CalculateSuccessfulHit", out del))
-                return del(attacker, target, chanceToHitMod, struckBodyPart);
-
             int chanceToHit = chanceToHitMod;
-
-            // Get armor value for struck body part
+			//Debug.LogFormat("Starting chanceToHitMod = {0}", chanceToHit);
+			
+			// Get armor value for struck body part
             chanceToHit += CalculateArmorToHit(target, struckBodyPart);
-
-            // Apply adrenaline rush modifiers.
+			
+			// Apply adrenaline rush modifiers.
             chanceToHit += CalculateAdrenalineRushToHit(attacker, target);
 
-            // Apply enchantment modifier
+            // Apply enchantment modifier. 
             chanceToHit += attacker.ChanceToHitModifier;
-
-            // Apply stat differential modifiers. (default: luck and agility)
-            chanceToHit += CalculateStatsToHit(attacker, target);
-
-            // Apply skill modifiers. (default: dodge and crit strike)
+			//Debug.LogFormat("Attacker Chance To Hit Mod 'Enchantment' = {0}", attacker.ChanceToHitModifier); // No idea what this does, always seeing 0.
+			
+			// Apply stat differential modifiers. (default: luck and agility)
+			chanceToHit += CalculateStatDiffsToHit(attacker, target);
+			
+			// Apply skill modifiers. (default: dodge and crit strike)
             chanceToHit += CalculateSkillsToHit(attacker, target);
-
-            // Apply monster modifier and biography adjustments.
+			//Debug.LogFormat("After Dodge = {0}", chanceToHitMod);
+			
+			// Apply monster modifier and biography adjustments.
             chanceToHit += CalculateAdjustmentsToHit(attacker, target);
+			//Debug.LogFormat("Final chanceToHitMod = {0}", chanceToHitMod);
 
             Mathf.Clamp(chanceToHit, 3, 97);
 
@@ -835,117 +1227,712 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (TryGetOverride("CalculateStruckBodyPart", out del))
                 return del();
 
-            int[] bodyParts = { 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6 };
+            int[] bodyParts = { 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6 };
             return bodyParts[UnityEngine.Random.Range(0, bodyParts.Length)];
         }
 
-        public static ToHitAndDamageMods CalculateSwingModifiers(FPSWeapon onscreenWeapon)
+        public static ToHitAndDamageMods CalculateSwingModifiers(FPSWeapon onscreenWeapon, DaggerfallUnityItem weapon = null)
         {
             Func<FPSWeapon, ToHitAndDamageMods> del;
             if (TryGetOverride("CalculateSwingModifiers", out del))
                 return del(onscreenWeapon);
 
             ToHitAndDamageMods mods = new ToHitAndDamageMods();
-            if (onscreenWeapon != null)
+            mods.damageMod = 0;
+            mods.toHitMod = 0;
+            mods.damType = 0;
+
+            if (weapon != null) // With Weapon
             {
-                // The Daggerfall manual groups diagonal slashes to the left and right as if they are the same, but they are different.
-                // Classic does not apply swing modifiers to unarmed attacks.
-                if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                if (onscreenWeapon != null)
                 {
-                    mods.damageMod = -4;
-                    mods.toHitMod = 10;
+                    switch (weapon.TemplateIndex)
+                    {
+                        case (int)Weapons.Dagger:
+                        case (int)Weapons.Tanto:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 8;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 5;
+                                mods.toHitMod = -8;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = -2;
+                                mods.toHitMod = 2;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = -2;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 4;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Shortsword:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 4;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = -12;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 4;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 0;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 4;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Wakazashi:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = -2;
+                                mods.toHitMod = 8;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 4;
+                                mods.toHitMod = -8;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 4;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 0;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 4;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Broadsword:
+                        case (int)Weapons.Claymore:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = -3;
+                                mods.toHitMod = 8;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 6;
+                                mods.toHitMod = -12;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 4;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 0;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 0;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Dai_Katana:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = -3;
+                                mods.toHitMod = 8;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 7;
+                                mods.toHitMod = -14;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 4;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 0;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 2;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Katana:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = -3;
+                                mods.toHitMod = 8;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 5;
+                                mods.toHitMod = -10;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 4;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 2;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 2;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Longsword:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = -3;
+                                mods.toHitMod = 10;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 5;
+                                mods.toHitMod = -10;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 4;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 0;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 2;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Saber:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = -3;
+                                mods.toHitMod = 8;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 5;
+                                mods.toHitMod = -12;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 4;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 0;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 0;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Battle_Axe:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = -2;
+                                mods.toHitMod = 9;
+                                mods.damType = 1;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 7;
+                                mods.toHitMod = -13;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 0;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 4;
+                                mods.toHitMod = -5;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 2;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.War_Axe:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = -3;
+                                mods.toHitMod = 6;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 7;
+                                mods.toHitMod = -11;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 3;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 0;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 0;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Flail:
+                        case (int)Weapons.Mace:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 0;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 6;
+                                mods.toHitMod = -6;
+                                mods.damType = 1;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 2;
+                                mods.damType = 1;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 4;
+                                mods.toHitMod = -1;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Staff:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 6;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 4;
+                                mods.toHitMod = -4;
+                                mods.damType = 1;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 3;
+                                mods.damType = 1;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = -1;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Warhammer:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = -4;
+                                mods.toHitMod = 11;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 8;
+                                mods.toHitMod = -10;
+                                mods.damType = 1;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = 0;
+                                mods.damType = 1;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 5;
+                                mods.toHitMod = -6;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Long_Bow:
+                        case (int)Weapons.Short_Bow:
+                            mods.damageMod = 0;
+                            mods.toHitMod = 0;
+                            mods.damType = 3;
+                            break;
+                        default:
+                            mods.damageMod = 0;
+                            mods.toHitMod = 0;
+                            mods.damType = 0;
+                            break;
+                    }
+                    return mods;
                 }
-                if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                else
+                    return mods;
+            }
+            else // Unarmed, I'll return to this later, right now this is all mostly just placeholder values and such, not final product at all, need more context for overall final image.
+            {
+                if (onscreenWeapon != null)
                 {
-                    mods.damageMod = -2;
-                    mods.toHitMod = 5;
+                    if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                    {
+                        mods.damageMod = 0;
+                        mods.toHitMod = 8;
+                        mods.damType = 1;
+                    }
+                    if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                    {
+                        mods.damageMod = 6;
+                        mods.toHitMod = -8;
+                        mods.damType = 1;
+                    }
+                    if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                    {
+                        mods.damageMod = 2;
+                        mods.toHitMod = 4;
+                        mods.damType = 1;
+                    }
+                    if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                    {
+                        mods.damageMod = 4;
+                        mods.toHitMod = 0;
+                        mods.damType = 1;
+                    }
+                    if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                    {
+                        mods.damageMod = -4;
+                        mods.toHitMod = 6;
+                        mods.damType = 2;
+                    }
+                    return mods;
                 }
-                if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                else
                 {
-                    mods.damageMod = 2;
-                    mods.toHitMod = -5;
-                }
-                if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
-                {
-                    mods.damageMod = 4;
-                    mods.toHitMod = -10;
+                    mods.damageMod = 0;
+                    mods.toHitMod = 0;
+                    mods.damType = 0;
+                    return mods;
                 }
             }
-            return mods;
         }
 
         public static ToHitAndDamageMods CalculateProficiencyModifiers(DaggerfallEntity attacker, DaggerfallUnityItem weapon)
         {
-            Func<DaggerfallEntity, DaggerfallUnityItem, ToHitAndDamageMods> del;
-            if (TryGetOverride("CalculateProficiencyModifiers", out del))
-                return del(attacker, weapon);
-
-            ToHitAndDamageMods mods = new ToHitAndDamageMods();
+            ToHitAndDamageMods mods = new ToHitAndDamageMods(); // If I feel that 50 starting points is too much for a level 1 character, I could always make the benefits only start past that 50 mark or something, maybe 40.
             if (weapon != null)
             {
                 // Apply weapon proficiency
                 if (((int)attacker.Career.ExpertProficiencies & weapon.GetWeaponSkillUsed()) != 0)
                 {
-                    mods.damageMod = (attacker.Level / 3) + 1;
-                    mods.toHitMod = attacker.Level;
+                    switch (weapon.GetWeaponSkillIDAsShort())
+                    {
+                        case (short)DFCareer.Skills.Archery:
+                            mods.damageMod = (attacker.Stats.LiveStrength / 25) + (attacker.Stats.LiveAgility / 25) + 1; //9
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 8) + (attacker.Stats.LiveSpeed / 20) + (attacker.Stats.LiveLuck / 20); //22.5
+                            break;
+                        case (short)DFCareer.Skills.Axe:
+                            mods.damageMod = (attacker.Stats.LiveStrength / 20) + (attacker.Stats.LiveAgility / 33) + 1; //9
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 11) + (attacker.Stats.LiveAgility / 11) + (attacker.Stats.LiveLuck / 22); //22.5
+                            break;
+                        case (short)DFCareer.Skills.BluntWeapon:
+                            mods.damageMod = (attacker.Stats.LiveStrength / 20) + (attacker.Stats.LiveEndurance / 33) + 1; //9
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 10) + (attacker.Stats.LiveAgility / 16) + (attacker.Stats.LiveLuck / 16); //22.5
+                            break;
+                        case (short)DFCareer.Skills.LongBlade:
+                            mods.damageMod = (attacker.Stats.LiveAgility / 20) + (attacker.Stats.LiveStrength / 33) + 1; //9
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 8) + (attacker.Stats.LiveSpeed / 20) + (attacker.Stats.LiveLuck / 20); //22.5
+                            break;
+                        case (short)DFCareer.Skills.ShortBlade:
+                            mods.damageMod = (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveSpeed / 25) + 1; //9
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 10) + (attacker.Stats.LiveSpeed / 14) + (attacker.Stats.LiveLuck / 18); //22.5
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             // Apply hand-to-hand proficiency. Hand-to-hand proficiency is not applied in classic.
             else if (((int)attacker.Career.ExpertProficiencies & (int)DFCareer.ProficiencyFlags.HandToHand) != 0)
             {
-                mods.damageMod = (attacker.Level / 3) + 1;
-                mods.toHitMod = attacker.Level;
+                mods.damageMod = (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveEndurance / 50) + (attacker.Stats.LiveAgility / 50) + (attacker.Stats.LiveSpeed / 50) + 1; //9
+                mods.toHitMod = (attacker.Stats.LiveAgility / 22) + (attacker.Stats.LiveSpeed / 22) + (attacker.Stats.LiveStrength / 22) + (attacker.Stats.LiveEndurance / 22) + (attacker.Stats.LiveLuck / 22); //22.5
             }
+            //Debug.LogFormat("Here is the damage modifier for this proficiency = {0}", mods.damageMod);
+            //Debug.LogFormat("Here is the accuracy modifier for this proficiency = {0}", mods.toHitMod);
             return mods;
         }
 
         public static ToHitAndDamageMods CalculateRacialModifiers(DaggerfallEntity attacker, DaggerfallUnityItem weapon, PlayerEntity player)
         {
-            Func<DaggerfallEntity, DaggerfallUnityItem, PlayerEntity, ToHitAndDamageMods> del;
-            if (TryGetOverride("CalculateRacialModifiers", out del))
-                return del(attacker, weapon, player);
-
             ToHitAndDamageMods mods = new ToHitAndDamageMods();
             if (weapon != null)
             {
-                if (player.RaceTemplate.ID == (int)Races.DarkElf)
+                switch (player.RaceTemplate.ID)
                 {
-                    mods.damageMod = attacker.Level / 4;
-                    mods.toHitMod = attacker.Level / 4;
-                }
-                else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.Archery)
-                {
-                    if (player.RaceTemplate.ID == (int)Races.WoodElf)
-                    {
-                        mods.damageMod = attacker.Level / 3;
-                        mods.toHitMod = attacker.Level / 3;
-                    }
-                }
-                else if (player.RaceTemplate.ID == (int)Races.Redguard)
-                {
-                    mods.damageMod = attacker.Level / 3;
-                    mods.toHitMod = attacker.Level / 3;
+                    case (int)Races.Argonian:
+                        if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.ShortBlade)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveSpeed / 33); //6
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 16) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 33); //12
+                        }
+                        break;
+                    case (int)Races.DarkElf:
+                        if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.LongBlade)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveStrength / 25); //8
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 33); //10
+                        }
+                        else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.ShortBlade)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveAgility / 50) + (attacker.Stats.LiveSpeed / 50); //4
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 33); //9
+                        }
+                        break;
+                    case (int)Races.Khajiit:
+                        if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.ShortBlade)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveSpeed / 50); //5
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 20) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 50); //10
+                        }
+                        break;
+                    case (int)Races.Nord:
+                        if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.Axe)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveStrength / 16) + (attacker.Stats.LiveAgility / 33); //9
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveLuck / 33); //9
+                        }
+                        else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.BluntWeapon)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveStrength / 25) + (attacker.Stats.LiveEndurance / 25); //8
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 25) + (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveLuck / 33); //10
+                        }
+                        break;
+                    case (int)Races.Redguard:
+                        if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.LongBlade)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveStrength / 50); //5
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 10) + (attacker.Stats.LiveSpeed / 25) + (attacker.Stats.LiveLuck / 25); //18
+                        }
+                        else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.BluntWeapon)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveEndurance / 33); //6
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 20) + (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveLuck / 33); //12
+                        }
+                        else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.Axe)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveStrength / 16) + (attacker.Stats.LiveAgility / 33); //6
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveLuck / 33); //12
+                        }
+                        else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.Archery)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveAgility / 50); //4
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 33); //10
+                        }
+                        break;
+                    case (int)Races.WoodElf:
+                        if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.ShortBlade)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveSpeed / 50); //5
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 20) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 50); //10
+                        }
+                        else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.Archery)
+                        {
+                            mods.damageMod = (attacker.Stats.LiveStrength / 25) + (attacker.Stats.LiveAgility / 25); //8
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 10) + (attacker.Stats.LiveSpeed / 25) + (attacker.Stats.LiveLuck / 25); //18
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
+            else if (weapon == null)
+            {
+                if (player.RaceTemplate.ID == (int)Races.Khajiit)
+                {
+                    mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveEndurance / 33) + (attacker.Stats.LiveAgility / 50) + (attacker.Stats.LiveSpeed / 50); //10
+                    mods.toHitMod = (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveSpeed / 50) + (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveEndurance / 50) + (attacker.Stats.LiveLuck / 50); //12
+                }
+                else if (player.RaceTemplate.ID == (int)Races.Nord)
+                {
+                    mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveEndurance / 50); //5
+                }
+            }
+            //Debug.LogFormat("Here is the damage modifier for this Race and Weapon = {0}", mods.damageMod);
+            //Debug.LogFormat("Here is the accuracy modifier for this Race and Weapon = {0}", mods.toHitMod);
             return mods;
         }
 
-        public static int CalculateBackstabChance(PlayerEntity player, DaggerfallEntity target, int enemyAnimStateRecord)
+        private static int CalculateBackstabChance(PlayerEntity player, DaggerfallEntity target, int enemyAnimStateRecord)
         {
-            Func<PlayerEntity, DaggerfallEntity, int, int> del;
-            if (TryGetOverride("CalculateBackstabChance", out del))
-                return del(player, target, enemyAnimStateRecord);
-
             // If enemy is facing away from player
             if (enemyAnimStateRecord % 5 > 2)
             {
                 player.TallySkill(DFCareer.Skills.Backstabbing, 1);
                 return player.Skills.GetLiveSkillValue(DFCareer.Skills.Backstabbing);
             }
-            return 0;
+            else
+                return 0;
         }
 
-        public static int CalculateBackstabDamage(int damage, int backstabbingLevel)
+        public static int CalculateBackstabDamage(int damage, int backstabbingLevel, int damageType = 0, DaggerfallUnityItem weapon = null)
         {
             Func<int, int, int> del;
             if (TryGetOverride("CalculateBackstabDamage", out del))
@@ -953,76 +1940,100 @@ namespace DaggerfallWorkshop.Game.Formulas
 
             if (backstabbingLevel > 1 && Dice100.SuccessRoll(backstabbingLevel))
             {
-                damage *= 3;
+                if (weapon != null && damageType == 3 && (weapon.TemplateIndex == (int)Weapons.Dagger || weapon.TemplateIndex == (int)Weapons.Tanto))
+                    damage *= 5;
+                else if (weapon != null && (weapon.TemplateIndex == (int)Weapons.Dagger || weapon.TemplateIndex == (int)Weapons.Tanto))
+                    damage *= 4;
+                else if (weapon != null && damageType == 3)
+                    damage *= 3;
+                else
+                    damage *= 2;
                 string backstabMessage = TextManager.Instance.GetLocalizedText("successfulBackstab");
                 DaggerfallUI.Instance.PopupMessage(backstabMessage);
             }
             return damage;
         }
 
-        public static int GetBonusOrPenaltyByEnemyType(DaggerfallEntity attacker, DaggerfallEntity target)
+        static int GetBonusOrPenaltyByEnemyType(DaggerfallEntity attacker, DaggerfallEntity target) // Possibly update at some point like 10.26 did so vampirism of the player is taken into account.
         {
-            Func<DaggerfallEntity, DaggerfallEntity, int> del;
-            if (TryGetOverride("GetBonusOrPenaltyByEnemyType", out del))
-                return del(attacker, target);
-
-            if (attacker == null || target == null)
+            if (attacker == null || target == null) // So after observing the effects of adding large amounts of weight to an enemy, it does not seem to have that much of an effect on their ability to be stun-locked. As the knock-back/hurt state is probably the real issue here, as well as other parts of the AI choices. So I think this comes down a lot more to AI behavior than creature weight values. So with that, I will mostly likely make an entirely seperate mod to try and deal with this issue and continue on non-AI related stuff in this already large mod. So yeah, start another "proof of concept" mod project where I attempt to change the AI to make it more challenging/smarter.
                 return 0;
+
+            int attackerWillpMod = 0;
+            int confidenceMod = 0;
+            int courageMod = 0;
+            EnemyEntity AITarget = null;
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+
+            if (target != player)
+                AITarget = target as EnemyEntity;
+            else
+                player = target as PlayerEntity;
+
+            if (player == attacker) // When attacker is the player
+            {
+                attackerWillpMod = (int)Mathf.Round((attacker.Stats.LiveWillpower - 50) / 5);
+                confidenceMod = Mathf.Max(10 + attackerWillpMod - (target.Level / 2), 0);
+                courageMod = Mathf.Max((target.Level / 2) - attackerWillpMod, 0);
+
+                confidenceMod = UnityEngine.Random.Range(0, confidenceMod);
+            }
+            else // When attacker is anything other than the player // Apparently "32" is the maximum possible level cap for the player without cheating.
+            {
+                attackerWillpMod = (int)Mathf.Round((attacker.Stats.LiveWillpower - 50) / 5);
+                confidenceMod = Mathf.Max(5 + attackerWillpMod + (attacker.Level / 4), 0);
+                courageMod = Mathf.Max(target.Level - (attacker.Level + attackerWillpMod), 0);
+
+                confidenceMod = UnityEngine.Random.Range(0, confidenceMod);
+            }
 
             int damage = 0;
             // Apply bonus or penalty by opponent type.
             // In classic this is broken and only works if the attack is done with a weapon that has the maximum number of enchantments.
-            if (target is EnemyEntity)
+            if (AITarget != null && AITarget.GetEnemyGroup() == DFCareer.EnemyGroups.Undead)
             {
-                var enemyTarget = target as EnemyEntity;
-                if (enemyTarget.MobileEnemy.Affinity == MobileAffinity.Human)
+                if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
                 {
-                    if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
-                        damage += attacker.Level;
-                    if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
-                        damage -= attacker.Level;
+                    damage += confidenceMod;
                 }
-                else if (enemyTarget.GetEnemyGroup() == DFCareer.EnemyGroups.Undead)
+                if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
                 {
-                    if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
-                        damage += attacker.Level;
-                    if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
-                        damage -= attacker.Level;
-                }
-                else if (enemyTarget.GetEnemyGroup() == DFCareer.EnemyGroups.Daedra)
-                {
-                    if (((int)attacker.Career.DaedraAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
-                        damage += attacker.Level;
-                    if (((int)attacker.Career.DaedraAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
-                        damage -= attacker.Level;
-                }
-                else if (enemyTarget.GetEnemyGroup() == DFCareer.EnemyGroups.Animals)
-                {
-                    if (((int)attacker.Career.AnimalsAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
-                        damage += attacker.Level;
-                    if (((int)attacker.Career.AnimalsAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
-                        damage -= attacker.Level;
+                    damage -= courageMod;
                 }
             }
-            else if (target is PlayerEntity)
+            else if (AITarget != null && AITarget.GetEnemyGroup() == DFCareer.EnemyGroups.Daedra)
             {
-                if (GameManager.Instance.PlayerEffectManager.HasVampirism()) // Vampires are undead, therefore use undead modifier
+                if (((int)attacker.Career.DaedraAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
                 {
-                    if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
-                        damage += attacker.Level;
-                    if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
-                        damage -= attacker.Level;
+                    damage += confidenceMod;
                 }
-                else
+                if (((int)attacker.Career.DaedraAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
                 {
-                    // Player is assumed humanoid
-                    if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
-                        damage += attacker.Level;
-                    if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
-                        damage -= attacker.Level;
+                    damage -= courageMod;
                 }
             }
-
+            else if ((AITarget != null && AITarget.GetEnemyGroup() == DFCareer.EnemyGroups.Humanoid) || player == target) // Apparently human npcs already are in the humanoid career, so "|| AITarget.EntityType == EntityTypes.EnemyClass" is unneeded.
+            {
+                if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+                {
+                    damage += confidenceMod;
+                }
+                if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+                {
+                    damage -= courageMod;
+                }
+            }
+            else if (AITarget != null && AITarget.GetEnemyGroup() == DFCareer.EnemyGroups.Animals)
+            {
+                if (((int)attacker.Career.AnimalsAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+                {
+                    damage += confidenceMod;
+                }
+                if (((int)attacker.Career.AnimalsAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+                {
+                    damage -= courageMod;
+                }
+            }
             return damage;
         }
 
@@ -1044,162 +2055,155 @@ namespace DaggerfallWorkshop.Game.Formulas
             return damage;
         }
 
-        /// <summary>
         /// Allocate any equipment damage from a strike, and reduce item condition.
-        /// </summary>
-        public static void DamageEquipment(DaggerfallEntity attacker, DaggerfallEntity target, int damage, DaggerfallUnityItem weapon, int struckBodyPart)
+		public static void DamageEquipment(DaggerfallEntity attacker, DaggerfallEntity target, int struckBodyPart, bool shieldBlockSuccess, int damType, int damBefore, int damAfter, DaggerfallUnityItem weapon = null)
         {
-            Func<DaggerfallEntity, DaggerfallEntity, int, DaggerfallUnityItem, int, bool> del;
-            if (TryGetOverride("DamageEquipment", out del))
-                if (del(attacker, target, damage, weapon, struckBodyPart))
-                    return; // Only return if override returns true
+            if (damType == 4) // Special damage type won't deal damage to equipment, since it ignores it.
+                return;
+            if (damBefore <= 0)
+                return;
 
-            // If damage was done by a weapon, damage the weapon and armor of the hit body part.
-            // In classic, shields are never damaged, only armor specific to the hitbody part is.
-            // Here, if an equipped shield covers the hit body part, it takes damage instead.
-            if (weapon != null && damage > 0)
+            int damAbsorbed = damBefore - damAfter;
+            float damTypeMulti = 1f;
+            float strengthMulti = Mathf.Clamp((attacker.Stats.LiveStrength - 50) / 5, 0, 100) * 0.05f;
+            float armorDensityMulti = 1f;
+            bool missileWep = false;
+            int startItemCondPer = 0;
+
+            if (damType == 1)
+                damTypeMulti = 0.7f;
+            else if (damType == 2)
+                damTypeMulti = 1.3f;
+            else if (damType == 3)
+                damTypeMulti = 1.1f;
+
+            if (shieldBlockSuccess)
             {
-                // TODO: If attacker is AI, apply Ring of Namira effect
-                ApplyConditionDamageThroughPhysicalHit(weapon, attacker, damage);
-
-                DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
-                bool shieldTakesDamage = false;
+                DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand); // Checks if entity is using a shield or not.
                 if (shield != null)
                 {
-                    BodyParts[] protectedBodyParts = shield.GetShieldProtectedBodyParts();
+                    armorDensityMulti = ((shield.density - 300) / 50 * 0.1f) + 1;
+                    startItemCondPer = shield.ConditionPercentage;
+                    ApplyConditionDamageThroughPhysicalDamage(attacker, damAbsorbed, damAfter, damTypeMulti, strengthMulti, armorDensityMulti, missileWep, shield);
 
-                    for (int i = 0; (i < protectedBodyParts.Length) && !shieldTakesDamage; i++)
-                    {
-                        if (protectedBodyParts[i] == (BodyParts)struckBodyPart)
-                            shieldTakesDamage = true;
-                    }
-                }
-
-                if (shieldTakesDamage)
-                    ApplyConditionDamageThroughPhysicalHit(shield, target, damage);
-                else
-                {
-                    EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
-                    DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
-                    if (armor != null)
-                        ApplyConditionDamageThroughPhysicalHit(armor, target, damage);
+                    if (target == GameManager.Instance.PlayerEntity)
+                        WarningMessagePlayerEquipmentCondition(shield, startItemCondPer);
                 }
             }
-        }
+            else
+            {
+                EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
+                DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
+                if (armor != null)
+                {
+                    armorDensityMulti = ((armor.density - 300) / 50 * 0.1f) + 1;
+                    startItemCondPer = armor.ConditionPercentage;
+                    ApplyConditionDamageThroughPhysicalDamage(attacker, damAbsorbed, damAfter, damTypeMulti, strengthMulti, armorDensityMulti, missileWep, armor);
 
-        /// <summary>
-        /// Applies condition damage to an item based on physical hit damage.
-        /// </summary>
-        public static void ApplyConditionDamageThroughPhysicalHit(DaggerfallUnityItem item, DaggerfallEntity owner, int damage)
-        {
-            Func<DaggerfallUnityItem, DaggerfallEntity, int, bool> del;
-            if (TryGetOverride("ApplyConditionDamageThroughPhysicalHit", out del))
-                if (del(item, owner, damage))
-                    return; // Only return if override returns true
+                    if (target == GameManager.Instance.PlayerEntity)
+                        WarningMessagePlayerEquipmentCondition(armor, startItemCondPer);
+                }
+            }
 
-            int amount = (10 * damage + 50) / 100;
-            if ((amount == 0) && Dice100.SuccessRoll(20))
-                amount = 1;
+            // If damage was done by a weapon, damage the weapon and armor of the hit body part.
+            if (weapon != null)
+            {
+                if (weapon.GetWeaponSkillIDAsShort() == 33) // Checks if the weapon being used is in the Missile Weapon category, then sets a bool value to true.
+                    missileWep = true;
+                startItemCondPer = weapon.ConditionPercentage;
+                ApplyConditionDamageThroughPhysicalDamage(attacker, damAbsorbed, damAfter, damTypeMulti, strengthMulti, armorDensityMulti, missileWep, weapon); // Does condition damage to the attackers weapon.
 
-            item.LowerCondition(amount, owner);
-        }
-
-        public static int CalculateWeaponToHit(DaggerfallUnityItem weapon)
-        {
-            Func<DaggerfallUnityItem, int> del;
-            if (TryGetOverride("CalculateWeaponToHit", out del))
-                return del(weapon);
-
-            return weapon.GetWeaponMaterialModifier() * 10;
+                if (attacker == GameManager.Instance.PlayerEntity)
+                    WarningMessagePlayerEquipmentCondition(weapon, startItemCondPer);
+            }
         }
 
         public static int CalculateArmorToHit(DaggerfallEntity target, int struckBodyPart)
         {
-            Func<DaggerfallEntity, int, int> del;
-            if (TryGetOverride("CalculateArmorToHit", out del))
-                return del(target, struckBodyPart);
-
+            EnemyEntity AITarget = null;
+            AITarget = target as EnemyEntity;
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
             int armorValue = 0;
+
+            // Get armor value for struck body part. This value is multiplied by 5 times in the "EnemyEntity.cs" script, makes a big difference.
             if (struckBodyPart <= target.ArmorValues.Length)
             {
-                armorValue = target.ArmorValues[struckBodyPart] + target.IncreasedArmorValueModifier + target.DecreasedArmorValueModifier;
+                armorValue = target.ArmorValues[struckBodyPart];
             }
+
+            // Sets the armorValue so that armor does not have any effect on the hit chance, it just defaults to the "naked" amount for the player and humanoid enemies, other monsters still have their normal AC score factored in.
+            if (target == player)
+                armorValue = 100 - target.IncreasedArmorValueModifier - target.DecreasedArmorValueModifier;
+            else if (AITarget.EntityType == EntityTypes.EnemyClass)
+                armorValue = 60;
+
             return armorValue;
         }
 
         public static int CalculateAdrenalineRushToHit(DaggerfallEntity attacker, DaggerfallEntity target)
         {
-            Func<DaggerfallEntity, DaggerfallEntity, int> del;
-            if (TryGetOverride("CalculateAdrenalineRushToHit", out del))
-                return del(attacker, target);
-
-            const int adrenalineRushModifier = 5;
-            const int improvedAdrenalineRushModifier = 8;
+            const int adrenalineRushModifier = 8; //Buffed base adrenalineRushModifier by 3
+            const int improvedAdrenalineRushModifier = 12; //Buffed improvedAdrenalineRushModifier by 4
 
             int chanceToHitMod = 0;
-            if (attacker.Career.AdrenalineRush && attacker.CurrentHealth < (attacker.MaxHealth / 8))
+            if (attacker.Career.AdrenalineRush && attacker.CurrentHealth < (attacker.MaxHealth / 6)) //Made adrenaline rush effect come into effect earlier, I.E. at higher health percent. From /8 to /6
             {
                 chanceToHitMod += (attacker.ImprovedAdrenalineRush) ? improvedAdrenalineRushModifier : adrenalineRushModifier;
             }
 
-            if (target.Career.AdrenalineRush && target.CurrentHealth < (target.MaxHealth / 8))
+            if (target.Career.AdrenalineRush && target.CurrentHealth < (target.MaxHealth / 6)) //Made adrenaline rush effect come into effect earlier, I.E. at higher health percent. From /8 to /6
             {
                 chanceToHitMod -= (target.ImprovedAdrenalineRush) ? improvedAdrenalineRushModifier : adrenalineRushModifier;
             }
             return chanceToHitMod;
         }
 
-        public static int CalculateStatsToHit(DaggerfallEntity attacker, DaggerfallEntity target)
+        public static int CalculateStatDiffsToHit(DaggerfallEntity attacker, DaggerfallEntity target)
         {
-            Func<DaggerfallEntity, DaggerfallEntity, int> del;
-            if (TryGetOverride("CalculateStatDiffsToHit", out del))
-                return del(attacker, target);
-
             int chanceToHitMod = 0;
 
             // Apply luck modifier.
-            chanceToHitMod += (attacker.Stats.LiveLuck - target.Stats.LiveLuck) / 10;
+            chanceToHitMod += ((attacker.Stats.LiveLuck - target.Stats.LiveLuck) / 10);
+            //Debug.LogFormat("After Luck = {0}", chanceToHitMod);
 
             // Apply agility modifier.
-            chanceToHitMod += (attacker.Stats.LiveAgility - target.Stats.LiveAgility) / 10;
+            chanceToHitMod += ((attacker.Stats.LiveAgility - target.Stats.LiveAgility) / 4); //Made Agility have twice as much effect on final hit chance.
+                                                                                             //Debug.LogFormat("After Agility = {0}", chanceToHitMod);
+
+            // Possibly make the Speed Stat a small factor as well, seems like it would make sense.
+            chanceToHitMod += ((attacker.Stats.LiveSpeed - target.Stats.LiveSpeed) / 8);
+            //Debug.LogFormat("After Speed = {0}", chanceToHitMod);
+
+            // When I think about it, I might want to get some of the other stats into this formula as well, to help casters somewhat, as well as explain it like a more intelligent character notices patterns in enemy movement and uses to to get in more hits, maybe even strength, the character strikes with such force that they pierce through armor easier.
+
+            // Apply flat Luck factor for the target's chance of being hit. Higher luck above 50 means enemies will miss you more, and below 50 will mean they hit you more often.
+            chanceToHitMod -= (int)Mathf.Round((float)(target.Stats.LiveLuck - 50) / 10); // With this, at most Luck will effect chances by either -5 or +5.
 
             return chanceToHitMod;
         }
 
         public static int CalculateSkillsToHit(DaggerfallEntity attacker, DaggerfallEntity target)
         {
-            Func<DaggerfallEntity, DaggerfallEntity, int> del;
-            if (TryGetOverride("CalculateSkillsToHit", out del))
-                return del(attacker, target);
-
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
             int chanceToHitMod = 0;
 
             // Apply dodging modifier.
             // This modifier is bugged in classic and the attacker's dodging skill is used rather than the target's.
             // DF Chronicles says the dodging calculation is (dodging / 10), but it actually seems to be (dodging / 4).
-            chanceToHitMod -= target.Skills.GetLiveSkillValue(DFCareer.Skills.Dodging) / 4;
-
-            // Apply critical strike modifier.
-            if (Dice100.SuccessRoll(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike)))
-            {
-                chanceToHitMod += attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 10;
-            }
+            // Apply dodging modifier.
+            chanceToHitMod -= (target.Skills.GetLiveSkillValue(DFCareer.Skills.Dodging) / 2); // Changing 4 to a 2, so 100 dodge will give -50 to hit chance, very powerful.
 
             return chanceToHitMod;
         }
 
         public static int CalculateAdjustmentsToHit(DaggerfallEntity attacker, DaggerfallEntity target)
         {
-            Func<DaggerfallEntity, DaggerfallEntity, int> del;
-            if (TryGetOverride("CalculateAdjustmentsToHit", out del))
-                return del(attacker, target);
-
             PlayerEntity player = GameManager.Instance.PlayerEntity;
             EnemyEntity AITarget = target as EnemyEntity;
 
             int chanceToHitMod = 0;
 
-            // Apply hit mod from character biography
+            // Apply hit mod from character biography. This gives -5 to player chances to not be hit if they say they have trouble "Fighting and Parrying"
             if (target == player)
             {
                 chanceToHitMod -= player.BiographyAvoidHitMod;
@@ -1208,7 +2212,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             // Apply monster modifier.
             if ((target != player) && (AITarget.EntityType == EntityTypes.EnemyMonster))
             {
-                chanceToHitMod += 40;
+                chanceToHitMod += 50; // Changed from 40 to 50, +10, in since i'm going to make dodging have double the effect, as well as nerf weapon material hit mod more.
             }
 
             // DF Chronicles says -60 is applied at the end, but it actually seems to be -50.
@@ -1217,9 +2221,602 @@ namespace DaggerfallWorkshop.Game.Formulas
             return chanceToHitMod;
         }
 
+        /// Applies condition damage to an item based on physical hit damage.
+        public static void ApplyConditionDamageThroughPhysicalDamage(DaggerfallEntity owner, int damAbsorbed, int damAfter, float damTypeMulti, float strengthMulti, float armorDensityMulti, bool missileWep, DaggerfallUnityItem item)
+        {
+            ItemCollection playerItems = GameManager.Instance.PlayerEntity.Items;
+            int amount = 0;
+
+            //Debug.LogFormat("Item Group Index is {0}", item.GroupIndex);
+            //Debug.LogFormat("Item Template Index is {0}", item.TemplateIndex);
+
+            if (item.ItemGroup == ItemGroups.Armor) // Target gets their armor/shield condition damaged.
+            {
+                amount = (int)Mathf.Round((damAbsorbed * 3) / armorDensityMulti);
+
+                if (owner == GameManager.Instance.PlayerEntity && item.IsEnchanted) // If the Weapon or Armor piece is enchanted, when broken it will be Destroyed from the player inventory.
+                    item.LowerCondition(amount, owner, playerItems);
+                else
+                    item.LowerCondition(amount, owner);
+
+                /*int percentChange = 100 * amount / item.maxCondition;
+                if (owner == GameManager.Instance.PlayerEntity){
+                    Debug.LogFormat("Target Had {0} Damaged by {1}, cond={2}", item.LongName, amount, item.currentCondition);
+					Debug.LogFormat("Had {0} Damaged by {1}%, of Total Maximum. There Remains {2}% of Max Cond.", item.LongName, percentChange, item.ConditionPercentage);} // Percentage Change */
+            }
+            else // Attacker gets their weapon damaged, if they are using one, otherwise this method is not called.
+            {
+                if (damAbsorbed == 0 || (damAfter * damTypeMulti * strengthMulti * 0.20f) > damAbsorbed)
+                    amount = (int)Mathf.Round(damAfter * damTypeMulti * strengthMulti * 0.20f); // Weapon gets damaged at least 20% of the damage dealt if there was no or little damage absorbed from other sources, I.E blade still dulls cutting flesh.
+                else
+                    amount = (int)Mathf.Round(damAbsorbed * damTypeMulti * strengthMulti * armorDensityMulti);
+
+                if ((amount == 0) && Dice100.SuccessRoll(40))
+                    amount = 1;
+
+                if (missileWep)
+                    amount = 1; // I'll have to figure out a way to deal damage to a bow when an arrow is shot, even if there was no target hit, will do later.
+
+                if (owner == GameManager.Instance.PlayerEntity && item.IsEnchanted) // If the Weapon or Armor piece is enchanted, when broken it will be Destroyed from the player inventory.
+                    item.LowerCondition(amount, owner, playerItems);
+                else
+                    item.LowerCondition(amount, owner);
+
+                /*int percentChange = 100 * amount / item.maxCondition;
+                if (owner == GameManager.Instance.PlayerEntity){
+                    Debug.LogFormat("Attacker Damaged {0} by {1}, cond={2}", item.LongName, amount, item.currentCondition);
+                    Debug.LogFormat("Had {0} Damaged by {1}%, of Total Maximum. There Remains {2}% of Max Cond.", item.LongName, percentChange, item.ConditionPercentage);} // Percentage Change */
+            }
+        }
+
+        /// Applies condition damage to an item based on physical hit damage. Specifically for unarmed attacks.
+        public static void ApplyConditionDamageThroughUnarmedDamage(DaggerfallUnityItem item, DaggerfallEntity owner, int damage)
+        {
+            ItemCollection playerItems = GameManager.Instance.PlayerEntity.Items;
+
+            //Debug.LogFormat("Item Group Index is {0}", item.GroupIndex);
+            //Debug.LogFormat("Item Template Index is {0}", item.TemplateIndex);
+
+            if (item.ItemGroup == ItemGroups.Armor) // Target gets their armor/shield condition damaged.
+            {
+                int amount = item.IsShield ? damage / 2 : damage;
+
+                if (owner == GameManager.Instance.PlayerEntity && item.IsEnchanted) // If the Weapon or Armor piece is enchanted, when broken it will be Destroyed from the player inventory.
+                    item.LowerCondition(amount, owner, playerItems);
+                else
+                    item.LowerCondition(amount, owner);
+
+                /*int percentChange = 100 * amount / item.maxCondition;
+                if (owner == GameManager.Instance.PlayerEntity){
+                    Debug.LogFormat("Target Had {0} Damaged by {1}, cond={2}", item.LongName, amount, item.currentCondition);
+					Debug.LogFormat("Had {0} Damaged by {1}%, of Total Maximum. There Remains {2}% of Max Cond.", item.LongName, percentChange, item.ConditionPercentage);} // Percentage Change */
+            }
+        }
+
+        /// Does a roll for based on the critical strike chance of the attacker, if this roll is successful critSuccess is returned as 'true'.
+		public static bool CriticalStrikeHandler(DaggerfallEntity attacker)
+        {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+            int attackerLuckBonus = (int)Mathf.Floor((float)(attacker.Stats.LiveLuck - 50) / 25f);
+            Mathf.Clamp(attackerLuckBonus, -2, 2); // This is meant to disallow crit odds from going higher than 50%, incase luck is allowed to go over 100 points.
+
+            if (attacker == player)
+            {
+                if (Dice100.SuccessRoll(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / (4 - attackerLuckBonus))) // Player has a 25% chance of critting at level 100. 33% with 75 luck, and 50% with 100 luck.
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                if (Dice100.SuccessRoll(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / (5 - attackerLuckBonus))) // Monsters have a 20% chance of critting at level 100, or level 14.
+                    return true;
+                else
+                    return false;
+            }
+
+        }
+
         #endregion
 
         #region Effects and Resistances
+
+        public static float NaturalDamageResist(DaggerfallEntity entity)
+        {
+            int targetEndur = entity.Stats.LiveEndurance - 50;
+            int targetStren = entity.Stats.LiveStrength - 50; // Every point of these does something, positive and negative between 50.
+            int targetWillp = entity.Stats.LiveWillpower - 50;
+
+            float naturalDamResist = (targetEndur * .002f);
+            naturalDamResist += (targetStren * .001f);
+            naturalDamResist += (targetWillp * .001f);
+
+            Mathf.Clamp(naturalDamResist, -0.2f, 0.2f); // This is to keep other mods that allow over 100 attribute points from allowing damage reduction values to go over 20%. May actually remove this cap for monsters, possibly, since some of the higher level ones have over 100 attribute points.
+            return naturalDamResist * 100;
+            //Debug.LogFormat("Natural Damage Resist = {0}", naturalDamResist);
+        }
+
+        // If the player has equipment that is below a certain percentage of condition, this will check if they should be warned with a pop-up message about said piece of equipment.
+        public static void WarningMessagePlayerEquipmentCondition(DaggerfallUnityItem item, int startItemCondPer)
+        {
+            string roughItemMessage = "";
+            string damagedItemMessage = "";
+            string majorDamageItemMessage = "";
+            int condDiff = startItemCondPer - item.ConditionPercentage;
+
+            if (item.ConditionPercentage <= 49 || condDiff >= 15)
+            {
+                if (item.IsEnchanted) // All Magically Enchanted Items Text
+                {
+                    if (item.customMagic != null)
+                    {
+                        string shortMagicItemName = item.shortName;
+                        roughItemMessage = String.Format("My {0} Is Flickering Slightly", shortMagicItemName);
+                        damagedItemMessage = String.Format("My {0} Is Going In And Out Of Existence", shortMagicItemName);
+                        majorDamageItemMessage = String.Format("My {0} Was Drained Significantly By That", shortMagicItemName);
+                    }
+                    else
+                    {
+                        string longMagicItemName = item.LongName;
+                        roughItemMessage = String.Format("My {0} Is Flickering Slightly", longMagicItemName);
+                        damagedItemMessage = String.Format("My {0} Is Going In And Out Of Existence", longMagicItemName);
+                        majorDamageItemMessage = String.Format("My {0} Was Drained Significantly By That", longMagicItemName);
+                    }
+                }
+                else
+                {
+                    string shortItemName = item.shortName;
+                    switch (item.TemplateIndex)
+                    {
+                        case (int)Armor.Boots:
+                        case (int)Armor.Gauntlets:  // Armor With Plural Names Text
+                        case (int)Armor.Greaves:
+                        case 516:                   // RPR:I, Chausses Index Value
+                        case 519:                   // RPR:I, Sollerets Index Value
+                            roughItemMessage = String.Format("My {0} Are In Rough Shape", shortItemName);
+                            damagedItemMessage = String.Format("My {0} Are Falling Apart", shortItemName);
+                            majorDamageItemMessage = String.Format("My {0} Were Shredded Heavily By That", shortItemName);
+                            break;
+                        case (int)Weapons.Broadsword:
+                        case (int)Weapons.Claymore:
+                        case (int)Weapons.Dai_Katana:
+                        case (int)Weapons.Katana:
+                        case (int)Weapons.Longsword:
+                        case (int)Weapons.Saber:    // Bladed Weapons Text
+                        case (int)Weapons.Dagger:
+                        case (int)Weapons.Shortsword:
+                        case (int)Weapons.Tanto:
+                        case (int)Weapons.Wakazashi:
+                        case (int)Weapons.Battle_Axe:
+                        case (int)Weapons.War_Axe:
+                        case 513:                   // RPR:I, Archer's Axe Index Value
+                            roughItemMessage = String.Format("My {0} Could Use A Sharpening", shortItemName);
+                            damagedItemMessage = String.Format("My {0} Looks As Dull As A Butter Knife", shortItemName);
+                            majorDamageItemMessage = String.Format("My {0} Lost A lot Of Edge From That Swipe", shortItemName);
+                            break;
+                        case (int)Weapons.Flail:
+                        case (int)Weapons.Mace:     // Blunt Weapoons Text
+                        case (int)Weapons.Staff:
+                        case (int)Weapons.Warhammer:
+                        case 514:                   // RPR:I, Light Flail Index Value
+                            roughItemMessage = String.Format("My {0}'s Shaft Has Some Small Cracks", shortItemName);
+                            damagedItemMessage = String.Format("My {0}'s Shaft Is Nearly Split In Two", shortItemName);
+                            majorDamageItemMessage = String.Format("My {0} Shaft Was Cracked By That Swing", shortItemName);
+                            break;
+                        case (int)Weapons.Long_Bow: // Archery Weapons Text
+                        case (int)Weapons.Short_Bow:
+                            roughItemMessage = String.Format("The Bowstring On My {0} Is Losing Its Twang", shortItemName);
+                            damagedItemMessage = String.Format("The Bowstring On My {0} Looks Ready To Snap", shortItemName);
+                            majorDamageItemMessage = String.Format("The Bowstring On My {0} Nearly Snapped From That", shortItemName);
+                            break;
+                        default:                    // Text for any other Valid Items
+                            roughItemMessage = String.Format("My {0} Is In Rough Shape", shortItemName);
+                            damagedItemMessage = String.Format("My {0} Is Falling Apart", shortItemName);
+                            majorDamageItemMessage = String.Format("My {0} Was Shredded Heavily By That", shortItemName);
+                            break;
+                    }
+                }
+
+                if (item.ConditionPercentage == 48) // 49 & 45 // This will work for now, until I find a more elegant solution.
+                    DaggerfallUI.AddHUDText(roughItemMessage, 2.00f); // Possibly make a random between a few of these lines to mix it up or something.				
+                else if (item.ConditionPercentage == 15) // 16 & 12
+                    DaggerfallUI.AddHUDText(damagedItemMessage, 2.00f);
+                else if (condDiff >= 15)
+                    DaggerfallUI.AddHUDText(majorDamageItemMessage, 2.00f);
+            }
+        }
+
+        // Check whether the struck body part of the target was covered by armor or shield, returns true if yes, false if no.
+        private static bool ArmorStruckVerification(DaggerfallEntity target, int struckBodyPart, bool shieldBlockSuccess)
+        {
+            if (shieldBlockSuccess)
+                return true;
+            else
+            {
+                EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
+                DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
+                if (armor != null)
+                    return true;
+            }
+            return false;
+        }
+
+        // Checks for if a shield block was successful and returns true if so, false if not.
+        public static bool ShieldBlockChanceCalculation(DaggerfallEntity target, bool shieldStrongSpot, DaggerfallUnityItem shield)
+        {
+            float hardBlockChance = 0f;
+            float softBlockChance = 0f;
+            int targetAgili = target.Stats.LiveAgility - 50;
+            int targetSpeed = target.Stats.LiveSpeed - 50;
+            int targetStren = target.Stats.LiveStrength - 50;
+            int targetEndur = target.Stats.LiveEndurance - 50;
+            int targetWillp = target.Stats.LiveWillpower - 50;
+            int targetLuck = target.Stats.LiveLuck - 50;
+
+            switch (shield.TemplateIndex)
+            {
+                case (int)Armor.Buckler:
+                    hardBlockChance = 30f;
+                    softBlockChance = 20f;
+                    break;
+                case (int)Armor.Round_Shield:
+                    hardBlockChance = 35f;
+                    softBlockChance = 10f;
+                    break;
+                case (int)Armor.Kite_Shield:
+                    hardBlockChance = 45f;
+                    softBlockChance = 5f;
+                    break;
+                case (int)Armor.Tower_Shield:
+                    hardBlockChance = 55f;
+                    softBlockChance = -5f;
+                    break;
+                default:
+                    hardBlockChance = 40f;
+                    softBlockChance = 0f;
+                    break;
+            }
+
+            softBlockChance += (ItemBuilder.weightMultipliersByMaterial[shield.NativeMaterialValue] - 6) * -(0.017f * (targetStren / 100)); // The more heavy the shield material, the harder it is to block the "soft points" of the shield, more strength reduces this effect. Keep in mind, the way it is now, it may reduce chances with lighter shields and high strength, testing required.
+
+            if (shieldStrongSpot)
+            {
+                hardBlockChance += (targetAgili * .3f);
+                hardBlockChance += (targetSpeed * .3f);
+                hardBlockChance += (targetStren * .3f);
+                hardBlockChance += (targetEndur * .2f);
+                hardBlockChance += (targetWillp * .1f);
+                hardBlockChance += (targetLuck * .1f);
+
+                Mathf.Clamp(hardBlockChance, 7f, 95f);
+                int blockChanceInt = (int)Mathf.Round(hardBlockChance);
+
+                if (Dice100.SuccessRoll(blockChanceInt))
+                {
+                    //Debug.LogFormat("$$$. Shield Blocked A Hard-Point, Chance Was {0}%", blockChanceInt);
+                    return true;
+                }
+                else
+                {
+                    //Debug.LogFormat("!!!. Shield FAILED To Block A Hard-Point, Chance Was {0}%", blockChanceInt);
+                    return false;
+                }
+            }
+            else
+            {
+                softBlockChance += (targetAgili * .3f);
+                softBlockChance += (targetSpeed * .2f);
+                softBlockChance += (targetStren * .2f);
+                softBlockChance += (targetEndur * .1f);
+                softBlockChance += (targetWillp * .1f);
+                softBlockChance += (targetLuck * .1f);
+
+                Mathf.Clamp(softBlockChance, 0f, 50f);
+                int blockChanceInt = (int)Mathf.Round(softBlockChance);
+
+                if (Dice100.SuccessRoll(blockChanceInt))
+                {
+                    //Debug.LogFormat("$$$. Shield Blocked A Soft-Point, Chance Was {0}%", blockChanceInt);
+                    return true;
+                }
+                else
+                {
+                    //Debug.LogFormat("!!!. Shield FAILED To Block A Soft-Point, Chance Was {0}%", blockChanceInt);
+                    return false;
+                }
+            }
+        }
+
+        // Compares the damage reduction of the struck shield, with the armor under the part that was struck, and returns true if the shield has the higher reduction value, or false if the armor under has a higher reduction value. This is to keep a full-suit of daedric armor from being worse while wearing a leather shield, which when a block is successful, would actually take more damage than if not wearing a shield.
+        public static bool CompareShieldToUnderArmor(DaggerfallEntity attacker, DaggerfallEntity target, int damType, int struckBodyPart, float critDamPen)
+        {
+            int redDamShield = 1;
+            int redDamUnderArmor = 1;
+
+            DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
+            redDamShield = CalculateArmorDamageReduction(attacker, target, 100, damType, struckBodyPart, true, critDamPen); // Inefficient Repeating of armor and shield finding code.
+
+            EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
+            DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
+            if (armor != null)
+                redDamUnderArmor = CalculateArmorDamageReduction(attacker, target, 100, damType, struckBodyPart, false, critDamPen); // Inefficient Repeating of armor and shield finding code.
+            else // If the body part struck in 'naked' IE has no armor protecting it.
+            {
+                //Debug.Log("$$$: Shield Is Stronger Than Under Armor, Shield Being Used");
+                return true;
+            }
+
+            if (redDamShield <= redDamUnderArmor)
+            {
+                //Debug.Log("$$$: Shield Is Stronger Than Under Armor, Shield Being Used");
+                return true;
+            }
+            else
+            {
+                //Debug.Log("!!!: Shield Is Weaker Than Under Armor, Armor Being Used Instead");
+                return false;
+            }
+        }
+
+        // Multiplies the damage of an attack with a weapon, based on the current condition of said weapon, blunt less effected, but also does not benefit as much from higher condition.
+        public static float AlterDamageBasedOnWepCondition(DaggerfallUnityItem weapon, int damType)
+        {
+            int condPerc = weapon.ConditionPercentage;
+
+            if (damType == 1) // Bludgeoning
+            {
+                if (condPerc >= 92)                         // New
+                    return 1.1f;
+                else if (condPerc <= 91 && condPerc >= 76)  // Almost New
+                    return 1f;
+                else if (condPerc <= 75 && condPerc >= 61)  // Slightly Used
+                    return 1f;
+                else if (condPerc <= 60 && condPerc >= 41)  // Used
+                    return 0.90f;
+                else if (condPerc <= 40 && condPerc >= 16)  // Worn
+                    return 0.80f;
+                else if (condPerc <= 15 && condPerc >= 6)   // Battered
+                    return 0.65f;
+                else if (condPerc <= 5)                     // Useless, Broken
+                    return 0.50f;
+                else                                        // Other
+                    return 1f;
+            }
+            else if (damType == 2) // Slashing
+            {
+                if (condPerc >= 92)                         // New
+                    return 1.3f;
+                else if (condPerc <= 91 && condPerc >= 76)  // Almost New
+                    return 1.1f;
+                else if (condPerc <= 75 && condPerc >= 61)  // Slightly Used
+                    return 1f;
+                else if (condPerc <= 60 && condPerc >= 41)  // Used
+                    return 0.85f;
+                else if (condPerc <= 40 && condPerc >= 16)  // Worn
+                    return 0.70f;
+                else if (condPerc <= 15 && condPerc >= 6)   // Battered
+                    return 0.45f;
+                else if (condPerc <= 5)                     // Useless, Broken
+                    return 0.25f;
+                else                                        // Other
+                    return 1f;
+            }
+            else if (damType == 3) // Piercing
+            {
+                if (condPerc >= 92)                         // New
+                    return 1.2f;
+                else if (condPerc <= 91 && condPerc >= 76)  // Almost New
+                    return 1f;
+                else if (condPerc <= 75 && condPerc >= 61)  // Slightly Used
+                    return 1f;
+                else if (condPerc <= 60 && condPerc >= 41)  // Used
+                    return 0.90f;
+                else if (condPerc <= 40 && condPerc >= 16)  // Worn
+                    return 0.75f;
+                else if (condPerc <= 15 && condPerc >= 6)   // Battered
+                    return 0.55f;
+                else if (condPerc <= 5)                     // Useless, Broken
+                    return 0.35f;
+                else                                        // Other
+                    return 1f;
+            }
+            else // Other
+                return 1f;
+        }
+
+        // Multiplies the damage reduction of a piece of armor, based on the current condition of said armor.
+        public static float AlterDamageReductionBasedOnArmorCondition(DaggerfallUnityItem item, bool shieldBlockSuccess, int damType)
+        {
+            int condPerc = item.ConditionPercentage;
+
+            if (shieldBlockSuccess) // Shield
+            {
+                if (condPerc >= 92)                         // New
+                    return 1.3f;
+                else if (condPerc <= 91 && condPerc >= 76)  // Almost New
+                    return 1.1f;
+                else if (condPerc <= 75 && condPerc >= 61)  // Slightly Used
+                    return 1f;
+                else if (condPerc <= 60 && condPerc >= 41)  // Used
+                    return 0.90f;
+                else if (condPerc <= 40 && condPerc >= 16)  // Worn
+                    return 0.80f;
+                else if (condPerc <= 15 && condPerc >= 6)   // Battered
+                    return 0.70f;
+                else if (condPerc <= 5)                     // Useless, Broken
+                    return 0.50f;
+                else                                        // Other
+                    return 1f;
+            }
+            else // Other Armor
+            {
+                if (condPerc >= 92)                         // New
+                    return 1.2f;
+                else if (condPerc <= 91 && condPerc >= 76)  // Almost New
+                    return 1.1f;
+                else if (condPerc <= 75 && condPerc >= 61)  // Slightly Used
+                    return 1f;
+                else if (condPerc <= 60 && condPerc >= 41)  // Used
+                    return 0.80f;
+                else if (condPerc <= 40 && condPerc >= 16)  // Worn
+                    return 0.70f;
+                else if (condPerc <= 15 && condPerc >= 6)   // Battered
+                    return 0.60f;
+                else if (condPerc <= 5)                     // Useless, Broken
+                    return 0.45f;
+                else                                        // Other
+                    return 1f;
+            }
+        }
+
+        public static int CalculateArmorDamageReduction(DaggerfallEntity attacker, DaggerfallEntity target, int damage, int damType, int struckBodyPart, bool shieldBlockSuccess, float critDamPen, DaggerfallUnityItem weapon = null)
+        {
+            float reductionPercent = 1f;
+
+            if (shieldBlockSuccess)
+            {
+                DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
+
+                reductionPercent = PercentageDamageReductionCalculation(shield, shieldBlockSuccess, critDamPen, damType);
+            }
+            else
+            {
+                EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
+                DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
+                if (armor != null)
+                {
+                    reductionPercent = PercentageDamageReductionCalculation(armor, shieldBlockSuccess, critDamPen, damType);
+                }
+            }
+            return (int)Mathf.Round(damage * reductionPercent);
+        }
+
+        public static float PercentageDamageReductionCalculation(DaggerfallUnityItem item, bool shieldBlockSuccess, float critDamPen, int damType)
+        {
+            if (shieldBlockSuccess) // For Shield
+            {
+                if (damType == 1)
+                {
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.020f;
+                    float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
+                    float reductionMod = ((item.fracture - 300) / 50) * 0.05f;
+                    float resultMod = Mathf.Clamp((0.50f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    return (resultMod - 1f) * -1f;
+                }
+                else if (damType == 2)
+                {
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.025f;
+                    float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
+                    float reductionMod = ((item.shear - 300) / 50) * 0.05f;
+                    float resultMod = Mathf.Clamp((0.50f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    return (resultMod - 1f) * -1f;
+                }
+                else if (damType == 3)
+                {
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.030f;
+                    float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
+                    float reductionMod = ((item.density - 300) / 50) * 0.05f;
+                    float resultMod = Mathf.Clamp((0.50f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    return (resultMod - 1f) * -1f;
+                }
+                else if (damType == 4) // Special Attacks Ignore Armor Reductions
+                    return 1f;
+                else
+                    return 1f;
+            }
+            else // For Armor that is not a shield
+            {
+                if (damType == 1)
+                {
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.015f;
+                    float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
+                    float reductionMod = ((item.fracture - 300) / 50) * 0.04f;
+                    float resultMod = Mathf.Clamp((0.40f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    return (resultMod - 1f) * -1f;
+                }
+                else if (damType == 2)
+                {
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.020f;
+                    float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
+                    float reductionMod = ((item.shear - 300) / 50) * 0.04f;
+                    float resultMod = Mathf.Clamp((0.40f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    return (resultMod - 1f) * -1f;
+                }
+                else if (damType == 3)
+                {
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.020f;
+                    float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
+                    float reductionMod = ((item.density - 300) / 50) * 0.04f;
+                    float resultMod = Mathf.Clamp((0.40f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    return (resultMod - 1f) * -1f;
+                }
+                else if (damType == 4) // Special Attacks Ignore Armor Reductions
+                    return 1f;
+                else
+                    return 1f;
+            }
+        }
+
+        public static float ShieldBlockChance(DaggerfallUnityItem shield, DaggerfallEntity entity, bool covered)
+        {
+            float hardBlockChance = 0f;
+            float softBlockChance = 0f;
+            int targetAgili = entity.Stats.LiveAgility - 50;
+            int targetSpeed = entity.Stats.LiveSpeed - 50;
+            int targetStren = entity.Stats.LiveStrength - 50;
+            int targetEndur = entity.Stats.LiveEndurance - 50;
+            int targetWillp = entity.Stats.LiveWillpower - 50;
+            int targetLuck = entity.Stats.LiveLuck - 50;
+
+            switch (shield.TemplateIndex)
+            {
+                case (int)Armor.Buckler:
+                    hardBlockChance = 30f;
+                    softBlockChance = 20f;
+                    break;
+                case (int)Armor.Round_Shield:
+                    hardBlockChance = 35f;
+                    softBlockChance = 10f;
+                    break;
+                case (int)Armor.Kite_Shield:
+                    hardBlockChance = 45f;
+                    softBlockChance = 5f;
+                    break;
+                case (int)Armor.Tower_Shield:
+                    hardBlockChance = 55f;
+                    softBlockChance = -5f;
+                    break;
+                default:
+                    hardBlockChance = 40f;
+                    softBlockChance = 0f;
+                    break;
+            }
+
+            softBlockChance += (ItemBuilder.weightMultipliersByMaterial[shield.NativeMaterialValue] - 6) * -(0.017f * (targetStren / 100)); // The more heavy the shield material, the harder it is to block the "soft points" of the shield, more strength reduces this effect. Keep in mind, the way it is now, it may reduce chances with lighter shields and high strength, testing required.
+
+            if (covered)
+            {
+                hardBlockChance += (targetAgili * .3f);
+                hardBlockChance += (targetSpeed * .3f);
+                hardBlockChance += (targetStren * .3f);
+                hardBlockChance += (targetEndur * .2f);
+                hardBlockChance += (targetWillp * .1f);
+                hardBlockChance += (targetLuck * .1f);
+
+                return Mathf.Clamp(hardBlockChance, 7f, 95f);
+            }
+            else
+            {
+                softBlockChance += (targetAgili * .3f);
+                softBlockChance += (targetSpeed * .2f);
+                softBlockChance += (targetStren * .2f);
+                softBlockChance += (targetEndur * .1f);
+                softBlockChance += (targetWillp * .1f);
+                softBlockChance += (targetLuck * .1f);
+
+                return Mathf.Clamp(softBlockChance, 0f, 50f);
+            }
+        }
 
         /// <summary>
         /// Execute special monster attack effects.

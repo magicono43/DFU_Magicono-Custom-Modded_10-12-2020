@@ -559,6 +559,110 @@ namespace DaggerfallWorkshop.Game.Entity
             return itemWeightsClassic + baseWeight;
         }
 
+        // This is where specific monsters will be given a true or false, depending on if said monster is clearly holding a type of weapon in their sprite.
+        public static bool SpecialWeaponCheckForMonsters(DaggerfallEntity attacker)
+        {
+            EnemyEntity AIAttacker = null;
+            AIAttacker = attacker as EnemyEntity;
+
+            switch (AIAttacker.CareerIndex)
+            {
+                case (int)MonsterCareers.Centaur:
+                case (int)MonsterCareers.Giant:
+                case (int)MonsterCareers.Gargoyle:
+                case (int)MonsterCareers.Orc:
+                case (int)MonsterCareers.OrcSergeant:
+                case (int)MonsterCareers.OrcShaman:
+                case (int)MonsterCareers.OrcWarlord:
+                case (int)MonsterCareers.IronAtronach:
+                case (int)MonsterCareers.IceAtronach:
+                case (int)MonsterCareers.SkeletalWarrior:
+                case (int)MonsterCareers.Wraith:
+                case (int)MonsterCareers.Lich:
+                case (int)MonsterCareers.AncientLich:
+                case (int)MonsterCareers.FrostDaedra:
+                case (int)MonsterCareers.FireDaedra:
+                case (int)MonsterCareers.Daedroth:
+                case (int)MonsterCareers.DaedraLord:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // This is where specific monsters will be given a pre-defined weapon object for purposes of the rest of the formula, based on their level and sprite weapon appearance.
+        public static DaggerfallUnityItem MonsterWeaponAssign(DaggerfallEntity attacker)
+        {
+            EnemyEntity AIAttacker = null;
+            AIAttacker = attacker as EnemyEntity;
+
+            switch (AIAttacker.CareerIndex)
+            {
+                case (int)MonsterCareers.SkeletalWarrior:
+                    return ItemBuilder.CreateWeapon(Weapons.War_Axe, WeaponMaterialTypes.Steel);
+                case (int)MonsterCareers.Orc:
+                    return ItemBuilder.CreateWeapon(Weapons.Saber, WeaponMaterialTypes.Steel);
+                case (int)MonsterCareers.OrcSergeant:
+                    return ItemBuilder.CreateWeapon(Weapons.Battle_Axe, WeaponMaterialTypes.Dwarven);
+                case (int)MonsterCareers.OrcWarlord:
+                case (int)MonsterCareers.Daedroth:
+                    return ItemBuilder.CreateWeapon(Weapons.Battle_Axe, WeaponMaterialTypes.Orcish);
+                case (int)MonsterCareers.OrcShaman:
+                case (int)MonsterCareers.Lich:
+                case (int)MonsterCareers.AncientLich:
+                    return ItemBuilder.CreateWeapon(Weapons.Staff, WeaponMaterialTypes.Adamantium);
+                case (int)MonsterCareers.Centaur:
+                    return ItemBuilder.CreateWeapon(Weapons.Claymore, WeaponMaterialTypes.Elven);
+                case (int)MonsterCareers.Giant:
+                    return ItemBuilder.CreateWeapon(Weapons.Warhammer, WeaponMaterialTypes.Steel);
+                case (int)MonsterCareers.Gargoyle:
+                    return ItemBuilder.CreateWeapon(Weapons.Flail, WeaponMaterialTypes.Steel);
+                case (int)MonsterCareers.IronAtronach:
+                    return ItemBuilder.CreateWeapon(Weapons.Mace, WeaponMaterialTypes.Steel);
+                case (int)MonsterCareers.IceAtronach:
+                    return ItemBuilder.CreateWeapon(Weapons.Katana, WeaponMaterialTypes.Elven);
+                case (int)MonsterCareers.Wraith:
+                    return ItemBuilder.CreateWeapon(Weapons.Saber, WeaponMaterialTypes.Mithril);
+                case (int)MonsterCareers.FrostDaedra:
+                    return ItemBuilder.CreateWeapon(Weapons.Warhammer, WeaponMaterialTypes.Daedric);
+                case (int)MonsterCareers.FireDaedra:
+                case (int)MonsterCareers.DaedraLord:
+                    return ItemBuilder.CreateWeapon(Weapons.Broadsword, WeaponMaterialTypes.Daedric);
+                default:
+                    return null;
+            }
+        }
+
+        // This is where specific monsters will be given a true or false, depending on if said monster is clearly holding a type of shield in their sprite.
+        public static bool SpecialShieldCheckForMonsters(DaggerfallEntity attacker)
+        {
+            EnemyEntity AIAttacker = null;
+            AIAttacker = attacker as EnemyEntity;
+
+            switch (AIAttacker.CareerIndex)
+            {
+                case (int)MonsterCareers.SkeletalWarrior:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // This is where specific monsters will be given a pre-defined shield object for purposes of the rest of the formula, based on their level and sprite weapon appearance.
+        public static DaggerfallUnityItem MonsterShieldAssign(DaggerfallEntity attacker)
+        {
+            EnemyEntity AIAttacker = null;
+            AIAttacker = attacker as EnemyEntity;
+
+            switch (AIAttacker.CareerIndex)
+            {
+                case (int)MonsterCareers.SkeletalWarrior:
+                    return ItemBuilder.CreateArmor(Genders.Male, Races.Breton, Armor.Round_Shield, ArmorMaterialTypes.Steel);
+                default:
+                    return null;
+            }
+        }
+
         #endregion
     }
 }

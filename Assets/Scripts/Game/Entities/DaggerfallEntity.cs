@@ -605,11 +605,11 @@ namespace DaggerfallWorkshop.Game.Entity
 
                     if (equipping)
                     {
-                        armorValues[index] -= (sbyte)(armor.GetMaterialArmorValue() * 5);
+                        armorValues[index] += (sbyte)(armor.GetMaterialArmorValue());
                     }
                     else
                     {
-                        armorValues[index] += (sbyte)(armor.GetMaterialArmorValue() * 5);
+                        armorValues[index] -= (sbyte)(armor.GetMaterialArmorValue());
                     }
                 }
                 else
@@ -628,11 +628,11 @@ namespace DaggerfallWorkshop.Game.Entity
                     {
                         if (equipping)
                         {
-                            armorValues[i] -= (sbyte)(values[i] * 5);
+                            armorValues[i] += (sbyte)(values[i]);
                         }
                         else
                         {
-                            armorValues[i] += (sbyte)(values[i] * 5);
+                            armorValues[i] -= (sbyte)(values[i]);
                         }
                     }
                 }
@@ -900,6 +900,254 @@ namespace DaggerfallWorkshop.Game.Entity
         #endregion
 
         #region Static Methods
+
+        public static float EntityMaterialResistanceCalculator(DaggerfallEntity target, int weaponMatValue)
+        {
+            PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+
+            if (target == GameManager.Instance.PlayerEntity && (GameManager.Instance.PlayerEffectManager.HasLycanthropy() || GameManager.Instance.PlayerEffectManager.HasVampirism()))
+            {
+                if (weaponMatValue == 2) // Silver
+                    return 1.75f; //some increased modifier value.
+                else if (weaponMatValue == 0 || weaponMatValue == 3) // Iron and Elven
+                    return 0.5f; //some decreased modifier value
+                else // Everything Else
+                    return 1f; //Unchanged modifier value.
+            }
+            else if (target == GameManager.Instance.PlayerEntity) // Just to possibly catch a null-reference exception error if it decided to go down to the else and not find a CareerIndex value.
+            {
+                return 1f;
+            }
+            else
+            {
+                EnemyEntity AITarget = target as EnemyEntity;
+
+                switch (AITarget.CareerIndex)
+                {
+                    case 1:
+                    case 40: // Imp and Large Dragonling
+                        if (weaponMatValue == 0 || weaponMatValue == 2 || weaponMatValue == 3) // Iron, Silver, and Elven
+                            return 0.5f;
+                        else
+                            return 1f;
+                    case 2:
+                    case 10: // Spriggan and Nymph
+                        if (weaponMatValue == 3) // Elven
+                            return 0.3f;
+                        else if (weaponMatValue == 0 || weaponMatValue == 1 || weaponMatValue == 8) // Iron, Steel, and Orcish
+                            return 1.75f;
+                        else
+                            return 1f;
+                    case 13: // Harpy
+                        if (weaponMatValue == 0 || weaponMatValue == 2 || weaponMatValue == 3) // Iron, Silver, and Elven
+                            return 0.3f;
+                        else if (weaponMatValue == 1) // Steel
+                            return 0.6f;
+                        else if (weaponMatValue == 4) // Dwarven
+                            return 1.75f;
+                        else
+                            return 1f;
+                    case 22: // Gargoyle
+                        if (weaponMatValue == 0 || weaponMatValue == 2 || weaponMatValue == 3) // Iron, Silver, and Elven
+                            return 0.3f;
+                        else if (weaponMatValue == 4) // Dwarven
+                            return 0.6f;
+                        else
+                            return 1f;
+                    case 9:
+                    case 14:
+                    case 28: // Werewolf, Wereboar, and Vampire
+                        if (weaponMatValue == 0 || weaponMatValue == 3) // Iron and Elven
+                            return 0.5f;
+                        else if (weaponMatValue == 2) // Silver
+                            return 1.75f;
+                        else
+                            return 1f;
+                    case 36: // Iron Atronach
+                        if (weaponMatValue == 0 || weaponMatValue == 2) // Iron and Silver
+                            return 0.3f;
+                        else
+                            return 1f;
+                    case 15: // Skeletal Warrior
+                        if (weaponMatValue == 2) // Silver
+                            return 1.75f;
+                        else
+                            return 1f;
+                    case 18:
+                    case 23: // Ghost and Wraith
+                        if (weaponMatValue == 0 || weaponMatValue == 3) // Iron and Elven
+                            return 0.3f;
+                        else if (weaponMatValue == 1) // Steel
+                            return 0.6f;
+                        else if (weaponMatValue == 2) // Silver
+                            return 1.75f;
+                        else
+                            return 1f;
+                    case 30: // Vampire Ancient
+                        if (weaponMatValue == 0 || weaponMatValue == 3) // Iron and Elven
+                            return 0.3f;
+                        else if (weaponMatValue == 1 || weaponMatValue == 4) // Steel and Dwarven
+                            return 0.6f;
+                        else if (weaponMatValue == 2) // Silver
+                            return 1.75f;
+                        else
+                            return 1f;
+                    case 32:
+                    case 33: // Lich and Ancient Lich
+                        if (weaponMatValue == 0 || weaponMatValue == 3) // Iron and Elven
+                            return 0.3f;
+                        else if (weaponMatValue == 4 || weaponMatValue == 5) // Dwarven and Mithril
+                            return 0.6f;
+                        else if (weaponMatValue == 2) // Silver
+                            return 1.75f;
+                        else
+                            return 1f;
+                    case 25:
+                    case 26:
+                    case 27:
+                    case 29:
+                    case 31: // Frost Daedra, Fire Daedra, Daedroth, Daedra Seducer, and Daedra Lord
+                        if (weaponMatValue == 0 || weaponMatValue == 2 || weaponMatValue == 3) // Iron, Silver, and Elven
+                            return 0.3f;
+                        else if (weaponMatValue == 1 || weaponMatValue == 5 || weaponMatValue == 4) // Steel, Mithril, and Dwarven
+                            return 0.6f;
+                        else
+                            return 1f;
+                    default: // Everything Else
+                        return 1f;
+                }
+            }
+        }
+
+        public static float EntityDamageTypeResistanceCalculator(DaggerfallEntity target, int damType, int struckBodyPart, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+            EnemyEntity AITarget = target as EnemyEntity;
+
+            if (target == GameManager.Instance.PlayerEntity)
+            {
+                return PlayerEntity.PlayerPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+            }
+            else if (AITarget.EntityType == EntityTypes.EnemyClass)
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case (int)ClassCareers.Mage:
+                    case (int)ClassCareers.Spellsword:
+                    case (int)ClassCareers.Battlemage:
+                    case (int)ClassCareers.Sorcerer:
+                    case (int)ClassCareers.Healer:
+                    case (int)ClassCareers.Nightblade:
+                    case (int)ClassCareers.Bard:
+                    case (int)ClassCareers.Burglar:
+                    case (int)ClassCareers.Rogue:
+                    case (int)ClassCareers.Acrobat:
+                    case (int)ClassCareers.Thief:
+                    case (int)ClassCareers.Assassin:
+                    case (int)ClassCareers.Monk:
+                    case (int)ClassCareers.Archer:
+                    case (int)ClassCareers.Ranger:
+                    case (int)ClassCareers.Barbarian:
+                    case (int)ClassCareers.Warrior:
+                    case (int)ClassCareers.Knight:
+                        return EnemyBasics.HumanClassPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    default:
+                        return 1f;
+                }
+            }
+            else
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case 0:
+                        return EnemyBasics.RatPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 3:
+                        return EnemyBasics.GiantBatPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 4:
+                        return EnemyBasics.GrizzlyBearPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 5:
+                        return EnemyBasics.SabertoothTigerPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 6:
+                        return EnemyBasics.SpiderPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 11:
+                        return EnemyBasics.SlaughterfishPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 20:
+                        return EnemyBasics.GiantScorpionPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 1:
+                        return EnemyBasics.ImpPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 2:
+                        return EnemyBasics.SprigganPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 8:
+                        return EnemyBasics.CentaurPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 10:
+                        return EnemyBasics.NymphTigerPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 13:
+                        return EnemyBasics.HarpyPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 16:
+                        return EnemyBasics.GiantPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 22:
+                        return EnemyBasics.GargoylePhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 34:
+                        return EnemyBasics.DragonlingPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 40:
+                        return EnemyBasics.LargeDragonlingPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 41:
+                        return EnemyBasics.DreughPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 42:
+                        return EnemyBasics.LamiaPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 7:
+                        return EnemyBasics.OrcPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 12:
+                        return EnemyBasics.OrcSergeantPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 21:
+                        return EnemyBasics.OrcShamanPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 24:
+                        return EnemyBasics.OrcWarlordPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 9:
+                        return EnemyBasics.WerewolfPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 14:
+                        return EnemyBasics.WereboarPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 35:
+                        return EnemyBasics.FireAtronachPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 36:
+                        return EnemyBasics.IronAtronachPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 37:
+                        return EnemyBasics.FleshAtronachPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 38:
+                        return EnemyBasics.IceAtronachPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 15:
+                        return EnemyBasics.SkeletalWarriorPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 17:
+                        return EnemyBasics.ZombiePhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 18:
+                        return EnemyBasics.GhostPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 19:
+                        return EnemyBasics.MummyPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 23:
+                        return EnemyBasics.WraithPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 28:
+                        return EnemyBasics.VampirePhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 30:
+                        return EnemyBasics.VampireAncientPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 32:
+                        return EnemyBasics.LichPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 33:
+                        return EnemyBasics.AncientLichPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 25:
+                        return EnemyBasics.FrostDaedraPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 26:
+                        return EnemyBasics.FireDaedraPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 27:
+                        return EnemyBasics.DaedrothPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 29:
+                        return EnemyBasics.DaedraSeducerPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    case 31:
+                        return EnemyBasics.DaedraLordPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    default:
+                        return 1f;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets class career template.

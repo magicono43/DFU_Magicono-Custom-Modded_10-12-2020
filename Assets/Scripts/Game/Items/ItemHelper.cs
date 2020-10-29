@@ -659,8 +659,8 @@ namespace DaggerfallWorkshop.Game.Items
         public static TextFile.Token[] GetItemInfo(DaggerfallUnityItem item, ITextProvider textProvider)
         {
             const int paintingTextId = 250;
-            const int armorTextId = 1000;
-            const int weaponTextId = 1001;
+            //const int armorTextId = 1000;
+            //const int weaponTextId = 1001;
             const int miscTextId = 1003;
             const int soulTrapTextId = 1004;
             const int letterOfCreditTextId = 1007;
@@ -677,7 +677,7 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 case ItemGroups.Armor:
                     if (ArmorShouldShowMaterial(item))
-                        return textProvider.GetRSCTokens(armorTextId); // Handle armor showing material
+                        return GetCustomArmorTokens(); // Handle armor showing material
                     else
                         return textProvider.GetRSCTokens(armorNoMaterialTextId); // Handle armor not showing material
 
@@ -687,7 +687,7 @@ namespace DaggerfallWorkshop.Game.Items
                     else if (item.IsArtifact)
                         return textProvider.GetRSCTokens(weaponNoMaterialTextId);   // Handle artifacts
                     else
-                        return textProvider.GetRSCTokens(weaponTextId);             // Handle weapons
+                        return GetCustomWeaponTokens();             // Handle weapons
 
                 case ItemGroups.Books:
                     if (item.legacyMagic != null && item.legacyMagic[0].type == EnchantmentTypes.SpecialArtifactEffect)
@@ -764,6 +764,58 @@ namespace DaggerfallWorkshop.Game.Items
             tokens[1] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
             tokens[2] = TextFile.CreateTextToken("Weight: %kg kilograms");
             tokens[3] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            return tokens;
+        }
+
+        private static TextFile.Token[] GetCustomWeaponTokens()
+        {
+            TextFile.Token[] tokens = new TextFile.Token[20];
+            tokens[0] = TextFile.CreateTextToken("%mat %wep");
+            tokens[1] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[2] = TextFile.CreateTextToken("%wdm points of damage");
+            tokens[3] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[4] = TextFile.CreateTextToken("Condition: %qua");
+            tokens[5] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[6] = TextFile.CreateTextToken("Weight: %kg kilograms");
+            tokens[7] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[8] = TextFile.CreateTextToken("Density: %den");
+            tokens[9] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[10] = TextFile.CreateTextToken("Shear: %she");
+            tokens[11] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[12] = TextFile.CreateTextToken("Fracture: %fra");
+            tokens[13] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[14] = TextFile.CreateTextToken("Melting Point: %mpo");
+            tokens[15] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[16] = TextFile.CreateTextToken("Conductivity: %con");
+            tokens[17] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[18] = TextFile.CreateTextToken("Brittleness: %bri");
+            tokens[19] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            return tokens;
+        }
+
+        private static TextFile.Token[] GetCustomArmorTokens()
+        {
+            TextFile.Token[] tokens = new TextFile.Token[20];
+            tokens[0] = TextFile.CreateTextToken("%mat %arm");
+            tokens[1] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[2] = TextFile.CreateTextToken("%mod to armor rating");
+            tokens[3] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[4] = TextFile.CreateTextToken("Condition: %qua");
+            tokens[5] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[6] = TextFile.CreateTextToken("Weight: %kg kilograms");
+            tokens[7] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[8] = TextFile.CreateTextToken("Density: %den");
+            tokens[9] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[10] = TextFile.CreateTextToken("Shear: %she");
+            tokens[11] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[12] = TextFile.CreateTextToken("Fracture: %fra");
+            tokens[13] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[14] = TextFile.CreateTextToken("Melting Point: %mpo");
+            tokens[15] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[16] = TextFile.CreateTextToken("Conductivity: %con");
+            tokens[17] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[18] = TextFile.CreateTextToken("Brittleness: %bri");
+            tokens[19] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
             return tokens;
         }
 

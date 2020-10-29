@@ -1175,7 +1175,7 @@ namespace DaggerfallWorkshop.Game.Entity
                 FillVitalSigns();
                 for (int i = 0; i < ArmorValues.Length; i++)
                 {
-                    ArmorValues[i] = 100;
+                    ArmorValues[i] = 0;
                 }
             }
         }
@@ -2335,6 +2335,36 @@ namespace DaggerfallWorkshop.Game.Entity
             bool suppressCrime = racialOverride != null && racialOverride.SuppressCrime;
 
             crimeCommitted = (!suppressCrime) ? crime : Crimes.None;
+        }
+
+        #endregion
+
+        #region Player Damage Type Resistance
+
+        public static float PlayerPhysicalDamTypeWeaknesses(DaggerfallEntity tarPlayer, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        {
+            if (damType == 1)
+            {
+                return 1f;
+            }
+            else if (damType == 2)
+            {
+                if (armor != null && armor.shear >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else if (damType == 3)
+            {
+                if (armor != null && armor.density >= 300 || shieldBlockSuccess)
+                    return 1f;
+                else
+                    return 1.50f;
+            }
+            else
+            {
+                return 1f;
+            }
         }
 
         #endregion

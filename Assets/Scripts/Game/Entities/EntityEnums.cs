@@ -191,4 +191,16 @@ namespace DaggerfallWorkshop.Game.Entity
         ShadeNormal = 16,
         ShadeTrue = 32,
     }
+
+    /// <summary>
+    /// Player reflex settings for enemy speed.
+    /// </summary>
+    public enum DamageTypes
+    {
+        None = 0,
+        Bludgeoning = 1,
+        Slashing = 2,
+        Piercing = 3,
+        Special = 4,
+    }
 }

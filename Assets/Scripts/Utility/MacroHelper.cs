@@ -236,6 +236,16 @@ namespace DaggerfallWorkshop.Utility
             { "%pg3", PlayerPronoun3 },  // His/Her (player)
             { "%hrn", HomeRegion },  // Home region (of person)
             { "%pcl", PlayerLastname }, // Character's last name
+        // DF Unity Modded - added macros:
+            { "%den", Density },      // Item Density
+            { "%she", Shear },        // Item Shear
+            { "%fra", Fracture },     // Item Fracture
+            { "%mpo", MeltingPoint }, // Item Melting Point
+            { "%con", Conductivity }, // Item Conductivity
+            { "%bri", Brittleness },  // Item Brittleness
+            { "%wdmb", WeaponDamageBludgeoning }, // Weapon damage Bludgeoning Type
+            { "%wdms", WeaponDamageSlashing }, // Weapon damage Slashing Type
+            { "%wdmp", WeaponDamagePiercing }, // Weapon damage Piercing Type
         };
 
         // Multi-line macro handlers, returns tokens.
@@ -1165,6 +1175,60 @@ namespace DaggerfallWorkshop.Utility
         {   // %kg
             if (mcp == null) return null;
             return mcp.GetMacroDataSource().Weight();
+        }
+
+        public static string Density(IMacroContextProvider mcp)
+        {   // %den
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().Density();
+        }
+
+        public static string Shear(IMacroContextProvider mcp)
+        {   // %she
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().Shear();
+        }
+
+        public static string Fracture(IMacroContextProvider mcp)
+        {   // %fra
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().Fracture();
+        }
+
+        public static string MeltingPoint(IMacroContextProvider mcp)
+        {   // %mpo
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().MeltingPoint();
+        }
+
+        public static string Conductivity(IMacroContextProvider mcp)
+        {   // %con
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().Conductivity();
+        }
+
+        public static string Brittleness(IMacroContextProvider mcp)
+        {   // %bri
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().Brittleness();
+        }
+
+        public static string WeaponDamageBludgeoning(IMacroContextProvider mcp)
+        {   // %wdmb
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().WeaponDamageBludgeoning();
+        }
+
+        public static string WeaponDamageSlashing(IMacroContextProvider mcp)
+        {   // %wdms
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().WeaponDamageSlashing();
+        }
+
+        public static string WeaponDamagePiercing(IMacroContextProvider mcp)
+        {   // %wdmp
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().WeaponDamagePiercing();
         }
 
         public static string WeaponDamage(IMacroContextProvider mcp)

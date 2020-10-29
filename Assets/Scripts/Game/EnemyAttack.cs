@@ -239,8 +239,10 @@ namespace DaggerfallWorkshop.Game
             EnemyEntity entity = entityBehaviour.Entity as EnemyEntity;
             PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
 
+            int enemyDamType = EnemyDamageTypeUsed(entity); // Returns an integer value that corresponds to a specific damage type that this type of enemy can use, will use later on in combat formula.
+
             // Calculate damage
-            damage = FormulaHelper.CalculateAttackDamage(entity, playerEntity, -1, 0, weapon);
+            damage = FormulaHelper.CalculateAttackDamage(entity, playerEntity, -1, 0, weapon, enemyDamType);
 
             // Break any "normal power" concealment effects on enemy
             if (entity.IsMagicallyConcealedNormalPower && damage > 0)
@@ -300,8 +302,10 @@ namespace DaggerfallWorkshop.Game
             EnemySounds targetSounds = senses.Target.GetComponent<EnemySounds>();
             EnemyMotor targetMotor = senses.Target.transform.GetComponent<EnemyMotor>();
 
+            int enemyDamType = EnemyDamageTypeUsed(entity); // Returns an integer value that corresponds to a specific damage type that this type of enemy can use, will use later on in combat formula.
+
             // Calculate damage
-            damage = FormulaHelper.CalculateAttackDamage(entity, targetEntity, -1, 0, weapon);
+            damage = FormulaHelper.CalculateAttackDamage(entity, targetEntity, -1, 0, weapon, enemyDamType);
 
             // Break any "normal power" concealment effects on enemy
             if (entity.IsMagicallyConcealedNormalPower && damage > 0)
@@ -403,6 +407,140 @@ namespace DaggerfallWorkshop.Game
                 GameManager.Instance.PlayerObject.SendMessage("PlayWeaponHitSound");
             else
                 GameManager.Instance.PlayerObject.SendMessage("PlayWeaponlessHitSound");
+        }
+
+        #endregion
+
+        #region Custom Helper Methods
+
+        public int EnemyDamageTypeUsed(EnemyEntity entity) // Check what enemy is attacking and determine what their damage type is for this attack.
+        {
+            int[] damTypes;
+
+            if (entity.EntityType == EntityTypes.EnemyClass)
+            {
+                switch (entity.CareerIndex)
+                {
+                    case (int)ClassCareers.Mage:
+                        damTypes = new int[] { 1, 1, 1, 1, 1, 1, 1, 4, 4, 4 }; // 70% Bludgeoning, 30% Special
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Spellsword:
+                        damTypes = new int[] { 1, 1, 1, 2, 2, 2, 2, 3, 3, 3 }; // 30% Bludgeoning, 40% Slashing, 40% Piercing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Battlemage:
+                        damTypes = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 3 }; // 70% Slashing, 30% Piercing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Sorcerer:
+                        damTypes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 3, 3 }; // 80% Bludgeoning, 20% Piercing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Healer:
+                        return 1; // 100% Bludgeoning
+                    case (int)ClassCareers.Nightblade:
+                        damTypes = new int[] { 2, 2, 2, 2, 3, 3, 3, 3, 3, 3 }; // 40% Slashing, 60% Piercing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Bard:
+                        damTypes = new int[] { 1, 1, 2, 2, 2, 2, 2, 2, 3, 3 }; // 20% Bludgeoning, 60% Slashing, 20% Piercing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Burglar:
+                        damTypes = new int[] { 2, 2, 2, 2, 3, 3, 3, 3, 3, 3 }; // 40% Slashing, 60% Piercing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Rogue:
+                        damTypes = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 3 }; // 70% Slashing, 30% Piercing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Acrobat:
+                        damTypes = new int[] { 2, 2, 2, 2, 2, 2, 2, 2, 3, 3 }; // 80% Slashing, 20% Piercing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Thief:
+                        damTypes = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 3 }; // 70% Slashing, 30% Piercing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Assassin:
+                        damTypes = new int[] { 2, 2, 3, 3, 3, 3, 3, 3, 3, 3 }; // 20% Slashing, 80% Piercing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Monk:
+                        damTypes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 2, 2 }; // 80% Bludgeoning, 20% Slashing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Archer:
+                        return 3; // 100% Piercing
+                    case (int)ClassCareers.Ranger:
+                        return 3; // 100% Piercing
+                    case (int)ClassCareers.Barbarian:
+                        damTypes = new int[] { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2 }; // 50% Bludgeoning, 50% Slashing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Warrior:
+                        damTypes = new int[] { 1, 1, 1, 2, 2, 2, 2, 2, 2, 2 }; // 30% Bludgeoning, 70% Slashing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case (int)ClassCareers.Knight:
+                        damTypes = new int[] { 1, 1, 1, 2, 2, 2, 2, 2, 2, 2 }; // 30% Bludgeoning, 70% Slashing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    default: // Everything Else.
+                        return 1; // 100% Bludgeoning
+                }
+            }
+            else
+            {
+                switch (entity.CareerIndex)
+                {
+                    case 0:
+                    case 3:
+                    case 6:
+                    case 11:
+                    case 20:
+                    case 8: // Rat, Giant Bat, Spider, Giant Scorpion, Centaur.
+                        return 3; // 100% Piercing
+                    case 41:
+                    case 42:
+                    case 15:
+                    case 18:
+                    case 23:
+                    case 26:
+                    case 27: // Dreugh, Lamia, Skeletal Warrior, Ghost, Wraith, Fire Daedra, Daedroth.
+                        return 2; // 100% Slashing
+                    case 2:
+                    case 16:
+                    case 22:
+                    case 36:
+                    case 37:
+                    case 25: // Spriggan, Giant, Gargoyle, Iron Atronach, Flesh Atronach, Frost Daedra.
+                        return 1; // 100% Bludgeoning
+                    case 4:
+                    case 7:
+                    case 12:
+                    case 24: // Grizzly Bear, Orc, Orc Sergeant, Orc Warlord.
+                        damTypes = new int[] { 1, 1, 1, 2, 2, 2, 2, 2, 2, 2 }; // 30% Bludgeoning, 70% Slashing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case 5:
+                    case 13:
+                    case 9:
+                    case 14:
+                    case 38:
+                    case 28:
+                    case 30:
+                    case 31: // Sabertooth Tiger, Harpy, Werewolf, Wereboar, Ice Atronach, Vampire, Vampire Ancient, Daedra Lord.
+                        damTypes = new int[] { 3, 3, 3, 2, 2, 2, 2, 2, 2, 2 }; // 30% Piercing, 70% Slashing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case 1:
+                    case 10:
+                    case 29: // Imp, Nymph, Daedra Seducer.
+                        damTypes = new int[] { 2, 2, 2, 4, 4, 4, 4, 4, 4, 4 }; // 30% Slashing, 70% Special
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case 21:
+                    case 35:
+                    case 32:
+                    case 33: // Orc Shaman, Fire Atronach, Lich, Ancient Lich.
+                        damTypes = new int[] { 1, 1, 1, 1, 1, 1, 4, 4, 4, 4 }; // 60% Bludgeoning, 40% Special
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case 17:
+                    case 19: // Zombie, Mummy.
+                        damTypes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 2, 2 }; // 80% Bludgeoning, 20% Slashing
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    case 34:
+                    case 40: // Dragonling, Large Dragonling.
+                        damTypes = new int[] { 2, 2, 2, 3, 3, 3, 4, 4, 4, 4 }; // 30% Slashing, 30% Piercing, 40% Special
+                        return damTypes[Random.Range(0, damTypes.Length)];
+                    default: // Everything Else.
+                        return 1; // 100% Bludgeoning
+                }
+            }
         }
 
         #endregion

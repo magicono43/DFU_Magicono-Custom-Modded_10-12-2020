@@ -1,4 +1,4 @@
-﻿// Project:         Daggerfall Tools For Unity
+// Project:         Daggerfall Tools For Unity
 // Copyright:       Copyright (C) 2009-2020 Daggerfall Workshop
 // Web Site:        http://www.dfworkshop.net
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -49,6 +49,12 @@ namespace DaggerfallConnect.FallExe
         public string name;                         // Display name
         public float baseWeight;                    // Base weight in kilograms before material, etc.
         public int hitPoints;                       // Hit points
+        public int baseDensity;                     // Base Density value of item before material.
+        public int baseShear;                       // Base Shear value of item before material.
+        public int baseFracture;                    // Base Fracture value of item before material.
+        public int baseMeltingPoint;                // Base Melting Point value of item before material.
+        public int baseConductivity;                // Base Conductivity value of item before material.
+        public int baseBrittleness;                 // Base Brittleness value of item before material.
         public int capacityOrTarget;                // Capacity of container or target of effect
         public int basePrice;                       // Base price before material, mercantile, etc. modify value
         public int enchantmentPoints;               // Base enchantment points before material

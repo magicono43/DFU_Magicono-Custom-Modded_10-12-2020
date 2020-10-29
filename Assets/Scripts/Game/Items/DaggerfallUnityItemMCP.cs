@@ -16,6 +16,7 @@ using DaggerfallWorkshop.Game.Utility;
 using DaggerfallWorkshop.Game.Entity;
 using DaggerfallWorkshop.Utility.AssetInjection;
 using DaggerfallWorkshop.Game.MagicAndEffects;
+using DaggerfallWorkshop.Game.Formulas;
 
 namespace DaggerfallWorkshop.Game.Items
 {
@@ -139,6 +140,87 @@ namespace DaggerfallWorkshop.Game.Items
                 return String.Format(weight % 1 == 0 ? "{0:F0}" : "{0:F2}", weight);
             }
 
+            public override string Density()
+            {   // %den
+                if (parent.density <= 3000)
+                    return "Low";
+                else if (parent.density <= 6000 && parent.density > 3000)
+                    return "Medium";
+                else
+                    return "High";
+            }
+
+            public override string Shear()
+            {   // %she
+                if (parent.shear <= 3000)
+                    return "Low";
+                else if (parent.shear <= 6000 && parent.shear > 3000)
+                    return "Medium";
+                else
+                    return "High";
+            }
+
+            public override string Fracture()
+            {   // %fra
+                if (parent.fracture <= 3000)
+                    return "Low";
+                else if (parent.fracture <= 6000 && parent.fracture > 3000)
+                    return "Medium";
+                else
+                    return "High";
+            }
+
+            public override string MeltingPoint()
+            {   // %mpo
+                if (parent.meltingPoint <= 3000)
+                    return "Low";
+                else if (parent.meltingPoint <= 6000 && parent.meltingPoint > 3000)
+                    return "Medium";
+                else
+                    return "High";
+            }
+
+            public override string Conductivity()
+            {   // %con
+                if (parent.conductivity <= 3000)
+                    return "Low";
+                else if (parent.conductivity <= 6000 && parent.conductivity > 3000)
+                    return "Medium";
+                else
+                    return "High";
+            }
+
+            public override string Brittleness()
+            {   // %bri
+                if (parent.brittleness <= 3000)
+                    return "Low";
+                else if (parent.brittleness <= 6000 && parent.brittleness > 3000)
+                    return "Medium";
+                else
+                    return "High";
+            }
+            
+            public override string WeaponDamageBludgeoning()
+            {   // %wdmb
+                int matMod = parent.GetWeaponMaterialModDensity();
+                float conditionMulti =  FormulaHelper.AlterDamageBasedOnWepCondition(parent, 1);
+                return String.Format("{0} - {1}", Mathf.Clamp((int)Mathf.Round((parent.GetBaseBludgeoningDamageMin() + matMod) * conditionMulti), 0, 1000), Mathf.Clamp((int)Mathf.Round((parent.GetBaseBludgeoningDamageMax() + matMod) * conditionMulti), 0, 1000));
+            }
+
+            public override string WeaponDamageSlashing()
+            {   // %wdms
+                int matMod = parent.GetWeaponMaterialModShear();
+                float conditionMulti = FormulaHelper.AlterDamageBasedOnWepCondition(parent, 2);
+                return String.Format("{0} - {1}", Mathf.Clamp((int)Mathf.Round((parent.GetBaseSlashingDamageMin() + matMod) * conditionMulti), 0, 1000), Mathf.Clamp((int)Mathf.Round((parent.GetBaseSlashingDamageMax() + matMod) * conditionMulti), 0, 1000));
+            }
+
+            public override string WeaponDamagePiercing()
+            {   // %wdmp
+                int matMod = parent.GetWeaponMaterialModFracture();
+                float conditionMulti = FormulaHelper.AlterDamageBasedOnWepCondition(parent, 3);
+                return String.Format("{0} - {1}", Mathf.Clamp((int)Mathf.Round((parent.GetBasePiercingDamageMin() + matMod) * conditionMulti), 0, 1000), Mathf.Clamp((int)Mathf.Round((parent.GetBasePiercingDamageMax() + matMod) * conditionMulti), 0, 1000));
+            }
+
             public override string WeaponDamage()
             {   // %wdm
                 int matMod = parent.GetWeaponMaterialModifier();
@@ -148,7 +230,8 @@ namespace DaggerfallWorkshop.Game.Items
             // Armour mod is double what classic displays, but this is correct according to Allofich.
             public override string ArmourMod()
             {   // %mod
-                return parent.GetMaterialArmorValue().ToString("+0;-0;0");
+                int matMod = parent.GetMaterialArmorValue();
+                return String.Format("+{0}%", matMod);
             }
 
             public override string BookAuthor()
