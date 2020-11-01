@@ -60,6 +60,12 @@ namespace DaggerfallConnect.Save
             public UInt16 material;
             public Byte color;
             public UInt32 weight;
+            public UInt16 density;
+            public UInt16 shear;
+            public UInt16 fracture;
+            public UInt16 meltingPoint;
+            public UInt16 conductivity;
+            public UInt16 brittleness;
             public UInt16 enchantmentPoints;
             public UInt16 message;
             public Byte variants;
@@ -144,6 +150,12 @@ namespace DaggerfallConnect.Save
             parsedData.material = reader.ReadUInt16();
             parsedData.color = reader.ReadByte();
             parsedData.weight = reader.ReadUInt32();
+            parsedData.density = reader.ReadUInt16();
+            parsedData.shear = reader.ReadUInt16();
+            parsedData.fracture = reader.ReadUInt16();
+            parsedData.meltingPoint = reader.ReadUInt16();
+            parsedData.conductivity = reader.ReadUInt16();
+            parsedData.brittleness = reader.ReadUInt16();
             parsedData.enchantmentPoints = reader.ReadUInt16();
             parsedData.message = reader.ReadUInt16();
             parsedData.variants = reader.ReadByte();

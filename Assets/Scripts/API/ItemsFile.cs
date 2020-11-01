@@ -27,6 +27,12 @@ namespace DaggerfallConnect.FallExe
         public Byte[] name;                         // Display name
         public Int32 baseWeightUnits;               // Base weight in 0.25kg units
         public UInt16 hitPoints;                    // Hit points
+        public UInt16 baseDensity;
+        public UInt16 baseShear;
+        public UInt16 baseFracture;
+        public UInt16 baseMeltingPoint;
+        public UInt16 baseConductivity;
+        public UInt16 baseBrittleness;
         public Int32 capacityOrTarget;              // Capacity of container or target of effect
         public Int32 basePrice;                     // Base price before material, mercantile, etc. modify value
         public Int16 enchantmentPoints;             // Base enchantment points before material
@@ -333,6 +339,12 @@ namespace DaggerfallConnect.FallExe
                 desc.name = Encoding.UTF8.GetString(item.name).TrimEnd('\0');
                 desc.baseWeight = (float)item.baseWeightUnits * 0.25f;
                 desc.hitPoints = item.hitPoints;
+                desc.hitPoints = item.baseDensity;
+                desc.hitPoints = item.baseShear;
+                desc.hitPoints = item.baseFracture;
+                desc.hitPoints = item.baseMeltingPoint;
+                desc.hitPoints = item.baseConductivity;
+                desc.hitPoints = item.baseBrittleness;
                 desc.capacityOrTarget = item.capacityOrTarget;
                 desc.basePrice = item.basePrice;
                 desc.enchantmentPoints = item.enchantmentPoints;
@@ -370,6 +382,12 @@ namespace DaggerfallConnect.FallExe
                 writer.Write(item.name);
                 writer.Write(item.baseWeightUnits);
                 writer.Write(item.hitPoints);
+                writer.Write(item.baseDensity);
+                writer.Write(item.baseShear);
+                writer.Write(item.baseFracture);
+                writer.Write(item.baseMeltingPoint);
+                writer.Write(item.baseConductivity);
+                writer.Write(item.baseBrittleness);
                 writer.Write(item.capacityOrTarget);
                 writer.Write(item.basePrice);
                 writer.Write(item.enchantmentPoints);
@@ -441,6 +459,12 @@ namespace DaggerfallConnect.FallExe
             item.name = reader.ReadBytes(nameLength);
             item.baseWeightUnits = reader.ReadInt32();
             item.hitPoints = reader.ReadUInt16();
+            item.baseDensity = reader.ReadUInt16();
+            item.baseShear = reader.ReadUInt16();
+            item.baseFracture = reader.ReadUInt16();
+            item.baseMeltingPoint = reader.ReadUInt16();
+            item.baseConductivity = reader.ReadUInt16();
+            item.baseBrittleness = reader.ReadUInt16();
             item.capacityOrTarget = reader.ReadInt32();
             item.basePrice = reader.ReadInt32();
             item.enchantmentPoints = reader.ReadInt16();

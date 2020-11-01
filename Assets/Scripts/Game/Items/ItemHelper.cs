@@ -687,7 +687,7 @@ namespace DaggerfallWorkshop.Game.Items
                     else if (item.IsArtifact)
                         return textProvider.GetRSCTokens(weaponNoMaterialTextId);   // Handle artifacts
                     else
-                        return GetCustomWeaponTokens();             // Handle weapons
+                        return GetCustomWeaponTokens(item);             // Handle weapons
 
                 case ItemGroups.Books:
                     if (item.legacyMagic != null && item.legacyMagic[0].type == EnchantmentTypes.SpecialArtifactEffect)
@@ -767,56 +767,149 @@ namespace DaggerfallWorkshop.Game.Items
             return tokens;
         }
 
-        private static TextFile.Token[] GetCustomWeaponTokens()
+        private static TextFile.Token[] GetCustomWeaponTokens(DaggerfallUnityItem item)
         {
-            TextFile.Token[] tokens = new TextFile.Token[20];
-            tokens[0] = TextFile.CreateTextToken("%mat %wep");
-            tokens[1] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[2] = TextFile.CreateTextToken("%wdm points of damage");
-            tokens[3] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[4] = TextFile.CreateTextToken("Condition: %qua");
-            tokens[5] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[6] = TextFile.CreateTextToken("Weight: %kg kilograms");
-            tokens[7] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[8] = TextFile.CreateTextToken("Density: %den");
-            tokens[9] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[10] = TextFile.CreateTextToken("Shear: %she");
-            tokens[11] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[12] = TextFile.CreateTextToken("Fracture: %fra");
-            tokens[13] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[14] = TextFile.CreateTextToken("Melting Point: %mpo");
-            tokens[15] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[16] = TextFile.CreateTextToken("Conductivity: %con");
-            tokens[17] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[18] = TextFile.CreateTextToken("Brittleness: %bri");
-            tokens[19] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            return tokens;
+            int weaponTextContext = WeaponTextContextInfo(item);
+
+            if (weaponTextContext == 1) // Blunt and Slashing attacks only
+            {
+                TextFile.Token[] tokens = new TextFile.Token[16];
+                tokens[0] = TextFile.CreateTextToken("%mat %wep");
+                tokens[1] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[2] = TextFile.CreateTextToken("%wdmb bludgeoning damage");
+                tokens[3] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[4] = TextFile.CreateTextToken("%wdms slashing damage");
+                tokens[5] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[6] = TextFile.CreateTextToken("Condition: %qua");
+                tokens[7] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[8] = TextFile.CreateTextToken("Weight: %kg kilograms");
+                tokens[9] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[10] = TextFile.CreateTextToken("Melting Point: %mpo");
+                tokens[11] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[12] = TextFile.CreateTextToken("Conductivity: %con");
+                tokens[13] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[14] = TextFile.CreateTextToken("Brittleness: %bri");
+                tokens[15] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                return tokens;
+            }
+            else if (weaponTextContext == 2) // Blunt and Piercing attacks only
+            {
+                TextFile.Token[] tokens = new TextFile.Token[16];
+                tokens[0] = TextFile.CreateTextToken("%mat %wep");
+                tokens[1] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[2] = TextFile.CreateTextToken("%wdmb bludgeoning damage");
+                tokens[3] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[4] = TextFile.CreateTextToken("%wdmp piercing damage");
+                tokens[5] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[6] = TextFile.CreateTextToken("Condition: %qua");
+                tokens[7] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[8] = TextFile.CreateTextToken("Weight: %kg kilograms");
+                tokens[9] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[10] = TextFile.CreateTextToken("Melting Point: %mpo");
+                tokens[11] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[12] = TextFile.CreateTextToken("Conductivity: %con");
+                tokens[13] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[14] = TextFile.CreateTextToken("Brittleness: %bri");
+                tokens[15] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                return tokens;
+            }
+            else if (weaponTextContext == 3) // Piercing attacks only
+            {
+                TextFile.Token[] tokens = new TextFile.Token[14];
+                tokens[0] = TextFile.CreateTextToken("%mat %wep");
+                tokens[1] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[2] = TextFile.CreateTextToken("%wdmp piercing damage");
+                tokens[3] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[4] = TextFile.CreateTextToken("Condition: %qua");
+                tokens[5] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[6] = TextFile.CreateTextToken("Weight: %kg kilograms");
+                tokens[7] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[8] = TextFile.CreateTextToken("Melting Point: %mpo");
+                tokens[9] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[10] = TextFile.CreateTextToken("Conductivity: %con");
+                tokens[11] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[12] = TextFile.CreateTextToken("Brittleness: %bri");
+                tokens[13] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                return tokens;
+            }
+            else // All attacks types
+            {
+                TextFile.Token[] tokens = new TextFile.Token[18];
+                tokens[0] = TextFile.CreateTextToken("%mat %wep");
+                tokens[1] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[2] = TextFile.CreateTextToken("%wdmb bludgeoning damage");
+                tokens[3] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[4] = TextFile.CreateTextToken("%wdms slashing damage");
+                tokens[5] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[6] = TextFile.CreateTextToken("%wdmp piercing damage");
+                tokens[7] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[8] = TextFile.CreateTextToken("Condition: %qua");
+                tokens[9] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[10] = TextFile.CreateTextToken("Weight: %kg kilograms");
+                tokens[11] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[12] = TextFile.CreateTextToken("Melting Point: %mpo");
+                tokens[13] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[14] = TextFile.CreateTextToken("Conductivity: %con");
+                tokens[15] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                tokens[16] = TextFile.CreateTextToken("Brittleness: %bri");
+                tokens[17] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+                return tokens;
+            }
         }
 
         private static TextFile.Token[] GetCustomArmorTokens()
         {
-            TextFile.Token[] tokens = new TextFile.Token[20];
+            TextFile.Token[] tokens = new TextFile.Token[18];
             tokens[0] = TextFile.CreateTextToken("%mat %arm");
             tokens[1] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[2] = TextFile.CreateTextToken("%mod to armor rating");
+            tokens[2] = TextFile.CreateTextToken("%dredb protected from bludgeoning");
             tokens[3] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[4] = TextFile.CreateTextToken("Condition: %qua");
+            tokens[4] = TextFile.CreateTextToken("%dreds protected from slashing");
             tokens[5] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[6] = TextFile.CreateTextToken("Weight: %kg kilograms");
+            tokens[6] = TextFile.CreateTextToken("%dredp protected from piercing");
             tokens[7] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[8] = TextFile.CreateTextToken("Density: %den");
+            tokens[8] = TextFile.CreateTextToken("Condition: %qua");
             tokens[9] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[10] = TextFile.CreateTextToken("Shear: %she");
+            tokens[10] = TextFile.CreateTextToken("Weight: %kg kilograms");
             tokens[11] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[12] = TextFile.CreateTextToken("Fracture: %fra");
+            tokens[12] = TextFile.CreateTextToken("Melting Point: %mpo");
             tokens[13] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[14] = TextFile.CreateTextToken("Melting Point: %mpo");
+            tokens[14] = TextFile.CreateTextToken("Conductivity: %con");
             tokens[15] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[16] = TextFile.CreateTextToken("Conductivity: %con");
+            tokens[16] = TextFile.CreateTextToken("Brittleness: %bri");
             tokens[17] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
-            tokens[18] = TextFile.CreateTextToken("Brittleness: %bri");
-            tokens[19] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
             return tokens;
+        }
+
+        public static int WeaponTextContextInfo(DaggerfallUnityItem weapon)
+        {
+            switch (weapon.TemplateIndex)
+            {
+                case (int)Weapons.Dagger:
+                case (int)Weapons.Shortsword:
+                case (int)Weapons.Tanto:
+                case (int)Weapons.Wakazashi:
+                case (int)Weapons.Broadsword:
+                case (int)Weapons.Claymore:
+                case (int)Weapons.Dai_Katana:
+                case (int)Weapons.Katana:
+                case (int)Weapons.Longsword:
+                case (int)Weapons.Saber:
+                case (int)Weapons.War_Axe:
+                    return 0;
+                case (int)Weapons.Battle_Axe:
+                    return 1;
+                case (int)Weapons.Flail:
+                case (int)Weapons.Mace:
+                case (int)Weapons.Staff:
+                case (int)Weapons.Warhammer:
+                    return 2;
+                case (int)Weapons.Long_Bow:
+                case (int)Weapons.Short_Bow:
+                    return 3;
+                default:
+                    return 0;
+            }
         }
 
         /// <summary>

@@ -532,9 +532,9 @@ namespace DaggerfallWorkshop.Game.Formulas
                     return 0;
                 case Weapons.Shortsword:
                 case Weapons.Wakazashi:
-                case Weapons.Broadsword:
                 case Weapons.Longsword:
                     return 2;
+                case Weapons.Broadsword:
                 case Weapons.Dai_Katana:
                 case Weapons.Katana:
                 case Weapons.Saber:
@@ -570,13 +570,13 @@ namespace DaggerfallWorkshop.Game.Formulas
                 case Weapons.Dagger:
                     return 4;
                 case Weapons.Shortsword:
-                    return 5;
                 case Weapons.Longsword:
-                    return 6;
+                    return 5;
                 case Weapons.Wakazashi:
-                case Weapons.Broadsword:
                 case Weapons.Saber:
                     return 7;
+                case Weapons.Broadsword:
+                    return 8;
                 case Weapons.Claymore:
                 case Weapons.Battle_Axe:
                     return 9;
@@ -652,9 +652,9 @@ namespace DaggerfallWorkshop.Game.Formulas
                 case Weapons.Warhammer:
                     return 4;
                 case Weapons.Dagger:
+                case Weapons.Longsword:
                 case Weapons.War_Axe:
                     return 5;
-                case Weapons.Longsword:
                 case Weapons.Staff:
                     return 6;
                 case Weapons.Tanto:
@@ -1088,6 +1088,10 @@ namespace DaggerfallWorkshop.Game.Formulas
         {
             int damage = 0;
             float conditionMulti = 1f;
+            int minDamLowerLimit = CalculateWeaponMinDamTypeLowerLimit(weapon, mainDamType);
+            int minDamUpperLimit = CalculateWeaponMinDamTypeUpperLimit(weapon, mainDamType);
+            int maxDamLowerLimit = CalculateWeaponMaxDamTypeLowerLimit(weapon, mainDamType);
+            int maxDamUpperLimit = CalculateWeaponMaxDamTypeUpperLimit(weapon, mainDamType);
 
             if (attacker == GameManager.Instance.PlayerEntity) // Only the player has weapon damage effected by condition value.
             {
@@ -1096,11 +1100,11 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
 
             if (mainDamType == 1)
-                damage = UnityEngine.Random.Range(Mathf.Clamp((int)Mathf.Round((weapon.GetBaseBludgeoningDamageMin() + weapon.GetWeaponMaterialModDensity()) * conditionMulti * damTypeResistMod), 0, 1000), Mathf.Clamp((int)Mathf.Round((weapon.GetBaseBludgeoningDamageMax() + weapon.GetWeaponMaterialModDensity()) * conditionMulti * damTypeResistMod), 1, 1000)) + damageModifier;
+                damage = UnityEngine.Random.Range(Mathf.Clamp((int)Mathf.Round((weapon.GetBaseBludgeoningDamageMin() + weapon.GetWeaponMaterialModDensity()) * conditionMulti * damTypeResistMod), minDamLowerLimit, minDamUpperLimit), Mathf.Clamp((int)Mathf.Round((weapon.GetBaseBludgeoningDamageMax() + weapon.GetWeaponMaterialModDensity()) * conditionMulti * damTypeResistMod), maxDamLowerLimit, maxDamUpperLimit)) + damageModifier;
             else if (mainDamType == 2)
-                damage = UnityEngine.Random.Range(Mathf.Clamp((int)Mathf.Round((weapon.GetBaseSlashingDamageMin() + weapon.GetWeaponMaterialModShear()) * conditionMulti * damTypeResistMod), 0, 1000), Mathf.Clamp((int)Mathf.Round((weapon.GetBaseSlashingDamageMax() + weapon.GetWeaponMaterialModShear()) * conditionMulti * damTypeResistMod), 1, 1000)) + damageModifier;
+                damage = UnityEngine.Random.Range(Mathf.Clamp((int)Mathf.Round((weapon.GetBaseSlashingDamageMin() + weapon.GetWeaponMaterialModShear()) * conditionMulti * damTypeResistMod), minDamLowerLimit, minDamUpperLimit), Mathf.Clamp((int)Mathf.Round((weapon.GetBaseSlashingDamageMax() + weapon.GetWeaponMaterialModShear()) * conditionMulti * damTypeResistMod), maxDamLowerLimit, maxDamUpperLimit)) + damageModifier;
             else if (mainDamType == 3)
-                damage = UnityEngine.Random.Range(Mathf.Clamp((int)Mathf.Round((weapon.GetBasePiercingDamageMin() + weapon.GetWeaponMaterialModFracture()) * conditionMulti * damTypeResistMod), 0, 1000), Mathf.Clamp((int)Mathf.Round((weapon.GetBasePiercingDamageMax() + weapon.GetWeaponMaterialModFracture()) * conditionMulti * damTypeResistMod), 1, 1000)) + damageModifier;
+                damage = UnityEngine.Random.Range(Mathf.Clamp((int)Mathf.Round((weapon.GetBasePiercingDamageMin() + weapon.GetWeaponMaterialModFracture()) * conditionMulti * damTypeResistMod), minDamLowerLimit, minDamUpperLimit), Mathf.Clamp((int)Mathf.Round((weapon.GetBasePiercingDamageMax() + weapon.GetWeaponMaterialModFracture()) * conditionMulti * damTypeResistMod), maxDamLowerLimit, maxDamUpperLimit)) + damageModifier;
             else
                 damage = UnityEngine.Random.Range(weapon.GetBaseDamageMin(), weapon.GetBaseDamageMax() + 1) + damageModifier;
 
@@ -1774,6 +1778,364 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
         }
 
+        public static int CalculateWeaponMinDamTypeLowerLimit(DaggerfallUnityItem weapon, int damType)
+        {
+            if (damType == 1)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Dagger:
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Longsword:
+                        return 1;
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Battle_Axe:
+                    case (int)Weapons.War_Axe:
+                        return 2;
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Staff:
+                        return 3;
+                    case (int)Weapons.Mace:
+                    case (int)Weapons.Flail:
+                    case (int)Weapons.Warhammer:
+                        return 4;
+                    default:
+                        return 0;
+                }
+            }
+            else if (damType == 2)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Dagger:
+                    case (int)Weapons.Tanto:
+                        return 1;
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Wakazashi:
+                    case (int)Weapons.Longsword:
+                        return 2;
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Battle_Axe:
+                    case (int)Weapons.War_Axe:
+                        return 3;
+                    case (int)Weapons.Katana:
+                        return 4;
+                    case (int)Weapons.Dai_Katana:
+                        return 5;
+                    default:
+                        return 0;
+                }
+            }
+            else if (damType == 3)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Wakazashi:
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Flail:
+                    case (int)Weapons.Mace:
+                    case (int)Weapons.Staff:
+                        return 1;
+                    case (int)Weapons.Katana:
+                    case (int)Weapons.Dai_Katana:
+                    case (int)Weapons.War_Axe:
+                    case (int)Weapons.Warhammer:
+                        return 2;
+                    case (int)Weapons.Dagger:
+                    case (int)Weapons.Longsword:
+                        return 3;
+                    case (int)Weapons.Tanto:
+                        return 4;
+                    case (int)Weapons.Long_Bow:
+                    case (int)Weapons.Short_Bow:
+                        return 5;
+                    default:
+                        return 0;
+                }
+            }
+            else
+                return 0;
+        }
+
+        public static int CalculateWeaponMinDamTypeUpperLimit(DaggerfallUnityItem weapon, int damType)
+        {
+            if (damType == 1)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Tanto:
+                    case (int)Weapons.Wakazashi:
+                    case (int)Weapons.Dai_Katana:
+                    case (int)Weapons.Katana:
+                        return 2;
+                    case (int)Weapons.Dagger:
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Longsword:
+                        return 3;
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Battle_Axe:
+                    case (int)Weapons.War_Axe:
+                        return 4;
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Staff:
+                        return 5;
+                    case (int)Weapons.Mace:
+                    case (int)Weapons.Flail:
+                    case (int)Weapons.Warhammer:
+                        return 6;
+                    default:
+                        return 0;
+                }
+            }
+            else if (damType == 2)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Tanto:
+                        return 3;
+                    case (int)Weapons.Dagger:
+                    case (int)Weapons.Shortsword:
+                        return 4;
+                    case (int)Weapons.Wakazashi:
+                    case (int)Weapons.Longsword:
+                        return 5;
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Battle_Axe:
+                    case (int)Weapons.War_Axe:
+                        return 6;
+                    case (int)Weapons.Katana:
+                        return 7;
+                    case (int)Weapons.Dai_Katana:
+                        return 8;
+                    default:
+                        return 0;
+                }
+            }
+            else if (damType == 3)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Flail:
+                    case (int)Weapons.Mace:
+                    case (int)Weapons.Staff:
+                        return 2;
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Wakazashi:
+                        return 3;
+                    case (int)Weapons.Katana:
+                    case (int)Weapons.Dai_Katana:
+                    case (int)Weapons.War_Axe:
+                    case (int)Weapons.Warhammer:
+                        return 4;
+                    case (int)Weapons.Longsword:
+                        return 5;
+                    case (int)Weapons.Dagger:
+                        return 6;
+                    case (int)Weapons.Tanto:
+                        return 7;
+                    case (int)Weapons.Long_Bow:
+                    case (int)Weapons.Short_Bow:
+                        return 8;
+                    default:
+                        return 0;
+                }
+            }
+            else
+                return 0;
+        }
+
+        public static int CalculateWeaponMaxDamTypeLowerLimit(DaggerfallUnityItem weapon, int damType)
+        {
+            if (damType == 1)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Tanto:
+                    case (int)Weapons.Wakazashi:
+                    case (int)Weapons.Dai_Katana:
+                    case (int)Weapons.Katana:
+                        return 2;
+                    case (int)Weapons.Dagger:
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Longsword:
+                        return 3;
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Battle_Axe:
+                    case (int)Weapons.War_Axe:
+                        return 4;
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Staff:
+                        return 5;
+                    case (int)Weapons.Mace:
+                    case (int)Weapons.Flail:
+                    case (int)Weapons.Warhammer:
+                        return 6;
+                    default:
+                        return 0;
+                }
+            }
+            else if (damType == 2)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Tanto:
+                        return 3;
+                    case (int)Weapons.Dagger:
+                    case (int)Weapons.Shortsword:
+                        return 4;
+                    case (int)Weapons.Wakazashi:
+                    case (int)Weapons.Longsword:
+                        return 5;
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Battle_Axe:
+                    case (int)Weapons.War_Axe:
+                        return 6;
+                    case (int)Weapons.Katana:
+                        return 7;
+                    case (int)Weapons.Dai_Katana:
+                        return 8;
+                    default:
+                        return 0;
+                }
+            }
+            else if (damType == 3)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Flail:
+                    case (int)Weapons.Mace:
+                    case (int)Weapons.Staff:
+                        return 2;
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Wakazashi:
+                        return 3;
+                    case (int)Weapons.Katana:
+                    case (int)Weapons.Dai_Katana:
+                    case (int)Weapons.War_Axe:
+                    case (int)Weapons.Warhammer:
+                        return 4;
+                    case (int)Weapons.Longsword:
+                        return 5;
+                    case (int)Weapons.Dagger:
+                        return 6;
+                    case (int)Weapons.Tanto:
+                        return 7;
+                    case (int)Weapons.Long_Bow:
+                    case (int)Weapons.Short_Bow:
+                        return 8;
+                    default:
+                        return 0;
+                }
+            }
+            else
+                return 0;
+        }
+
+        public static int CalculateWeaponMaxDamTypeUpperLimit(DaggerfallUnityItem weapon, int damType)
+        {
+            if (damType == 1)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Tanto:
+                    case (int)Weapons.Wakazashi:
+                    case (int)Weapons.Dai_Katana:
+                    case (int)Weapons.Katana:
+                        return 4;
+                    case (int)Weapons.Dagger:
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Longsword:
+                        return 5;
+                    case (int)Weapons.Broadsword:
+                        return 6;
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Battle_Axe:
+                    case (int)Weapons.War_Axe:
+                        return 7;
+                    case (int)Weapons.Staff:
+                    case (int)Weapons.Mace:
+                    case (int)Weapons.Flail:
+                    case (int)Weapons.Warhammer:
+                        return 60;
+                    default:
+                        return 0;
+                }
+            }
+            else if (damType == 2)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Tanto:
+                        return 6;
+                    case (int)Weapons.Dagger:
+                        return 8;
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Wakazashi:
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Longsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Battle_Axe:
+                    case (int)Weapons.War_Axe:
+                    case (int)Weapons.Katana:
+                    case (int)Weapons.Dai_Katana:
+                        return 60;
+                    default:
+                        return 0;
+                }
+            }
+            else if (damType == 3)
+            {
+                switch (weapon.TemplateIndex)
+                {
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Flail:
+                    case (int)Weapons.Mace:
+                    case (int)Weapons.Staff:
+                        return 7;
+                    case (int)Weapons.Wakazashi:
+                    case (int)Weapons.Katana:
+                    case (int)Weapons.Dai_Katana:
+                        return 8;
+                    case (int)Weapons.War_Axe:
+                    case (int)Weapons.Warhammer:
+                        return 9;
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Dagger:
+                    case (int)Weapons.Longsword:
+                    case (int)Weapons.Tanto:
+                    case (int)Weapons.Long_Bow:
+                    case (int)Weapons.Short_Bow:
+                        return 60;
+                    default:
+                        return 0;
+                }
+            }
+            else
+                return 0;
+        }
+
         public static ToHitAndDamageMods CalculateProficiencyModifiers(DaggerfallEntity attacker, DaggerfallUnityItem weapon)
         {
             ToHitAndDamageMods mods = new ToHitAndDamageMods(); // If I feel that 50 starting points is too much for a level 1 character, I could always make the benefits only start past that 50 mark or something, maybe 40.
@@ -2321,21 +2683,6 @@ namespace DaggerfallWorkshop.Game.Formulas
 
         #region Effects and Resistances
 
-        public static float NaturalDamageResist(DaggerfallEntity entity)
-        {
-            int targetEndur = entity.Stats.LiveEndurance - 50;
-            int targetStren = entity.Stats.LiveStrength - 50; // Every point of these does something, positive and negative between 50.
-            int targetWillp = entity.Stats.LiveWillpower - 50;
-
-            float naturalDamResist = (targetEndur * .002f);
-            naturalDamResist += (targetStren * .001f);
-            naturalDamResist += (targetWillp * .001f);
-
-            Mathf.Clamp(naturalDamResist, -0.2f, 0.2f); // This is to keep other mods that allow over 100 attribute points from allowing damage reduction values to go over 20%. May actually remove this cap for monsters, possibly, since some of the higher level ones have over 100 attribute points.
-            return naturalDamResist * 100;
-            //Debug.LogFormat("Natural Damage Resist = {0}", naturalDamResist);
-        }
-
         // If the player has equipment that is below a certain percentage of condition, this will check if they should be warned with a pop-up message about said piece of equipment.
         public static void WarningMessagePlayerEquipmentCondition(DaggerfallUnityItem item, int startItemCondPer)
         {
@@ -2477,7 +2824,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                     break;
             }
 
-            softBlockChance += (ItemBuilder.weightMultipliersByMaterial[shield.NativeMaterialValue] - 6) * -(0.017f * (targetStren / 100)); // The more heavy the shield material, the harder it is to block the "soft points" of the shield, more strength reduces this effect. Keep in mind, the way it is now, it may reduce chances with lighter shields and high strength, testing required.
+            softBlockChance += (ItemBuilder.weightMultipliersByMaterial[DaggerfallUnityItem.MaterialIdentification(shield)] - 6) * -2.5f; // I don't know why, but the math here is fucking with me, I think I would have to do this in a few steps to get the results i'm after, i'll just leave it simple like this for now.
 
             if (shieldStrongSpot)
             {
@@ -2632,9 +2979,9 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (shieldBlockSuccess) // Shield
             {
                 if (condPerc >= 92)                         // New
-                    return 1.3f;
-                else if (condPerc <= 91 && condPerc >= 76)  // Almost New
                     return 1.1f;
+                else if (condPerc <= 91 && condPerc >= 76)  // Almost New
+                    return 1.05f;
                 else if (condPerc <= 75 && condPerc >= 61)  // Slightly Used
                     return 1f;
                 else if (condPerc <= 60 && condPerc >= 41)  // Used
@@ -2651,9 +2998,9 @@ namespace DaggerfallWorkshop.Game.Formulas
             else // Other Armor
             {
                 if (condPerc >= 92)                         // New
-                    return 1.2f;
-                else if (condPerc <= 91 && condPerc >= 76)  // Almost New
                     return 1.1f;
+                else if (condPerc <= 91 && condPerc >= 76)  // Almost New
+                    return 1.05f;
                 else if (condPerc <= 75 && condPerc >= 61)  // Slightly Used
                     return 1f;
                 else if (condPerc <= 60 && condPerc >= 41)  // Used
@@ -2697,26 +3044,26 @@ namespace DaggerfallWorkshop.Game.Formulas
             {
                 if (damType == 1)
                 {
-                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.020f;
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[DaggerfallUnityItem.MaterialIdentification(item)]) - 6) * 0.030f;
                     float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
                     float reductionMod = ((item.fracture - 300) / 50) * 0.05f;
-                    float resultMod = Mathf.Clamp((0.50f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    float resultMod = Mathf.Clamp((0.50f + reductionMod + weightMod - critDamPen) * conditionMod, 0f, 1f);
                     return (resultMod - 1f) * -1f;
                 }
                 else if (damType == 2)
                 {
-                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.025f;
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[DaggerfallUnityItem.MaterialIdentification(item)]) - 6) * 0.040f;
                     float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
                     float reductionMod = ((item.shear - 300) / 50) * 0.05f;
-                    float resultMod = Mathf.Clamp((0.50f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    float resultMod = Mathf.Clamp((0.50f + reductionMod + weightMod - critDamPen) * conditionMod, 0f, 1f);
                     return (resultMod - 1f) * -1f;
                 }
                 else if (damType == 3)
                 {
-                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.030f;
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[DaggerfallUnityItem.MaterialIdentification(item)]) - 6) * 0.045f;
                     float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
                     float reductionMod = ((item.density - 300) / 50) * 0.05f;
-                    float resultMod = Mathf.Clamp((0.50f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    float resultMod = Mathf.Clamp((0.50f + reductionMod + weightMod - critDamPen) * conditionMod, 0f, 1f);
                     return (resultMod - 1f) * -1f;
                 }
                 else if (damType == 4) // Special Attacks Ignore Armor Reductions
@@ -2728,26 +3075,26 @@ namespace DaggerfallWorkshop.Game.Formulas
             {
                 if (damType == 1)
                 {
-                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.015f;
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[DaggerfallUnityItem.MaterialIdentification(item)]) - 6) * 0.025f;
                     float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
                     float reductionMod = ((item.fracture - 300) / 50) * 0.04f;
-                    float resultMod = Mathf.Clamp((0.40f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    float resultMod = Mathf.Clamp((0.40f + reductionMod + weightMod - critDamPen) * conditionMod, 0f, 1f);
                     return (resultMod - 1f) * -1f;
                 }
                 else if (damType == 2)
                 {
-                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.020f;
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[DaggerfallUnityItem.MaterialIdentification(item)]) - 6) * 0.035f;
                     float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
                     float reductionMod = ((item.shear - 300) / 50) * 0.04f;
-                    float resultMod = Mathf.Clamp((0.40f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    float resultMod = Mathf.Clamp((0.40f + reductionMod + weightMod - critDamPen) * conditionMod, 0f, 1f);
                     return (resultMod - 1f) * -1f;
                 }
                 else if (damType == 3)
                 {
-                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[item.NativeMaterialValue]) - 6) * 0.020f;
+                    float weightMod = ((ItemBuilder.weightMultipliersByMaterial[DaggerfallUnityItem.MaterialIdentification(item)]) - 6) * 0.040f;
                     float conditionMod = AlterDamageReductionBasedOnArmorCondition(item, shieldBlockSuccess, damType);
                     float reductionMod = ((item.density - 300) / 50) * 0.04f;
-                    float resultMod = Mathf.Clamp((0.40f + reductionMod + weightMod - critDamPen) * conditionMod, 0, 1);
+                    float resultMod = Mathf.Clamp((0.40f + reductionMod + weightMod - critDamPen) * conditionMod, 0f, 1f);
                     return (resultMod - 1f) * -1f;
                 }
                 else if (damType == 4) // Special Attacks Ignore Armor Reductions
@@ -2792,7 +3139,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                     break;
             }
 
-            softBlockChance += (ItemBuilder.weightMultipliersByMaterial[shield.NativeMaterialValue] - 6) * -(0.017f * (targetStren / 100)); // The more heavy the shield material, the harder it is to block the "soft points" of the shield, more strength reduces this effect. Keep in mind, the way it is now, it may reduce chances with lighter shields and high strength, testing required.
+            softBlockChance += (ItemBuilder.weightMultipliersByMaterial[DaggerfallUnityItem.MaterialIdentification(shield)] - 6) * -2.5f; // I don't know why, but the math here is fucking with me, I think I would have to do this in a few steps to get the results i'm after, i'll just leave it simple like this for now.
 
             if (covered)
             {

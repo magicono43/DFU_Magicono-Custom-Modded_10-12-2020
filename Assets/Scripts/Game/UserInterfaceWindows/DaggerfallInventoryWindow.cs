@@ -457,7 +457,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             paperDoll.OnMouseClick += PaperDoll_OnMouseClick;
             paperDoll.OnRightMouseClick += PaperDoll_OnRightMouseClick;
             paperDoll.ToolTip = defaultToolTip;
-            paperDoll.Refresh();
+            paperDoll.Refresh(true);
         }
 
         protected void SetupTabPageButtons()
@@ -767,7 +767,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
 
             // Refresh paper doll
             if (refreshPaperDoll)
-                paperDoll.Refresh();
+                paperDoll.Refresh(true);
         }
 
         #endregion
@@ -1388,7 +1388,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         {
             item.NextVariant();
             if (item.IsEquipped)
-                paperDoll.Refresh();
+                paperDoll.Refresh(true);
             else
                 Refresh(false);
         }

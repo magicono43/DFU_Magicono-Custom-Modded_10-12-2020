@@ -1007,22 +1007,25 @@ namespace DaggerfallWorkshop.Game.Items
 
         public int GetWeaponMaterialModDensity()
         {
-            float mainMatMod = (density - 300) / 50;
-            float weightDamMod = Mathf.Clamp((weightInKg - 4) / 5, 0, 100);
+            float mainMatMod = Mathf.Clamp((density - 300) / 50, -2, 15);
+            float weightDamMod = Mathf.Ceil((ItemBuilder.weightMultipliersByMaterial[InternalMaterialIdentification()] - 6) / 2);
+            //float weightDamMod = Mathf.Clamp((weightInKg - 4) / 5, 0, 100);
             return (int)Mathf.Round(mainMatMod + weightDamMod);
         }
 
         public int GetWeaponMaterialModShear()
         {
             float mainMatMod = (shear - 300) / 50;
-            float weightDamMod = Mathf.Clamp((weightInKg - 4) / 8, 0, 100);
+            float weightDamMod = Mathf.Ceil((ItemBuilder.weightMultipliersByMaterial[InternalMaterialIdentification()] - 6) / 4);
+            //float weightDamMod = Mathf.Clamp((weightInKg - 4) / 8, 0, 100);
             return (int)Mathf.Round(mainMatMod + weightDamMod);
         }
 
         public int GetWeaponMaterialModFracture()
         {
             float mainMatMod = (fracture - 300) / 50;
-            float weightDamMod = Mathf.Clamp((weightInKg - 4) / 7, 0, 100);
+            float weightDamMod = Mathf.Ceil((ItemBuilder.weightMultipliersByMaterial[InternalMaterialIdentification()] - 6) / 3);
+            //float weightDamMod = Mathf.Clamp((weightInKg - 4) / 7, 0, 100);
             return (int)Mathf.Round(mainMatMod + weightDamMod);
         }
 
@@ -1123,6 +1126,69 @@ namespace DaggerfallWorkshop.Game.Items
 
                 default:
                     return 0;
+            }
+        }
+
+        public static int MaterialIdentification(DaggerfallUnityItem item)
+        {
+            switch (item.nativeMaterialValue)
+            {
+                case (int)ArmorMaterialTypes.Iron:
+                    return 0;
+                case (int)ArmorMaterialTypes.Steel:
+                    return 1;
+                case (int)ArmorMaterialTypes.Silver:
+                    return 2;
+                case (int)ArmorMaterialTypes.Elven:
+                    return 3;
+                case (int)ArmorMaterialTypes.Dwarven:
+                    return 4;
+                case (int)ArmorMaterialTypes.Mithril:
+                    return 5;
+                case (int)ArmorMaterialTypes.Adamantium:
+                    return 6;
+                case (int)ArmorMaterialTypes.Ebony:
+                    return 7;
+                case (int)ArmorMaterialTypes.Orcish:
+                    return 8;
+                case (int)ArmorMaterialTypes.Daedric:
+                    return 9;
+                case (int)ArmorMaterialTypes.Leather:
+                    return 10;
+                case (int)ArmorMaterialTypes.Chain:
+                case (int)ArmorMaterialTypes.Chain2:
+                    return 11;
+                default:
+                    return -1;
+            }
+        }
+
+        public int InternalMaterialIdentification()
+        {
+            switch (nativeMaterialValue)
+            {
+                case (int)WeaponMaterialTypes.Iron:
+                    return 0;
+                case (int)WeaponMaterialTypes.Steel:
+                    return 1;
+                case (int)WeaponMaterialTypes.Silver:
+                    return 2;
+                case (int)WeaponMaterialTypes.Elven:
+                    return 3;
+                case (int)WeaponMaterialTypes.Dwarven:
+                    return 4;
+                case (int)WeaponMaterialTypes.Mithril:
+                    return 5;
+                case (int)WeaponMaterialTypes.Adamantium:
+                    return 6;
+                case (int)WeaponMaterialTypes.Ebony:
+                    return 7;
+                case (int)WeaponMaterialTypes.Orcish:
+                    return 8;
+                case (int)WeaponMaterialTypes.Daedric:
+                    return 9;
+                default:
+                    return -1;
             }
         }
 
@@ -1605,6 +1671,12 @@ namespace DaggerfallWorkshop.Game.Items
             nativeMaterialValue = itemRecord.ParsedData.material;
             dyeColor = (DyeColors)itemRecord.ParsedData.color;
             weightInKg = (float)itemRecord.ParsedData.weight * 0.25f;
+            density = itemRecord.ParsedData.density;
+            shear = itemRecord.ParsedData.shear;
+            fracture = itemRecord.ParsedData.fracture;
+            meltingPoint = itemRecord.ParsedData.meltingPoint;
+            conductivity = itemRecord.ParsedData.conductivity;
+            brittleness = itemRecord.ParsedData.brittleness;
             drawOrder = itemTemplate.drawOrderOrEffect;
             value = (int)itemRecord.ParsedData.value;
             unknown = itemRecord.ParsedData.unknown;
@@ -1681,6 +1753,12 @@ namespace DaggerfallWorkshop.Game.Items
             // These are being saved in DF Unity saves as one int32 value but are two 8-bit values in classic
             unknown2 = (byte)(data.hits3 & 0xff);
             typeDependentData = (byte)(data.hits3 >> 8);
+            density = data.density;
+            shear = data.shear;
+            fracture = data.fracture;
+            meltingPoint = data.meltingPoint;
+            conductivity = data.conductivity;
+            brittleness = data.brittleness;
             enchantmentPoints = data.enchantmentPoints;
             message = data.message;
             // Convert magic data that was saved as int array

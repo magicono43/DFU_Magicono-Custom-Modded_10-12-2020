@@ -185,6 +185,21 @@ namespace DaggerfallWorkshop.Utility
             throw new NotImplementedException();
         }
 
+        public virtual string DamageReductionBludgeoning()
+        {   // %dredb
+            throw new NotImplementedException();
+        }
+
+        public virtual string DamageReductionSlashing()
+        {   // %dreds
+            throw new NotImplementedException();
+        }
+
+        public virtual string DamageReductionPiercing()
+        {   // %dredp
+            throw new NotImplementedException();
+        }
+
         public virtual string ArmourMod()
         {   // %mod
             throw new NotImplementedException();

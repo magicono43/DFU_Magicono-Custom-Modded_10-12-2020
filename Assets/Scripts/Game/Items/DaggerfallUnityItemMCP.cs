@@ -142,89 +142,194 @@ namespace DaggerfallWorkshop.Game.Items
 
             public override string Density()
             {   // %den
-                if (parent.density <= 3000)
+                if (parent.density <= 100)
+                    return "Extremely Low";
+                else if (parent.density <= 200 && parent.density > 100)
+                    return "Very Low";
+                else if (parent.density <= 300 && parent.density > 200)
                     return "Low";
-                else if (parent.density <= 6000 && parent.density > 3000)
-                    return "Medium";
-                else
+                else if (parent.density <= 350 && parent.density > 300)
+                    return "Moderate";
+                else if (parent.density <= 400 && parent.density > 350)
                     return "High";
+                else if (parent.density <= 500 && parent.density > 400)
+                    return "Very High";
+                else
+                    return "Extremely High";
             }
 
             public override string Shear()
             {   // %she
-                if (parent.shear <= 3000)
+                if (parent.shear <= 100)
+                    return "Extremely Low";
+                else if (parent.shear <= 200 && parent.shear > 100)
+                    return "Very Low";
+                else if (parent.shear <= 300 && parent.shear > 200)
                     return "Low";
-                else if (parent.shear <= 6000 && parent.shear > 3000)
-                    return "Medium";
-                else
+                else if (parent.shear <= 350 && parent.shear > 300)
+                    return "Moderate";
+                else if (parent.shear <= 400 && parent.shear > 350)
                     return "High";
+                else if (parent.shear <= 500 && parent.shear > 400)
+                    return "Very High";
+                else
+                    return "Extremely High";
             }
 
             public override string Fracture()
             {   // %fra
-                if (parent.fracture <= 3000)
+                if (parent.fracture <= 100)
+                    return "Extremely Low";
+                else if (parent.fracture <= 200 && parent.fracture > 100)
+                    return "Very Low";
+                else if (parent.fracture <= 300 && parent.fracture > 200)
                     return "Low";
-                else if (parent.fracture <= 6000 && parent.fracture > 3000)
-                    return "Medium";
-                else
+                else if (parent.fracture <= 350 && parent.fracture > 300)
+                    return "Moderate";
+                else if (parent.fracture <= 400 && parent.fracture > 350)
                     return "High";
+                else if (parent.fracture <= 500 && parent.fracture > 400)
+                    return "Very High";
+                else
+                    return "Extremely High";
             }
 
             public override string MeltingPoint()
             {   // %mpo
-                if (parent.meltingPoint <= 3000)
+                if (parent.meltingPoint <= 25)
+                    return "Extremely Low";
+                else if (parent.meltingPoint <= 50 && parent.meltingPoint > 25)
+                    return "Very Low";
+                else if (parent.meltingPoint <= 75 && parent.meltingPoint > 50)
                     return "Low";
-                else if (parent.meltingPoint <= 6000 && parent.meltingPoint > 3000)
-                    return "Medium";
-                else
+                else if (parent.meltingPoint <= 150 && parent.meltingPoint > 75)
+                    return "Moderate";
+                else if (parent.meltingPoint <= 175 && parent.meltingPoint > 150)
                     return "High";
+                else if (parent.meltingPoint <= 200 && parent.meltingPoint > 175)
+                    return "Very High";
+                else
+                    return "Extremely High";
             }
 
             public override string Conductivity()
             {   // %con
-                if (parent.conductivity <= 3000)
+                if (parent.conductivity <= 25)
+                    return "Extremely Low";
+                else if (parent.conductivity <= 50 && parent.conductivity > 25)
+                    return "Very Low";
+                else if (parent.conductivity <= 75 && parent.conductivity > 50)
                     return "Low";
-                else if (parent.conductivity <= 6000 && parent.conductivity > 3000)
-                    return "Medium";
-                else
+                else if (parent.conductivity <= 150 && parent.conductivity > 75)
+                    return "Moderate";
+                else if (parent.conductivity <= 175 && parent.conductivity > 150)
                     return "High";
+                else if (parent.conductivity <= 200 && parent.conductivity > 175)
+                    return "Very High";
+                else
+                    return "Extremely High";
             }
 
             public override string Brittleness()
             {   // %bri
-                if (parent.brittleness <= 3000)
+                if (parent.brittleness <= 25)
+                    return "Extremely Low";
+                else if (parent.brittleness <= 50 && parent.brittleness > 25)
+                    return "Very Low";
+                else if (parent.brittleness <= 75 && parent.brittleness > 50)
                     return "Low";
-                else if (parent.brittleness <= 6000 && parent.brittleness > 3000)
-                    return "Medium";
-                else
+                else if (parent.brittleness <= 150 && parent.brittleness > 75)
+                    return "Moderate";
+                else if (parent.brittleness <= 175 && parent.brittleness > 150)
                     return "High";
+                else if (parent.brittleness <= 200 && parent.brittleness > 175)
+                    return "Very High";
+                else
+                    return "Extremely High";
             }
             
             public override string WeaponDamageBludgeoning()
             {   // %wdmb
+                int minDamLowerLimit = FormulaHelper.CalculateWeaponMinDamTypeLowerLimit(parent, 1);
+                int minDamUpperLimit = FormulaHelper.CalculateWeaponMinDamTypeUpperLimit(parent, 1);
+                int maxDamLowerLimit = FormulaHelper.CalculateWeaponMaxDamTypeLowerLimit(parent, 1);
+                int maxDamUpperLimit = FormulaHelper.CalculateWeaponMaxDamTypeUpperLimit(parent, 1);
                 int matMod = parent.GetWeaponMaterialModDensity();
                 float conditionMulti =  FormulaHelper.AlterDamageBasedOnWepCondition(parent, 1);
-                return String.Format("{0} - {1}", Mathf.Clamp((int)Mathf.Round((parent.GetBaseBludgeoningDamageMin() + matMod) * conditionMulti), 0, 1000), Mathf.Clamp((int)Mathf.Round((parent.GetBaseBludgeoningDamageMax() + matMod) * conditionMulti), 0, 1000));
+                return String.Format("{0} - {1}", Mathf.Clamp((int)Mathf.Round((parent.GetBaseBludgeoningDamageMin() + matMod) * conditionMulti), minDamLowerLimit, minDamUpperLimit), Mathf.Clamp((int)Mathf.Round((parent.GetBaseBludgeoningDamageMax() + matMod) * conditionMulti), maxDamLowerLimit, maxDamUpperLimit));
             }
 
             public override string WeaponDamageSlashing()
             {   // %wdms
+                int minDamLowerLimit = FormulaHelper.CalculateWeaponMinDamTypeLowerLimit(parent, 2);
+                int minDamUpperLimit = FormulaHelper.CalculateWeaponMinDamTypeUpperLimit(parent, 2);
+                int maxDamLowerLimit = FormulaHelper.CalculateWeaponMaxDamTypeLowerLimit(parent, 2);
+                int maxDamUpperLimit = FormulaHelper.CalculateWeaponMaxDamTypeUpperLimit(parent, 2);
                 int matMod = parent.GetWeaponMaterialModShear();
                 float conditionMulti = FormulaHelper.AlterDamageBasedOnWepCondition(parent, 2);
-                return String.Format("{0} - {1}", Mathf.Clamp((int)Mathf.Round((parent.GetBaseSlashingDamageMin() + matMod) * conditionMulti), 0, 1000), Mathf.Clamp((int)Mathf.Round((parent.GetBaseSlashingDamageMax() + matMod) * conditionMulti), 0, 1000));
+                return String.Format("{0} - {1}", Mathf.Clamp((int)Mathf.Round((parent.GetBaseSlashingDamageMin() + matMod) * conditionMulti), minDamLowerLimit, minDamUpperLimit), Mathf.Clamp((int)Mathf.Round((parent.GetBaseSlashingDamageMax() + matMod) * conditionMulti), maxDamLowerLimit, maxDamUpperLimit));
             }
 
             public override string WeaponDamagePiercing()
             {   // %wdmp
+                int minDamLowerLimit = FormulaHelper.CalculateWeaponMinDamTypeLowerLimit(parent, 3);
+                int minDamUpperLimit = FormulaHelper.CalculateWeaponMinDamTypeUpperLimit(parent, 3);
+                int maxDamLowerLimit = FormulaHelper.CalculateWeaponMaxDamTypeLowerLimit(parent, 3);
+                int maxDamUpperLimit = FormulaHelper.CalculateWeaponMaxDamTypeUpperLimit(parent, 3);
                 int matMod = parent.GetWeaponMaterialModFracture();
                 float conditionMulti = FormulaHelper.AlterDamageBasedOnWepCondition(parent, 3);
-                return String.Format("{0} - {1}", Mathf.Clamp((int)Mathf.Round((parent.GetBasePiercingDamageMin() + matMod) * conditionMulti), 0, 1000), Mathf.Clamp((int)Mathf.Round((parent.GetBasePiercingDamageMax() + matMod) * conditionMulti), 0, 1000));
+                return String.Format("{0} - {1}", Mathf.Clamp((int)Mathf.Round((parent.GetBasePiercingDamageMin() + matMod) * conditionMulti), minDamLowerLimit, minDamUpperLimit), Mathf.Clamp((int)Mathf.Round((parent.GetBasePiercingDamageMax() + matMod) * conditionMulti), maxDamLowerLimit, maxDamUpperLimit));
             }
 
             public override string WeaponDamage()
             {   // %wdm
                 int matMod = parent.GetWeaponMaterialModifier();
                 return String.Format("{0} - {1}", parent.GetBaseDamageMin() + matMod, parent.GetBaseDamageMax() + matMod);
+            }
+
+            public override string DamageReductionBludgeoning()
+            {   // %dredb
+                float damReduction = 0f;
+
+                //if (parent.nativeMaterialValue < 512)
+                    //return String.Format("{0}%", 0 * 100);
+
+                if (parent.IsShield)
+                    damReduction = FormulaHelper.PercentageDamageReductionCalculation(parent, true, 0f, 1);
+                else
+                    damReduction = FormulaHelper.PercentageDamageReductionCalculation(parent, false, 0f, 1);
+
+                return String.Format("{0}%", (int)Mathf.Round((damReduction - 1) * -100f));
+            }
+
+            public override string DamageReductionSlashing()
+            {   // %dreds
+                float damReduction = 0f;
+
+                //if (parent.nativeMaterialValue < 512)
+                    //return String.Format("{0}%", 0 * 100);
+
+                if (parent.IsShield)
+                    damReduction = FormulaHelper.PercentageDamageReductionCalculation(parent, true, 0f, 2);
+                else
+                    damReduction = FormulaHelper.PercentageDamageReductionCalculation(parent, false, 0f, 2);
+
+                return String.Format("{0}%", (int)Mathf.Round((damReduction - 1) * -100f));
+            }
+
+            public override string DamageReductionPiercing()
+            {   // %dredp
+                float damReduction = 0f;
+
+                //if (parent.nativeMaterialValue < 512)
+                    //return String.Format("{0}%", 0 * 100);
+
+                if (parent.IsShield)
+                    damReduction = FormulaHelper.PercentageDamageReductionCalculation(parent, true, 0f, 3);
+                else
+                    damReduction = FormulaHelper.PercentageDamageReductionCalculation(parent, false, 0f, 3);
+
+                return String.Format("{0}%", (int)Mathf.Round((damReduction - 1) * -100f));
             }
 
             // Armour mod is double what classic displays, but this is correct according to Allofich.

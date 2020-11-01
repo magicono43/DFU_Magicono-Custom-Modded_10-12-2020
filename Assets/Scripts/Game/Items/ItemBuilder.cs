@@ -40,36 +40,37 @@ namespace DaggerfallWorkshop.Game.Items
         // The array is traversed, subtracting each value from a sum until the sum is less than the next value.
         // Steel through Daedric, or Iron if sum is less than the first value.
         public static readonly byte[] materialsByModifier = { 64, 128, 10, 21, 13, 8, 5, 3, 2, 5 };
+        //public static readonly byte[] materialsByModifier = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; // Has something to do with drop-chance and rarity, it's weird.
 
         // Weight multipliers by material type. Iron through Daedric. Weight is baseWeight * value / 4.
         //static readonly short[] weightMultipliersByMaterial = { 4, 5, 4, 4, 3, 4, 4, 2, 4, 5 };
-        public static readonly short[] weightMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        public static readonly short[] weightMultipliersByMaterial = { 8, 10, 5, 4, 8, 5, 6, 3, 12, 7, 2, 3 }; // Added two values to the end here, for leather and chain.
 
         // Value multipliers by material type. Iron through Daedric. Value is baseValue * ( 3 * value).
         //static readonly short[] valueMultipliersByMaterial = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 };
-        static readonly short[] valueMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        static readonly short[] valueMultipliersByMaterial = { 2, 5, 10, 20, 50, 30, 70, 60, 40, 140 };
 
         // Condition multipliers by material type. Iron through Daedric. MaxCondition is baseMaxCondition * value / 4.
         //static readonly short[] conditionMultipliersByMaterial = { 4, 6, 6, 8, 12, 16, 20, 24, 28, 32 };
-        static readonly short[] conditionMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        static readonly short[] conditionMultipliersByMaterial = { 4, 6, 2, 2, 4, 4, 6, 3, 9, 6 };
 
         // Blunt
-        static readonly short[] densityMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        static readonly short[] densityMultipliersByMaterial = { 400, 500, 250, 200, 400, 250, 300, 150, 600, 350 };
 
         // Slashing/Cutting
-        static readonly short[] shearMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        static readonly short[] shearMultipliersByMaterial = { 150, 200, 200, 400, 200, 500, 350, 600, 250, 500 };
 
         // Piercing
-        static readonly short[] fractureMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        static readonly short[] fractureMultipliersByMaterial = { 200, 250, 400, 350, 500, 300, 600, 200, 100, 450 };
 
         // Extra condition/damage from fire if low
-        static readonly short[] meltingPointMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        static readonly short[] meltingPointMultipliersByMaterial = { 175, 200, 75, 100, 50, 125, 25, 150, 225, 350 };
 
         // Extra damage from electrical attacks if high
-        static readonly short[] conductivityMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        static readonly short[] conductivityMultipliersByMaterial = { 100, 150, 225, 50, 200, 25, 175, 75, 125, 100 };
 
         // Extra condition/damage from ice attacks when high
-        static readonly short[] brittlenessMultipliersByMaterial = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        static readonly short[] brittlenessMultipliersByMaterial = { 200, 225, 50, 100, 75, 150, 25, 125, 175, 200 };
 
         // Enchantment point/gold value data for item powers
         static readonly int[] extraSpellPtsEnchantPts = { 0x1F4, 0x1F4, 0x1F4, 0x1F4, 0xC8, 0xC8, 0xC8, 0x2BC, 0x320, 0x384, 0x3E8 };
@@ -510,11 +511,24 @@ namespace DaggerfallWorkshop.Game.Items
 
             if (armor.nativeMaterialValue == (int)ArmorMaterialTypes.Leather)
             {
-                armor.weightInKg /= 2;
+                armor.weightInKg *= 0.65f;
+                armor.density *= 150;
+                armor.shear *= 50;
+                armor.fracture *= 650;
+                armor.meltingPoint *= 75;
+                armor.conductivity *= 25;
+                armor.brittleness *= 25;
             }
             else if (armor.nativeMaterialValue == (int)ArmorMaterialTypes.Chain)
             {
+                armor.weightInKg *= 1.75f;
                 armor.value *= 2;
+                armor.density *= 200;
+                armor.shear *= 550;
+                armor.fracture *= 50;
+                armor.meltingPoint *= 75;
+                armor.conductivity *= 175;
+                armor.brittleness *= 150;
             }
             else if (armor.nativeMaterialValue >= (int)ArmorMaterialTypes.Iron)
             {

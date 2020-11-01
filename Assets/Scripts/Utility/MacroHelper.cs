@@ -246,6 +246,9 @@ namespace DaggerfallWorkshop.Utility
             { "%wdmb", WeaponDamageBludgeoning }, // Weapon damage Bludgeoning Type
             { "%wdms", WeaponDamageSlashing }, // Weapon damage Slashing Type
             { "%wdmp", WeaponDamagePiercing }, // Weapon damage Piercing Type
+            { "%dredb", DamageReductionBludgeoning }, // Damage Reduction From Bludgeoning Type Attacks
+            { "%dreds", DamageReductionSlashing }, // Damage Reduction From Slashing Type Attacks
+            { "%dredp", DamageReductionPiercing }, // Damage Reduction From Piercing Type Attacks
         };
 
         // Multi-line macro handlers, returns tokens.
@@ -1235,6 +1238,24 @@ namespace DaggerfallWorkshop.Utility
         {   // %wdm
             if (mcp == null) return null;
             return mcp.GetMacroDataSource().WeaponDamage();
+        }
+
+        public static string DamageReductionBludgeoning(IMacroContextProvider mcp)
+        {   // %dredb
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().DamageReductionBludgeoning();
+        }
+
+        public static string DamageReductionSlashing(IMacroContextProvider mcp)
+        {   // %dreds
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().DamageReductionSlashing();
+        }
+
+        public static string DamageReductionPiercing(IMacroContextProvider mcp)
+        {   // %dredp
+            if (mcp == null) return null;
+            return mcp.GetMacroDataSource().DamageReductionPiercing();
         }
 
         public static string ArmourMod(IMacroContextProvider mcp)
