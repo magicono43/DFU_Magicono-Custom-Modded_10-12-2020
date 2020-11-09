@@ -524,7 +524,7 @@ namespace DaggerfallWorkshop.Game
 
                     // Calculate damage
                     int animTime = (int)(ScreenWeapon.GetAnimTime() * 1000);    // Get animation time, converted to ms.
-                    int damage = FormulaHelper.CalculateAttackDamage(playerEntity, enemyEntity, entityMobileUnit.Summary.AnimStateRecord, animTime, strikingWeapon);
+                    int damage = FormulaHelper.CalculateAttackDamage(playerEntity, enemyEntity, entityMobileUnit.Summary.AnimStateRecord, animTime, strikingWeapon, out bool shieldBlockSuccess, out int mainDamType, out bool critStrikeSuccess, out bool armorPartAbsorbed, out bool armorCompleteAbsorbed, out DaggerfallUnityItem addedAIWeapon, out bool hitSuccess, out bool metalShield, out bool metalArmor);
 
                     // Break any "normal power" concealment effects on player
                     if (playerEntity.IsMagicallyConcealedNormalPower && damage > 0)
@@ -537,13 +537,54 @@ namespace DaggerfallWorkshop.Game
                         enemyEntity.Items.AddItem(arrow);
                     }
 
+                    // Play associated sound when armor/shield was responsible for absorbing damage completely.
+                    if (damage <= 0)
+                    {
+                        if (usingRightHand)
+                        {
+                            if (hitSuccess && shieldBlockSuccess)
+                                enemySounds.PlayShieldBlockSound(currentRightHandWeapon, metalShield);
+                            else if (hitSuccess && armorCompleteAbsorbed)
+                                enemySounds.PlayArmorAbsorbSound(currentRightHandWeapon, metalArmor);
+                            else
+                            {
+                                if ((!arrowHit && !enemyEntity.MobileEnemy.ParrySounds) || strikingWeapon == null)
+                                    ScreenWeapon.PlaySwingSound();
+                                else if (enemyEntity.MobileEnemy.ParrySounds)
+                                    enemySounds.PlayParrySound();
+                            }
+                        }
+                        else
+                        {
+                            if (hitSuccess && shieldBlockSuccess)
+                                enemySounds.PlayShieldBlockSound(currentLeftHandWeapon, metalShield);
+                            else if (hitSuccess && armorCompleteAbsorbed)
+                                enemySounds.PlayArmorAbsorbSound(currentLeftHandWeapon, metalArmor);
+                            else
+                            {
+                                if ((!arrowHit && !enemyEntity.MobileEnemy.ParrySounds) || strikingWeapon == null)
+                                    ScreenWeapon.PlaySwingSound();
+                                else if (enemyEntity.MobileEnemy.ParrySounds)
+                                    enemySounds.PlayParrySound();
+                            }
+                        }
+                    }
+
                     // Play hit sound and trigger blood splash at hit point
                     if (damage > 0)
                     {
                         if (usingRightHand)
-                            enemySounds.PlayHitSound(currentRightHandWeapon);
+                        {
+                            if (shieldBlockSuccess && armorPartAbsorbed)
+                                enemySounds.PlayShieldBlockSound(currentRightHandWeapon, metalShield);
+                            enemySounds.PlayWeaponHitSound(currentRightHandWeapon, mainDamType, critStrikeSuccess);
+                        }
                         else
-                            enemySounds.PlayHitSound(currentLeftHandWeapon);
+                        {
+                            if (shieldBlockSuccess && armorPartAbsorbed)
+                                enemySounds.PlayShieldBlockSound(currentLeftHandWeapon, metalShield);
+                            enemySounds.PlayWeaponHitSound(currentLeftHandWeapon, mainDamType, critStrikeSuccess);
+                        }
 
                         EnemyBlood blood = hitTransform.GetComponent<EnemyBlood>();
                         if (blood)
@@ -586,12 +627,6 @@ namespace DaggerfallWorkshop.Game
                         }
                     }
                     else
-                    {
-                        if ((!arrowHit && !enemyEntity.MobileEnemy.ParrySounds) || strikingWeapon == null)
-                            ScreenWeapon.PlaySwingSound();
-                        else if (enemyEntity.MobileEnemy.ParrySounds)
-                            enemySounds.PlayParrySound();
-                    }
 
                     // Handle weapon striking enchantments - this could change damage amount
                     if (strikingWeapon != null && strikingWeapon.IsEnchanted)

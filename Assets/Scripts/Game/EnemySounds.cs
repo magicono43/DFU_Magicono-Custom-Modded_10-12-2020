@@ -98,6 +98,138 @@ namespace DaggerfallWorkshop.Game
             }
         }
 
+        #region Custom Physical Hit Sounds
+
+        public void PlayShieldBlockSound(Items.DaggerfallUnityItem weapon, bool metalShield)
+        {
+            if (IsReady())
+            {
+                if (weapon != null)
+                {
+                    if (metalShield)
+                    {
+                        AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.metalShieldClips[Random.Range(0, 8)]);
+                        CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                    }
+                    else
+                    {
+                        AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.leatherShieldClips[Random.Range(0, 9)]);
+                        CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                    }
+                }
+                else
+                {
+                    if (metalShield)
+                    {
+                        AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.metalShieldClips[Random.Range(0, 8)]);
+                        CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                    }
+                    else
+                    {
+                        AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.leatherShieldClips[Random.Range(0, 9)]);
+                        CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                    }
+                }
+            }
+        }
+
+        public void PlayArmorAbsorbSound(Items.DaggerfallUnityItem weapon, bool metalArmor)
+        {
+            if (IsReady())
+            {
+                if (weapon != null)
+                {
+                    if (metalArmor)
+                    {
+                        AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.metalArmorClips[Random.Range(0, 12)]);
+                        CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                    }
+                    else
+                    {
+                        AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.leatherArmorClips[Random.Range(0, 12)]);
+                        CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                    }
+                }
+                else
+                {
+                    if (metalArmor)
+                    {
+                        AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.metalArmorClips[Random.Range(0, 12)]);
+                        CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                    }
+                    else
+                    {
+                        AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.leatherArmorClips[Random.Range(0, 12)]);
+                        CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                    }
+                }
+            }
+        }
+
+        public void PlayWeaponHitSound(Items.DaggerfallUnityItem weapon, int mainDamType, bool critStrikeSuccess)
+        {
+            if (IsReady())
+            {
+                if (critStrikeSuccess)
+                {
+                    if (weapon != null)
+                    {
+                        if (mainDamType == 1)
+                        {
+                            AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.critBludgeoningHitClips[Random.Range(0, 14)]);
+                            CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                        }
+                        else if (mainDamType == 2)
+                        {
+                            AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.critSlashingHitClips[Random.Range(0, 13)]);
+                            CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                        }
+                        else if (mainDamType == 3)
+                        {
+                            AudioClip clip = CustomAudioClipImporter.ImportAudioClipMain.myMod.GetAsset<AudioClip>(CustomAudioClipImporter.ImportAudioClipMain.critPiercingHitClips[Random.Range(0, 14)]);
+                            CustomAudioClipImporter.ImportAudioClipMain.audioSource.PlayOneShot(clip);
+                        }
+                        else
+                        {
+                            PlayHitSound(weapon);
+                        }
+                    }
+                    else
+                    {
+                        PlayHitSound(weapon);
+                    }
+                }
+                else
+                {
+                    if (weapon != null)
+                    {
+                        if (mainDamType == 1)
+                        {
+                            PlayHitSound(weapon);
+                        }
+                        else if (mainDamType == 2)
+                        {
+                            PlayHitSound(weapon);
+                        }
+                        else if (mainDamType == 3)
+                        {
+                            PlayHitSound(weapon);
+                        }
+                        else
+                        {
+                            PlayHitSound(weapon);
+                        }
+                    }
+                    else
+                    {
+                        PlayHitSound(weapon);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         public void PlayAttackSound()
         {
             if (IsReady())

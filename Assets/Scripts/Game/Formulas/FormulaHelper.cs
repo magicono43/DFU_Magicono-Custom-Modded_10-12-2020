@@ -751,14 +751,21 @@ namespace DaggerfallWorkshop.Game.Formulas
         /// <param name="weaponAnimTime">Time the weapon animation lasted before the attack in ms, used for bow drawing </param>
         /// <param name="weapon">The weapon item being used</param>
         /// <returns>Damage inflicted to target, can be 0 for a miss or ineffective hit</returns>
-        public static int CalculateAttackDamage(DaggerfallEntity attacker, DaggerfallEntity target, int enemyAnimStateRecord, int weaponAnimTime, DaggerfallUnityItem weapon, int enemyDamType = 0)
+        public static int CalculateAttackDamage(DaggerfallEntity attacker, DaggerfallEntity target, int enemyAnimStateRecord, int weaponAnimTime, DaggerfallUnityItem weapon, out bool shieldBlockSuccess, out int mainDamType, out bool critStrikeSuccess, out bool armorPartAbsorbed, out bool armorCompleteAbsorbed, out DaggerfallUnityItem addedAIWeapon, out bool hitSuccess, out bool metalShield, out bool metalArmor, int enemyDamType = 0)
         {
+            // Pre-defininng "out" parameters, depending on how horrible this looks and such, I might consider using a "Tuple" instead of this out parameter thing.
+            shieldBlockSuccess = false;     // Good
+            mainDamType = 0;                // Good
+            critStrikeSuccess = false;      // Good
+            armorPartAbsorbed = false;      // Good
+            armorCompleteAbsorbed = false;  // Good
+            addedAIWeapon = null;           // Good
+            hitSuccess = false;             // Good
+            metalShield = false;            // Good
+            metalArmor = false;             // Good
+
             if (attacker == null || target == null)
                 return 0;
-
-            Func<DaggerfallEntity, DaggerfallEntity, int, int, DaggerfallUnityItem, int> del;
-            if (TryGetOverride("CalculateAttackDamage", out del))
-                return del(attacker, target, enemyAnimStateRecord, weaponAnimTime, weapon);
 
             int damageModifiers = 0;
             int damage = 0;
@@ -775,12 +782,42 @@ namespace DaggerfallWorkshop.Game.Formulas
             float critDamMulti = 1f;
             float critDamPen = 0;
             bool critIgnoreShield = false;
+            EnemyBasics.CustomEnemyStatValues enemyAttackerStats = EnemyBasics.EnemyCustomAttributeInitializer(attacker);
+            EnemyBasics.CustomEnemyStatValues enemyTargetStats = EnemyBasics.EnemyCustomAttributeInitializer(target);
 
             EnemyEntity AITarget = null;
             AITarget = target as EnemyEntity;
+            EnemyEntity AIAttacker = attacker as EnemyEntity;
+
+            if (AIAttacker != null)
+            {
+                // Get enemy attacker entity custom stats for later use in formula
+                enemyAttackerStats = EnemyBasics.EnemyCustomAttributeCalculator(attacker);
+                int atkEnemyWepSkill = enemyAttackerStats.weaponSkillCustom;
+                int atkEnemyCritSkill = enemyAttackerStats.critSkillCustom;
+                int atkEnemyDodSkill = enemyAttackerStats.dodgeSkillCustom;
+                int atkEnemyStrength = enemyAttackerStats.strengthCustom;
+                int atkEnemyAgility = enemyAttackerStats.agilityCustom;
+                int atkEnemySpeed = enemyAttackerStats.speedCustom;
+                int atkEnemyWillpower = enemyAttackerStats.willpowerCustom;
+                int atkEnemyLuck = enemyAttackerStats.luckCustom;
+            }
+
+            if (AITarget != null)
+            {
+                // Get enemy target entity custom stats for later use in formula
+                enemyTargetStats = EnemyBasics.EnemyCustomAttributeCalculator(target);
+                int tarEnemyWepSkill = enemyTargetStats.weaponSkillCustom;
+                int tarEnemyCritSkill = enemyTargetStats.critSkillCustom;
+                int tarEnemyDodSkill = enemyTargetStats.dodgeSkillCustom;
+                int tarEnemyStrength = enemyTargetStats.strengthCustom;
+                int tarEnemyAgility = enemyTargetStats.agilityCustom;
+                int tarEnemySpeed = enemyTargetStats.speedCustom;
+                int tarEnemyWillpower = enemyTargetStats.willpowerCustom;
+                int tarEnemyLuck = enemyTargetStats.luckCustom;
+            }
 
             // Enemies will choose to use their weaponless attack if it is more damaging.
-            EnemyEntity AIAttacker = attacker as EnemyEntity;
             if (AIAttacker != null && weapon != null)
             {
                 int weaponAverage = (weapon.GetBaseDamageMin() + weapon.GetBaseDamageMax()) / 2;
@@ -817,7 +854,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                 chanceToHitMod = playerWeaponSkill;
             }
             else
-                chanceToHitMod = attacker.Skills.GetLiveSkillValue(skillID);
+                chanceToHitMod = enemyAttackerStats.weaponSkillCustom;
 
             if (attacker == player)
             {
@@ -852,14 +889,15 @@ namespace DaggerfallWorkshop.Game.Formulas
                 chanceToHitMod += backstabChance;
             }
 
-            int mainDamType = Mathf.Max(playerDamType, enemyDamType); // Takes the damage types and picks whatever what is largest, to keep it simple over rest of method.
+            mainDamType = Mathf.Max(playerDamType, enemyDamType); // Takes the damage types and picks whatever what is largest, to keep it simple over rest of method.
 
             if (attacker == player) // Crit modifiers, if true, for the player.
             {
-                critSuccess = CriticalStrikeHandler(attacker); // Rolls for if the attacker is sucessful with a critical strike, if yes, critSuccess is set to 'true'.
+                critSuccess = CriticalStrikeHandler(attacker, enemyAttackerStats); // Rolls for if the attacker is sucessful with a critical strike, if yes, critSuccess is set to 'true'.
 
                 if (critSuccess)
                 {
+                    critStrikeSuccess = true; // For "out" return value later.
                     if (mainDamType == 1) // Bludgeoning Crit
                     {
                         critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
@@ -889,37 +927,38 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
             else // Crit modifiers, if true, for monsters/enemies.
             {
-                critSuccess = CriticalStrikeHandler(attacker); // Rolls for if the attacker is sucessful with a critical strike, if yes, critSuccess is set to 'true'.
+                critSuccess = CriticalStrikeHandler(attacker, enemyAttackerStats); // Rolls for if the attacker is sucessful with a critical strike, if yes, critSuccess is set to 'true'.
 
                 if (critSuccess)
                 {
+                    critStrikeSuccess = true; // For "out" return value later.
                     if (mainDamType == 1) // Bludgeoning Crit
                     {
-                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (enemyAttackerStats.critSkillCustom / 4);
                         critDamMulti = (critDamMulti * .025f) + 1;
                         critIgnoreShield = true;
                         critDamPen = 0.10f;
                     }
                     else if (mainDamType == 2) // Slashing Crit
                     {
-                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (enemyAttackerStats.critSkillCustom / 4);
                         critDamMulti = (critDamMulti * .0325f) + 1;
                     }
                     else if (mainDamType == 3) // Piercing Crit
                     {
-                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (enemyAttackerStats.critSkillCustom / 4);
                         critDamMulti = (critDamMulti * .025f) + 1;
                         critDamPen = 0.30f;
                     }
                     else if (mainDamType == 4) // Special Crit
                     {
-                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (enemyAttackerStats.critSkillCustom / 4);
                         critDamMulti = (critDamMulti * .0125f) + 1;
                         critIgnoreShield = true;
                     }
                     else // Undefined Type Crit
                     {
-                        critDamMulti = (attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / 4);
+                        critDamMulti = (enemyAttackerStats.critSkillCustom / 4);
                         critDamMulti = (critDamMulti * .025f) + 1;
                     }
                     //Debug.LogFormat("1. critDamMulti From MONSTER Skills = {0}", critDamMulti);
@@ -931,7 +970,13 @@ namespace DaggerfallWorkshop.Game.Formulas
             int struckBodyPart = CalculateStruckBodyPart();
             EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
             DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
-            DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand); // Checks if target is using a shield or not.
+            DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
+            if (shield != null && !shield.IsShield)
+                shield = null;
+
+            if (armor != null)
+                if (DaggerfallUnityItem.MaterialIdentification(armor) <= 9)
+                    metalArmor = true;
 
             if (AITarget != null) // target is a monster
             {
@@ -942,10 +987,12 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
 
             bool shieldStrongSpot = false;
-            bool shieldBlockSuccess = false;
             if (shield != null)
             {
                 BodyParts[] protectedBodyParts = shield.GetShieldProtectedBodyParts();
+
+                if (DaggerfallUnityItem.MaterialIdentification(shield) <= 9)
+                    metalShield = true;
 
                 for (int i = 0; (i < protectedBodyParts.Length) && !shieldStrongSpot; i++)
                 {
@@ -955,7 +1002,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                 shieldBlockSuccess = ShieldBlockChanceCalculation(target, shieldStrongSpot, shield);
 
                 if (shieldBlockSuccess)
-                    shieldBlockSuccess = CompareShieldToUnderArmor(attacker, target, mainDamType, struckBodyPart, critDamPen);
+                    shieldBlockSuccess = CompareShieldToUnderArmor(attacker, target, mainDamType, struckBodyPart, critDamPen, shield);
             }
 
             if (critIgnoreShield)
@@ -968,11 +1015,12 @@ namespace DaggerfallWorkshop.Game.Formulas
             {
                 if (attacker == player || (AIAttacker != null && AIAttacker.EntityType == EntityTypes.EnemyClass))
                 {
-                    if (CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart))
+                    hitSuccess = CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart, enemyAttackerStats, enemyTargetStats);
+                    if (hitSuccess)
                     {
                         damage = CalculateHandToHandAttackDamage(attacker, target, damageModifiers, matResistMod, critDamMulti, attacker == player);
 
-                        damage = CalculateBackstabDamage(damage, mainDamType, backstabChance);
+                        damage = CalculateBackstabDamage(damage, backstabChance, mainDamType);
                     }
                 }
                 else if (AIAttacker != null) // attacker is a monster
@@ -980,20 +1028,22 @@ namespace DaggerfallWorkshop.Game.Formulas
                     specialMonsterWeapon = EnemyEntity.SpecialWeaponCheckForMonsters(attacker);
 
                     if (specialMonsterWeapon)
+                    {
                         weapon = EnemyEntity.MonsterWeaponAssign(attacker);
+                        addedAIWeapon = weapon; // For "out" return value later.
+                    }
 
                     // Handle attacks by AI
                     int minBaseDamage = AIAttacker.MobileEnemy.MinDamage;
                     int maxBaseDamage = AIAttacker.MobileEnemy.MaxDamage;
 
-                    int reflexesChance = 50 - (10 * ((int)player.Reflexes - 2)); // I'll leave this roll part for now, but after some testing I may remove it and see how it feels/works out.
-
-                    if (DFRandom.rand() % 100 < reflexesChance && minBaseDamage > 0 && CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart))
+                    hitSuccess = CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart, enemyAttackerStats, enemyTargetStats);
+                    if (hitSuccess)
                     {
                         int hitDamage = UnityEngine.Random.Range(minBaseDamage, maxBaseDamage + 1);
                         // Apply special monster attack effects
                         if (hitDamage > 0)
-                            FormulaHelper.OnMonsterHit(AIAttacker, target, hitDamage); // I'm very likely going to mess with and tweek around with this later.
+                            FormulaHelper.OnMonsterHit(AIAttacker, target, hitDamage); // I'm very likely going to mess with and tweek around with this later. Could add a few diseases, one I thought of was Tetinus which would be potentially contracted from iron golems and enemies using iron weapons with lower condition maybe. Rabies as well perhaps. Also see how the disease contraction works in general, if it does not already, probably make endurance have a chance of resisting a successful attempt or something.
 
                         damage += hitDamage;
                     }
@@ -1010,7 +1060,8 @@ namespace DaggerfallWorkshop.Game.Formulas
                 // Mod hook for adjusting final hit chance mod. (is a no-op in DFU)
                 chanceToHitMod = AdjustWeaponHitChanceMod(attacker, target, chanceToHitMod, weaponAnimTime, weapon); // Does Nothing
 
-                if (CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart))
+                hitSuccess = CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart, enemyAttackerStats, enemyTargetStats);
+                if (hitSuccess)
                 {
                     damage = CalculateWeaponAttackDamage(attacker, target, damageModifiers, weaponAnimTime, weapon, mainDamType, matResistMod, critDamMulti, damTypeResistMod);
 
@@ -1040,7 +1091,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             //Debug.LogFormat("Here is damage value before armor reduction is applied = {0}", damage);
             int damBefore = damage;
 
-            damage = CalculateArmorDamageReduction(attacker, target, damage, mainDamType, struckBodyPart, shieldBlockSuccess, critDamPen, weapon);
+            damage = CalculateArmorDamageReduction(attacker, target, damage, mainDamType, struckBodyPart, shieldBlockSuccess, critDamPen, weapon, shield);
 
             int damAfter = damage;
             //Debug.LogFormat("Here is damage value after armor reduction = {0}", damage);
@@ -1048,6 +1099,10 @@ namespace DaggerfallWorkshop.Game.Formulas
             {
                 int damReduPercent = ((100 * damAfter / damBefore) - 100) * -1;
                 //Debug.LogFormat("Here is damage reduction percent = {0}%", damReduPercent);
+                if (damReduPercent > 0 && damAfter == 0)
+                    armorCompleteAbsorbed = true;   // For "out" return value later.
+                else if (damReduPercent >= 35)
+                    armorPartAbsorbed = true;       // For "out" return value later.
             }
             //Debug.Log("------------------------------------------------------------------------------------------");
 
@@ -1165,7 +1220,7 @@ namespace DaggerfallWorkshop.Game.Formulas
         }
 
         /// Calculates whether an attack on a target is successful or not.
-		private static bool CalculateSuccessfulHit(DaggerfallEntity attacker, DaggerfallEntity target, int chanceToHitMod, int struckBodyPart)
+		private static bool CalculateSuccessfulHit(DaggerfallEntity attacker, DaggerfallEntity target, int chanceToHitMod, int struckBodyPart, EnemyBasics.CustomEnemyStatValues enemyAttackerStats, EnemyBasics.CustomEnemyStatValues enemyTargetStats)
 		{
 			PlayerEntity player = GameManager.Instance.PlayerEntity;
 			
@@ -1186,10 +1241,10 @@ namespace DaggerfallWorkshop.Game.Formulas
 			//Debug.LogFormat("Attacker Chance To Hit Mod 'Enchantment' = {0}", attacker.ChanceToHitModifier); // No idea what this does, always seeing 0.
 			
 			// Apply stat differential modifiers. (default: luck and agility)
-			chanceToHit += CalculateStatDiffsToHit(attacker, target);
+			chanceToHit += CalculateStatDiffsToHit(attacker, target, enemyAttackerStats, enemyTargetStats);
 			
 			// Apply skill modifiers. (default: dodge and crit strike)
-            chanceToHit += CalculateSkillsToHit(attacker, target);
+            chanceToHit += CalculateSkillsToHit(attacker, target, enemyTargetStats);
 			//Debug.LogFormat("After Dodge = {0}", chanceToHitMod);
 			
 			// Apply monster modifier and biography adjustments.
@@ -1256,36 +1311,36 @@ namespace DaggerfallWorkshop.Game.Formulas
                         case (int)Weapons.Tanto:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
-                                mods.damageMod = 1;
-                                mods.toHitMod = 8;
+                                mods.damageMod = 0;
+                                mods.toHitMod = 0;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 5;
-                                mods.toHitMod = -8;
+                                mods.damageMod = 3;
+                                mods.toHitMod = -10;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
-                                mods.damageMod = -2;
-                                mods.toHitMod = 2;
+                                mods.damageMod = -1;
+                                mods.toHitMod = 5;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
                             {
-                                mods.damageMod = 3;
-                                mods.toHitMod = -2;
+                                mods.damageMod = 1;
+                                mods.toHitMod = -5;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
-                                mods.damageMod = 1;
-                                mods.toHitMod = 4;
+                                mods.damageMod = -1;
+                                mods.toHitMod = 5;
                                 mods.damType = 1;
                                 break;
                             }
@@ -1293,36 +1348,36 @@ namespace DaggerfallWorkshop.Game.Formulas
                         case (int)Weapons.Shortsword:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
-                                mods.damageMod = 1;
-                                mods.toHitMod = 4;
+                                mods.damageMod = 0;
+                                mods.toHitMod = 0;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 3;
-                                mods.toHitMod = -12;
+                                mods.damageMod = 2;
+                                mods.toHitMod = -10;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
-                                mods.damageMod = 2;
-                                mods.toHitMod = 4;
+                                mods.damageMod = 0;
+                                mods.toHitMod = 5;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
                             {
-                                mods.damageMod = 3;
+                                mods.damageMod = 1;
                                 mods.toHitMod = 0;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
-                                mods.damageMod = 1;
-                                mods.toHitMod = 4;
+                                mods.damageMod = 0;
+                                mods.toHitMod = 5;
                                 mods.damType = 1;
                                 break;
                             }
@@ -1330,74 +1385,110 @@ namespace DaggerfallWorkshop.Game.Formulas
                         case (int)Weapons.Wakazashi:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
-                                mods.damageMod = -2;
-                                mods.toHitMod = 8;
+                                mods.damageMod = -1;
+                                mods.toHitMod = 0;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = -10;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 0;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = -5;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = -1;
+                                mods.toHitMod = 5;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Broadsword:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = -1;
+                                mods.toHitMod = 5;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = -10;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 0;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = -5;
+                                mods.damType = 2;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 2;
+                                mods.toHitMod = 0;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Claymore:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = 0;
+                                mods.toHitMod = 5;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
                                 mods.damageMod = 4;
-                                mods.toHitMod = -8;
-                                mods.damType = 3;
-                                break;
-                            }
-                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
-                            {
-                                mods.damageMod = 3;
-                                mods.toHitMod = 4;
-                                mods.damType = 2;
-                                break;
-                            }
-                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
-                            {
-                                mods.damageMod = 3;
-                                mods.toHitMod = 0;
-                                mods.damType = 2;
-                                break;
-                            }
-                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
-                            {
-                                mods.damageMod = 1;
-                                mods.toHitMod = 4;
-                                mods.damType = 1;
-                                break;
-                            }
-                            break;
-                        case (int)Weapons.Broadsword:
-                        case (int)Weapons.Claymore:
-                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
-                            {
-                                mods.damageMod = -3;
-                                mods.toHitMod = 8;
-                                mods.damType = 3;
-                                break;
-                            }
-                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
-                            {
-                                mods.damageMod = 6;
-                                mods.toHitMod = -12;
+                                mods.toHitMod = -10;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
                                 mods.damageMod = 2;
-                                mods.toHitMod = 4;
+                                mods.toHitMod = 0;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
                             {
                                 mods.damageMod = 3;
-                                mods.toHitMod = 0;
+                                mods.toHitMod = -5;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
                                 mods.damageMod = 2;
-                                mods.toHitMod = 0;
+                                mods.toHitMod = 5;
                                 mods.damType = 1;
                                 break;
                             }
@@ -1405,36 +1496,36 @@ namespace DaggerfallWorkshop.Game.Formulas
                         case (int)Weapons.Dai_Katana:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
-                                mods.damageMod = -3;
-                                mods.toHitMod = 8;
+                                mods.damageMod = -1;
+                                mods.toHitMod = 0;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 7;
-                                mods.toHitMod = -14;
+                                mods.damageMod = 5;
+                                mods.toHitMod = -10;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
-                                mods.damageMod = 2;
-                                mods.toHitMod = 4;
+                                mods.damageMod = 3;
+                                mods.toHitMod = -5;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
                             {
-                                mods.damageMod = 3;
+                                mods.damageMod = 2;
                                 mods.toHitMod = 0;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
-                                mods.damageMod = 1;
-                                mods.toHitMod = 2;
+                                mods.damageMod = -1;
+                                mods.toHitMod = 5;
                                 mods.damType = 1;
                                 break;
                             }
@@ -1442,36 +1533,36 @@ namespace DaggerfallWorkshop.Game.Formulas
                         case (int)Weapons.Katana:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
-                                mods.damageMod = -3;
-                                mods.toHitMod = 8;
+                                mods.damageMod = -1;
+                                mods.toHitMod = 0;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 5;
+                                mods.damageMod = 4;
                                 mods.toHitMod = -10;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
-                                mods.damageMod = 2;
-                                mods.toHitMod = 4;
+                                mods.damageMod = 1;
+                                mods.toHitMod = 0;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
                             {
-                                mods.damageMod = 3;
-                                mods.toHitMod = 2;
+                                mods.damageMod = 2;
+                                mods.toHitMod = -5;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
-                                mods.damageMod = 1;
-                                mods.toHitMod = 2;
+                                mods.damageMod = -1;
+                                mods.toHitMod = 5;
                                 mods.damType = 1;
                                 break;
                             }
@@ -1479,36 +1570,36 @@ namespace DaggerfallWorkshop.Game.Formulas
                         case (int)Weapons.Longsword:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
-                                mods.damageMod = -3;
-                                mods.toHitMod = 10;
+                                mods.damageMod = -1;
+                                mods.toHitMod = 0;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 5;
+                                mods.damageMod = 2;
                                 mods.toHitMod = -10;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
-                                mods.damageMod = 2;
-                                mods.toHitMod = 4;
+                                mods.damageMod = 0;
+                                mods.toHitMod = 5;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
                             {
-                                mods.damageMod = 3;
-                                mods.toHitMod = 0;
+                                mods.damageMod = 1;
+                                mods.toHitMod = -5;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
-                                mods.damageMod = 1;
-                                mods.toHitMod = 2;
+                                mods.damageMod = 0;
+                                mods.toHitMod = 5;
                                 mods.damType = 1;
                                 break;
                             }
@@ -1516,35 +1607,35 @@ namespace DaggerfallWorkshop.Game.Formulas
                         case (int)Weapons.Saber:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
-                                mods.damageMod = -3;
-                                mods.toHitMod = 8;
+                                mods.damageMod = -1;
+                                mods.toHitMod = 0;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 5;
-                                mods.toHitMod = -12;
+                                mods.damageMod = 3;
+                                mods.toHitMod = -10;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
-                                mods.damageMod = 2;
-                                mods.toHitMod = 4;
+                                mods.damageMod = 1;
+                                mods.toHitMod = 5;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
                             {
-                                mods.damageMod = 3;
+                                mods.damageMod = 2;
                                 mods.toHitMod = 0;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
-                                mods.damageMod = 3;
+                                mods.damageMod = 2;
                                 mods.toHitMod = 0;
                                 mods.damType = 1;
                                 break;
@@ -1553,36 +1644,36 @@ namespace DaggerfallWorkshop.Game.Formulas
                         case (int)Weapons.Battle_Axe:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
-                                mods.damageMod = -2;
-                                mods.toHitMod = 9;
+                                mods.damageMod = 1;
+                                mods.toHitMod = 0;
                                 mods.damType = 1;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 7;
-                                mods.toHitMod = -13;
+                                mods.damageMod = 4;
+                                mods.toHitMod = -10;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
-                                mods.damageMod = 3;
+                                mods.damageMod = 1;
                                 mods.toHitMod = 0;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
                             {
-                                mods.damageMod = 4;
+                                mods.damageMod = 3;
                                 mods.toHitMod = -5;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
-                                mods.damageMod = 1;
-                                mods.toHitMod = 2;
+                                mods.damageMod = 0;
+                                mods.toHitMod = 5;
                                 mods.damType = 1;
                                 break;
                             }
@@ -1590,67 +1681,96 @@ namespace DaggerfallWorkshop.Game.Formulas
                         case (int)Weapons.War_Axe:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
-                                mods.damageMod = -3;
-                                mods.toHitMod = 6;
+                                mods.damageMod = 0;
+                                mods.toHitMod = 5;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 7;
-                                mods.toHitMod = -11;
+                                mods.damageMod = 5;
+                                mods.toHitMod = -10;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
                                 mods.damageMod = 2;
-                                mods.toHitMod = 3;
+                                mods.toHitMod = 0;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
                             {
                                 mods.damageMod = 3;
-                                mods.toHitMod = 0;
+                                mods.toHitMod = -5;
                                 mods.damType = 2;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
-                                mods.damageMod = 2;
-                                mods.toHitMod = 0;
+                                mods.damageMod = 0;
+                                mods.toHitMod = -5;
                                 mods.damType = 1;
                                 break;
                             }
                             break;
                         case (int)Weapons.Flail:
-                        case (int)Weapons.Mace:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
                                 mods.damageMod = 1;
-                                mods.toHitMod = 0;
+                                mods.toHitMod = 5;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 6;
-                                mods.toHitMod = -6;
+                                mods.damageMod = 5;
+                                mods.toHitMod = -10;
                                 mods.damType = 1;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
                                 mods.damageMod = 2;
-                                mods.toHitMod = 2;
+                                mods.toHitMod = 0;
                                 mods.damType = 1;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
+                                mods.damageMod = 3;
+                                mods.toHitMod = -5;
+                                mods.damType = 1;
+                                break;
+                            }
+                            break;
+                        case (int)Weapons.Mace:
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 5;
+                                mods.damType = 3;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+                            {
                                 mods.damageMod = 4;
-                                mods.toHitMod = -1;
+                                mods.toHitMod = -10;
+                                mods.damType = 1;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
+                            {
+                                mods.damageMod = 1;
+                                mods.toHitMod = 0;
+                                mods.damType = 1;
+                                break;
+                            }
+                            if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+                            {
+                                mods.damageMod = 3;
+                                mods.toHitMod = -5;
                                 mods.damType = 1;
                                 break;
                             }
@@ -1659,28 +1779,28 @@ namespace DaggerfallWorkshop.Game.Formulas
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
                                 mods.damageMod = 1;
-                                mods.toHitMod = 6;
+                                mods.toHitMod = 10;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 4;
-                                mods.toHitMod = -4;
+                                mods.damageMod = 2;
+                                mods.toHitMod = -10;
                                 mods.damType = 1;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                             {
-                                mods.damageMod = 2;
-                                mods.toHitMod = 3;
+                                mods.damageMod = 0;
+                                mods.toHitMod = 0;
                                 mods.damType = 1;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
-                                mods.damageMod = 3;
-                                mods.toHitMod = -1;
+                                mods.damageMod = 1;
+                                mods.toHitMod = -5;
                                 mods.damType = 1;
                                 break;
                             }
@@ -1688,14 +1808,14 @@ namespace DaggerfallWorkshop.Game.Formulas
                         case (int)Weapons.Warhammer:
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                             {
-                                mods.damageMod = -4;
-                                mods.toHitMod = 11;
+                                mods.damageMod = 0;
+                                mods.toHitMod = 5;
                                 mods.damType = 3;
                                 break;
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                             {
-                                mods.damageMod = 8;
+                                mods.damageMod = 5;
                                 mods.toHitMod = -10;
                                 mods.damType = 1;
                                 break;
@@ -1709,8 +1829,8 @@ namespace DaggerfallWorkshop.Game.Formulas
                             }
                             if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                             {
-                                mods.damageMod = 5;
-                                mods.toHitMod = -6;
+                                mods.damageMod = 4;
+                                mods.toHitMod = -5;
                                 mods.damType = 1;
                                 break;
                             }
@@ -1739,31 +1859,31 @@ namespace DaggerfallWorkshop.Game.Formulas
                     if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
                     {
                         mods.damageMod = 0;
-                        mods.toHitMod = 8;
+                        mods.toHitMod = 10;
                         mods.damType = 1;
                     }
                     if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
                     {
-                        mods.damageMod = 6;
-                        mods.toHitMod = -8;
+                        mods.damageMod = 3;
+                        mods.toHitMod = -10;
                         mods.damType = 1;
                     }
                     if (onscreenWeapon.WeaponState == WeaponStates.StrikeLeft || onscreenWeapon.WeaponState == WeaponStates.StrikeRight)
                     {
-                        mods.damageMod = 2;
-                        mods.toHitMod = 4;
+                        mods.damageMod = 1;
+                        mods.toHitMod = 0;
                         mods.damType = 1;
                     }
                     if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
                     {
-                        mods.damageMod = 4;
-                        mods.toHitMod = 0;
+                        mods.damageMod = 2;
+                        mods.toHitMod = -5;
                         mods.damType = 1;
                     }
                     if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
                     {
-                        mods.damageMod = -4;
-                        mods.toHitMod = 6;
+                        mods.damageMod = -1;
+                        mods.toHitMod = 5;
                         mods.damType = 2;
                     }
                     return mods;
@@ -2147,24 +2267,24 @@ namespace DaggerfallWorkshop.Game.Formulas
                     switch (weapon.GetWeaponSkillIDAsShort())
                     {
                         case (short)DFCareer.Skills.Archery:
-                            mods.damageMod = (attacker.Stats.LiveStrength / 25) + (attacker.Stats.LiveAgility / 25) + 1; //9
-                            mods.toHitMod = (attacker.Stats.LiveAgility / 8) + (attacker.Stats.LiveSpeed / 20) + (attacker.Stats.LiveLuck / 20); //22.5
+                            mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 33) + 1; //7
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 7) + (attacker.Stats.LiveSpeed / 20) + (attacker.Stats.LiveLuck / 10); //29
                             break;
                         case (short)DFCareer.Skills.Axe:
-                            mods.damageMod = (attacker.Stats.LiveStrength / 20) + (attacker.Stats.LiveAgility / 33) + 1; //9
-                            mods.toHitMod = (attacker.Stats.LiveStrength / 11) + (attacker.Stats.LiveAgility / 11) + (attacker.Stats.LiveLuck / 22); //22.5
+                            mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 33) + 1; //7
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 9) + (attacker.Stats.LiveAgility / 9) + (attacker.Stats.LiveLuck / 14); //29
                             break;
                         case (short)DFCareer.Skills.BluntWeapon:
-                            mods.damageMod = (attacker.Stats.LiveStrength / 20) + (attacker.Stats.LiveEndurance / 33) + 1; //9
-                            mods.toHitMod = (attacker.Stats.LiveStrength / 10) + (attacker.Stats.LiveAgility / 16) + (attacker.Stats.LiveLuck / 16); //22.5
+                            mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveEndurance / 33) + 1; //7
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 7) + (attacker.Stats.LiveAgility / 12) + (attacker.Stats.LiveLuck / 15); //29
                             break;
                         case (short)DFCareer.Skills.LongBlade:
-                            mods.damageMod = (attacker.Stats.LiveAgility / 20) + (attacker.Stats.LiveStrength / 33) + 1; //9
-                            mods.toHitMod = (attacker.Stats.LiveAgility / 8) + (attacker.Stats.LiveSpeed / 20) + (attacker.Stats.LiveLuck / 20); //22.5
+                            mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveStrength / 33) + 1; //7
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 7) + (attacker.Stats.LiveSpeed / 12) + (attacker.Stats.LiveLuck / 15); //29
                             break;
                         case (short)DFCareer.Skills.ShortBlade:
-                            mods.damageMod = (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveSpeed / 25) + 1; //9
-                            mods.toHitMod = (attacker.Stats.LiveAgility / 10) + (attacker.Stats.LiveSpeed / 14) + (attacker.Stats.LiveLuck / 18); //22.5
+                            mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveSpeed / 33) + 1; //7
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 7) + (attacker.Stats.LiveSpeed / 12) + (attacker.Stats.LiveLuck / 15); //29
                             break;
                         default:
                             break;
@@ -2175,7 +2295,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             else if (((int)attacker.Career.ExpertProficiencies & (int)DFCareer.ProficiencyFlags.HandToHand) != 0)
             {
                 mods.damageMod = (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveEndurance / 50) + (attacker.Stats.LiveAgility / 50) + (attacker.Stats.LiveSpeed / 50) + 1; //9
-                mods.toHitMod = (attacker.Stats.LiveAgility / 22) + (attacker.Stats.LiveSpeed / 22) + (attacker.Stats.LiveStrength / 22) + (attacker.Stats.LiveEndurance / 22) + (attacker.Stats.LiveLuck / 22); //22.5
+                mods.toHitMod = (attacker.Stats.LiveAgility / 14) + (attacker.Stats.LiveSpeed / 14) + (attacker.Stats.LiveStrength / 14) + (attacker.Stats.LiveEndurance / 14) + (attacker.Stats.LiveLuck / 14); //35
             }
             //Debug.LogFormat("Here is the damage modifier for this proficiency = {0}", mods.damageMod);
             //Debug.LogFormat("Here is the accuracy modifier for this proficiency = {0}", mods.toHitMod);
@@ -2192,73 +2312,73 @@ namespace DaggerfallWorkshop.Game.Formulas
                     case (int)Races.Argonian:
                         if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.ShortBlade)
                         {
-                            mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveSpeed / 33); //6
-                            mods.toHitMod = (attacker.Stats.LiveAgility / 16) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 33); //12
+                            mods.damageMod = (attacker.Stats.LiveAgility / 50) + (attacker.Stats.LiveSpeed / 50); //4
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 16) + (attacker.Stats.LiveSpeed / 16) + (attacker.Stats.LiveLuck / 33); //15
                         }
                         break;
                     case (int)Races.DarkElf:
                         if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.LongBlade)
                         {
-                            mods.damageMod = (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveStrength / 25); //8
+                            mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveStrength / 50); //5
                             mods.toHitMod = (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 33); //10
                         }
                         else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.ShortBlade)
                         {
-                            mods.damageMod = (attacker.Stats.LiveAgility / 50) + (attacker.Stats.LiveSpeed / 50); //4
-                            mods.toHitMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 33); //9
+                            mods.damageMod = (attacker.Stats.LiveAgility / 75) + (attacker.Stats.LiveSpeed / 75); //2
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 20) + (attacker.Stats.LiveSpeed / 20) + (attacker.Stats.LiveLuck / 50); //12
                         }
                         break;
                     case (int)Races.Khajiit:
                         if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.ShortBlade)
                         {
-                            mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveSpeed / 50); //5
-                            mods.toHitMod = (attacker.Stats.LiveAgility / 20) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 50); //10
+                            mods.damageMod = (attacker.Stats.LiveAgility / 50) + (attacker.Stats.LiveSpeed / 50); //4
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 20) + (attacker.Stats.LiveSpeed / 20) + (attacker.Stats.LiveLuck / 33); //13
                         }
                         break;
                     case (int)Races.Nord:
                         if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.Axe)
                         {
-                            mods.damageMod = (attacker.Stats.LiveStrength / 16) + (attacker.Stats.LiveAgility / 33); //9
-                            mods.toHitMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveLuck / 33); //9
+                            mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 50); //5
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveLuck / 33); //10
                         }
                         else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.BluntWeapon)
                         {
-                            mods.damageMod = (attacker.Stats.LiveStrength / 25) + (attacker.Stats.LiveEndurance / 25); //8
-                            mods.toHitMod = (attacker.Stats.LiveStrength / 25) + (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveLuck / 33); //10
+                            mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveEndurance / 33); //6
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveLuck / 33); //9
                         }
                         break;
                     case (int)Races.Redguard:
                         if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.LongBlade)
                         {
                             mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveStrength / 50); //5
-                            mods.toHitMod = (attacker.Stats.LiveAgility / 10) + (attacker.Stats.LiveSpeed / 25) + (attacker.Stats.LiveLuck / 25); //18
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 20) + (attacker.Stats.LiveSpeed / 20) + (attacker.Stats.LiveLuck / 20); //15
                         }
                         else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.BluntWeapon)
                         {
-                            mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveEndurance / 33); //6
-                            mods.toHitMod = (attacker.Stats.LiveStrength / 20) + (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveLuck / 33); //12
+                            mods.damageMod = (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveEndurance / 50); //4
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveLuck / 33); //10
                         }
                         else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.Axe)
                         {
-                            mods.damageMod = (attacker.Stats.LiveStrength / 16) + (attacker.Stats.LiveAgility / 33); //6
-                            mods.toHitMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveLuck / 33); //12
+                            mods.damageMod = (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveAgility / 50); //4
+                            mods.toHitMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveLuck / 33); //10
                         }
                         else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.Archery)
                         {
-                            mods.damageMod = (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveAgility / 50); //4
-                            mods.toHitMod = (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 33); //10
+                            mods.damageMod = (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveAgility / 75); //3
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveSpeed / 50) + (attacker.Stats.LiveLuck / 33); //8
                         }
                         break;
                     case (int)Races.WoodElf:
                         if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.ShortBlade)
                         {
-                            mods.damageMod = (attacker.Stats.LiveAgility / 33) + (attacker.Stats.LiveSpeed / 50); //5
+                            mods.damageMod = (attacker.Stats.LiveAgility / 50) + (attacker.Stats.LiveSpeed / 75); //3
                             mods.toHitMod = (attacker.Stats.LiveAgility / 20) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveLuck / 50); //10
                         }
                         else if (weapon.GetWeaponSkillIDAsShort() == (short)DFCareer.Skills.Archery)
                         {
-                            mods.damageMod = (attacker.Stats.LiveStrength / 25) + (attacker.Stats.LiveAgility / 25); //8
-                            mods.toHitMod = (attacker.Stats.LiveAgility / 10) + (attacker.Stats.LiveSpeed / 25) + (attacker.Stats.LiveLuck / 25); //18
+                            mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveAgility / 33); //6
+                            mods.toHitMod = (attacker.Stats.LiveAgility / 12) + (attacker.Stats.LiveSpeed / 20) + (attacker.Stats.LiveLuck / 20); //18
                         }
                         break;
                     default:
@@ -2269,12 +2389,12 @@ namespace DaggerfallWorkshop.Game.Formulas
             {
                 if (player.RaceTemplate.ID == (int)Races.Khajiit)
                 {
-                    mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveEndurance / 33) + (attacker.Stats.LiveAgility / 50) + (attacker.Stats.LiveSpeed / 50); //10
-                    mods.toHitMod = (attacker.Stats.LiveAgility / 25) + (attacker.Stats.LiveSpeed / 50) + (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveEndurance / 50) + (attacker.Stats.LiveLuck / 50); //12
+                    mods.damageMod = (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveEndurance / 50) + (attacker.Stats.LiveAgility / 75) + (attacker.Stats.LiveSpeed / 75); //6
+                    mods.toHitMod = (attacker.Stats.LiveAgility / 20) + (attacker.Stats.LiveSpeed / 33) + (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveEndurance / 33) + (attacker.Stats.LiveLuck / 50); //16
                 }
                 else if (player.RaceTemplate.ID == (int)Races.Nord)
                 {
-                    mods.damageMod = (attacker.Stats.LiveStrength / 33) + (attacker.Stats.LiveEndurance / 50); //5
+                    mods.damageMod = (attacker.Stats.LiveStrength / 50) + (attacker.Stats.LiveEndurance / 50); //4
                 }
             }
             //Debug.LogFormat("Here is the damage modifier for this Race and Weapon = {0}", mods.damageMod);
@@ -2335,8 +2455,8 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (player == attacker) // When attacker is the player
             {
                 attackerWillpMod = (int)Mathf.Round((attacker.Stats.LiveWillpower - 50) / 5);
-                confidenceMod = Mathf.Max(10 + attackerWillpMod - (target.Level / 2), 0);
-                courageMod = Mathf.Max((target.Level / 2) - attackerWillpMod, 0);
+                confidenceMod = Mathf.Max(3 + attackerWillpMod - (target.Level / 3), 0);
+                courageMod = Mathf.Max((target.Level / 4) - attackerWillpMod, 0);
 
                 confidenceMod = UnityEngine.Random.Range(0, confidenceMod);
             }
@@ -2427,10 +2547,14 @@ namespace DaggerfallWorkshop.Game.Formulas
 
             int damAbsorbed = damBefore - damAfter;
             float damTypeMulti = 1f;
-            float strengthMulti = Mathf.Clamp((attacker.Stats.LiveStrength - 50) / 5, 0, 100) * 0.05f;
+            float strengthMulti = Mathf.Clamp((attacker.Stats.LiveStrength - 50) / 5, 0, 100) * 0.025f;
             float armorDensityMulti = 1f;
             bool missileWep = false;
             int startItemCondPer = 0;
+            bool weaponUsed = false;
+
+            if (weapon != null)
+                weaponUsed = true;
 
             if (damType == 1)
                 damTypeMulti = 0.7f;
@@ -2446,7 +2570,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                 {
                     armorDensityMulti = ((shield.density - 300) / 50 * 0.1f) + 1;
                     startItemCondPer = shield.ConditionPercentage;
-                    ApplyConditionDamageThroughPhysicalDamage(attacker, damAbsorbed, damAfter, damTypeMulti, strengthMulti, armorDensityMulti, missileWep, shield);
+                    ApplyConditionDamageThroughPhysicalDamage(attacker, damAbsorbed, damAfter, damTypeMulti, strengthMulti, armorDensityMulti, missileWep, shield, weaponUsed);
 
                     if (target == GameManager.Instance.PlayerEntity)
                         WarningMessagePlayerEquipmentCondition(shield, startItemCondPer);
@@ -2460,7 +2584,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                 {
                     armorDensityMulti = ((armor.density - 300) / 50 * 0.1f) + 1;
                     startItemCondPer = armor.ConditionPercentage;
-                    ApplyConditionDamageThroughPhysicalDamage(attacker, damAbsorbed, damAfter, damTypeMulti, strengthMulti, armorDensityMulti, missileWep, armor);
+                    ApplyConditionDamageThroughPhysicalDamage(attacker, damAbsorbed, damAfter, damTypeMulti, strengthMulti, armorDensityMulti, missileWep, armor, weaponUsed);
 
                     if (target == GameManager.Instance.PlayerEntity)
                         WarningMessagePlayerEquipmentCondition(armor, startItemCondPer);
@@ -2473,7 +2597,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                 if (weapon.GetWeaponSkillIDAsShort() == 33) // Checks if the weapon being used is in the Missile Weapon category, then sets a bool value to true.
                     missileWep = true;
                 startItemCondPer = weapon.ConditionPercentage;
-                ApplyConditionDamageThroughPhysicalDamage(attacker, damAbsorbed, damAfter, damTypeMulti, strengthMulti, armorDensityMulti, missileWep, weapon); // Does condition damage to the attackers weapon.
+                ApplyConditionDamageThroughPhysicalDamage(attacker, damAbsorbed, damAfter, damTypeMulti, strengthMulti, armorDensityMulti, missileWep, weapon, weaponUsed); // Does condition damage to the attackers weapon.
 
                 if (attacker == GameManager.Instance.PlayerEntity)
                     WarningMessagePlayerEquipmentCondition(weapon, startItemCondPer);
@@ -2485,19 +2609,11 @@ namespace DaggerfallWorkshop.Game.Formulas
             EnemyEntity AITarget = null;
             AITarget = target as EnemyEntity;
             PlayerEntity player = GameManager.Instance.PlayerEntity;
-            int armorValue = 0;
-
-            // Get armor value for struck body part. This value is multiplied by 5 times in the "EnemyEntity.cs" script, makes a big difference.
-            if (struckBodyPart <= target.ArmorValues.Length)
-            {
-                armorValue = target.ArmorValues[struckBodyPart];
-            }
+            int armorValue = 0; // taking out the whole "innate armor class" from enemies and just replacing that with an easier to work with dodge chance value I have control of 1 to 1, simple.
 
             // Sets the armorValue so that armor does not have any effect on the hit chance, it just defaults to the "naked" amount for the player and humanoid enemies, other monsters still have their normal AC score factored in.
             if (target == player)
-                armorValue = 100 - target.IncreasedArmorValueModifier - target.DecreasedArmorValueModifier;
-            else if (AITarget.EntityType == EntityTypes.EnemyClass)
-                armorValue = 60;
+                armorValue = 45 - target.IncreasedArmorValueModifier - target.DecreasedArmorValueModifier;
 
             return armorValue;
         }
@@ -2520,31 +2636,50 @@ namespace DaggerfallWorkshop.Game.Formulas
             return chanceToHitMod;
         }
 
-        public static int CalculateStatDiffsToHit(DaggerfallEntity attacker, DaggerfallEntity target)
+        public static int CalculateStatDiffsToHit(DaggerfallEntity attacker, DaggerfallEntity target, EnemyBasics.CustomEnemyStatValues enemyAttackerStats, EnemyBasics.CustomEnemyStatValues enemyTargetStats)
         {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
             int chanceToHitMod = 0;
 
             // Apply luck modifier.
-            chanceToHitMod += ((attacker.Stats.LiveLuck - target.Stats.LiveLuck) / 10);
+            if (attacker == player)
+                chanceToHitMod += ((attacker.Stats.LiveLuck - enemyTargetStats.luckCustom) / 10);
+            else if (target == player)
+                chanceToHitMod += ((enemyAttackerStats.luckCustom - target.Stats.LiveLuck) / 10);
+            else
+                chanceToHitMod += ((enemyAttackerStats.luckCustom - enemyTargetStats.luckCustom) / 10);
             //Debug.LogFormat("After Luck = {0}", chanceToHitMod);
 
             // Apply agility modifier.
-            chanceToHitMod += ((attacker.Stats.LiveAgility - target.Stats.LiveAgility) / 4); //Made Agility have twice as much effect on final hit chance.
-                                                                                             //Debug.LogFormat("After Agility = {0}", chanceToHitMod);
+            if (attacker == player)
+                chanceToHitMod += ((attacker.Stats.LiveAgility - enemyTargetStats.agilityCustom) / 4); //Made Agility have twice as much effect on final hit chance.
+            else if (target == player)
+                chanceToHitMod += ((enemyAttackerStats.agilityCustom - target.Stats.LiveAgility) / 4);
+            else
+                chanceToHitMod += ((enemyAttackerStats.agilityCustom - enemyTargetStats.agilityCustom) / 4);
+            //Debug.LogFormat("After Agility = {0}", chanceToHitMod);
 
             // Possibly make the Speed Stat a small factor as well, seems like it would make sense.
-            chanceToHitMod += ((attacker.Stats.LiveSpeed - target.Stats.LiveSpeed) / 8);
+            if (attacker == player)
+                chanceToHitMod += ((attacker.Stats.LiveSpeed - enemyTargetStats.speedCustom) / 8);
+            else if (target == player)
+                chanceToHitMod += ((enemyAttackerStats.speedCustom - target.Stats.LiveSpeed) / 8);
+            else
+                chanceToHitMod += ((enemyAttackerStats.speedCustom - enemyTargetStats.speedCustom) / 8);
             //Debug.LogFormat("After Speed = {0}", chanceToHitMod);
 
             // When I think about it, I might want to get some of the other stats into this formula as well, to help casters somewhat, as well as explain it like a more intelligent character notices patterns in enemy movement and uses to to get in more hits, maybe even strength, the character strikes with such force that they pierce through armor easier.
 
             // Apply flat Luck factor for the target's chance of being hit. Higher luck above 50 means enemies will miss you more, and below 50 will mean they hit you more often.
-            chanceToHitMod -= (int)Mathf.Round((float)(target.Stats.LiveLuck - 50) / 10); // With this, at most Luck will effect chances by either -5 or +5.
+            if (target == player)
+                chanceToHitMod -= (int)Mathf.Round((float)(target.Stats.LiveLuck - 50) / 10); // With this, at most Luck will effect chances by either -5 or +5.
+            else
+                chanceToHitMod -= (int)Mathf.Round((float)(enemyTargetStats.luckCustom - 50) / 10);
 
             return chanceToHitMod;
         }
 
-        public static int CalculateSkillsToHit(DaggerfallEntity attacker, DaggerfallEntity target)
+        public static int CalculateSkillsToHit(DaggerfallEntity attacker, DaggerfallEntity target, EnemyBasics.CustomEnemyStatValues enemyTargetStats)
         {
             PlayerEntity player = GameManager.Instance.PlayerEntity;
             int chanceToHitMod = 0;
@@ -2553,7 +2688,10 @@ namespace DaggerfallWorkshop.Game.Formulas
             // This modifier is bugged in classic and the attacker's dodging skill is used rather than the target's.
             // DF Chronicles says the dodging calculation is (dodging / 10), but it actually seems to be (dodging / 4).
             // Apply dodging modifier.
-            chanceToHitMod -= (target.Skills.GetLiveSkillValue(DFCareer.Skills.Dodging) / 2); // Changing 4 to a 2, so 100 dodge will give -50 to hit chance, very powerful.
+            if (target == player)
+                chanceToHitMod -= (target.Skills.GetLiveSkillValue(DFCareer.Skills.Dodging) / 2); // Changing 4 to a 2, so 100 dodge will give -50 to hit chance, very powerful.
+            else
+                chanceToHitMod -= enemyTargetStats.dodgeSkillCustom; // So for monsters, dodge skill is 1 to 1 for how much it effects chances to not be hit.
 
             return chanceToHitMod;
         }
@@ -2571,20 +2709,11 @@ namespace DaggerfallWorkshop.Game.Formulas
                 chanceToHitMod -= player.BiographyAvoidHitMod;
             }
 
-            // Apply monster modifier.
-            if ((target != player) && (AITarget.EntityType == EntityTypes.EnemyMonster))
-            {
-                chanceToHitMod += 50; // Changed from 40 to 50, +10, in since i'm going to make dodging have double the effect, as well as nerf weapon material hit mod more.
-            }
-
-            // DF Chronicles says -60 is applied at the end, but it actually seems to be -50.
-            chanceToHitMod -= 50;
-
             return chanceToHitMod;
         }
 
         /// Applies condition damage to an item based on physical hit damage.
-        public static void ApplyConditionDamageThroughPhysicalDamage(DaggerfallEntity owner, int damAbsorbed, int damAfter, float damTypeMulti, float strengthMulti, float armorDensityMulti, bool missileWep, DaggerfallUnityItem item)
+        public static void ApplyConditionDamageThroughPhysicalDamage(DaggerfallEntity owner, int damAbsorbed, int damAfter, float damTypeMulti, float strengthMulti, float armorDensityMulti, bool missileWep, DaggerfallUnityItem item, bool weaponUsed)
         {
             ItemCollection playerItems = GameManager.Instance.PlayerEntity.Items;
             int amount = 0;
@@ -2594,7 +2723,10 @@ namespace DaggerfallWorkshop.Game.Formulas
 
             if (item.ItemGroup == ItemGroups.Armor) // Target gets their armor/shield condition damaged.
             {
-                amount = (int)Mathf.Round((damAbsorbed * 3) / armorDensityMulti);
+                if (weaponUsed)
+                    amount = (int)Mathf.Round((damAbsorbed * 3) / armorDensityMulti); // Might alter this later to account for other properties, including weapon properties doing the attack, etc.
+                else
+                    amount = (int)Mathf.Round((damAbsorbed * 2) / armorDensityMulti); // Unarmed attacks do less condition damage to armor.
 
                 if (owner == GameManager.Instance.PlayerEntity && item.IsEnchanted) // If the Weapon or Armor piece is enchanted, when broken it will be Destroyed from the player inventory.
                     item.LowerCondition(amount, owner, playerItems);
@@ -2608,10 +2740,10 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
             else // Attacker gets their weapon damaged, if they are using one, otherwise this method is not called.
             {
-                if (damAbsorbed == 0 || (damAfter * damTypeMulti * strengthMulti * 0.20f) > damAbsorbed)
-                    amount = (int)Mathf.Round(damAfter * damTypeMulti * strengthMulti * 0.20f); // Weapon gets damaged at least 20% of the damage dealt if there was no or little damage absorbed from other sources, I.E blade still dulls cutting flesh.
+                if (damAbsorbed == 0 || (damAfter * (damTypeMulti - strengthMulti) * 0.20f) > damAbsorbed)
+                    amount = (int)Mathf.Round(damAfter * (damTypeMulti - strengthMulti) * 0.20f); // Weapon gets damaged at least 20% of the damage dealt if there was no or little damage absorbed from other sources, I.E blade still dulls cutting flesh.
                 else
-                    amount = (int)Mathf.Round(damAbsorbed * damTypeMulti * strengthMulti * armorDensityMulti);
+                    amount = (int)Mathf.Round(damAbsorbed * (damTypeMulti + armorDensityMulti - strengthMulti) );
 
                 if ((amount == 0) && Dice100.SuccessRoll(40))
                     amount = 1;
@@ -2631,35 +2763,17 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
         }
 
-        /// Applies condition damage to an item based on physical hit damage. Specifically for unarmed attacks.
-        public static void ApplyConditionDamageThroughUnarmedDamage(DaggerfallUnityItem item, DaggerfallEntity owner, int damage)
-        {
-            ItemCollection playerItems = GameManager.Instance.PlayerEntity.Items;
-
-            //Debug.LogFormat("Item Group Index is {0}", item.GroupIndex);
-            //Debug.LogFormat("Item Template Index is {0}", item.TemplateIndex);
-
-            if (item.ItemGroup == ItemGroups.Armor) // Target gets their armor/shield condition damaged.
-            {
-                int amount = item.IsShield ? damage / 2 : damage;
-
-                if (owner == GameManager.Instance.PlayerEntity && item.IsEnchanted) // If the Weapon or Armor piece is enchanted, when broken it will be Destroyed from the player inventory.
-                    item.LowerCondition(amount, owner, playerItems);
-                else
-                    item.LowerCondition(amount, owner);
-
-                /*int percentChange = 100 * amount / item.maxCondition;
-                if (owner == GameManager.Instance.PlayerEntity){
-                    Debug.LogFormat("Target Had {0} Damaged by {1}, cond={2}", item.LongName, amount, item.currentCondition);
-					Debug.LogFormat("Had {0} Damaged by {1}%, of Total Maximum. There Remains {2}% of Max Cond.", item.LongName, percentChange, item.ConditionPercentage);} // Percentage Change */
-            }
-        }
-
         /// Does a roll for based on the critical strike chance of the attacker, if this roll is successful critSuccess is returned as 'true'.
-		public static bool CriticalStrikeHandler(DaggerfallEntity attacker)
+		public static bool CriticalStrikeHandler(DaggerfallEntity attacker, EnemyBasics.CustomEnemyStatValues enemyAttackerStats)
         {
             PlayerEntity player = GameManager.Instance.PlayerEntity;
-            int attackerLuckBonus = (int)Mathf.Floor((float)(attacker.Stats.LiveLuck - 50) / 25f);
+            int attackerLuckBonus = 0;
+
+            if (attacker == player)
+                attackerLuckBonus = (int)Mathf.Floor((float)(attacker.Stats.LiveLuck - 50) / 25f);
+            else
+                attackerLuckBonus = (int)Mathf.Floor((float)(enemyAttackerStats.luckCustom - 50) / 25f);
+
             Mathf.Clamp(attackerLuckBonus, -2, 2); // This is meant to disallow crit odds from going higher than 50%, incase luck is allowed to go over 100 points.
 
             if (attacker == player)
@@ -2671,7 +2785,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
             else
             {
-                if (Dice100.SuccessRoll(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.CriticalStrike) / (5 - attackerLuckBonus))) // Monsters have a 20% chance of critting at level 100, or level 14.
+                if (Dice100.SuccessRoll(enemyAttackerStats.critSkillCustom / (5 - attackerLuckBonus))) // Monsters have a 20% chance of critting at level 100, or level 14.
                     return true;
                 else
                     return false;
@@ -2875,18 +2989,17 @@ namespace DaggerfallWorkshop.Game.Formulas
         }
 
         // Compares the damage reduction of the struck shield, with the armor under the part that was struck, and returns true if the shield has the higher reduction value, or false if the armor under has a higher reduction value. This is to keep a full-suit of daedric armor from being worse while wearing a leather shield, which when a block is successful, would actually take more damage than if not wearing a shield.
-        public static bool CompareShieldToUnderArmor(DaggerfallEntity attacker, DaggerfallEntity target, int damType, int struckBodyPart, float critDamPen)
+        public static bool CompareShieldToUnderArmor(DaggerfallEntity attacker, DaggerfallEntity target, int damType, int struckBodyPart, float critDamPen, DaggerfallUnityItem shield)
         {
             int redDamShield = 1;
             int redDamUnderArmor = 1;
 
-            DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
-            redDamShield = CalculateArmorDamageReduction(attacker, target, 100, damType, struckBodyPart, true, critDamPen); // Inefficient Repeating of armor and shield finding code.
+            redDamShield = CalculateArmorDamageReduction(attacker, target, 100, damType, struckBodyPart, true, critDamPen, null, shield); // Inefficient Repeating of armor and shield finding code.
 
             EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
             DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
             if (armor != null)
-                redDamUnderArmor = CalculateArmorDamageReduction(attacker, target, 100, damType, struckBodyPart, false, critDamPen); // Inefficient Repeating of armor and shield finding code.
+                redDamUnderArmor = CalculateArmorDamageReduction(attacker, target, 100, damType, struckBodyPart, false, critDamPen, null, shield); // Inefficient Repeating of armor and shield finding code.
             else // If the body part struck in 'naked' IE has no armor protecting it.
             {
                 //Debug.Log("$$$: Shield Is Stronger Than Under Armor, Shield Being Used");
@@ -3016,14 +3129,12 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
         }
 
-        public static int CalculateArmorDamageReduction(DaggerfallEntity attacker, DaggerfallEntity target, int damage, int damType, int struckBodyPart, bool shieldBlockSuccess, float critDamPen, DaggerfallUnityItem weapon = null)
+        public static int CalculateArmorDamageReduction(DaggerfallEntity attacker, DaggerfallEntity target, int damage, int damType, int struckBodyPart, bool shieldBlockSuccess, float critDamPen, DaggerfallUnityItem weapon = null, DaggerfallUnityItem shield = null)
         {
             float reductionPercent = 1f;
 
             if (shieldBlockSuccess)
             {
-                DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
-
                 reductionPercent = PercentageDamageReductionCalculation(shield, shieldBlockSuccess, critDamPen, damType);
             }
             else

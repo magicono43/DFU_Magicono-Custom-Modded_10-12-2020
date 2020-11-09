@@ -239,10 +239,10 @@ namespace DaggerfallWorkshop.Game
             EnemyEntity entity = entityBehaviour.Entity as EnemyEntity;
             PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
 
-            int enemyDamType = EnemyDamageTypeUsed(entity); // Returns an integer value that corresponds to a specific damage type that this type of enemy can use, will use later on in combat formula.
+            int enemyDamType = EnemyDamageTypeUsed(entity, weapon); // Returns an integer value that corresponds to a specific damage type that this type of enemy can use, will use later on in combat formula.
 
             // Calculate damage
-            damage = FormulaHelper.CalculateAttackDamage(entity, playerEntity, -1, 0, weapon, enemyDamType);
+            damage = FormulaHelper.CalculateAttackDamage(entity, playerEntity, -1, 0, weapon, out bool shieldBlockSuccess, out int mainDamType, out bool critStrikeSuccess, out bool armorPartAbsorbed, out bool armorCompleteAbsorbed, out Items.DaggerfallUnityItem addedAIWeapon, out bool hitSuccess, out bool metalShield, out bool metalArmor, enemyDamType);
 
             // Break any "normal power" concealment effects on enemy
             if (entity.IsMagicallyConcealedNormalPower && damage > 0)
@@ -257,6 +257,21 @@ namespace DaggerfallWorkshop.Game
                 EntityEffectManager effectManager = GetComponent<EntityEffectManager>();
                 if (effectManager)
                     damage = effectManager.DoItemEnchantmentPayloads(EnchantmentPayloadFlags.Strikes, weapon, entity.Items, playerEntity.EntityBehaviour, damage);
+            }
+
+            // If the AI was given a weapon through the damage formula, this gives them that weapon for this part of the calling method for later use.
+            if (weapon == null)
+                weapon = addedAIWeapon;
+
+            // Play associated sound when armor/shield was responsible for absorbing damage completely.
+            if (damage <= 0)
+            {
+                if (hitSuccess && shieldBlockSuccess)
+                    sounds.PlayShieldBlockSound(weapon, metalShield);
+                else if (hitSuccess && armorCompleteAbsorbed)
+                    sounds.PlayArmorAbsorbSound(weapon, metalArmor);
+                else
+                    sounds.PlayMissSound(weapon);
             }
 
             if (damage > 0)
@@ -281,13 +296,19 @@ namespace DaggerfallWorkshop.Game
                     // Surrender dialogue has been shown and player refused to surrender
                     // Guard damages player if player can survive hit, or if hit is fatal but guard rejects player's forced surrender
                     else if (playerEntity.CurrentHealth > damage || !playerEntity.SurrenderToCityGuards(false))
+                    {
+                        if (shieldBlockSuccess && armorPartAbsorbed)
+                            sounds.PlayShieldBlockSound(weapon, metalShield);
                         SendDamageToPlayer();
+                    }
                 }
                 else
+                {
+                    if (shieldBlockSuccess && armorPartAbsorbed)
+                        sounds.PlayShieldBlockSound(weapon, metalShield);
                     SendDamageToPlayer();
+                }
             }
-            else
-                sounds.PlayMissSound(weapon);
 
             return damage;
         }
@@ -302,18 +323,44 @@ namespace DaggerfallWorkshop.Game
             EnemySounds targetSounds = senses.Target.GetComponent<EnemySounds>();
             EnemyMotor targetMotor = senses.Target.transform.GetComponent<EnemyMotor>();
 
-            int enemyDamType = EnemyDamageTypeUsed(entity); // Returns an integer value that corresponds to a specific damage type that this type of enemy can use, will use later on in combat formula.
+            int enemyDamType = EnemyDamageTypeUsed(entity, weapon); // Returns an integer value that corresponds to a specific damage type that this type of enemy can use, will use later on in combat formula.
 
             // Calculate damage
-            damage = FormulaHelper.CalculateAttackDamage(entity, targetEntity, -1, 0, weapon, enemyDamType);
+            damage = FormulaHelper.CalculateAttackDamage(entity, targetEntity, -1, 0, weapon, out bool shieldBlockSuccess, out int mainDamType, out bool critStrikeSuccess, out bool armorPartAbsorbed, out bool armorCompleteAbsorbed, out Items.DaggerfallUnityItem addedAIWeapon, out bool hitSuccess, out bool metalShield, out bool metalArmor, enemyDamType);
 
             // Break any "normal power" concealment effects on enemy
             if (entity.IsMagicallyConcealedNormalPower && damage > 0)
                 EntityEffectManager.BreakNormalPowerConcealmentEffects(entityBehaviour);
 
+            // If the AI was given a weapon through the damage formula, this gives them that weapon for this part of the calling method for later use.
+            if (weapon == null)
+                weapon = addedAIWeapon;
+
+            // Play associated sound when armor/shield was responsible for absorbing damage completely.
+            if (damage <= 0)
+            {
+                if (hitSuccess && shieldBlockSuccess)
+                    targetSounds.PlayShieldBlockSound(weapon, metalShield);
+                else if (hitSuccess && armorCompleteAbsorbed)
+                    targetSounds.PlayArmorAbsorbSound(weapon, metalArmor);
+                else
+                {
+                    WeaponTypes weaponType = WeaponTypes.Melee;
+                    if (weapon != null)
+                        weaponType = DaggerfallUnity.Instance.ItemHelper.ConvertItemToAPIWeaponType(weapon);
+
+                    if ((!bowAttack && !targetEntity.MobileEnemy.ParrySounds) || weaponType == WeaponTypes.Melee)
+                        sounds.PlayMissSound(weapon);
+                    else if (targetEntity.MobileEnemy.ParrySounds)
+                        targetSounds.PlayParrySound();
+                }
+            }
+
             // Play hit sound and trigger blood splash at hit point
             if (damage > 0)
             {
+                if (shieldBlockSuccess && armorPartAbsorbed)
+                    sounds.PlayShieldBlockSound(weapon, metalShield);
                 targetSounds.PlayHitSound(weapon);
 
                 EnemyBlood blood = senses.Target.transform.GetComponent<EnemyBlood>();
@@ -355,17 +402,6 @@ namespace DaggerfallWorkshop.Game
 
                     targetSounds.PlayCombatVoice(gender, false, damage >= targetEntity.MaxHealth / 4);
                 }
-            }
-            else
-            {
-                WeaponTypes weaponType = WeaponTypes.Melee;
-                if (weapon != null)
-                    weaponType = DaggerfallUnity.Instance.ItemHelper.ConvertItemToAPIWeaponType(weapon);
-
-                if ((!bowAttack && !targetEntity.MobileEnemy.ParrySounds) || weaponType == WeaponTypes.Melee)
-                    sounds.PlayMissSound(weapon);
-                else if (targetEntity.MobileEnemy.ParrySounds)
-                    targetSounds.PlayParrySound();
             }
 
             // Handle Strikes payload from enemy to non-player target - this could change damage amount
@@ -413,67 +449,69 @@ namespace DaggerfallWorkshop.Game
 
         #region Custom Helper Methods
 
-        public int EnemyDamageTypeUsed(EnemyEntity entity) // Check what enemy is attacking and determine what their damage type is for this attack.
+        public int EnemyDamageTypeUsed(EnemyEntity entity, Items.DaggerfallUnityItem weapon = null) // Check what enemy is attacking and determine what their damage type is for this attack.
         {
             int[] damTypes;
 
             if (entity.EntityType == EntityTypes.EnemyClass)
             {
-                switch (entity.CareerIndex)
+                if (weapon != null)
                 {
-                    case (int)ClassCareers.Mage:
-                        damTypes = new int[] { 1, 1, 1, 1, 1, 1, 1, 4, 4, 4 }; // 70% Bludgeoning, 30% Special
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Spellsword:
-                        damTypes = new int[] { 1, 1, 1, 2, 2, 2, 2, 3, 3, 3 }; // 30% Bludgeoning, 40% Slashing, 40% Piercing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Battlemage:
-                        damTypes = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 3 }; // 70% Slashing, 30% Piercing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Sorcerer:
-                        damTypes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 3, 3 }; // 80% Bludgeoning, 20% Piercing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Healer:
-                        return 1; // 100% Bludgeoning
-                    case (int)ClassCareers.Nightblade:
-                        damTypes = new int[] { 2, 2, 2, 2, 3, 3, 3, 3, 3, 3 }; // 40% Slashing, 60% Piercing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Bard:
-                        damTypes = new int[] { 1, 1, 2, 2, 2, 2, 2, 2, 3, 3 }; // 20% Bludgeoning, 60% Slashing, 20% Piercing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Burglar:
-                        damTypes = new int[] { 2, 2, 2, 2, 3, 3, 3, 3, 3, 3 }; // 40% Slashing, 60% Piercing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Rogue:
-                        damTypes = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 3 }; // 70% Slashing, 30% Piercing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Acrobat:
-                        damTypes = new int[] { 2, 2, 2, 2, 2, 2, 2, 2, 3, 3 }; // 80% Slashing, 20% Piercing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Thief:
-                        damTypes = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 3 }; // 70% Slashing, 30% Piercing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Assassin:
-                        damTypes = new int[] { 2, 2, 3, 3, 3, 3, 3, 3, 3, 3 }; // 20% Slashing, 80% Piercing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Monk:
-                        damTypes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 2, 2 }; // 80% Bludgeoning, 20% Slashing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Archer:
-                        return 3; // 100% Piercing
-                    case (int)ClassCareers.Ranger:
-                        return 3; // 100% Piercing
-                    case (int)ClassCareers.Barbarian:
-                        damTypes = new int[] { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2 }; // 50% Bludgeoning, 50% Slashing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Warrior:
-                        damTypes = new int[] { 1, 1, 1, 2, 2, 2, 2, 2, 2, 2 }; // 30% Bludgeoning, 70% Slashing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    case (int)ClassCareers.Knight:
-                        damTypes = new int[] { 1, 1, 1, 2, 2, 2, 2, 2, 2, 2 }; // 30% Bludgeoning, 70% Slashing
-                        return damTypes[Random.Range(0, damTypes.Length)];
-                    default: // Everything Else.
-                        return 1; // 100% Bludgeoning
+                    switch (weapon.TemplateIndex)
+                    {
+                        case (int)Items.Weapons.Dagger:
+                        case (int)Items.Weapons.Tanto:
+                            damTypes = new int[] { 2, 2, 2, 3, 3, 3, 3, 3, 3, 3 }; // 70% Piercing, 30% Slashing
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        case (int)Items.Weapons.Shortsword:
+                        case (int)Items.Weapons.Wakazashi:
+                            damTypes = new int[] { 2, 2, 2, 2, 2, 3, 3, 3, 3, 3 }; // 50% Piercing, 50% Slashing
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        case (int)Items.Weapons.Broadsword:
+                        case (int)Items.Weapons.Claymore:
+                            damTypes = new int[] { 1, 1, 2, 2, 2, 2, 2, 2, 2, 3 }; // 20% Bludgeoning, 70% Slashing, 10% Piercing
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        case (int)Items.Weapons.Dai_Katana:
+                        case (int)Items.Weapons.Katana:
+                            damTypes = new int[] { 2, 2, 2, 2, 2, 2, 2, 2, 3, 3 }; // 80% Slashing, 20% Piercing
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        case (int)Items.Weapons.Longsword:
+                            damTypes = new int[] { 1, 2, 2, 2, 2, 2, 2, 3, 3, 3 }; // 10% Bludgeoning, 60% Slashing, 30% Piercing
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        case (int)Items.Weapons.Saber:
+                            damTypes = new int[] { 1, 1, 1, 2, 2, 2, 2, 2, 2, 3 }; // 30% Bludgeoning, 60% Slashing, 10% Piercing
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        case (int)Items.Weapons.Battle_Axe:
+                            damTypes = new int[] { 1, 1, 1, 2, 2, 2, 2, 2, 2, 2 }; // 30% Bludgeoning, 70% Slashing
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        case (int)Items.Weapons.War_Axe:
+                            damTypes = new int[] { 1, 1, 2, 2, 2, 2, 2, 2, 3, 3 }; // 20% Bludgeoning, 60% Slashing, 20% Piercing
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        case (int)Items.Weapons.Flail:
+                        case (int)Items.Weapons.Mace:
+                            damTypes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 3, 3 }; // 80% Bludgeoning, 20% Piercing
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        case (int)Items.Weapons.Staff:
+                        case (int)Items.Weapons.Warhammer:
+                            damTypes = new int[] { 1, 1, 1, 1, 1, 1, 1, 3, 3, 3 }; // 70% Bludgeoning, 30% Piercing
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        case (int)Items.Weapons.Long_Bow:
+                        case (int)Items.Weapons.Short_Bow:
+                            return 3; // 100% Piercing
+                        default:
+                            return 1; // 100% Bludgeoning
+                    }
+                }
+                else
+                {
+                    switch (entity.CareerIndex)
+                    {
+                        case (int)ClassCareers.Mage:
+                            damTypes = new int[] { 1, 1, 1, 1, 1, 1, 4, 4, 4, 4 }; // 60% Bludgeoning, 40% Special
+                            return damTypes[Random.Range(0, damTypes.Length)];
+                        default: // Everything Else.
+                            return 1; // 100% Bludgeoning
+                    }
                 }
             }
             else

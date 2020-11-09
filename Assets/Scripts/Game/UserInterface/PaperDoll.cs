@@ -164,6 +164,8 @@ namespace DaggerfallWorkshop.Game.UserInterface
         void RefreshArmourValues(PlayerEntity playerEntity, bool suppress = false)
         {
             DaggerfallUnityItem shield = playerEntity.ItemEquipTable.GetItem(EquipSlots.LeftHand); // Checks if character is using a shield or not.
+            if (shield != null && !shield.IsShield)
+                shield = null;
             bool hasShield = (shield != null) ? true : false; // if shield has a value, then true, if not, false.
             int[] shieldCovered = { 0, 0, 0, 0, 0, 0, 0 }; // shield's effect on the 7 armor values
             if (hasShield)

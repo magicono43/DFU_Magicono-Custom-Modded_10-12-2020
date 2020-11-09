@@ -35,6 +35,19 @@ namespace DaggerfallWorkshop.Utility
         public static int RangedAttack1AnimSpeed = 10;
         public static int RangedAttack2AnimSpeed = 10;
 
+        /// <summary>Struct for return values of method that alters enemy stat values for formula purposes on the fly.</summary>
+        public struct CustomEnemyStatValues
+        {
+            public int weaponSkillCustom;
+            public int critSkillCustom;
+            public int dodgeSkillCustom;
+            public int strengthCustom; // Not currently used
+            public int agilityCustom;
+            public int speedCustom;
+            public int willpowerCustom; // Not currently used
+            public int luckCustom;
+        }
+
         // Move animations (double as idle animations for swimming and flying enemies, and enemies without idle animations)
         public static MobileAnimation[] MoveAnims = new MobileAnimation[]
         {
@@ -251,11 +264,11 @@ namespace DaggerfallWorkshop.Utility
                 AttackSound = (int)SoundClips.EnemyRatAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
                 MinDamage = 1,
-                MaxDamage = 4,
-                MinHealth = 9,
-                MaxHealth = 16,
+                MaxDamage = 3,
+                MinHealth = 15,
+                MaxHealth = 35,
                 Level = 1,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 2,
@@ -281,11 +294,11 @@ namespace DaggerfallWorkshop.Utility
                 AttackSound = (int)SoundClips.EnemyImpAttack,
                 MinMetalToHit = WeaponMaterialTypes.Steel,
                 MinDamage = 2,
-                MaxDamage = 15,
-                MinHealth = 11,
-                MaxHealth = 18,
+                MaxDamage = 13,
+                MinHealth = 10,
+                MaxHealth = 20,
                 Level = 2,
-                ArmorValue = 3,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 1,
                 Weight = 40,
@@ -310,20 +323,17 @@ namespace DaggerfallWorkshop.Utility
                 HasRangedAttack1 = false,
                 HasRangedAttack2 = false,
                 CanOpenDoors = true,
+                BloodIndex = 2,
                 MoveSound = (int)SoundClips.EnemySprigganMove,
                 BarkSound = (int)SoundClips.EnemySprigganBark,
                 AttackSound = (int)SoundClips.EnemySprigganAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 1,
-                MaxDamage = 8,
-                MinDamage2 = 1,
-                MaxDamage2 = 8,
-                MinDamage3 = 1,
-                MaxDamage3 = 10,
-                MinHealth = 12,
-                MaxHealth = 26,
+                MinDamage = 5,
+                MaxDamage = 11,
+                MinHealth = 30,
+                MaxHealth = 55,
                 Level = 3,
-                ArmorValue = -4,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 240,
@@ -349,12 +359,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyGiantBatBark,
                 AttackSound = (int)SoundClips.EnemyGiantBatAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 2,
-                MaxDamage = 12,
-                MinHealth = 12,
-                MaxHealth = 26,
-                Level = 3,
-                ArmorValue = 6,
+                MinDamage = 1,
+                MaxDamage = 4,
+                MinHealth = 5,
+                MaxHealth = 13,
+                Level = 2,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 80,
@@ -378,16 +388,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyBearBark,
                 AttackSound = (int)SoundClips.EnemyBearAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 1,
-                MaxDamage = 8,
-                MinDamage2 = 1,
-                MaxDamage2 = 8,
-                MinDamage3 = 1,
-                MaxDamage3 = 10,
-                MinHealth = 13,
-                MaxHealth = 34,
+                MinDamage = 6,
+                MaxDamage = 14,
+                MinHealth = 55,
+                MaxHealth = 110,
                 Level = 4,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 1000,
@@ -411,16 +417,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyTigerBark,
                 AttackSound = (int)SoundClips.EnemyTigerAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 1,
-                MaxDamage = 10,
-                MinDamage2 = 1,
-                MaxDamage2 = 10,
-                MinDamage3 = 3,
-                MaxDamage3 = 15,
-                MinHealth = 13,
-                MaxHealth = 34,
+                MinDamage = 8,
+                MaxDamage = 18,
+                MinHealth = 35,
+                MaxHealth = 60,
                 Level = 4,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 1000,
@@ -444,12 +446,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemySpiderBark,
                 AttackSound = (int)SoundClips.EnemySpiderAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 13,
-                MaxHealth = 34,
-                Level = 4,
-                ArmorValue = 5,
+                MinDamage = 3,
+                MaxDamage = 9,
+                MinHealth = 12,
+                MaxHealth = 28,
+                Level = 2,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 400,
@@ -474,12 +476,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyOrcBark,
                 AttackSound = (int)SoundClips.EnemyOrcAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 1,
-                MaxDamage = 6,
-                MinHealth = 13,
-                MaxHealth = 34,
-                Level = 5,
-                ArmorValue = 7,
+                MinDamage = 6,
+                MaxDamage = 13,
+                MinHealth = 40,
+                MaxHealth = 70,
+                Level = 6,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 0,
                 Weight = 600,
@@ -508,12 +510,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyCentaurBark,
                 AttackSound = (int)SoundClips.EnemyCentaurAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 14,
-                MaxHealth = 46,
+                MinDamage = 7,
+                MaxDamage = 16,
+                MinHealth = 35,
+                MaxHealth = 65,
                 Level = 5,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 1,
                 Weight = 1200,
@@ -542,16 +544,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyWerewolfBark,
                 AttackSound = (int)SoundClips.EnemyWerewolfAttack,
                 MinMetalToHit = WeaponMaterialTypes.Silver,
-                MinDamage = 1,
-                MaxDamage = 10,
-                MinDamage2 = 1,
-                MaxDamage2 = 10,
-                MinDamage3 = 2,
-                MaxDamage3 = 12,
-                MinHealth = 17,
-                MaxHealth = 66,
-                Level = 6,
-                ArmorValue = 5,
+                MinDamage = 8,
+                MaxDamage = 19,
+                MinHealth = 30,
+                MaxHealth = 55,
+                Level = 8,
+                ArmorValue = 0,
                 MapChance = 0,
                 ParrySounds = false,
                 Weight = 480,
@@ -577,10 +575,10 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyNymphBark,
                 AttackSound = (int)SoundClips.EnemyNymphAttack,
                 MinMetalToHit = WeaponMaterialTypes.Silver,
-                MinDamage = 1,
-                MaxDamage = 5,
-                MinHealth = 15,
-                MaxHealth = 50,
+                MinDamage = 2,
+                MaxDamage = 9,
+                MinHealth = 25,
+                MaxHealth = 45,
                 Level = 6,
                 ArmorValue = 0,
                 ParrySounds = false,
@@ -608,12 +606,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyEelBark,
                 AttackSound = (int)SoundClips.EnemyEelAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 2,
+                MinDamage = 4,
                 MaxDamage = 12,
-                MinHealth = 15,
+                MinHealth = 25,
                 MaxHealth = 50,
                 Level = 7,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 400,
@@ -642,12 +640,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyOrcSergeantBark,
                 AttackSound = (int)SoundClips.EnemyOrcSergeantAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 15,
-                MaxHealth = 50,
-                Level = 7,
-                ArmorValue = 5,
+                MinDamage = 8,
+                MaxDamage = 18,
+                MinHealth = 50,
+                MaxHealth = 85,
+                Level = 9,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 1,
                 Weight = 600,
@@ -676,12 +674,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyHarpyBark,
                 AttackSound = (int)SoundClips.EnemyHarpyAttack,
                 MinMetalToHit = WeaponMaterialTypes.Dwarven,
-                MinDamage = 5,
+                MinDamage = 7,
                 MaxDamage = 15,
-                MinHealth = 16,
-                MaxHealth = 85,
+                MinHealth = 25,
+                MaxHealth = 60,
                 Level = 8,
-                ArmorValue = 2,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 200,
@@ -708,16 +706,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyWereboarBark,
                 AttackSound = (int)SoundClips.EnemyWereboarAttack,
                 MinMetalToHit = WeaponMaterialTypes.Silver,
-                MinDamage = 2,
-                MaxDamage = 12,
-                MinDamage2 = 2,
-                MaxDamage2 = 12,
-                MinDamage3 = 5,
-                MaxDamage3 = 15,
-                MinHealth = 17,
-                MaxHealth = 66,
+                MinDamage = 7,
+                MaxDamage = 17,
+                MinHealth = 65,
+                MaxHealth = 95,
                 Level = 8,
-                ArmorValue = 3,
+                ArmorValue = 0,
                 MapChance = 0,
                 ParrySounds = false,
                 Weight = 560,
@@ -744,12 +738,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemySkeletonBark,
                 AttackSound = (int)SoundClips.EnemySkeletonAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 17,
-                MaxHealth = 66,
-                Level = 9,
-                ArmorValue = 2,
+                MinDamage = 7,
+                MaxDamage = 14,
+                MinHealth = 20,
+                MaxHealth = 40,
+                Level = 11,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 1,
                 Weight = 80,
@@ -776,12 +770,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyGiantBark,
                 AttackSound = (int)SoundClips.EnemyGiantAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 10,
-                MaxDamage = 30,
-                MinHealth = 18,
-                MaxHealth = 74,
+                MinDamage = 8,
+                MaxDamage = 18,
+                MinHealth = 65,
+                MaxHealth = 100,
                 Level = 10,
-                ArmorValue = 3,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 1,
                 LootTableKey = "F",
@@ -808,11 +802,11 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyZombieBark,
                 AttackSound = (int)SoundClips.EnemyZombieAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 15,
-                MaxDamage = 50,
-                MinHealth = 52,
-                MaxHealth = 66,
-                Level = 10,
+                MinDamage = 4,
+                MaxDamage = 8,
+                MinHealth = 65,
+                MaxHealth = 125,
+                Level = 5,
                 ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 1,
@@ -842,10 +836,10 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyGhostBark,
                 AttackSound = (int)SoundClips.EnemyGhostAttack,
                 MinMetalToHit = WeaponMaterialTypes.Silver,
-                MinDamage = 10,
-                MaxDamage = 35,
-                MinHealth = 17,
-                MaxHealth = 66,
+                MinDamage = 7,
+                MaxDamage = 14,
+                MinHealth = 20,
+                MaxHealth = 40,
                 Level = 11,
                 ArmorValue = 0,
                 ParrySounds = false,
@@ -878,12 +872,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyMummyBark,
                 AttackSound = (int)SoundClips.EnemyMummyAttack,
                 MinMetalToHit = WeaponMaterialTypes.Silver,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 17,
-                MaxHealth = 66,
-                Level = 11,
-                ArmorValue = 2,
+                MinDamage = 6,
+                MaxDamage = 14,
+                MinHealth = 75,
+                MaxHealth = 110,
+                Level = 15,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 1,
                 Weight = 300,
@@ -910,11 +904,11 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyScorpionBark,
                 AttackSound = (int)SoundClips.EnemyScorpionAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 15,
-                MaxDamage = 25,
-                MinHealth = 18,
-                MaxHealth = 74,
-                Level = 12,
+                MinDamage = 7,
+                MaxDamage = 16,
+                MinHealth = 22,
+                MaxHealth = 40,
+                Level = 4,
                 ParrySounds = false,
                 ArmorValue = 0,
                 MapChance = 0,
@@ -940,12 +934,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyOrcShamanBark,
                 AttackSound = (int)SoundClips.EnemyOrcShamanAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 2,
-                MaxDamage = 20,
-                MinHealth = 18,
-                MaxHealth = 74,
-                Level = 13,
-                ArmorValue = 7,
+                MinDamage = 7,
+                MaxDamage = 15,
+                MinHealth = 45,
+                MaxHealth = 70,
+                Level = 15,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 3,
                 Weight = 400,
@@ -978,14 +972,15 @@ namespace DaggerfallWorkshop.Utility
                 HasRangedAttack1 = false,
                 HasRangedAttack2 = false,
                 CanOpenDoors = true,
+                BloodIndex = 2,
                 MoveSound = (int)SoundClips.EnemyGargoyleMove,
                 BarkSound = (int)SoundClips.EnemyGargoyleBark,
                 AttackSound = (int)SoundClips.EnemyGargoyleAttack,
                 MinMetalToHit = WeaponMaterialTypes.Mithril,
-                MinDamage = 10,
-                MaxDamage = 15,
-                MinHealth = 19,
-                MaxHealth = 82,
+                MinDamage = 16,
+                MaxDamage = 32,
+                MinHealth = 50,
+                MaxHealth = 100,
                 Level = 14,
                 ArmorValue = 0,
                 MapChance = 0,
@@ -1014,10 +1009,10 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyWraithBark,
                 AttackSound = (int)SoundClips.EnemyWraithAttack,
                 MinMetalToHit = WeaponMaterialTypes.Silver,
-                MinDamage = 20,
-                MaxDamage = 45,
+                MinDamage = 16,
+                MaxDamage = 32,
                 MinHealth = 30,
-                MaxHealth = 90,
+                MaxHealth = 50,
                 Level = 15,
                 ArmorValue = 0,
                 ParrySounds = false,
@@ -1049,11 +1044,11 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyOrcWarlordBark,
                 AttackSound = (int)SoundClips.EnemyOrcWarlordAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 50,
-                MinHealth = 20,
-                MaxHealth = 90,
-                Level = 16,
+                MinDamage = 20,
+                MaxDamage = 36,
+                MinHealth = 80,
+                MaxHealth = 125,
+                Level = 19,
                 ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 2,
@@ -1081,16 +1076,17 @@ namespace DaggerfallWorkshop.Utility
                 HasRangedAttack1 = false,
                 HasRangedAttack2 = false,
                 CanOpenDoors = true,
+                BloodIndex = 2,
                 MoveSound = (int)SoundClips.EnemyFrostDaedraMove,
                 BarkSound = (int)SoundClips.EnemyFrostDaedraBark,
                 AttackSound = (int)SoundClips.EnemyFrostDaedraAttack,
                 MinMetalToHit = WeaponMaterialTypes.Mithril,
-                MinDamage = 50,
-                MaxDamage = 100,
-                MinHealth = 25,
-                MaxHealth = 130,
+                MinDamage = 25,
+                MaxDamage = 40,
+                MinHealth = 90,
+                MaxHealth = 160,
                 Level = 17,
-                ArmorValue = -5,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 0,
                 Weight = 800,
@@ -1119,16 +1115,17 @@ namespace DaggerfallWorkshop.Utility
                 HasRangedAttack1 = false,
                 HasRangedAttack2 = false,
                 CanOpenDoors = true,
+                BloodIndex = 2,
                 MoveSound = (int)SoundClips.EnemyFireDaedraMove,
                 BarkSound = (int)SoundClips.EnemyFireDaedraBark,
                 AttackSound = (int)SoundClips.EnemyFireDaedraAttack,
                 MinMetalToHit = WeaponMaterialTypes.Mithril,
-                MinDamage = 15,
-                MaxDamage = 50,
-                MinHealth = 26,
-                MaxHealth = 138,
+                MinDamage = 35,
+                MaxDamage = 55,
+                MinHealth = 60,
+                MaxHealth = 100,
                 Level = 17,
-                ArmorValue = 1,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 0,
                 Weight = 800,
@@ -1161,12 +1158,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyLesserDaedraBark,
                 AttackSound = (int)SoundClips.EnemyLesserDaedraAttack,
                 MinMetalToHit = WeaponMaterialTypes.Mithril,
-                MinDamage = 15,
-                MaxDamage = 50,
-                MinHealth = 27,
-                MaxHealth = 146,
+                MinDamage = 20,
+                MaxDamage = 32,
+                MinHealth = 70,
+                MaxHealth = 120,
                 Level = 18,
-                ArmorValue = 1,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 0,
                 Weight = 400,
@@ -1199,12 +1196,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyFemaleVampireBark,
                 AttackSound = (int)SoundClips.EnemyFemaleVampireAttack,
                 MinMetalToHit = WeaponMaterialTypes.Silver,
-                MinDamage = 20,
-                MaxDamage = 50,
-                MinHealth = 28,
-                MaxHealth = 154,
-                Level = 19,
-                ArmorValue = -2,
+                MinDamage = 15,
+                MaxDamage = 32,
+                MinHealth = 70,
+                MaxHealth = 105,
+                Level = 17,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 3,
                 Weight = 400,
@@ -1236,12 +1233,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemySeducerBark,
                 AttackSound = (int)SoundClips.EnemySeducerAttack,
                 MinMetalToHit = WeaponMaterialTypes.Mithril,
-                MinDamage = 15,
-                MaxDamage = 50,
-                MinHealth = 27,
-                MaxHealth = 146,
+                MinDamage = 30,
+                MaxDamage = 60,
+                MinHealth = 70,
+                MaxHealth = 95,
                 Level = 19,
-                ArmorValue = 1,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 1,
                 Weight = 200,
@@ -1272,12 +1269,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyVampireBark,
                 AttackSound = (int)SoundClips.EnemyVampireAttack,
                 MinMetalToHit = WeaponMaterialTypes.Mithril,
-                MinDamage = 20,
-                MaxDamage = 60,
-                MinHealth = 30,
-                MaxHealth = 170,
+                MinDamage = 18,
+                MaxDamage = 35,
+                MinHealth = 85,
+                MaxHealth = 140,
                 Level = 20,
-                ArmorValue = -5,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 3,
                 Weight = 400,
@@ -1307,12 +1304,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyDaedraLordBark,
                 AttackSound = (int)SoundClips.EnemyDaedraLordAttack,
                 MinMetalToHit = WeaponMaterialTypes.Mithril,
-                MinDamage = 15,
-                MaxDamage = 50,
-                MinHealth = 35,
-                MaxHealth = 210,
-                Level = 20,
-                ArmorValue = -10,
+                MinDamage = 26,
+                MaxDamage = 42,
+                MinHealth = 170,
+                MaxHealth = 285,
+                Level = 21,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 0,
                 Weight = 1000,
@@ -1346,12 +1343,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyLichBark,
                 AttackSound = (int)SoundClips.EnemyLichAttack,
                 MinMetalToHit = WeaponMaterialTypes.Mithril,
-                MinDamage = 70,
-                MaxDamage = 100,
-                MinHealth = 30,
-                MaxHealth = 170,
+                MinDamage = 25,
+                MaxDamage = 45,
+                MinHealth = 85,
+                MaxHealth = 135,
                 Level = 20,
-                ArmorValue = -10,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 4,
                 Weight = 300,
@@ -1381,12 +1378,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyLichKingBark,
                 AttackSound = (int)SoundClips.EnemyLichKingAttack,
                 MinMetalToHit = WeaponMaterialTypes.Mithril,
-                MinDamage = 70,
-                MaxDamage = 100,
-                MinHealth = 30,
-                MaxHealth = 170,
+                MinDamage = 35,
+                MaxDamage = 55,
+                MinHealth = 115,
+                MaxHealth = 195,
                 Level = 21,
-                ArmorValue = -12,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 4,
                 Weight = 300,
@@ -1413,12 +1410,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyFaeryDragonBark,
                 AttackSound = (int)SoundClips.EnemyFaeryDragonAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 14,
-                MaxHealth = 42,
+                MinDamage = 12,
+                MaxDamage = 24,
+                MinHealth = 35,
+                MaxHealth = 60,
                 Level = 16,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 10000,
@@ -1439,16 +1436,17 @@ namespace DaggerfallWorkshop.Utility
                 HasRangedAttack1 = false,
                 HasRangedAttack2 = false,
                 CanOpenDoors = true,
+                BloodIndex = 2,
                 MoveSound = (int)SoundClips.EnemyFireAtronachMove,
                 BarkSound = (int)SoundClips.EnemyFireAtronachBark,
                 AttackSound = (int)SoundClips.EnemyFireAtronachAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 25,
-                MaxHealth = 130,
+                MinDamage = 9,
+                MaxDamage = 17,
+                MinHealth = 40,
+                MaxHealth = 60,
                 Level = 16,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 NoShadow = true,
@@ -1472,16 +1470,17 @@ namespace DaggerfallWorkshop.Utility
                 HasRangedAttack1 = false,
                 HasRangedAttack2 = false,
                 CanOpenDoors = true,
+                BloodIndex = 2,
                 MoveSound = (int)SoundClips.EnemyIronAtronachMove,
                 BarkSound = (int)SoundClips.EnemyIronAtronachBark,
                 AttackSound = (int)SoundClips.EnemyIronAtronachAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 25,
-                MaxHealth = 130,
-                Level = 16,
-                ArmorValue = 6,
+                MinDamage = 12,
+                MaxDamage = 23,
+                MinHealth = 95,
+                MaxHealth = 155,
+                Level = 21,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 0,
                 Weight = 1000,
@@ -1507,12 +1506,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyFleshAtronachBark,
                 AttackSound = (int)SoundClips.EnemyFleshAtronachAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 25,
-                MaxHealth = 130,
+                MinDamage = 3,
+                MaxDamage = 8,
+                MinHealth = 120,
+                MaxHealth = 225,
                 Level = 16,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 1000,
@@ -1534,16 +1533,17 @@ namespace DaggerfallWorkshop.Utility
                 HasRangedAttack1 = false,
                 HasRangedAttack2 = false,
                 CanOpenDoors = true,
+                BloodIndex = 2,
                 MoveSound = (int)SoundClips.EnemyIceAtronachMove,
                 BarkSound = (int)SoundClips.EnemyIceAtronachBark,
                 AttackSound = (int)SoundClips.EnemyIceAtronachAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
                 MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 25,
-                MaxHealth = 130,
+                MaxDamage = 13,
+                MinHealth = 70,
+                MaxHealth = 110,
                 Level = 16,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = true,
                 MapChance = 0,
                 Weight = 1000,
@@ -1581,12 +1581,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyFaeryDragonBark,
                 AttackSound = (int)SoundClips.EnemyFaeryDragonAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 14,
-                MaxHealth = 42,
-                Level = 16,
-                ArmorValue = 6,
+                MinDamage = 35,
+                MaxDamage = 95,
+                MinHealth = 125,
+                MaxHealth = 230,
+                Level = 21,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 10000, // Using same value as other dragonling
@@ -1612,12 +1612,12 @@ namespace DaggerfallWorkshop.Utility
                 BarkSound = (int)SoundClips.EnemyDreughBark,
                 AttackSound = (int)SoundClips.EnemyDreughAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
-                MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 13,
-                MaxHealth = 34,
+                MinDamage = 6,
+                MaxDamage = 16,
+                MinHealth = 45,
+                MaxHealth = 90,
                 Level = 16,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 Weight = 600, // Using same value as orc
@@ -1649,11 +1649,11 @@ namespace DaggerfallWorkshop.Utility
                 AttackSound = (int)SoundClips.EnemyLamiaAttack,
                 MinMetalToHit = WeaponMaterialTypes.None,
                 MinDamage = 5,
-                MaxDamage = 15,
-                MinHealth = 16,
-                MaxHealth = 58,
+                MaxDamage = 13,
+                MinHealth = 35,
+                MaxHealth = 65,
                 Level = 16,
-                ArmorValue = 6,
+                ArmorValue = 0,
                 ParrySounds = false,
                 MapChance = 0,
                 LootTableKey = "R",
@@ -3242,6 +3242,599 @@ namespace DaggerfallWorkshop.Utility
             {
                 return 1f;
             }
+        }
+
+        #endregion
+
+        #region Enemy Stat Hack Edits
+
+        /// <summary>
+        /// Custom values assigned to specific enemy entities on the fly for use in combat formula.
+        /// </summary>
+        public static CustomEnemyStatValues EnemyCustomAttributeCalculator(DaggerfallEntity enemy)
+        {
+            CustomEnemyStatValues values = new CustomEnemyStatValues();
+            values.weaponSkillCustom = 30;
+            values.critSkillCustom = 30;
+            values.dodgeSkillCustom = 0;
+            values.strengthCustom = 50;
+            values.agilityCustom = 50;
+            values.speedCustom = 50;
+            values.willpowerCustom = 50;
+            values.luckCustom = 50;
+
+            EnemyEntity AITarget = enemy as EnemyEntity;
+
+            if (AITarget.EntityType == EntityTypes.EnemyClass)
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case (int)ClassCareers.Mage:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -30;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case (int)ClassCareers.Spellsword:
+                    case (int)ClassCareers.Battlemage:
+                    case (int)ClassCareers.Sorcerer:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -20;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case (int)ClassCareers.Healer:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -30;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case (int)ClassCareers.Nightblade:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case (int)ClassCareers.Bard:
+                    case (int)ClassCareers.Burglar:
+                    case (int)ClassCareers.Rogue:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -10;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case (int)ClassCareers.Acrobat:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 5;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case (int)ClassCareers.Thief:
+                    case (int)ClassCareers.Assassin:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -5;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case (int)ClassCareers.Monk:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 0;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case (int)ClassCareers.Archer:
+                    case (int)ClassCareers.Ranger:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case (int)ClassCareers.Barbarian:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -20;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case (int)ClassCareers.Warrior:
+                    case (int)ClassCareers.Knight:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -25;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    default:
+                        return values;
+                }
+            }
+            else
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case 0:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -30;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 3:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -10;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 4:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -35;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 5:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -25;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 6:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -20;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 11:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -20;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 20:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -20;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 1:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 2:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 10;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 8:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -30;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 10:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 5;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 13:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 16:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -35;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 22:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 34:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 0;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 40:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 10;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 41:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -20;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 42:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -10;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 7:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -35;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 12:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -25;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 21:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 24:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -10;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 9:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 14:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -20;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 35:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 36:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -25;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 37:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -35;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 38:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -20;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 15:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -20;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 17:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -40;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 18:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -5;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 19:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = -15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 23:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 0;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 28:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 30:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 35;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 32:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 10;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 33:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 20;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 25:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 30;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 26:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 15;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 27:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 5;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 29:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 40;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    case 31:
+                        values.weaponSkillCustom = 30;
+                        values.critSkillCustom = 30;
+                        values.dodgeSkillCustom = 40;
+                        values.strengthCustom = 50;
+                        values.agilityCustom = 50;
+                        values.speedCustom = 50;
+                        values.willpowerCustom = 50;
+                        values.luckCustom = 50;
+                        return values;
+                    default:
+                        return values;
+                }
+            }
+        }
+
+        /// <summary>
+        /// This is literally there just to initialize this struct in another method, because I can't figure out how to do what I want with it otherwise, hopefully it works out.
+        /// </summary>
+        public static CustomEnemyStatValues EnemyCustomAttributeInitializer(DaggerfallEntity enemy)
+        {
+            CustomEnemyStatValues values = new CustomEnemyStatValues();
+            values.weaponSkillCustom = 30;
+            values.critSkillCustom = 30;
+            values.dodgeSkillCustom = 0;
+            values.strengthCustom = 50;
+            values.agilityCustom = 50;
+            values.speedCustom = 50;
+            values.willpowerCustom = 50;
+            values.luckCustom = 50;
+            return values;
         }
 
         #endregion

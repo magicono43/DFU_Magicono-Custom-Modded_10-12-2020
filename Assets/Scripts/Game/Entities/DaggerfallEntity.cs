@@ -904,6 +904,7 @@ namespace DaggerfallWorkshop.Game.Entity
         public static float EntityMaterialResistanceCalculator(DaggerfallEntity target, int weaponMatValue)
         {
             PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+            EnemyEntity AITarget = target as EnemyEntity;
 
             if (target == GameManager.Instance.PlayerEntity && (GameManager.Instance.PlayerEffectManager.HasLycanthropy() || GameManager.Instance.PlayerEffectManager.HasVampirism()))
             {
@@ -914,14 +915,12 @@ namespace DaggerfallWorkshop.Game.Entity
                 else // Everything Else
                     return 1f; //Unchanged modifier value.
             }
-            else if (target == GameManager.Instance.PlayerEntity) // Just to possibly catch a null-reference exception error if it decided to go down to the else and not find a CareerIndex value.
+            else if (target == GameManager.Instance.PlayerEntity || AITarget.EntityType == EntityTypes.EnemyClass) // Just to possibly catch a null-reference exception error if it decided to go down to the else and not find a CareerIndex value.
             {
                 return 1f;
             }
             else
             {
-                EnemyEntity AITarget = target as EnemyEntity;
-
                 switch (AITarget.CareerIndex)
                 {
                     case 1:

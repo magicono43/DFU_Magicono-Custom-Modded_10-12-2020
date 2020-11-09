@@ -601,9 +601,9 @@ namespace DaggerfallWorkshop.Game.Entity
                 case (int)MonsterCareers.SkeletalWarrior:
                     return ItemBuilder.CreateWeapon(Weapons.War_Axe, WeaponMaterialTypes.Steel);
                 case (int)MonsterCareers.Orc:
-                    return ItemBuilder.CreateWeapon(Weapons.Saber, WeaponMaterialTypes.Steel);
+                    return ItemBuilder.CreateWeapon(Weapons.Saber, WeaponMaterialTypes.Iron);
                 case (int)MonsterCareers.OrcSergeant:
-                    return ItemBuilder.CreateWeapon(Weapons.Battle_Axe, WeaponMaterialTypes.Dwarven);
+                    return ItemBuilder.CreateWeapon(Weapons.Battle_Axe, WeaponMaterialTypes.Steel);
                 case (int)MonsterCareers.OrcWarlord:
                 case (int)MonsterCareers.Daedroth:
                     return ItemBuilder.CreateWeapon(Weapons.Battle_Axe, WeaponMaterialTypes.Orcish);
