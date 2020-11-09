@@ -3251,7 +3251,7 @@ namespace DaggerfallWorkshop.Utility
         /// <summary>
         /// Custom values assigned to specific enemy entities on the fly for use in combat formula.
         /// </summary>
-        public static CustomEnemyStatValues EnemyCustomAttributeCalculator(DaggerfallEntity enemy)
+        public static CustomEnemyStatValues EnemyCustomAttributeCalculator(DaggerfallEntity enemy) // One issue with this method of "altering" the enemy stats, is that if the enemy target gets their stats drained, it won't currently work in this method, not that it matters too much, but still should consider fixing that later on possibly.
         {
             CustomEnemyStatValues values = new CustomEnemyStatValues();
             values.weaponSkillCustom = 30;
@@ -3267,189 +3267,189 @@ namespace DaggerfallWorkshop.Utility
 
             if (AITarget.EntityType == EntityTypes.EnemyClass) // Since the enemy classes have dynamic levels, I could add some amount per level they are and see how that works out.
             {
-                int classLvl = enemy.Level; // Use this to determine increases class human enemies attributes and skills get per level.
+                int classLvl = Mathf.Clamp(enemy.Level, 1, 25); // Use this to determine increases class human enemies attributes and skills get per level.
 
                 switch (AITarget.CareerIndex)
                 {
                     case (int)ClassCareers.Mage:
-                        values.weaponSkillCustom = 15;
-                        values.critSkillCustom = 5;
-                        values.dodgeSkillCustom = -25;
+                        values.weaponSkillCustom = (int)Mathf.Round(15 + (classLvl * 1.5f));
+                        values.critSkillCustom = (int)Mathf.Round(5 + (classLvl * 0.5f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-25 + (classLvl * 1f));
                         values.strengthCustom = 42;
                         values.agilityCustom = 45;
-                        values.speedCustom = 43;
-                        values.willpowerCustom = 65;
-                        values.luckCustom = 50;
+                        values.speedCustom = (int)Mathf.Round(43 + (classLvl * 1f));
+                        values.willpowerCustom = (int)Mathf.Round(65 + (classLvl * 1f));
+                        values.luckCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         return values;
                     case (int)ClassCareers.Spellsword:
-                        values.weaponSkillCustom = 40;
-                        values.critSkillCustom = 8;
-                        values.dodgeSkillCustom = -35;
+                        values.weaponSkillCustom = (int)Mathf.Round(40 + (classLvl * 2f));
+                        values.critSkillCustom = (int)Mathf.Round(8 + (classLvl * 1f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-35 + (classLvl * 0.5f));
                         values.strengthCustom = 60;
-                        values.agilityCustom = 50;
+                        values.agilityCustom = (int)Mathf.Round(50 + (classLvl * 1f));
                         values.speedCustom = 45;
-                        values.willpowerCustom = 55;
-                        values.luckCustom = 50;
+                        values.willpowerCustom = (int)Mathf.Round(55 + (classLvl * 1f));
+                        values.luckCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         return values;
                     case (int)ClassCareers.Battlemage:
-                        values.weaponSkillCustom = 35;
-                        values.critSkillCustom = 8;
-                        values.dodgeSkillCustom = -35;
+                        values.weaponSkillCustom = (int)Mathf.Round(35 + (classLvl * 2f));
+                        values.critSkillCustom = (int)Mathf.Round(8 + (classLvl * 1f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-35 + (classLvl * 0.5f));
                         values.strengthCustom = 50;
                         values.agilityCustom = 50;
-                        values.speedCustom = 50;
-                        values.willpowerCustom = 55;
-                        values.luckCustom = 50;
+                        values.speedCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
+                        values.willpowerCustom = (int)Mathf.Round(55 + (classLvl * 1f));
+                        values.luckCustom = (int)Mathf.Round(50 + (classLvl * 1f));
                         return values;
                     case (int)ClassCareers.Sorcerer:
-                        values.weaponSkillCustom = 15;
-                        values.critSkillCustom = 5;
-                        values.dodgeSkillCustom = -25;
+                        values.weaponSkillCustom = (int)Mathf.Round(15 + (classLvl * 1.5f));
+                        values.critSkillCustom = (int)Mathf.Round(5 + (classLvl * 0.5f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-25 + (classLvl * 1f));
                         values.strengthCustom = 45;
-                        values.agilityCustom = 45;
+                        values.agilityCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         values.speedCustom = 45;
-                        values.willpowerCustom = 65;
-                        values.luckCustom = 50;
+                        values.willpowerCustom = (int)Mathf.Round(65 + (classLvl * 1f));
+                        values.luckCustom = (int)Mathf.Round(50 + (classLvl * 1f));
                         return values;
                     case (int)ClassCareers.Healer:
-                        values.weaponSkillCustom = 15;
-                        values.critSkillCustom = 5;
-                        values.dodgeSkillCustom = -5;
+                        values.weaponSkillCustom = (int)Mathf.Round(15 + (classLvl * 1.5f));
+                        values.critSkillCustom = (int)Mathf.Round(5 + (classLvl * 0.5f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-5 + (classLvl * 1f));
                         values.strengthCustom = 42;
                         values.agilityCustom = 45;
-                        values.speedCustom = 46;
-                        values.willpowerCustom = 62;
-                        values.luckCustom = 50;
+                        values.speedCustom = (int)Mathf.Round(46 + (classLvl * 1f));
+                        values.willpowerCustom = (int)Mathf.Round(62 + (classLvl * 1f));
+                        values.luckCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         return values;
                     case (int)ClassCareers.Nightblade:
-                        values.weaponSkillCustom = 25;
-                        values.critSkillCustom = 15;
-                        values.dodgeSkillCustom = -5;
+                        values.weaponSkillCustom = (int)Mathf.Round(25 + (classLvl * 2f));
+                        values.critSkillCustom = (int)Mathf.Round(15 + (classLvl * 2f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-5 + (classLvl * 0.5f));
                         values.strengthCustom = 45;
-                        values.agilityCustom = 65;
-                        values.speedCustom = 50;
-                        values.willpowerCustom = 60;
+                        values.agilityCustom = (int)Mathf.Round(65 + (classLvl * 1f));
+                        values.speedCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
+                        values.willpowerCustom = (int)Mathf.Round(60 + (classLvl * 0.5f));
                         values.luckCustom = 45;
                         return values;
                     case (int)ClassCareers.Bard:
-                        values.weaponSkillCustom = 27;
-                        values.critSkillCustom = 8;
-                        values.dodgeSkillCustom = -35;
-                        values.strengthCustom = 45;
-                        values.agilityCustom = 55;
-                        values.speedCustom = 50;
-                        values.willpowerCustom = 50;
+                        values.weaponSkillCustom = (int)Mathf.Round(27 + (classLvl * 2f));
+                        values.critSkillCustom = (int)Mathf.Round(8 + (classLvl * 1.5f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-35 + (classLvl * 0.5f));
+                        values.strengthCustom = (int)Mathf.Round(45 + (classLvl * 0.5f));
+                        values.agilityCustom = (int)Mathf.Round(55 + (classLvl * 1f));
+                        values.speedCustom = (int)Mathf.Round(50 + (classLvl * 1f));
+                        values.willpowerCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         values.luckCustom = 45;
                         return values;
                     case (int)ClassCareers.Burglar:
-                        values.weaponSkillCustom = 25;
-                        values.critSkillCustom = 20;
-                        values.dodgeSkillCustom = -15;
+                        values.weaponSkillCustom = (int)Mathf.Round(25 + (classLvl * 2f));
+                        values.critSkillCustom = (int)Mathf.Round(20 + (classLvl * 2f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-15 + (classLvl * 1f));
                         values.strengthCustom = 44;
-                        values.agilityCustom = 62;
-                        values.speedCustom = 58;
+                        values.agilityCustom = (int)Mathf.Round(62 + (classLvl * 1f));
+                        values.speedCustom = (int)Mathf.Round(58 + (classLvl * 1f));
                         values.willpowerCustom = 46;
                         values.luckCustom = 50;
                         return values;
                     case (int)ClassCareers.Rogue:
-                        values.weaponSkillCustom = 32;
-                        values.critSkillCustom = 25;
-                        values.dodgeSkillCustom = -5;
-                        values.strengthCustom = 58;
-                        values.agilityCustom = 62;
+                        values.weaponSkillCustom = (int)Mathf.Round(32 + (classLvl * 2.5f));
+                        values.critSkillCustom = (int)Mathf.Round(25 + (classLvl * 2f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-5 + (classLvl * 0.5f));
+                        values.strengthCustom = (int)Mathf.Round(58 + (classLvl * 0.5f));
+                        values.agilityCustom = (int)Mathf.Round(62 + (classLvl * 1f));
                         values.speedCustom = 50;
                         values.willpowerCustom = 48;
                         values.luckCustom = 44;
                         return values;
                     case (int)ClassCareers.Acrobat:
-                        values.weaponSkillCustom = 20;
-                        values.critSkillCustom = 12;
-                        values.dodgeSkillCustom = 0;
+                        values.weaponSkillCustom = (int)Mathf.Round(20 + (classLvl * 1.5f));
+                        values.critSkillCustom = (int)Mathf.Round(12 + (classLvl * 1.5f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(0 + (classLvl * 0.5f));
                         values.strengthCustom = 40;
-                        values.agilityCustom = 65;
-                        values.speedCustom = 63;
+                        values.agilityCustom = (int)Mathf.Round(65 + (classLvl * 1f));
+                        values.speedCustom = (int)Mathf.Round(63 + (classLvl * 1f));
                         values.willpowerCustom = 45;
-                        values.luckCustom = 51;
+                        values.luckCustom = (int)Mathf.Round(51 + (classLvl * 1f));
                         return values;
                     case (int)ClassCareers.Thief:
-                        values.weaponSkillCustom = 32;
-                        values.critSkillCustom = 20;
-                        values.dodgeSkillCustom = -30;
+                        values.weaponSkillCustom = (int)Mathf.Round(32 + (classLvl * 2f));
+                        values.critSkillCustom = (int)Mathf.Round(20 + (classLvl * 2.5f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-30 + (classLvl * 1f));
                         values.strengthCustom = 45;
-                        values.agilityCustom = 58;
-                        values.speedCustom = 58;
+                        values.agilityCustom = (int)Mathf.Round(58 + (classLvl * 1f));
+                        values.speedCustom = (int)Mathf.Round(58 + (classLvl * 1f));
                         values.willpowerCustom = 45;
-                        values.luckCustom = 50;
+                        values.luckCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         return values;
                     case (int)ClassCareers.Assassin:
-                        values.weaponSkillCustom = 32;
-                        values.critSkillCustom = 40;
-                        values.dodgeSkillCustom = -28;
+                        values.weaponSkillCustom = (int)Mathf.Round(32 + (classLvl * 2f));
+                        values.critSkillCustom = (int)Mathf.Round(40 + (classLvl * 3f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-28 + (classLvl * 1f));
                         values.strengthCustom = 55;
-                        values.agilityCustom = 60;
-                        values.speedCustom = 50;
+                        values.agilityCustom = (int)Mathf.Round(60 + (classLvl * 1f));
+                        values.speedCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         values.willpowerCustom = 45;
                         values.luckCustom = 48;
                         return values;
                     case (int)ClassCareers.Monk:
-                        values.weaponSkillCustom = 35;
-                        values.critSkillCustom = 35;
-                        values.dodgeSkillCustom = -5;
-                        values.strengthCustom = 50;
-                        values.agilityCustom = 62;
-                        values.speedCustom = 58;
+                        values.weaponSkillCustom = (int)Mathf.Round(35 + (classLvl * 2f));
+                        values.critSkillCustom = (int)Mathf.Round(35 + (classLvl * 2f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-5 + (classLvl * 0.5f));
+                        values.strengthCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
+                        values.agilityCustom = (int)Mathf.Round(62 + (classLvl * 1f));
+                        values.speedCustom = (int)Mathf.Round(58 + (classLvl * 1f));
                         values.willpowerCustom = 45;
                         values.luckCustom = 50;
                         return values;
                     case (int)ClassCareers.Archer:
-                        values.weaponSkillCustom = 35;
-                        values.critSkillCustom = 20;
-                        values.dodgeSkillCustom = -5;
-                        values.strengthCustom = 55;
-                        values.agilityCustom = 60;
-                        values.speedCustom = 53;
+                        values.weaponSkillCustom = (int)Mathf.Round(35 + (classLvl * 2f));
+                        values.critSkillCustom = (int)Mathf.Round(20 + (classLvl * 2f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-5 + (classLvl * 0.5f));
+                        values.strengthCustom = (int)Mathf.Round(55 + (classLvl * 1f));
+                        values.agilityCustom = (int)Mathf.Round(60 + (classLvl * 1f));
+                        values.speedCustom = (int)Mathf.Round(53 + (classLvl * 1f));
                         values.willpowerCustom = 45;
-                        values.luckCustom = 50;
+                        values.luckCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         return values;
                     case (int)ClassCareers.Ranger:
-                        values.weaponSkillCustom = 35;
-                        values.critSkillCustom = 20;
-                        values.dodgeSkillCustom = -30;
-                        values.strengthCustom = 60;
-                        values.agilityCustom = 55;
-                        values.speedCustom = 47;
-                        values.willpowerCustom = 48;
-                        values.luckCustom = 50;
+                        values.weaponSkillCustom = (int)Mathf.Round(35 + (classLvl * 2f));
+                        values.critSkillCustom = (int)Mathf.Round(20 + (classLvl * 2f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-30 + (classLvl * 1f));
+                        values.strengthCustom = (int)Mathf.Round(60 + (classLvl * 1f));
+                        values.agilityCustom = (int)Mathf.Round(55 + (classLvl * 1f));
+                        values.speedCustom = (int)Mathf.Round(47 + (classLvl * 0.5f));
+                        values.willpowerCustom = (int)Mathf.Round(48 + (classLvl * 0.5f));
+                        values.luckCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         return values;
                     case (int)ClassCareers.Barbarian:
-                        values.weaponSkillCustom = 40;
-                        values.critSkillCustom = 15;
-                        values.dodgeSkillCustom = -30;
-                        values.strengthCustom = 65;
-                        values.agilityCustom = 50;
-                        values.speedCustom = 50;
+                        values.weaponSkillCustom = (int)Mathf.Round(40 + (classLvl * 2.5f));
+                        values.critSkillCustom = (int)Mathf.Round(15 + (classLvl * 1.5f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-30 + (classLvl * 0.5f));
+                        values.strengthCustom = (int)Mathf.Round(65 + (classLvl * 1f));
+                        values.agilityCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
+                        values.speedCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         values.willpowerCustom = 45;
                         values.luckCustom = 50;
                         return values;
                     case (int)ClassCareers.Warrior:
-                        values.weaponSkillCustom = 40;
-                        values.critSkillCustom = 8;
-                        values.dodgeSkillCustom = -30;
-                        values.strengthCustom = 60;
-                        values.agilityCustom = 57;
+                        values.weaponSkillCustom = (int)Mathf.Round(40 + (classLvl * 3f));
+                        values.critSkillCustom = (int)Mathf.Round(8 + (classLvl * 2f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-30 + (classLvl * 0.5f));
+                        values.strengthCustom = (int)Mathf.Round(60 + (classLvl * 1f));
+                        values.agilityCustom = (int)Mathf.Round(57 + (classLvl * 1f));
                         values.speedCustom = 47;
                         values.willpowerCustom = 47;
-                        values.luckCustom = 50;
+                        values.luckCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
                         return values;
                     case (int)ClassCareers.Knight:
-                        values.weaponSkillCustom = 35;
-                        values.critSkillCustom = 8;
-                        values.dodgeSkillCustom = -30;
-                        values.strengthCustom = 60;
-                        values.agilityCustom = 50;
-                        values.speedCustom = 45;
-                        values.willpowerCustom = 48;
-                        values.luckCustom = 45;
+                        values.weaponSkillCustom = (int)Mathf.Round(35 + (classLvl * 2.5f));
+                        values.critSkillCustom = (int)Mathf.Round(8 + (classLvl * 1.5f));
+                        values.dodgeSkillCustom = (int)Mathf.Round(-30 + (classLvl * 1f));
+                        values.strengthCustom = (int)Mathf.Round(60 + (classLvl * 1f));
+                        values.agilityCustom = (int)Mathf.Round(50 + (classLvl * 0.5f));
+                        values.speedCustom = (int)Mathf.Round(45 + (classLvl * 0.5f));
+                        values.willpowerCustom = (int)Mathf.Round(48 + (classLvl * 0.5f));
+                        values.luckCustom = (int)Mathf.Round(45 + (classLvl * 1f));
                         return values;
                     default:
                         return values;
