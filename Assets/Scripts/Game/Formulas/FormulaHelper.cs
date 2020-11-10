@@ -850,7 +850,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (attacker == player)
             {
                 int playerWeaponSkill = attacker.Skills.GetLiveSkillValue(skillID);
-                playerWeaponSkill = (int)Mathf.Ceil(playerWeaponSkill * 1.5f); // Makes it so player weapon skill has 150% of the effect it normally would on hit chance. So now instead of 50 weapon skill adding +50 to the end, 50 will now add +75.
+                playerWeaponSkill = (int)Mathf.Ceil(playerWeaponSkill * 1.1f); // Makes it so player weapon skill has 110% of the effect it normally would on hit chance. So now instead of 50 weapon skill adding +50 to the end, 50 will now add +55.
                 chanceToHitMod = playerWeaponSkill;
             }
             else
@@ -978,7 +978,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                 if (DaggerfallUnityItem.MaterialIdentification(armor) <= 9)
                     metalArmor = true;
 
-            if (AITarget != null) // target is a monster
+            if (AITarget != null && AITarget.EntityType != EntityTypes.EnemyClass) // target is a monster
             {
                 specialMonsterShield = EnemyEntity.SpecialShieldCheckForMonsters(target);
 
@@ -999,7 +999,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                     if (protectedBodyParts[i] == (BodyParts)struckBodyPart)
                         shieldStrongSpot = true;
                 }
-                shieldBlockSuccess = ShieldBlockChanceCalculation(target, shieldStrongSpot, shield);
+                shieldBlockSuccess = ShieldBlockChanceCalculation(target, shieldStrongSpot, shield, enemyTargetStats);
 
                 if (shieldBlockSuccess)
                     shieldBlockSuccess = CompareShieldToUnderArmor(attacker, target, mainDamType, struckBodyPart, critDamPen, shield);
@@ -1023,7 +1023,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                         damage = CalculateBackstabDamage(damage, backstabChance, mainDamType);
                     }
                 }
-                else if (AIAttacker != null) // attacker is a monster
+                else if (AIAttacker != null && AIAttacker.EntityType != EntityTypes.EnemyClass) // attacker is a monster
                 {
                     specialMonsterWeapon = EnemyEntity.SpecialWeaponCheckForMonsters(attacker);
 
@@ -1063,7 +1063,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                 hitSuccess = CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart, enemyAttackerStats, enemyTargetStats);
                 if (hitSuccess)
                 {
-                    damage = CalculateWeaponAttackDamage(attacker, target, damageModifiers, weaponAnimTime, weapon, mainDamType, matResistMod, critDamMulti, damTypeResistMod);
+                    damage = CalculateWeaponAttackDamage(attacker, target, damageModifiers, weaponAnimTime, weapon, mainDamType, matResistMod, critDamMulti, damTypeResistMod, enemyAttackerStats);
 
                     damage = CalculateBackstabDamage(damage, backstabChance, mainDamType, weapon);
                 }
@@ -1089,7 +1089,7 @@ namespace DaggerfallWorkshop.Game.Formulas
 
             //Debug.Log("------------------------------------------------------------------------------------------");
             //Debug.LogFormat("Here is damage value before armor reduction is applied = {0}", damage);
-            int damBefore = damage;
+            int damBefore = damage; // Something i'll likely want to implement later, that being taking enemy damage resistances into account for the damage reduction for calculating damage done to attacker weapon. Currently only worn armor is taken into consideration here in that regard.
 
             damage = CalculateArmorDamageReduction(attacker, target, damage, mainDamType, struckBodyPart, shieldBlockSuccess, critDamPen, weapon, shield);
 
@@ -1106,7 +1106,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
             //Debug.Log("------------------------------------------------------------------------------------------");
 
-            DamageEquipment(attacker, target, struckBodyPart, shieldBlockSuccess, mainDamType, damBefore, damAfter, weapon);
+            DamageEquipment(attacker, target, struckBodyPart, shieldBlockSuccess, mainDamType, damBefore, damAfter, enemyAttackerStats, weapon);
 
             if (damage < 1) // Cut off the execution if the damage is still not anything higher than 1 at this point in the method.
                 return 0;
@@ -1139,8 +1139,9 @@ namespace DaggerfallWorkshop.Game.Formulas
             return item != null && item.ContainsEnchantment(DaggerfallConnect.FallExe.EnchantmentTypes.SpecialArtifactEffect, (int)ArtifactsSubTypes.Ring_of_Namira);
         }
 
-        public static int CalculateWeaponAttackDamage(DaggerfallEntity attacker, DaggerfallEntity target, int damageModifier, int weaponAnimTime, DaggerfallUnityItem weapon, int mainDamType, float matResistMod, float critDamMulti, float damTypeResistMod)
+        public static int CalculateWeaponAttackDamage(DaggerfallEntity attacker, DaggerfallEntity target, int damageModifier, int weaponAnimTime, DaggerfallUnityItem weapon, int mainDamType, float matResistMod, float critDamMulti, float damTypeResistMod, EnemyBasics.CustomEnemyStatValues enemyAttackerStats)
         {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
             int damage = 0;
             float conditionMulti = 1f;
             int minDamLowerLimit = CalculateWeaponMinDamTypeLowerLimit(weapon, mainDamType);
@@ -1164,10 +1165,20 @@ namespace DaggerfallWorkshop.Game.Formulas
                 damage = UnityEngine.Random.Range(weapon.GetBaseDamageMin(), weapon.GetBaseDamageMax() + 1) + damageModifier;
 
             // Apply strength modifier
-            if (ItemEquipTable.GetItemHands(weapon) == ItemHands.Both && weapon.TemplateIndex != (int)Weapons.Short_Bow && weapon.TemplateIndex != (int)Weapons.Long_Bow)
-                damage += (DamageModifier(attacker.Stats.LiveStrength)) * 2; // Multiplying by 2, so that two-handed weapons gets double the damage mod from Strength, except bows.
+            if (attacker == player)
+            {
+                if (ItemEquipTable.GetItemHands(weapon) == ItemHands.Both && weapon.TemplateIndex != (int)Weapons.Short_Bow && weapon.TemplateIndex != (int)Weapons.Long_Bow)
+                    damage += (DamageModifier(attacker.Stats.LiveStrength)) * 2; // Multiplying by 2, so that two-handed weapons gets double the damage mod from Strength, except bows.
+                else
+                    damage += DamageModifier(attacker.Stats.LiveStrength);
+            }
             else
-                damage += DamageModifier(attacker.Stats.LiveStrength);
+            {
+                if (ItemEquipTable.GetItemHands(weapon) == ItemHands.Both && weapon.TemplateIndex != (int)Weapons.Short_Bow && weapon.TemplateIndex != (int)Weapons.Long_Bow)
+                    damage += (DamageModifier(enemyAttackerStats.strengthCustom)) * 2; // Multiplying by 2, so that two-handed weapons gets double the damage mod from Strength, except bows.
+                else
+                    damage += DamageModifier(enemyAttackerStats.strengthCustom);
+            }
 
             if (damage < 1)
                 damage = 0;
@@ -2538,20 +2549,25 @@ namespace DaggerfallWorkshop.Game.Formulas
         }
 
         /// Allocate any equipment damage from a strike, and reduce item condition.
-		public static void DamageEquipment(DaggerfallEntity attacker, DaggerfallEntity target, int struckBodyPart, bool shieldBlockSuccess, int damType, int damBefore, int damAfter, DaggerfallUnityItem weapon = null)
+		public static void DamageEquipment(DaggerfallEntity attacker, DaggerfallEntity target, int struckBodyPart, bool shieldBlockSuccess, int damType, int damBefore, int damAfter, EnemyBasics.CustomEnemyStatValues enemyAttackerStats, DaggerfallUnityItem weapon = null)
         {
             if (damType == 4) // Special damage type won't deal damage to equipment, since it ignores it.
                 return;
             if (damBefore <= 0)
                 return;
 
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
             int damAbsorbed = damBefore - damAfter;
             float damTypeMulti = 1f;
-            float strengthMulti = Mathf.Clamp((attacker.Stats.LiveStrength - 50) / 5, 0, 100) * 0.025f;
+            float strengthMulti = 0f;
             float armorDensityMulti = 1f;
             bool missileWep = false;
             int startItemCondPer = 0;
             bool weaponUsed = false;
+            if (attacker == player)
+                strengthMulti = Mathf.Clamp((attacker.Stats.LiveStrength - 50) / 5, 0, 100) * 0.025f;
+            else
+                strengthMulti = Mathf.Clamp((enemyAttackerStats.strengthCustom - 50) / 5, 0, 100) * 0.025f;
 
             if (weapon != null)
                 weaponUsed = true;
@@ -2620,8 +2636,8 @@ namespace DaggerfallWorkshop.Game.Formulas
 
         public static int CalculateAdrenalineRushToHit(DaggerfallEntity attacker, DaggerfallEntity target)
         {
-            const int adrenalineRushModifier = 8; //Buffed base adrenalineRushModifier by 3
-            const int improvedAdrenalineRushModifier = 12; //Buffed improvedAdrenalineRushModifier by 4
+            const int adrenalineRushModifier = 12;
+            const int improvedAdrenalineRushModifier = 18;
 
             int chanceToHitMod = 0;
             if (attacker.Career.AdrenalineRush && attacker.CurrentHealth < (attacker.MaxHealth / 6)) //Made adrenaline rush effect come into effect earlier, I.E. at higher health percent. From /8 to /6
@@ -2643,29 +2659,29 @@ namespace DaggerfallWorkshop.Game.Formulas
 
             // Apply luck modifier.
             if (attacker == player)
-                chanceToHitMod += ((attacker.Stats.LiveLuck - enemyTargetStats.luckCustom) / 10);
+                chanceToHitMod += ((attacker.Stats.LiveLuck - enemyTargetStats.luckCustom) / 8);
             else if (target == player)
-                chanceToHitMod += ((enemyAttackerStats.luckCustom - target.Stats.LiveLuck) / 10);
+                chanceToHitMod += ((enemyAttackerStats.luckCustom - target.Stats.LiveLuck) / 8);
             else
-                chanceToHitMod += ((enemyAttackerStats.luckCustom - enemyTargetStats.luckCustom) / 10);
+                chanceToHitMod += ((enemyAttackerStats.luckCustom - enemyTargetStats.luckCustom) / 8);
             //Debug.LogFormat("After Luck = {0}", chanceToHitMod);
 
             // Apply agility modifier.
             if (attacker == player)
-                chanceToHitMod += ((attacker.Stats.LiveAgility - enemyTargetStats.agilityCustom) / 4); //Made Agility have twice as much effect on final hit chance.
+                chanceToHitMod += ((attacker.Stats.LiveAgility - enemyTargetStats.agilityCustom) / 3); //Made Agility have twice as much effect on final hit chance.
             else if (target == player)
-                chanceToHitMod += ((enemyAttackerStats.agilityCustom - target.Stats.LiveAgility) / 4);
+                chanceToHitMod += ((enemyAttackerStats.agilityCustom - target.Stats.LiveAgility) / 3);
             else
-                chanceToHitMod += ((enemyAttackerStats.agilityCustom - enemyTargetStats.agilityCustom) / 4);
+                chanceToHitMod += ((enemyAttackerStats.agilityCustom - enemyTargetStats.agilityCustom) / 3);
             //Debug.LogFormat("After Agility = {0}", chanceToHitMod);
 
             // Possibly make the Speed Stat a small factor as well, seems like it would make sense.
             if (attacker == player)
-                chanceToHitMod += ((attacker.Stats.LiveSpeed - enemyTargetStats.speedCustom) / 8);
+                chanceToHitMod += ((attacker.Stats.LiveSpeed - enemyTargetStats.speedCustom) / 7);
             else if (target == player)
-                chanceToHitMod += ((enemyAttackerStats.speedCustom - target.Stats.LiveSpeed) / 8);
+                chanceToHitMod += ((enemyAttackerStats.speedCustom - target.Stats.LiveSpeed) / 7);
             else
-                chanceToHitMod += ((enemyAttackerStats.speedCustom - enemyTargetStats.speedCustom) / 8);
+                chanceToHitMod += ((enemyAttackerStats.speedCustom - enemyTargetStats.speedCustom) / 7);
             //Debug.LogFormat("After Speed = {0}", chanceToHitMod);
 
             // When I think about it, I might want to get some of the other stats into this formula as well, to help casters somewhat, as well as explain it like a more intelligent character notices patterns in enemy movement and uses to to get in more hits, maybe even strength, the character strikes with such force that they pierce through armor easier.
@@ -2903,16 +2919,37 @@ namespace DaggerfallWorkshop.Game.Formulas
         }
 
         // Checks for if a shield block was successful and returns true if so, false if not.
-        public static bool ShieldBlockChanceCalculation(DaggerfallEntity target, bool shieldStrongSpot, DaggerfallUnityItem shield)
+        public static bool ShieldBlockChanceCalculation(DaggerfallEntity target, bool shieldStrongSpot, DaggerfallUnityItem shield, EnemyBasics.CustomEnemyStatValues enemyTargetStats)
         {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+
             float hardBlockChance = 0f;
             float softBlockChance = 0f;
-            int targetAgili = target.Stats.LiveAgility - 50;
-            int targetSpeed = target.Stats.LiveSpeed - 50;
-            int targetStren = target.Stats.LiveStrength - 50;
-            int targetEndur = target.Stats.LiveEndurance - 50;
-            int targetWillp = target.Stats.LiveWillpower - 50;
-            int targetLuck = target.Stats.LiveLuck - 50;
+            int targetAgili = 0;
+            int targetSpeed = 0;
+            int targetStren = 0;
+            int targetEndur = 0;
+            int targetWillp = 0;
+            int targetLuck = 0;
+
+            if (target == player)
+            {
+                targetAgili = target.Stats.LiveAgility - 50;
+                targetSpeed = target.Stats.LiveSpeed - 50;
+                targetStren = target.Stats.LiveStrength - 50;
+                targetEndur = target.Stats.LiveEndurance - 50;
+                targetWillp = target.Stats.LiveWillpower - 50;
+                targetLuck = target.Stats.LiveLuck - 50;
+            }
+            else
+            {
+                targetAgili = enemyTargetStats.agilityCustom - 50;
+                targetSpeed = enemyTargetStats.speedCustom - 50;
+                targetStren = enemyTargetStats.strengthCustom - 50;
+                targetEndur = target.Stats.LiveEndurance - 50;
+                targetWillp = enemyTargetStats.willpowerCustom - 50;
+                targetLuck = enemyTargetStats.luckCustom - 50;
+            }
 
             switch (shield.TemplateIndex)
             {
@@ -3709,7 +3746,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (TryGetOverride("RollEnemyClassMaxHealth", out del))
                 return del(level, hitPointsPerLevel);
 
-            const int baseHealth = 10;
+            const int baseHealth = 20; // Increased from 10 to 20, since I felt that 10 was far to low at least for a base-line for all human enemy classes.
             int maxHealth = baseHealth;
 
             for (int i = 0; i < level; i++)
