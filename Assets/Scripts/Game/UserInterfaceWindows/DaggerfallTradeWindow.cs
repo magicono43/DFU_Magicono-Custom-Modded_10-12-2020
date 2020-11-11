@@ -587,7 +587,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                 {
                     DaggerfallUnityItem item = basketItems.GetItem(i);
                     if (item.IsEquipped)
-                        UnequipItem(item);
+                        UnequipItem(item, true);
                 }
                 remoteItems.TransferAll(basketItems);
             }
@@ -793,7 +793,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                         if (UsingWagon)     // Allows player to get & equip stuff from cart while purchasing.
                             TransferItem(item, localItems, PlayerEntity.Items, CanCarryAmount(item), equip: !item.IsAStack());
                         else                // Allows player to equip and unequip while purchasing.
-                            EquipItem(item);
+                            EquipItem(item, true);
                         break;
 
                     case WindowModes.Repair:

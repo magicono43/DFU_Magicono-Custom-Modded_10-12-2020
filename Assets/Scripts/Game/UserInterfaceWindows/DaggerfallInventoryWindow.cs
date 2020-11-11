@@ -1301,7 +1301,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
 
         #region Item Action Helpers
 
-        protected void EquipItem(DaggerfallUnityItem item)
+        protected void EquipItem(DaggerfallUnityItem item, bool inTradeWindow = false)
         {
             const int itemBrokenTextId = 29;
             const int forbiddenEquipmentTextId = 1068;
@@ -1361,8 +1361,35 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                 }
                 return;
             }
+
+            if (!inTradeWindow && item.ItemGroup == ItemGroups.Armor && !item.IsShield)
+            {
+                PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+                if (GameManager.Instance.AreEnemiesNearby(true)) // If enemies are nearby, don't allow armor (besides shields) to be equipped. Possibly add stamina drain as well.
+                {
+                    DaggerfallUI.MessageBox("Can't equip armor with enemies around.");
+                    return;
+                }
+
+                if (playerEntity.CurrentFatigue <= (6 * DaggerfallEntity.FatigueMultiplier)) // If player would otherwise possibly pass out after closing the inventory screen from stamina drained, don't allow them to equip armor if their stamina is too low.
+                {
+                    DaggerfallUI.MessageBox("You are too exhausted to do that.");
+                    return;
+                }
+            }
+
             // Try to equip the item, and update armour values accordingly
             List<DaggerfallUnityItem> unequippedList = playerEntity.ItemEquipTable.EquipItem(item);
+            if (!inTradeWindow && item.ItemGroup == ItemGroups.Armor && !item.IsShield)
+            {
+                int speedMod = (int)Mathf.Round((playerEntity.Stats.LiveSpeed - 50f) / 5);
+                int agiliMod = (int)Mathf.Round((playerEntity.Stats.LiveAgility - 50f) / 5);
+                int endurMod = (int)Mathf.Round((playerEntity.Stats.LiveEndurance - 50f) / 10);
+                int staminaDrainValue = Mathf.Clamp(3 - endurMod, 1, 5);
+                int timeDrainValue = Mathf.Clamp(180 - (speedMod * 10) - (agiliMod * 10), 60, 360);
+                playerEntity.DecreaseFatigue(staminaDrainValue, true); // Reduce player current stamina value from the action of equipping armor. Likely add another check after enemy proximity so you can't pass out after leaving the inventory.
+                DaggerfallUnity.Instance.WorldTime.Now.RaiseTime(timeDrainValue); // Forwards time by an amount of minutes in-game time every time a piece of armor (besides shields) is equipped.
+            }
             if (unequippedList != null)
             {
                 foreach (DaggerfallUnityItem unequippedItem in unequippedList)
@@ -1374,8 +1401,22 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             Refresh();
         }
 
-        protected void UnequipItem(DaggerfallUnityItem item, bool refreshPaperDoll = true)
+        protected void UnequipItem(DaggerfallUnityItem item, bool inTradeWindow = false, bool refreshPaperDoll = true)
         {
+            if (!inTradeWindow && item.ItemGroup == ItemGroups.Armor && !item.IsShield && GameManager.Instance.AreEnemiesNearby(true)) // If enemies are nearby, don't allow armor (besides shields) to be unequipped. 
+            {
+                DaggerfallUI.MessageBox("Can't unequip armor with enemies around.");
+                return;
+            }
+
+            if (!inTradeWindow && item.ItemGroup == ItemGroups.Armor && !item.IsShield)
+            {
+                int speedMod = (int)Mathf.Round((playerEntity.Stats.LiveSpeed - 50f) / 5);
+                int agiliMod = (int)Mathf.Round((playerEntity.Stats.LiveAgility - 50f) / 5);
+                int TimeDrainValue = Mathf.Clamp(90 - (speedMod * 5) - (agiliMod * 5), 30, 180);
+                DaggerfallUnity.Instance.WorldTime.Now.RaiseTime(TimeDrainValue); // Forwards time by an amount of minutes in-game time every time a piece of armor (besides shields) is unequipped.
+            }
+
             if (playerEntity.ItemEquipTable.UnequipItem(item.EquipSlot) != null)
             {
                 playerEntity.UpdateEquippedArmorValues(item, false);

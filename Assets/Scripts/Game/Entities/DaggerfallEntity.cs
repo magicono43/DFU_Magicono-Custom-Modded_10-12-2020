@@ -636,6 +636,10 @@ namespace DaggerfallWorkshop.Game.Entity
                         }
                     }
                 }
+                if (this == GameManager.Instance.PlayerEntity)
+                {
+                    UpdateEquipmentEncumbranceState();
+                }
             }
         }
 
@@ -865,6 +869,56 @@ namespace DaggerfallWorkshop.Game.Entity
         {
             ClearConstantEffects();
             SetEntityDefaults();
+        }
+
+        // Method that will update the "encumbrance state" of the entity, basically where the speed modification to an entity will be calculated based on their current equipment they are using.
+        public void UpdateEquipmentEncumbranceState()
+        {
+            DaggerfallUnityItem helm = this.ItemEquipTable.GetItem(EquipSlots.Head);
+            DaggerfallUnityItem rPauldron = this.ItemEquipTable.GetItem(EquipSlots.RightArm);
+            DaggerfallUnityItem lPauldron = this.ItemEquipTable.GetItem(EquipSlots.LeftArm);
+            DaggerfallUnityItem cuirass = this.ItemEquipTable.GetItem(EquipSlots.ChestArmor);
+            DaggerfallUnityItem gauntlets = this.ItemEquipTable.GetItem(EquipSlots.Gloves);
+            DaggerfallUnityItem greaves = this.ItemEquipTable.GetItem(EquipSlots.LegsArmor);
+            DaggerfallUnityItem boots = this.ItemEquipTable.GetItem(EquipSlots.Feet);
+            DaggerfallUnityItem rightWeapon = this.ItemEquipTable.GetItem(EquipSlots.RightHand);
+            DaggerfallUnityItem leftItem = this.ItemEquipTable.GetItem(EquipSlots.LeftHand);
+
+            float entityMovementSpeedMod = CalculateEquipmentEncumbranceAmount(helm, rPauldron, lPauldron, cuirass, gauntlets, greaves, boots, rightWeapon, leftItem);
+        }
+
+        public float CalculateEquipmentEncumbranceAmount(DaggerfallUnityItem helm, DaggerfallUnityItem rPauldron, DaggerfallUnityItem lPauldron, DaggerfallUnityItem cuirass, DaggerfallUnityItem gauntlets, DaggerfallUnityItem greaves, DaggerfallUnityItem boots, DaggerfallUnityItem rightWeapon, DaggerfallUnityItem leftItem)
+        {
+            float encumbrance = 0f;
+
+            if (helm != null)
+                encumbrance += 1f;
+
+            if (rPauldron != null)
+                encumbrance += 1f;
+
+            if (lPauldron != null)
+                encumbrance += 1f;
+
+            if (cuirass != null)
+                encumbrance += 1f;
+
+            if (gauntlets != null)
+                encumbrance += 1f;
+
+            if (greaves != null)
+                encumbrance += 1f;
+
+            if (boots != null)
+                encumbrance += 1f;
+
+            if (rightWeapon != null)
+                encumbrance += 1f;
+
+            if (leftItem != null)
+                encumbrance += 1f;
+
+            return encumbrance;
         }
 
         #endregion
