@@ -1738,6 +1738,9 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
             }
 
             RemovePendingBundles();
+
+            if (entityBehaviour.Entity == GameManager.Instance.PlayerEntity) // Optimally not how I would like to check for this, but probably best I'll be able to do for now. 
+                GameManager.Instance.PlayerEntity.EquipmentEncumbranceSpeedMod = GameManager.Instance.PlayerEntity.UpdateEquipmentEncumbranceState();
         }
 
         void RemoveBundle(LiveEffectBundle bundle)

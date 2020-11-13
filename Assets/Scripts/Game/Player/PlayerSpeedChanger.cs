@@ -138,7 +138,7 @@ namespace DaggerfallWorkshop.Game
                 playerMotor = GameManager.Instance.PlayerMotor;
             // crouching speed penalty doesn't apply if swimming.
             if (playerMotor.IsCrouching && !levitateMotor.IsSwimming)
-                baseSpeed = (playerSpeed + dfCrouchBase) / classicToUnitySpeedUnitRatio;
+                baseSpeed = (playerSpeed + dfCrouchBase) * GameManager.Instance.PlayerEntity.EquipmentEncumbranceSpeedMod / classicToUnitySpeedUnitRatio;
             else if (playerMotor.IsRiding)
             {
                 float rideSpeed = (GameManager.Instance.TransportManager.TransportMode == TransportModes.Cart) ? dfCartBase : dfRideBase;
@@ -159,7 +159,7 @@ namespace DaggerfallWorkshop.Game
             if (useWalkSpeedOverride)
                 return walkSpeedOverride;
             else
-                return (player.Stats.LiveSpeed + dfWalkBase) / classicToUnitySpeedUnitRatio;
+                return (player.Stats.LiveSpeed + dfWalkBase) * GameManager.Instance.PlayerEntity.EquipmentEncumbranceSpeedMod / classicToUnitySpeedUnitRatio;
         }
 
         /// <summary>

@@ -106,7 +106,7 @@ namespace DaggerfallWorkshop.Game.Entity
 
         // Fatigue loss per in-game minute
         public const int DefaultFatigueLoss = 11;
-        public const int ClimbingFatigueLoss = 22;
+        public const int ClimbingFatigueLoss = 132; // Increased from 22 to 132 (50% more than running), since I know lifting/climbing your entire weight is very taxing.
         public const int RunningFatigueLoss = 88;
         public const int SwimmingFatigueLoss = 44;
         public const int JumpingFatigueLoss = 11;
@@ -389,6 +389,7 @@ namespace DaggerfallWorkshop.Game.Entity
                 // If player also has improved athleticism enchantment, they will lose fatigue 20% slower
                 // TODO: Determine actual improvement multiplier to fatigue loss, possibly move to FormulaHelper
                 float fatigueLossMultiplier = 1.0f;
+                float equipEncumbrancePenalty = GameManager.Instance.PlayerEntity.CalculateStaminaUsageEquipmentEncumbrance();
                 if (career.Athleticism)
                     fatigueLossMultiplier = (ImprovedAthleticism) ? improvedAtleticismMultiplier : atleticismMultiplier;
 
@@ -396,15 +397,15 @@ namespace DaggerfallWorkshop.Game.Entity
                 if (lastGameMinutes != gameMinutes)
                 {
                     // Apply fatigue loss to the player
-                    int amount = (int)(DefaultFatigueLoss * fatigueLossMultiplier);
+                    int amount = (int)(DefaultFatigueLoss * fatigueLossMultiplier * equipEncumbrancePenalty);
                     if (climbingMotor != null && climbingMotor.IsClimbing)
-                        amount = (int)(ClimbingFatigueLoss * fatigueLossMultiplier);
+                        amount = (int)(ClimbingFatigueLoss * fatigueLossMultiplier * equipEncumbrancePenalty);
                     else if (playerMotor.IsRunning && !playerMotor.IsStandingStill)
-                        amount = (int)(RunningFatigueLoss * fatigueLossMultiplier);
+                        amount = (int)(RunningFatigueLoss * fatigueLossMultiplier * equipEncumbrancePenalty);
                     else if (GameManager.Instance.PlayerEnterExit.IsPlayerSwimming)
                     {
                         if (Race != Races.Argonian && Dice100.FailedRoll(Skills.GetLiveSkillValue(DFCareer.Skills.Swimming)))
-                            amount = (int)(SwimmingFatigueLoss * fatigueLossMultiplier);
+                            amount = (int)(SwimmingFatigueLoss * fatigueLossMultiplier * equipEncumbrancePenalty);
                         TallySkill(DFCareer.Skills.Swimming, 1);
                     }
 

@@ -95,6 +95,8 @@ namespace DaggerfallWorkshop.Game.Entity
         public bool ImprovedAthleticism { get; set; }
         public bool ImprovedAdrenalineRush { get; set; }
 
+        public float EquipmentEncumbranceSpeedMod { get; set; } = 1f;
+
         /// <summary>
         /// Gets the DaggerfallEntityBehaviour related to this DaggerfallEntity.
         /// </summary>
@@ -636,10 +638,6 @@ namespace DaggerfallWorkshop.Game.Entity
                         }
                     }
                 }
-                if (this == GameManager.Instance.PlayerEntity)
-                {
-                    UpdateEquipmentEncumbranceState();
-                }
             }
         }
 
@@ -872,7 +870,7 @@ namespace DaggerfallWorkshop.Game.Entity
         }
 
         // Method that will update the "encumbrance state" of the entity, basically where the speed modification to an entity will be calculated based on their current equipment they are using.
-        public void UpdateEquipmentEncumbranceState()
+        public float UpdateEquipmentEncumbranceState()
         {
             DaggerfallUnityItem helm = this.ItemEquipTable.GetItem(EquipSlots.Head);
             DaggerfallUnityItem rPauldron = this.ItemEquipTable.GetItem(EquipSlots.RightArm);
@@ -884,41 +882,72 @@ namespace DaggerfallWorkshop.Game.Entity
             DaggerfallUnityItem rightWeapon = this.ItemEquipTable.GetItem(EquipSlots.RightHand);
             DaggerfallUnityItem leftItem = this.ItemEquipTable.GetItem(EquipSlots.LeftHand);
 
-            float entityMovementSpeedMod = CalculateEquipmentEncumbranceAmount(helm, rPauldron, lPauldron, cuirass, gauntlets, greaves, boots, rightWeapon, leftItem);
+            float encumbranceMod = CalculateEquipmentEncumbranceAmount(helm, rPauldron, lPauldron, cuirass, gauntlets, greaves, boots, rightWeapon, leftItem);
+            //Debug.LogFormat("@@@. Equipment Encumbrance Amount Is Currently Slowing You By {0}%", encumbranceMod);
+            return ((encumbranceMod / 100) - 1f) * -1f;
         }
 
         public float CalculateEquipmentEncumbranceAmount(DaggerfallUnityItem helm, DaggerfallUnityItem rPauldron, DaggerfallUnityItem lPauldron, DaggerfallUnityItem cuirass, DaggerfallUnityItem gauntlets, DaggerfallUnityItem greaves, DaggerfallUnityItem boots, DaggerfallUnityItem rightWeapon, DaggerfallUnityItem leftItem)
         {
             float encumbrance = 0f;
+            float strenMod = Mathf.Round((this.Stats.LiveStrength - 50f) / 5f) * 0.02f;
+            float endurMod = Mathf.Round((this.Stats.LiveEndurance - 50f) / 5f) * 0.03f;
+            float agiliMod = Mathf.Round((this.Stats.LiveAgility - 50f) / 5f) * 0.01f;
+            float speedMod = Mathf.Round((this.Stats.LiveSpeed - 50f) / 5f) * 0.01f;
+            float modTotal = (strenMod + endurMod + agiliMod + speedMod - 1f) * -1f;
 
             if (helm != null)
-                encumbrance += 1f;
+                encumbrance += Mathf.Clamp(helm.weightInKg / 1.75f * 2.5f, 0f, 50f);
 
             if (rPauldron != null)
-                encumbrance += 1f;
+                encumbrance += Mathf.Clamp(rPauldron.weightInKg / 2.25f * 4f, 0f, 50f);
 
             if (lPauldron != null)
-                encumbrance += 1f;
+                encumbrance += Mathf.Clamp(lPauldron.weightInKg / 2.25f * 4f, 0f, 50f);
 
             if (cuirass != null)
-                encumbrance += 1f;
+                encumbrance += Mathf.Clamp(cuirass.weightInKg / 6.50f * 6f, 0f, 50f);
 
             if (gauntlets != null)
-                encumbrance += 1f;
+                encumbrance += Mathf.Clamp(gauntlets.weightInKg / 1.00f * 2f, 0f, 50f);
 
             if (greaves != null)
-                encumbrance += 1f;
+                encumbrance += Mathf.Clamp(greaves.weightInKg / 3.50f * 5f, 0f, 50f);
 
             if (boots != null)
-                encumbrance += 1f;
+                encumbrance += Mathf.Clamp(boots.weightInKg / 2.00f * 3.5f, 0f, 50f);
 
             if (rightWeapon != null)
-                encumbrance += 1f;
+                encumbrance += Mathf.Clamp(rightWeapon.weightInKg / 2.93f * 2.5f, 0f, 15f);
 
             if (leftItem != null)
-                encumbrance += 1f;
+                encumbrance += Mathf.Clamp(leftItem.weightInKg / 3.16f * 3f, 0f, 20f);
 
-            return encumbrance;
+            return Mathf.Round(Mathf.Clamp(encumbrance * modTotal, 0f, 95f));
+        }
+
+        public float CalculateStaminaUsageEquipmentEncumbrance()
+        {
+            float encumbrance = EquipmentEncumbranceSpeedMod;
+
+            if (encumbrance == 1f)
+                return 1f;
+
+            encumbrance = (encumbrance - 1) * -1;
+            float endurMod = Mathf.Round((this.Stats.LiveEndurance - 50f) / 5f);
+            float modTotal = ((endurMod * 0.06f) - 1f) * -1f;
+            if (encumbrance >= 0.20f)
+                encumbrance *= 1.25f;
+            else if (encumbrance >= 0.40f)
+                encumbrance *= 1.5f;
+            else if (encumbrance >= 0.65f)
+                encumbrance *= 2.0f;
+            else if (encumbrance >= 0.90f)
+                encumbrance *= 3.0f;
+
+            encumbrance += 1f;
+
+            return Mathf.Clamp(encumbrance * modTotal, 1f, 6f);
         }
 
         #endregion

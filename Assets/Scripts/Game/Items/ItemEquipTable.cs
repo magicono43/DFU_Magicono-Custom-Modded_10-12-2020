@@ -137,6 +137,8 @@ namespace DaggerfallWorkshop.Game.Items
             else
                 UnequipItem(slot, unequippedList);
 
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+
             // Equip item to slot
             item.EquipSlot = slot;
             equipTable[(int)slot] = item;
@@ -149,6 +151,11 @@ namespace DaggerfallWorkshop.Game.Items
             StartEquippedItem(item);
 
             //Debug.Log(string.Format("Equipped {0} to {1}", item.LongName, slot.ToString()));
+
+            if (parentEntity == player)
+            {
+                GameManager.Instance.PlayerEntity.EquipmentEncumbranceSpeedMod = GameManager.Instance.PlayerEntity.UpdateEquipmentEncumbranceState();
+            }
 
             return unequippedList;
         }
@@ -200,6 +207,13 @@ namespace DaggerfallWorkshop.Game.Items
 
                 // Allow entity effect manager to stop any enchantments on this item
                 StopEquippedItem(item);
+
+                PlayerEntity player = GameManager.Instance.PlayerEntity;
+
+                if (parentEntity == player)
+                {
+                    GameManager.Instance.PlayerEntity.EquipmentEncumbranceSpeedMod = GameManager.Instance.PlayerEntity.UpdateEquipmentEncumbranceState();
+                }
 
                 return item;
             }

@@ -1368,26 +1368,29 @@ namespace DaggerfallWorkshop.Game
             statusBox.Show();
         }
 
-        public DaggerfallMessageBox CreateHealthStatusBox(IUserInterfaceWindow previous = null)
+        public DaggerfallMessageBox CreateHealthStatusBox(IUserInterfaceWindow previous = null) // Will probably put equipment encumbrance info text in this health status text-box, for now at least. 
         {
             const int youAreHealthyID = 18;
             const int youHaveBeenPoisoned = 117;
+            bool youAreHealthy = true;
 
             DaggerfallMessageBox healthBox = new DaggerfallMessageBox(uiManager, previous);
+            TextFile.Token[] tokens = null;
+
+            tokens = CustomTextTokenHolder.EquipEncumbranceTextTokens();
 
             // Show "You are healthy." if there are no diseases and no poisons
             int diseaseCount = GameManager.Instance.PlayerEffectManager.DiseaseCount;
             int poisonCount = GameManager.Instance.PlayerEffectManager.PoisonCount;
             if (diseaseCount == 0 && poisonCount == 0)
             {
-                healthBox.SetTextTokens(youAreHealthyID);
+                tokens = TextFile.AppendTokens(tokens, DaggerfallUnity.Instance.TextProvider.GetRSCTokens(youAreHealthyID));
             }
             else
             {
                 EntityEffectManager playerEffectManager = GameManager.Instance.PlayerEffectManager;
 
                 // Get disease descriptions for each disease effect
-                TextFile.Token[] tokens = null;
                 LiveEffectBundle[] bundles = playerEffectManager.DiseaseBundles;
                 foreach (LiveEffectBundle bundle in bundles)
                 {
@@ -1398,14 +1401,8 @@ namespace DaggerfallWorkshop.Game
                             DiseaseEffect disease = (DiseaseEffect)effect;
                             if (disease.IncubationOver)
                             {
-                                if (tokens == null)
-                                {
-                                    tokens = disease.ContractedMessageTokens;
-                                }
-                                else // Concatenate descriptions for multiple diseases with a new line in-between
-                                {
-                                    tokens = TextFile.AppendTokens(tokens, disease.ContractedMessageTokens);
-                                }
+                                tokens = TextFile.AppendTokens(tokens, disease.ContractedMessageTokens);
+                                youAreHealthy = false;
                             }
                         }
                     }
@@ -1424,6 +1421,7 @@ namespace DaggerfallWorkshop.Game
                             if (poison.CurrentState != PoisonEffect.PoisonStates.Waiting)
                             {
                                 poisonActive = true;
+                                youAreHealthy = false;
                                 break;
                             }
                         }
@@ -1435,11 +1433,10 @@ namespace DaggerfallWorkshop.Game
                     tokens = TextFile.AppendTokens(tokens, DaggerfallUnity.Instance.TextProvider.GetRSCTokens(youHaveBeenPoisoned));
 
                 // If no diseases were done with incubation, or no poisons, show "You are healthy."
-                if (tokens == null)
-                    healthBox.SetTextTokens(youAreHealthyID);
-                else
-                    healthBox.SetTextTokens(tokens);
+                if (youAreHealthy)
+                    tokens = TextFile.AppendTokens(tokens, DaggerfallUnity.Instance.TextProvider.GetRSCTokens(youAreHealthyID));
             }
+            healthBox.SetTextTokens(tokens);
             healthBox.ClickAnywhereToClose = true;
             return healthBox;
         }

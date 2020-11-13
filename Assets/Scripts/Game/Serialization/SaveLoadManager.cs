@@ -1451,6 +1451,9 @@ namespace DaggerfallWorkshop.Game.Serialization
             // Clamp legal reputation
             playerEntity.ClampLegalReputations();
 
+            // Updates current movement speed modifier after loading a save
+            GameManager.Instance.PlayerEntity.EquipmentEncumbranceSpeedMod = GameManager.Instance.PlayerEntity.UpdateEquipmentEncumbranceState();
+
             // Lower load in progress flag
             loadInProgress = false;
 
