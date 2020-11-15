@@ -1009,7 +1009,6 @@ namespace DaggerfallWorkshop.Game.Items
         {
             float mainMatMod = Mathf.Clamp((density - 300) / 50, -2, 15);
             float weightDamMod = Mathf.Ceil((ItemBuilder.weightMultipliersByMaterial[InternalMaterialIdentification()] - 6) / 2);
-            //float weightDamMod = Mathf.Clamp((weightInKg - 4) / 5, 0, 100);
             return (int)Mathf.Round(mainMatMod + weightDamMod);
         }
 
@@ -1017,7 +1016,6 @@ namespace DaggerfallWorkshop.Game.Items
         {
             float mainMatMod = (shear - 300) / 50;
             float weightDamMod = Mathf.Ceil((ItemBuilder.weightMultipliersByMaterial[InternalMaterialIdentification()] - 6) / 4);
-            //float weightDamMod = Mathf.Clamp((weightInKg - 4) / 8, 0, 100);
             return (int)Mathf.Round(mainMatMod + weightDamMod);
         }
 
@@ -1025,8 +1023,33 @@ namespace DaggerfallWorkshop.Game.Items
         {
             float mainMatMod = (fracture - 300) / 50;
             float weightDamMod = Mathf.Ceil((ItemBuilder.weightMultipliersByMaterial[InternalMaterialIdentification()] - 6) / 3);
-            //float weightDamMod = Mathf.Clamp((weightInKg - 4) / 7, 0, 100);
             return (int)Mathf.Round(mainMatMod + weightDamMod);
+        }
+
+        public int GetSaveThrowModAgainstFire()
+        {
+            return (meltingPoint - 125) / 25;
+        }
+
+        public int GetSaveThrowModAgainstCold()
+        {
+            return  -1 * ((brittleness - 125) / 25);
+        }
+
+        public int GetSaveThrowModAgainstShock()
+        {
+            return -1 * ((conductivity - 125) / 25);
+        }
+
+        public int GetSaveThrowModAgainstMagic() // I'll need to play around with the numbers on this one a bit.
+        {
+            float enchantmentMod = 0f;
+            if (ItemGroup == ItemGroups.Weapons)
+                enchantmentMod = 4 * FormulaHelper.GetWeaponEnchantmentMultiplier((WeaponMaterialTypes)NativeMaterialValue);
+            else if (ItemGroup == ItemGroups.Armor)
+                enchantmentMod = 4 * FormulaHelper.GetArmorEnchantmentMultiplier((ArmorMaterialTypes)NativeMaterialValue);
+
+            return (int)Mathf.Round(enchantmentMod);
         }
 
         public int GetWeaponMaterialModifier()

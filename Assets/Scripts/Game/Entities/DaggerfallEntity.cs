@@ -872,22 +872,16 @@ namespace DaggerfallWorkshop.Game.Entity
         // Method that will update the "encumbrance state" of the entity, basically where the speed modification to an entity will be calculated based on their current equipment they are using.
         public float UpdateEquipmentEncumbranceState()
         {
-            DaggerfallUnityItem helm = this.ItemEquipTable.GetItem(EquipSlots.Head);
-            DaggerfallUnityItem rPauldron = this.ItemEquipTable.GetItem(EquipSlots.RightArm);
-            DaggerfallUnityItem lPauldron = this.ItemEquipTable.GetItem(EquipSlots.LeftArm);
-            DaggerfallUnityItem cuirass = this.ItemEquipTable.GetItem(EquipSlots.ChestArmor);
-            DaggerfallUnityItem gauntlets = this.ItemEquipTable.GetItem(EquipSlots.Gloves);
-            DaggerfallUnityItem greaves = this.ItemEquipTable.GetItem(EquipSlots.LegsArmor);
-            DaggerfallUnityItem boots = this.ItemEquipTable.GetItem(EquipSlots.Feet);
-            DaggerfallUnityItem rightWeapon = this.ItemEquipTable.GetItem(EquipSlots.RightHand);
-            DaggerfallUnityItem leftItem = this.ItemEquipTable.GetItem(EquipSlots.LeftHand);
+            DaggerfallUnityItem[] equipment = { ItemEquipTable.GetItem(EquipSlots.Head), ItemEquipTable.GetItem(EquipSlots.RightArm), ItemEquipTable.GetItem(EquipSlots.LeftArm),
+                ItemEquipTable.GetItem(EquipSlots.ChestArmor), ItemEquipTable.GetItem(EquipSlots.Gloves), ItemEquipTable.GetItem(EquipSlots.LegsArmor),
+                ItemEquipTable.GetItem(EquipSlots.Feet), ItemEquipTable.GetItem(EquipSlots.RightHand), ItemEquipTable.GetItem(EquipSlots.LeftHand)};
 
-            float encumbranceMod = CalculateEquipmentEncumbranceAmount(helm, rPauldron, lPauldron, cuirass, gauntlets, greaves, boots, rightWeapon, leftItem);
+            float encumbranceMod = CalculateEquipmentEncumbranceAmount(equipment);
             //Debug.LogFormat("@@@. Equipment Encumbrance Amount Is Currently Slowing You By {0}%", encumbranceMod);
             return ((encumbranceMod / 100) - 1f) * -1f;
         }
 
-        public float CalculateEquipmentEncumbranceAmount(DaggerfallUnityItem helm, DaggerfallUnityItem rPauldron, DaggerfallUnityItem lPauldron, DaggerfallUnityItem cuirass, DaggerfallUnityItem gauntlets, DaggerfallUnityItem greaves, DaggerfallUnityItem boots, DaggerfallUnityItem rightWeapon, DaggerfallUnityItem leftItem)
+        public float CalculateEquipmentEncumbranceAmount(DaggerfallUnityItem[] equipment)
         {
             float encumbrance = 0f;
             float strenMod = Mathf.Round((this.Stats.LiveStrength - 50f) / 5f) * 0.02f;
@@ -896,32 +890,32 @@ namespace DaggerfallWorkshop.Game.Entity
             float speedMod = Mathf.Round((this.Stats.LiveSpeed - 50f) / 5f) * 0.01f;
             float modTotal = (strenMod + endurMod + agiliMod + speedMod - 1f) * -1f;
 
-            if (helm != null)
-                encumbrance += Mathf.Clamp(helm.weightInKg / 1.75f * 2.5f, 0f, 50f);
+            if (equipment[0] != null) // Helmet
+                encumbrance += Mathf.Clamp(equipment[0].weightInKg / 1.75f * 2.5f, 0f, 50f);
 
-            if (rPauldron != null)
-                encumbrance += Mathf.Clamp(rPauldron.weightInKg / 2.25f * 4f, 0f, 50f);
+            if (equipment[1] != null) // Right Pauldron
+                encumbrance += Mathf.Clamp(equipment[1].weightInKg / 2.25f * 4f, 0f, 50f);
 
-            if (lPauldron != null)
-                encumbrance += Mathf.Clamp(lPauldron.weightInKg / 2.25f * 4f, 0f, 50f);
+            if (equipment[2] != null) // Left Pauldron
+                encumbrance += Mathf.Clamp(equipment[2].weightInKg / 2.25f * 4f, 0f, 50f);
 
-            if (cuirass != null)
-                encumbrance += Mathf.Clamp(cuirass.weightInKg / 6.50f * 6f, 0f, 50f);
+            if (equipment[3] != null) // Cuirass
+                encumbrance += Mathf.Clamp(equipment[3].weightInKg / 6.50f * 6f, 0f, 50f);
 
-            if (gauntlets != null)
-                encumbrance += Mathf.Clamp(gauntlets.weightInKg / 1.00f * 2f, 0f, 50f);
+            if (equipment[4] != null) // Gauntlets
+                encumbrance += Mathf.Clamp(equipment[4].weightInKg / 1.00f * 2f, 0f, 50f);
 
-            if (greaves != null)
-                encumbrance += Mathf.Clamp(greaves.weightInKg / 3.50f * 5f, 0f, 50f);
+            if (equipment[5] != null) // Greaves
+                encumbrance += Mathf.Clamp(equipment[5].weightInKg / 3.50f * 5f, 0f, 50f);
 
-            if (boots != null)
-                encumbrance += Mathf.Clamp(boots.weightInKg / 2.00f * 3.5f, 0f, 50f);
+            if (equipment[6] != null) // Boots
+                encumbrance += Mathf.Clamp(equipment[6].weightInKg / 2.00f * 3.5f, 0f, 50f);
 
-            if (rightWeapon != null)
-                encumbrance += Mathf.Clamp(rightWeapon.weightInKg / 2.93f * 2.5f, 0f, 15f);
+            if (equipment[7] != null) // Right Hand Weapon
+                encumbrance += Mathf.Clamp(equipment[7].weightInKg / 2.93f * 2.5f, 0f, 15f);
 
-            if (leftItem != null)
-                encumbrance += Mathf.Clamp(leftItem.weightInKg / 3.16f * 3f, 0f, 20f);
+            if (equipment[8] != null) // Left Hand Item
+                encumbrance += Mathf.Clamp(equipment[8].weightInKg / 3.16f * 3f, 0f, 20f);
 
             return Mathf.Round(Mathf.Clamp(encumbrance * modTotal, 0f, 95f));
         }
@@ -1162,7 +1156,7 @@ namespace DaggerfallWorkshop.Game.Entity
                     case 8:
                         return EnemyBasics.CentaurPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
                     case 10:
-                        return EnemyBasics.NymphTigerPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                        return EnemyBasics.NymphPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
                     case 13:
                         return EnemyBasics.HarpyPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
                     case 16:
@@ -1225,6 +1219,162 @@ namespace DaggerfallWorkshop.Game.Entity
                         return EnemyBasics.DaedraSeducerPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
                     case 31:
                         return EnemyBasics.DaedraLordPhysicalDamTypeWeaknesses(target, struckBodyPart, damType, shieldBlockSuccess, armor);
+                    default:
+                        return 1f;
+                }
+            }
+        }
+
+        public static float EntityElementalTypeResistanceCalculator(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+            EnemyEntity AITarget = target as EnemyEntity;
+
+            if (target == GameManager.Instance.PlayerEntity && GameManager.Instance.PlayerEffectManager.HasVampirism())
+            {
+                if (elementType == DFCareer.Elements.Fire)
+                    return 2.00f;
+                else if (elementType == DFCareer.Elements.Frost)
+                    return 0.65f;
+                else if (elementType == DFCareer.Elements.Shock)
+                    return 0.65f;
+                else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                    return 0.65f;
+                else // Magic
+                    return 1f;
+            }
+            else if (target == GameManager.Instance.PlayerEntity && GameManager.Instance.PlayerEffectManager.HasLycanthropy())
+            {
+                if (elementType == DFCareer.Elements.Fire)
+                    return 1.50f;
+                else if (elementType == DFCareer.Elements.Frost)
+                    return 1.00f;
+                else if (elementType == DFCareer.Elements.Shock)
+                    return 1.50f;
+                else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                    return 1.00f;
+                else // Magic
+                    return 1.00f;
+            }
+            else if (target == GameManager.Instance.PlayerEntity)
+            {
+                return PlayerEntity.PlayerElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+            }
+            else if (AITarget.EntityType == EntityTypes.EnemyClass)
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case (int)ClassCareers.Mage:
+                    case (int)ClassCareers.Spellsword:
+                    case (int)ClassCareers.Battlemage:
+                    case (int)ClassCareers.Sorcerer:
+                    case (int)ClassCareers.Healer:
+                    case (int)ClassCareers.Nightblade:
+                    case (int)ClassCareers.Bard:
+                    case (int)ClassCareers.Burglar:
+                    case (int)ClassCareers.Rogue:
+                    case (int)ClassCareers.Acrobat:
+                    case (int)ClassCareers.Thief:
+                    case (int)ClassCareers.Assassin:
+                    case (int)ClassCareers.Monk:
+                    case (int)ClassCareers.Archer:
+                    case (int)ClassCareers.Ranger:
+                    case (int)ClassCareers.Barbarian:
+                    case (int)ClassCareers.Warrior:
+                    case (int)ClassCareers.Knight:
+                        return EnemyBasics.HumanClassElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    default:
+                        return 1f;
+                }
+            }
+            else
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case 0:
+                        return EnemyBasics.RatElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 3:
+                        return EnemyBasics.GiantBatElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 4:
+                        return EnemyBasics.GrizzlyBearElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 5:
+                        return EnemyBasics.SabertoothTigerElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 6:
+                        return EnemyBasics.SpiderElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 11:
+                        return EnemyBasics.SlaughterfishElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 20:
+                        return EnemyBasics.GiantScorpionElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 1:
+                        return EnemyBasics.ImpElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 2:
+                        return EnemyBasics.SprigganElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 8:
+                        return EnemyBasics.CentaurElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 10:
+                        return EnemyBasics.NymphElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 13:
+                        return EnemyBasics.HarpyElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 16:
+                        return EnemyBasics.GiantElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 22:
+                        return EnemyBasics.GargoyleElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 34:
+                        return EnemyBasics.DragonlingElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 40:
+                        return EnemyBasics.LargeDragonlingElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 41:
+                        return EnemyBasics.DreughElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 42:
+                        return EnemyBasics.LamiaElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 7:
+                        return EnemyBasics.OrcElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 12:
+                        return EnemyBasics.OrcSergeantElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 21:
+                        return EnemyBasics.OrcShamanElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 24:
+                        return EnemyBasics.OrcWarlordElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 9:
+                        return EnemyBasics.WerewolfElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 14:
+                        return EnemyBasics.WereboarElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 35:
+                        return EnemyBasics.FireAtronachElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 36:
+                        return EnemyBasics.IronAtronachElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 37:
+                        return EnemyBasics.FleshAtronachElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 38:
+                        return EnemyBasics.IceAtronachElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 15:
+                        return EnemyBasics.SkeletalWarriorElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 17:
+                        return EnemyBasics.ZombieElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 18:
+                        return EnemyBasics.GhostElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 19:
+                        return EnemyBasics.MummyElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 23:
+                        return EnemyBasics.WraithElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 28:
+                        return EnemyBasics.VampireElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 30:
+                        return EnemyBasics.VampireAncientElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 32:
+                        return EnemyBasics.LichElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 33:
+                        return EnemyBasics.AncientLichElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 25:
+                        return EnemyBasics.FrostDaedraElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 26:
+                        return EnemyBasics.FireDaedraElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 27:
+                        return EnemyBasics.DaedrothElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 29:
+                        return EnemyBasics.DaedraSeducerElementalDamTypeWeaknesses(elementType, target, singlePartHit);
+                    case 31:
+                        return EnemyBasics.DaedraLordElementalDamTypeWeaknesses(elementType, target, singlePartHit);
                     default:
                         return 1f;
                 }

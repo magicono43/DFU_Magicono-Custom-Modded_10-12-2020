@@ -2368,6 +2368,20 @@ namespace DaggerfallWorkshop.Game.Entity
             }
         }
 
+        public static float PlayerElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit) // Might add more details to this later, but for now just everything for the player is base 1.00 multiplier for the time being, also no extra armor effect for now.
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 1.00f;
+        }
+
         #endregion
 
         #region Event Handlers

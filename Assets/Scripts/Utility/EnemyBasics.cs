@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using DaggerfallConnect;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Entity;
 using DaggerfallWorkshop.Game.Items;
@@ -2222,8 +2223,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float HumanClassPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-
-
             if (damType == 1)
             {
                 return 1f;
@@ -2250,8 +2249,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float RatPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1.50f;
@@ -2272,8 +2269,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float GiantBatPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1.50f;
@@ -2294,8 +2289,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float GrizzlyBearPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2316,8 +2309,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float SabertoothTigerPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2338,8 +2329,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float SpiderPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1.50f;
@@ -2360,8 +2349,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float SlaughterfishPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2382,8 +2369,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float GiantScorpionPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1.50f;
@@ -2404,8 +2389,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float ImpPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
@@ -2435,8 +2418,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float SprigganPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 0.65f;
@@ -2457,8 +2438,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float CentaurPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2483,10 +2462,8 @@ namespace DaggerfallWorkshop.Utility
             }
         }
 
-        public static float NymphTigerPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
+        public static float NymphPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
@@ -2516,8 +2493,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float HarpyPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2538,8 +2513,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float GiantPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2566,8 +2539,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float GargoylePhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 2f;
@@ -2588,8 +2559,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float DragonlingPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1.50f;
@@ -2610,8 +2579,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float LargeDragonlingPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2632,8 +2599,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float DreughPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1.50f;
@@ -2654,8 +2619,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float LamiaPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1.50f;
@@ -2676,8 +2639,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float OrcPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2698,8 +2659,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float OrcSergeantPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2720,8 +2679,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float OrcShamanPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
@@ -2751,8 +2708,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float OrcWarlordPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2773,8 +2728,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float WerewolfPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2795,8 +2748,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float WereboarPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2817,8 +2768,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float FireAtronachPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2839,8 +2788,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float IronAtronachPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 0.32f;
@@ -2861,8 +2808,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float FleshAtronachPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2883,8 +2828,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float IceAtronachPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 2f;
@@ -2905,8 +2848,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float SkeletalWarriorPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
@@ -2930,8 +2871,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float ZombiePhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2955,8 +2894,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float GhostPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 0.65f;
@@ -2977,8 +2914,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float MummyPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -2999,8 +2934,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float WraithPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 0.65f;
@@ -3021,8 +2954,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float VampirePhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -3049,8 +2980,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float VampireAncientPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -3077,8 +3006,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float LichPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
@@ -3102,8 +3029,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float AncientLichPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
@@ -3127,8 +3052,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float FrostDaedraPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -3149,8 +3072,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float FireDaedraPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 0.65f;
@@ -3171,8 +3092,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float DaedrothPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 1f;
@@ -3193,8 +3112,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float DaedraSeducerPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 if (armor != null && armor.fracture >= 300 || shieldBlockSuccess)
@@ -3224,8 +3141,6 @@ namespace DaggerfallWorkshop.Utility
 
         public static float DaedraLordPhysicalDamTypeWeaknesses(DaggerfallEntity tarEnemy, int struckBodyPart, int damType, bool shieldBlockSuccess, DaggerfallUnityItem armor = null)
         {
-            
-
             if (damType == 1)
             {
                 return 0.65f;
@@ -3242,6 +3157,612 @@ namespace DaggerfallWorkshop.Utility
             {
                 return 1f;
             }
+        }
+
+        #endregion
+
+        #region Enemy Elemental Type Resistance
+
+        public static float HumanClassElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit) // These are just place-holder for now, i'm likely going to make seperate magic resistance values for the different types of human classes.
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float RatElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.50f;
+            else // Magic
+                return 1.50f;
+        }
+
+        public static float GiantBatElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.50f;
+            else // Magic
+                return 1.50f;
+        }
+
+        public static float GrizzlyBearElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.50f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float SabertoothTigerElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.50f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float SpiderElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float SlaughterfishElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 2.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float GiantScorpionElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float ImpElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 0.65f;
+        }
+
+        public static float SprigganElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 2.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.32f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 0.65f;
+        }
+
+        public static float CentaurElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.50f;
+            else // Magic
+                return 1.50f;
+        }
+
+        public static float NymphElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 0.65f;
+        }
+
+        public static float HarpyElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 0.65f;
+        }
+
+        public static float GiantElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.50f;
+            else // Magic
+                return 1.50f;
+        }
+
+        public static float GargoyleElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.32f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.32f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float DragonlingElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 0.65f;
+        }
+
+        public static float LargeDragonlingElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.32f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 0.32f;
+        }
+
+        public static float DreughElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 0.65f;
+        }
+
+        public static float LamiaElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.32f;
+            else // Magic
+                return 0.32f;
+        }
+
+        public static float OrcElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.50f;
+            else // Magic
+                return 1.50f;
+        }
+
+        public static float OrcSergeantElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.50f;
+            else // Magic
+                return 1.50f;
+        }
+
+        public static float OrcShamanElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 0.65f;
+        }
+
+        public static float OrcWarlordElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.50f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float WerewolfElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float WereboarElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float FireAtronachElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0f; // Have to see how I might add restoration as well? But have to see how that works in classic code first as well, probably some flag somewhere.
+            else if (elementType == DFCareer.Elements.Frost)
+                return 2.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float IronAtronachElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0f; // Have to see how I might add restoration as well? But have to see how that works in classic code first as well, probably some flag somewhere.
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.32f;
+            else // Magic
+                return 2.00f;
+        }
+
+        public static float FleshAtronachElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 2.00f;
+            else // Magic // Have to see how I might add restoration as well? But have to see how that works in classic code first as well, probably some flag somewhere.
+                return 0f;
+        }
+
+        public static float IceAtronachElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 2.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 0f; // Have to see how I might add restoration as well? But have to see how that works in classic code first as well, probably some flag somewhere.
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float SkeletalWarriorElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 2.00f;
+        }
+
+        public static float ZombieElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.32f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float GhostElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 1.50f;
+        }
+
+        public static float MummyElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 1.50f;
+        }
+
+        public static float WraithElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 1.50f;
+        }
+
+        public static float VampireElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 2.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float VampireAncientElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 2.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float LichElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 0.65f;
+        }
+
+        public static float AncientLichElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 0.32f;
+        }
+
+        public static float FrostDaedraElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 2.00f;
+            else if (elementType == DFCareer.Elements.Frost)
+                return 0f; // Have to see how I might add restoration as well? But have to see how that works in classic code first as well, probably some flag somewhere.
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float FireDaedraElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0f; // Have to see how I might add restoration as well? But have to see how that works in classic code first as well, probably some flag somewhere.
+            else if (elementType == DFCareer.Elements.Frost)
+                return 2.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 1.00f;
+        }
+
+        public static float DaedrothElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f; // Have to see how I might add restoration as well? But have to see how that works in classic code first as well, probably some flag somewhere.
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.32f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 0.65f;
+        }
+
+        public static float DaedraSeducerElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 1.00f; // Have to see how I might add restoration as well? But have to see how that works in classic code first as well, probably some flag somewhere.
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.50f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 1.00f;
+            else // Magic
+                return 0.65f;
+        }
+
+        public static float DaedraLordElementalDamTypeWeaknesses(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit)
+        {
+            if (elementType == DFCareer.Elements.Fire)
+                return 0.65f; // Have to see how I might add restoration as well? But have to see how that works in classic code first as well, probably some flag somewhere.
+            else if (elementType == DFCareer.Elements.Frost)
+                return 1.00f;
+            else if (elementType == DFCareer.Elements.Shock)
+                return 0.65f;
+            else if (elementType == DFCareer.Elements.DiseaseOrPoison)
+                return 0.65f;
+            else // Magic
+                return 0.65f;
         }
 
         #endregion

@@ -3478,7 +3478,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             return flag;
         }
 
-        public static int SavingThrow(DFCareer.Elements elementType, DFCareer.EffectFlags effectFlags, DaggerfallEntity target, int modifier)
+        public static int SavingThrow(DFCareer.Elements elementType, DFCareer.EffectFlags effectFlags, DaggerfallEntity target, int modifier, int baseAmount = 0, TargetTypes targetType = TargetTypes.None)
         {
             // Handle resistances granted by magical effects
             if (target.HasResistanceFlag(elementType))
@@ -3554,24 +3554,36 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (savingThrow >= 100)
                 return 0;
 
+            // Equipment modifier here for addition/reduction of chances of completely negating spell package or not. Will possibly only do this for certain effects and not all.
+            bool singlePartHit = false;
+            if (targetType == TargetTypes.ByTouch || targetType == TargetTypes.SingleTargetAtRange)
+                singlePartHit = true;
+
+            int equipSaveThrowMod = EquipmentMaterialSavingThrowMod(elementType, target, singlePartHit, baseAmount);
+            savingThrow += equipSaveThrowMod;
+
             savingThrow = Mathf.Clamp(savingThrow, 5, 95);
 
             int percentDamageOrDuration = 100;
             int roll = Dice100.Roll();
 
+            // Equipment modifier here for addition/reduction of magnitude modifier if a spell package does hit, so basically a multiplier determining how much more or less than 100% a spell with magnitude will do.
+            percentDamageOrDuration += -3 * equipSaveThrowMod;
+            percentDamageOrDuration = (int)Mathf.Round(percentDamageOrDuration * DaggerfallEntity.EntityElementalTypeResistanceCalculator(elementType, target, singlePartHit));
+
             if (roll <= savingThrow)
             {
                 // Percent damage/duration is prorated at within 20 of failed roll, as described in DF Chronicles
                 if (savingThrow - 20 <= roll)
-                    percentDamageOrDuration = 100 - 5 * (savingThrow - roll);
+                    percentDamageOrDuration -= 5 * (savingThrow - roll);
                 else
                     percentDamageOrDuration = 0;
             }
 
-            return Mathf.Clamp(percentDamageOrDuration, 0, 100);
+            return Mathf.Clamp(percentDamageOrDuration, 0, 1000);
         }
 
-        public static int SavingThrow(IEntityEffect sourceEffect, DaggerfallEntity target)
+        public static int SavingThrow(IEntityEffect sourceEffect, DaggerfallEntity target, int baseAmount = 0)
         {
             if (sourceEffect == null || sourceEffect.ParentBundle == null)
                 return 100;
@@ -3579,8 +3591,9 @@ namespace DaggerfallWorkshop.Game.Formulas
             DFCareer.EffectFlags effectFlags = GetEffectFlags(sourceEffect);
             DFCareer.Elements elementType = GetElementType(sourceEffect);
             int modifier = GetResistanceModifier(effectFlags, target);
+            TargetTypes targetType = sourceEffect.Properties.AllowedTargets;
 
-            return SavingThrow(elementType, effectFlags, target, modifier);
+            return SavingThrow(elementType, effectFlags, target, modifier, baseAmount, targetType);
         }
 
         public static int ModifyEffectAmount(IEntityEffect sourceEffect, DaggerfallEntity target, int amount)
@@ -3588,7 +3601,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (sourceEffect == null || sourceEffect.ParentBundle == null)
                 return amount;
 
-            int percentDamageOrDuration = SavingThrow(sourceEffect, target);
+            int percentDamageOrDuration = SavingThrow(sourceEffect, target, amount);
             float percent = percentDamageOrDuration / 100f;
 
             return (int)(amount * percent);
@@ -3682,16 +3695,167 @@ namespace DaggerfallWorkshop.Game.Formulas
             return result;
         }
 
-        #endregion
+        public static int EquipmentMaterialSavingThrowMod(DFCareer.Elements elementType, DaggerfallEntity target, bool singlePartHit, int baseAmount)
+        {
+            if (singlePartHit)
+            {
+                // Choose struck body part
+                int struckBodyPart = CalculateStruckBodyPart();
+                EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
+                DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
+                DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand); // I could even add a spell projectile blocking chance/mechanic or something. Perhaps even a spell reflection with some materials?
+                if (shield != null && !shield.IsShield)
+                    shield = null;
 
-        #region Enemies
+                if (armor != null)
+                {
+                    int armorSaveThrowMod = 0;
+                    switch (elementType) // Damage equipment in the same the values are returned, just before that, using likely the baseAmount multiplied by some amount based on the material properties. 
+                    {
+                        case DFCareer.Elements.Fire:
+                            armorSaveThrowMod = armor.GetSaveThrowModAgainstFire();
+                            ApplyConditionDamageThroughMagicDamage(target, armor, singlePartHit, armorSaveThrowMod, baseAmount);
+                            return 7 * armorSaveThrowMod;
+                        case DFCareer.Elements.Frost:
+                            armorSaveThrowMod = armor.GetSaveThrowModAgainstCold();
+                            ApplyConditionDamageThroughMagicDamage(target, armor, singlePartHit, armorSaveThrowMod, baseAmount);
+                            return 7 * armorSaveThrowMod;
+                        case DFCareer.Elements.Magic:
+                            armorSaveThrowMod = armor.GetSaveThrowModAgainstMagic();
+                            ApplyConditionDamageThroughMagicDamage(target, armor, singlePartHit, armorSaveThrowMod, baseAmount);
+                            return 7 * armorSaveThrowMod;
+                        case DFCareer.Elements.Shock:
+                            armorSaveThrowMod = armor.GetSaveThrowModAgainstShock();
+                            ApplyConditionDamageThroughMagicDamage(target, armor, singlePartHit, armorSaveThrowMod, baseAmount);
+                            return 7 * armorSaveThrowMod;
+                        default:
+                            return 0;
+                    }
+                }
+                else
+                    return 0;
+            }
+            else
+            {
+                DaggerfallUnityItem[] equipment = { target.ItemEquipTable.GetItem(EquipSlots.Head), target.ItemEquipTable.GetItem(EquipSlots.RightArm), target.ItemEquipTable.GetItem(EquipSlots.LeftArm),
+                target.ItemEquipTable.GetItem(EquipSlots.ChestArmor), target.ItemEquipTable.GetItem(EquipSlots.Gloves), target.ItemEquipTable.GetItem(EquipSlots.LegsArmor),
+                target.ItemEquipTable.GetItem(EquipSlots.Feet), target.ItemEquipTable.GetItem(EquipSlots.RightHand), target.ItemEquipTable.GetItem(EquipSlots.LeftHand)};
 
-        /// <summary>
-        /// Inflict a classic disease onto player.
-        /// </summary>
-        /// <param name="target">Target entity - must be player.</param>
-        /// <param name="diseaseList">Array of disease indices matching Diseases enum.</param>
-        public static void InflictDisease(DaggerfallEntity target, byte[] diseaseList)
+                return GetSaveThrowModAgainstAOESpell(elementType, equipment, target, baseAmount);
+            }
+        }
+
+        public static int GetSaveThrowModAgainstAOESpell(DFCareer.Elements elementType, DaggerfallUnityItem[] equipment, DaggerfallEntity owner, int baseAmount)
+        {
+            int itemSaveThrowMod = 0;
+            float finalSaveThrowMod = 0f;
+
+            if (elementType == DFCareer.Elements.Fire)
+            {
+                for (int i = 0; i < equipment.Length; i++)
+                {
+                    if (equipment[i] != null)
+                    {
+                        itemSaveThrowMod = equipment[i].GetSaveThrowModAgainstFire();
+                        ApplyConditionDamageThroughMagicDamage(owner, equipment[i], false, itemSaveThrowMod, baseAmount);
+                        finalSaveThrowMod += 1f * itemSaveThrowMod;
+                    }
+                }
+            }
+            else if (elementType == DFCareer.Elements.Frost)
+            {
+                for (int i = 0; i < equipment.Length; i++)
+                {
+                    if (equipment[i] != null)
+                    {
+                        itemSaveThrowMod = equipment[i].GetSaveThrowModAgainstCold();
+                        ApplyConditionDamageThroughMagicDamage(owner, equipment[i], false, itemSaveThrowMod, baseAmount);
+                        finalSaveThrowMod += 1f * itemSaveThrowMod;
+                    }
+                }
+            }
+            else if (elementType == DFCareer.Elements.Shock)
+            {
+                for (int i = 0; i < equipment.Length; i++)
+                {
+                    if (equipment[i] != null)
+                    {
+                        itemSaveThrowMod = equipment[i].GetSaveThrowModAgainstShock();
+                        ApplyConditionDamageThroughMagicDamage(owner, equipment[i], false, itemSaveThrowMod, baseAmount);
+                        finalSaveThrowMod += 1f * itemSaveThrowMod;
+                    }
+                }
+            }
+            else if (elementType == DFCareer.Elements.Magic)
+            {
+                for (int i = 0; i < equipment.Length; i++)
+                {
+                    if (equipment[i] != null)
+                    {
+                        itemSaveThrowMod = equipment[i].GetSaveThrowModAgainstMagic();
+                        ApplyConditionDamageThroughMagicDamage(owner, equipment[i], false, itemSaveThrowMod, baseAmount);
+                        finalSaveThrowMod += 1f * itemSaveThrowMod;
+                    }
+                }
+            }
+            return (int)Mathf.Round(finalSaveThrowMod);
+        }
+
+        /// Applies condition damage to an item based on magic damage.
+        public static void ApplyConditionDamageThroughMagicDamage(DaggerfallEntity owner, DaggerfallUnityItem item, bool singlePartHit, int armorSaveThrowMod, int baseAmount)
+        {
+            if (item == null || owner == null)
+                return;
+
+            ItemCollection playerItems = GameManager.Instance.PlayerEntity.Items;
+            int conditionDamValue = 0;
+
+            if (singlePartHit)
+            {
+                conditionDamValue = (int)Mathf.Round(baseAmount * ((-armorSaveThrowMod * 0.24f) + 1));
+
+                if (conditionDamValue > 0)
+                {
+                    if (owner == GameManager.Instance.PlayerEntity && item.IsEnchanted) // If the Weapon or Armor piece is enchanted, when broken it will be Destroyed from the player inventory.
+                        item.LowerCondition(conditionDamValue, owner, playerItems);
+                    else
+                        item.LowerCondition(conditionDamValue, owner);
+
+                    /*int percentChange = 100 * amount / item.maxCondition;
+                    if (owner == GameManager.Instance.PlayerEntity){
+                        Debug.LogFormat("Target Had {0} Damaged by {1}, cond={2}", item.LongName, amount, item.currentCondition);
+                        Debug.LogFormat("Had {0} Damaged by {1}%, of Total Maximum. There Remains {2}% of Max Cond.", item.LongName, percentChange, item.ConditionPercentage);} // Percentage Change */
+                }
+            }
+            else
+            {
+                conditionDamValue = (int)Mathf.Round(baseAmount * ((-armorSaveThrowMod * 0.24f) + 1) / 9);
+
+                if (conditionDamValue > 0)
+                {
+                    if (owner == GameManager.Instance.PlayerEntity && item.IsEnchanted) // If the Weapon or Armor piece is enchanted, when broken it will be Destroyed from the player inventory.
+                        item.LowerCondition(conditionDamValue, owner, playerItems);
+                    else
+                        item.LowerCondition(conditionDamValue, owner);
+
+                    /*int percentChange = 100 * amount / item.maxCondition;
+                    if (owner == GameManager.Instance.PlayerEntity){
+                        Debug.LogFormat("Target Had {0} Damaged by {1}, cond={2}", item.LongName, amount, item.currentCondition);
+                        Debug.LogFormat("Had {0} Damaged by {1}%, of Total Maximum. There Remains {2}% of Max Cond.", item.LongName, percentChange, item.ConditionPercentage);} // Percentage Change */
+                }
+            }
+        }
+
+            #endregion
+
+            #region Enemies
+
+            /// <summary>
+            /// Inflict a classic disease onto player.
+            /// </summary>
+            /// <param name="target">Target entity - must be player.</param>
+            /// <param name="diseaseList">Array of disease indices matching Diseases enum.</param>
+            public static void InflictDisease(DaggerfallEntity target, byte[] diseaseList)
         {
             // Must have a valid disease list
             if (diseaseList == null || diseaseList.Length == 0 || target.EntityBehaviour.EntityType != EntityTypes.Player)
@@ -4667,26 +4831,26 @@ namespace DaggerfallWorkshop.Game.Formulas
             switch(weaponMaterial)
             {
                 default:       
-                case WeaponMaterialTypes.Steel:         // Steel uses base enchantment power
-                    return 0f;
-                case WeaponMaterialTypes.Iron:          // Iron is -25% from base
+                case WeaponMaterialTypes.Iron:
+                    return -0.50f;
+                case WeaponMaterialTypes.Steel:
                     return -0.25f;
-                case WeaponMaterialTypes.Silver:        // Silver is +75% from base
-                    return 0.75f;
-                case WeaponMaterialTypes.Elven:         // Elven is +25% from base
+                case WeaponMaterialTypes.Silver:
+                    return -0.25f;
+                case WeaponMaterialTypes.Orcish:
+                    return 0f;
+                case WeaponMaterialTypes.Ebony:
                     return 0.25f;
-                case WeaponMaterialTypes.Dwarven:       // Dwarven is +50% from base
-                    return 0.5f;
-                case WeaponMaterialTypes.Mithril:       // Mithril is +25% from base
-                    return 0.25f;
-                case WeaponMaterialTypes.Adamantium:    // Adamantium is +75% from base
+                case WeaponMaterialTypes.Mithril:
+                    return 0.50f;
+                case WeaponMaterialTypes.Elven:
                     return 0.75f;
-                case WeaponMaterialTypes.Ebony:         // Ebony is +100% from base
-                    return 1.0f;
-                case WeaponMaterialTypes.Orcish:        // Orcish is +150% from base
-                    return 1.5f;
-                case WeaponMaterialTypes.Daedric:       // Daedric is +200% from base
-                    return 2.0f;
+                case WeaponMaterialTypes.Daedric:
+                    return 1.00f;
+                case WeaponMaterialTypes.Dwarven:
+                    return 1.25f;
+                case WeaponMaterialTypes.Adamantium:
+                    return 2.25f;
             }
         }
 
@@ -4699,29 +4863,29 @@ namespace DaggerfallWorkshop.Game.Formulas
             switch (armorMaterial)
             {
                 default:
-                case ArmorMaterialTypes.Leather:        // Leather/Chain/Steel all use base enchantment power
+                case ArmorMaterialTypes.Iron:
+                    return -0.50f;
+                case ArmorMaterialTypes.Leather:
                 case ArmorMaterialTypes.Chain:
                 case ArmorMaterialTypes.Chain2:
                 case ArmorMaterialTypes.Steel:
-                    return 0f;
-                case ArmorMaterialTypes.Iron:           // Iron is -25% from base
                     return -0.25f;
-                case ArmorMaterialTypes.Silver:         // Silver is +75% from base
-                    return 0.75f;
-                case ArmorMaterialTypes.Elven:          // Elven is +25% from base
+                case ArmorMaterialTypes.Silver:
+                    return -0.25f;
+                case ArmorMaterialTypes.Orcish:
+                    return 0f;
+                case ArmorMaterialTypes.Ebony:
                     return 0.25f;
-                case ArmorMaterialTypes.Dwarven:        // Dwarven is +50% from base
-                    return 0.5f;
-                case ArmorMaterialTypes.Mithril:        // Mithril is +25% from base
-                    return 0.25f;
-                case ArmorMaterialTypes.Adamantium:     // Adamantium is +75% from base
+                case ArmorMaterialTypes.Mithril:
+                    return 0.50f;
+                case ArmorMaterialTypes.Elven:
                     return 0.75f;
-                case ArmorMaterialTypes.Ebony:          // Ebony is +100% from base
-                    return 1.0f;
-                case ArmorMaterialTypes.Orcish:         // Orcish is +150% from base
-                    return 1.5f;
-                case ArmorMaterialTypes.Daedric:        // Daedric is +200% from base
-                    return 2.0f;
+                case ArmorMaterialTypes.Daedric:
+                    return 1.00f;
+                case ArmorMaterialTypes.Dwarven:
+                    return 1.25f;
+                case ArmorMaterialTypes.Adamantium:
+                    return 2.25f;
             }
         }
 
