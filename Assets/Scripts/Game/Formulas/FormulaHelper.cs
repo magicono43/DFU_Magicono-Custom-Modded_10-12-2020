@@ -3478,8 +3478,11 @@ namespace DaggerfallWorkshop.Game.Formulas
             return flag;
         }
 
-        public static int SavingThrow(DFCareer.Elements elementType, DFCareer.EffectFlags effectFlags, DaggerfallEntity target, int modifier, int baseAmount = 0, TargetTypes targetType = TargetTypes.None)
+        public static int SavingThrow(DFCareer.Elements elementType, DFCareer.EffectFlags effectFlags, DaggerfallEntity target, int modifier, bool hasMagnitude = false, DFCareer.MagicSkills spellSchool = DFCareer.MagicSkills.None, int baseAmount = 0, TargetTypes targetType = TargetTypes.None)
         {
+            bool singlePartHit = false;
+            int equipSaveThrowMod = 0;
+
             // Handle resistances granted by magical effects
             if (target.HasResistanceFlag(elementType))
             {
@@ -3554,22 +3557,36 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (savingThrow >= 100)
                 return 0;
 
-            // Equipment modifier here for addition/reduction of chances of completely negating spell package or not. Will possibly only do this for certain effects and not all.
-            bool singlePartHit = false;
-            if (targetType == TargetTypes.ByTouch || targetType == TargetTypes.SingleTargetAtRange)
-                singlePartHit = true;
+            if (hasMagnitude && spellSchool == DFCareer.MagicSkills.Destruction)
+            {
+                // Equipment modifier here for addition/reduction of chances of completely negating spell package or not. Will possibly only do this for certain effects and not all.
+                if (targetType == TargetTypes.ByTouch || targetType == TargetTypes.SingleTargetAtRange)
+                    singlePartHit = true;
 
-            int equipSaveThrowMod = EquipmentMaterialSavingThrowMod(elementType, target, singlePartHit, baseAmount);
-            savingThrow += equipSaveThrowMod;
+                equipSaveThrowMod = EquipmentMaterialSavingThrowMod(elementType, target, singlePartHit, baseAmount);
+                savingThrow += equipSaveThrowMod;
+            }
+            else if (spellSchool != DFCareer.MagicSkills.Restoration) // This is here so that magic effects with no magnitude, but don't do any "healing" effects to the target still get taken into account for spells like paralyze. So adamantium armor will make you more resistant to various magical effects, and iron, etc will make you more likely to be effected by these spells, if you are not outright immune at least.
+            {
+                // Equipment modifier here for addition/reduction of chances of completely negating spell package or not. Will possibly only do this for certain effects and not all.
+                if (targetType == TargetTypes.ByTouch || targetType == TargetTypes.SingleTargetAtRange)
+                    singlePartHit = true;
+
+                equipSaveThrowMod = EquipmentMaterialSavingThrowMod(elementType, target, singlePartHit, baseAmount);
+                savingThrow += equipSaveThrowMod;
+            }
 
             savingThrow = Mathf.Clamp(savingThrow, 5, 95);
 
             int percentDamageOrDuration = 100;
             int roll = Dice100.Roll();
 
-            // Equipment modifier here for addition/reduction of magnitude modifier if a spell package does hit, so basically a multiplier determining how much more or less than 100% a spell with magnitude will do.
-            percentDamageOrDuration += -3 * equipSaveThrowMod;
-            percentDamageOrDuration = (int)Mathf.Round(percentDamageOrDuration * DaggerfallEntity.EntityElementalTypeResistanceCalculator(elementType, target, singlePartHit));
+            if (hasMagnitude && spellSchool == DFCareer.MagicSkills.Destruction)
+            {
+                // Equipment modifier here for addition/reduction of magnitude modifier if a spell package does hit, so basically a multiplier determining how much more or less than 100% a spell with magnitude will do.
+                percentDamageOrDuration += -3 * equipSaveThrowMod;
+                percentDamageOrDuration = (int)Mathf.Round(percentDamageOrDuration * DaggerfallEntity.EntityElementalTypeResistanceCalculator(elementType, target, singlePartHit));
+            }
 
             if (roll <= savingThrow)
             {
@@ -3587,13 +3604,16 @@ namespace DaggerfallWorkshop.Game.Formulas
         {
             if (sourceEffect == null || sourceEffect.ParentBundle == null)
                 return 100;
+            bool hasMagnitude = false;
 
             DFCareer.EffectFlags effectFlags = GetEffectFlags(sourceEffect);
             DFCareer.Elements elementType = GetElementType(sourceEffect);
             int modifier = GetResistanceModifier(effectFlags, target);
-            TargetTypes targetType = sourceEffect.Properties.AllowedTargets;
+            TargetTypes targetType = sourceEffect.ParentBundle.targetType;
+            hasMagnitude = sourceEffect.Properties.SupportMagnitude;
+            DFCareer.MagicSkills spellSchool = sourceEffect.Properties.MagicSkill;
 
-            return SavingThrow(elementType, effectFlags, target, modifier, baseAmount, targetType);
+            return SavingThrow(elementType, effectFlags, target, modifier, hasMagnitude, spellSchool, baseAmount, targetType);
         }
 
         public static int ModifyEffectAmount(IEntityEffect sourceEffect, DaggerfallEntity target, int amount)
@@ -3710,23 +3730,32 @@ namespace DaggerfallWorkshop.Game.Formulas
                 if (armor != null)
                 {
                     int armorSaveThrowMod = 0;
+                    int startItemCondPer = armor.ConditionPercentage;
                     switch (elementType) // Damage equipment in the same the values are returned, just before that, using likely the baseAmount multiplied by some amount based on the material properties. 
                     {
                         case DFCareer.Elements.Fire:
                             armorSaveThrowMod = armor.GetSaveThrowModAgainstFire();
                             ApplyConditionDamageThroughMagicDamage(target, armor, singlePartHit, armorSaveThrowMod, baseAmount);
+                            if (target == GameManager.Instance.PlayerEntity)
+                                WarningMessagePlayerEquipmentCondition(armor, startItemCondPer);
                             return 7 * armorSaveThrowMod;
                         case DFCareer.Elements.Frost:
                             armorSaveThrowMod = armor.GetSaveThrowModAgainstCold();
                             ApplyConditionDamageThroughMagicDamage(target, armor, singlePartHit, armorSaveThrowMod, baseAmount);
+                            if (target == GameManager.Instance.PlayerEntity)
+                                WarningMessagePlayerEquipmentCondition(armor, startItemCondPer);
                             return 7 * armorSaveThrowMod;
                         case DFCareer.Elements.Magic:
                             armorSaveThrowMod = armor.GetSaveThrowModAgainstMagic();
                             ApplyConditionDamageThroughMagicDamage(target, armor, singlePartHit, armorSaveThrowMod, baseAmount);
+                            if (target == GameManager.Instance.PlayerEntity)
+                                WarningMessagePlayerEquipmentCondition(armor, startItemCondPer);
                             return 7 * armorSaveThrowMod;
                         case DFCareer.Elements.Shock:
                             armorSaveThrowMod = armor.GetSaveThrowModAgainstShock();
                             ApplyConditionDamageThroughMagicDamage(target, armor, singlePartHit, armorSaveThrowMod, baseAmount);
+                            if (target == GameManager.Instance.PlayerEntity)
+                                WarningMessagePlayerEquipmentCondition(armor, startItemCondPer);
                             return 7 * armorSaveThrowMod;
                         default:
                             return 0;
@@ -3756,8 +3785,11 @@ namespace DaggerfallWorkshop.Game.Formulas
                 {
                     if (equipment[i] != null)
                     {
+                        int startItemCondPer = equipment[i].ConditionPercentage;
                         itemSaveThrowMod = equipment[i].GetSaveThrowModAgainstFire();
                         ApplyConditionDamageThroughMagicDamage(owner, equipment[i], false, itemSaveThrowMod, baseAmount);
+                        if (owner == GameManager.Instance.PlayerEntity)
+                            WarningMessagePlayerEquipmentCondition(equipment[i], startItemCondPer);
                         finalSaveThrowMod += 1f * itemSaveThrowMod;
                     }
                 }
@@ -3768,8 +3800,11 @@ namespace DaggerfallWorkshop.Game.Formulas
                 {
                     if (equipment[i] != null)
                     {
+                        int startItemCondPer = equipment[i].ConditionPercentage;
                         itemSaveThrowMod = equipment[i].GetSaveThrowModAgainstCold();
                         ApplyConditionDamageThroughMagicDamage(owner, equipment[i], false, itemSaveThrowMod, baseAmount);
+                        if (owner == GameManager.Instance.PlayerEntity)
+                            WarningMessagePlayerEquipmentCondition(equipment[i], startItemCondPer);
                         finalSaveThrowMod += 1f * itemSaveThrowMod;
                     }
                 }
@@ -3780,8 +3815,11 @@ namespace DaggerfallWorkshop.Game.Formulas
                 {
                     if (equipment[i] != null)
                     {
+                        int startItemCondPer = equipment[i].ConditionPercentage;
                         itemSaveThrowMod = equipment[i].GetSaveThrowModAgainstShock();
                         ApplyConditionDamageThroughMagicDamage(owner, equipment[i], false, itemSaveThrowMod, baseAmount);
+                        if (owner == GameManager.Instance.PlayerEntity)
+                            WarningMessagePlayerEquipmentCondition(equipment[i], startItemCondPer);
                         finalSaveThrowMod += 1f * itemSaveThrowMod;
                     }
                 }
@@ -3792,8 +3830,11 @@ namespace DaggerfallWorkshop.Game.Formulas
                 {
                     if (equipment[i] != null)
                     {
+                        int startItemCondPer = equipment[i].ConditionPercentage;
                         itemSaveThrowMod = equipment[i].GetSaveThrowModAgainstMagic();
                         ApplyConditionDamageThroughMagicDamage(owner, equipment[i], false, itemSaveThrowMod, baseAmount);
+                        if (owner == GameManager.Instance.PlayerEntity)
+                            WarningMessagePlayerEquipmentCondition(equipment[i], startItemCondPer);
                         finalSaveThrowMod += 1f * itemSaveThrowMod;
                     }
                 }
@@ -3813,6 +3854,8 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (singlePartHit)
             {
                 conditionDamValue = (int)Mathf.Round(baseAmount * ((-armorSaveThrowMod * 0.24f) + 1));
+                //Debug.Log("Starting Magnitude of Spell = " + baseAmount);
+                //Debug.Log("Spell Magnitude After Armor Resist Mod = " + conditionDamValue);
 
                 if (conditionDamValue > 0)
                 {
@@ -3821,15 +3864,17 @@ namespace DaggerfallWorkshop.Game.Formulas
                     else
                         item.LowerCondition(conditionDamValue, owner);
 
-                    /*int percentChange = 100 * amount / item.maxCondition;
+                    /*int percentChange = 100 * conditionDamValue / item.maxCondition;
                     if (owner == GameManager.Instance.PlayerEntity){
-                        Debug.LogFormat("Target Had {0} Damaged by {1}, cond={2}", item.LongName, amount, item.currentCondition);
+                        Debug.LogFormat("Target Had {0} Damaged by {1}, cond={2}", item.LongName, conditionDamValue, item.currentCondition);
                         Debug.LogFormat("Had {0} Damaged by {1}%, of Total Maximum. There Remains {2}% of Max Cond.", item.LongName, percentChange, item.ConditionPercentage);} // Percentage Change */
                 }
             }
             else
             {
-                conditionDamValue = (int)Mathf.Round(baseAmount * ((-armorSaveThrowMod * 0.24f) + 1) / 9);
+                conditionDamValue = (int)Mathf.Round(baseAmount * ((-armorSaveThrowMod * 0.24f) + 1) / 5);
+                //Debug.Log("Starting Magnitude of Spell = " + baseAmount);
+                //Debug.Log("Spell Magnitude After Armor Resist Mod = " + conditionDamValue);
 
                 if (conditionDamValue > 0)
                 {
@@ -3838,9 +3883,9 @@ namespace DaggerfallWorkshop.Game.Formulas
                     else
                         item.LowerCondition(conditionDamValue, owner);
 
-                    /*int percentChange = 100 * amount / item.maxCondition;
+                    /*int percentChange = 100 * conditionDamValue / item.maxCondition;
                     if (owner == GameManager.Instance.PlayerEntity){
-                        Debug.LogFormat("Target Had {0} Damaged by {1}, cond={2}", item.LongName, amount, item.currentCondition);
+                        Debug.LogFormat("Target Had {0} Damaged by {1}, cond={2}", item.LongName, conditionDamValue, item.currentCondition);
                         Debug.LogFormat("Had {0} Damaged by {1}%, of Total Maximum. There Remains {2}% of Max Cond.", item.LongName, percentChange, item.ConditionPercentage);} // Percentage Change */
                 }
             }
