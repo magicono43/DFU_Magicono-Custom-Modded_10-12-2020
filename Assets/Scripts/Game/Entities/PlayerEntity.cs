@@ -1226,22 +1226,94 @@ namespace DaggerfallWorkshop.Game.Entity
                 return base.SetMagicka(amount, restoreMode);
         }
 
+        #region Modded Section
+
         /// <summary>
         /// Tally skill usage.
         /// </summary>
-        public override void TallySkill(DFCareer.Skills skill, short amount)
+        public override void TallySkill(DFCareer.Skills skill, short amount, int contextValueOne = 0, int contextValueTwo = 0)
         {
             int skillId = (int)skill;
-
             try
             {
-                skillUses[skillId] += amount;
+                if (amount >= 4)
+                {
+                    Debug.LogFormat("This is a training session that gave, Skill enum {0}, {1} tallys", skillId, amount);
+                }
+                else
+                {
+                    switch (skillId)
+                    {
+                        default:
+                        case 18:
+                        case 21:
+                        case 28:
+                        case 29:
+                        case 30:    // Weapon and other quick leveling skills like running
+                        case 31:
+                        case 32:
+                        case 33:
+                        case 34:
+                            // These do not change costs, just including here for completeness
+                            break;
+                        case 0:     // Medical
+                            amount = TallyMedical(skillId, amount);
+                            break;
+                        case 1:
+                        case 2:     // Human Specific Languages
+                            break;
+                        case 3:     // Jumping // Skip changing jumping for now, as i'll need to make an event handler for "OnPlayerFallDamage" or something.
+                            break;
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:     // Non-Human Languages
+                        case 9:
+                        case 10:
+                        case 11:
+                        case 12:
+                            amount = TallyMonsterLanguage(skillId, amount);
+                            break;
+                        case 13:    // Lockpicking
+                            amount = TallyLockpicking(skillId, amount, contextValueOne, contextValueTwo);
+                            break;
+                        case 14:    // Mercantile
+                            amount = TallyMercantile(skillId, amount, contextValueOne, contextValueTwo);
+                            break;
+                        case 15:    // Pickpocket
+                            amount = TallyPickpocketing(skillId, amount, contextValueOne, contextValueTwo);
+                            break;
+                        case 16:    // Stealth // Leaving alone for now, since i'm not sure what to do with it, or if this needs changing really.
+                            break;
+                        case 17:    // Swimming // Going to double this for now, as you touch water so infrequently that I think it's fair enough.
+                            amount = TallySwimming(skillId, amount);
+                            break;
+                        case 19:    // Backstabbing // Going to make this way higher, as this also likely happens not that often due to many factors.
+                            amount = TallyBackstabbing(skillId, amount);
+                            break;
+                        case 20:    // Dodging // Once again, going to make this slightly higher, for now at least, can't really think of anything else for it.
+                            amount = TallyDodging(skillId, amount);
+                            break;
+                        case 22:
+                        case 23:
+                        case 24:    // Magic Schools
+                        case 25:
+                        case 26:
+                        case 27:
+                            amount = TallyMagicSchools(skillId, amount, contextValueOne, contextValueTwo);
+                            break;
+                    }
+                }
+                Debug.LogFormat("The Skill enum, {0} just increased by {1}", skillId, amount);
+                skillUses[skillId] += amount; // This is the important part, rest is just to keep within some range.
                 if (skillUses[skillId] > 20000)
                     skillUses[skillId] = 20000;
                 else if (skillUses[skillId] < 0)
                 {
                     skillUses[skillId] = 0;
                 }
+                ModdedRaiseSkills(skillId); // For continous skill advancement checks as skills are raised.
             }
             catch (Exception ex)
             {
@@ -1253,6 +1325,108 @@ namespace DaggerfallWorkshop.Game.Entity
                 Debug.Log(error);
             }
         }
+
+        private short TallyMedical(int skillId, short amount) // For now, just make a higher training rate than currently is. Will possibly make it train faster based on how much damage is healed each hour or something.
+        {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+            if (!(player.CurrentHealth == player.MaxHealth)) // If player health is NOT full.
+            {
+                int healthDifference = (int)Mathf.Floor(((player.MaxHealth - player.CurrentHealth) * 100) / player.MaxHealth);
+                return (short)Mathf.Max((int)Mathf.Round(healthDifference / 15), 2); // Will work for now, only problem is that characters that stay a lower percentage of HP before getting to max will gain more medical skill during a rest, could be fixed by factoring in HealthRecoveryRate, fine for now.
+            }
+            return 1;
+        }
+
+        private short TallyMonsterLanguage(int skillId, short amount) // Very basic increase of xp gained for monster languages.
+        {
+            if (amount == 1)
+                return 3;
+            else
+                return 7;
+        }
+
+        private short TallyLockpicking(int skillId, short amount, int lockpickSuccess, int lockDifficulty)
+        {
+            if (lockpickSuccess == 0)
+            {
+                return 2;
+            }
+            else
+            {
+                return (short)((lockDifficulty * 2) + 1);
+            }
+        }
+
+        private short TallyMercantile(int skillId, short amount, int tradePrice, int basketItems = 1)
+        {
+            if (basketItems > 1 || tradePrice >= 1000)
+            {
+                int basketXp = (int)Mathf.Floor(basketItems / 2) + 1;
+                int priceXp = (int)Mathf.Floor(tradePrice / 1000) + 1;
+                return (short)Mathf.Max(basketXp, priceXp, 2);
+            }
+            return 1;
+        }
+
+        private short TallyPickpocketing(int skillId, short amount, int pickpocketSuccessCheck, int basketItems = 1)
+        {
+            if (pickpocketSuccessCheck == 0)
+            {
+                return 2;
+            }
+            else
+            {
+                if (basketItems > 1)
+                    return (short)((basketItems * 3) + 1);
+                else
+                    return 4;
+            }
+        }
+
+        private short TallySwimming(int skillId, short amount)
+        {
+            return 2;
+        }
+
+        private short TallyBackstabbing(int skillId, short amount)
+        {
+            return 5;
+        }
+
+        private short TallyDodging(int skillId, short amount)
+        {
+            return 2;
+        }
+
+        private short TallyMagicSchools(int skillId, short amount, int effectCastingCost, int effectCount)
+        {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+            int tallyAmount = 1;
+            if (effectCastingCost > 6 && effectCastingCost <= 300)
+            {
+                tallyAmount = (int)Mathf.Round(effectCastingCost / 5f);
+                tallyAmount = Mathf.Max(tallyAmount, 2);
+            }
+            else if (effectCastingCost > 300)
+            {
+                tallyAmount = (int)Mathf.Round(((effectCastingCost - 300f) / 3f) + 60f);
+                tallyAmount = Mathf.Max(tallyAmount, 2);
+            }
+            if (tallyAmount <= 1)
+            {
+                float tallyRoller = (UnityEngine.Random.Range(tallyAmount / effectCount, 1f));
+                if (tallyRoller >= 0.8f)
+                    return 1;
+                else
+                    return 0;
+            }
+            else
+            {
+                return (short)Mathf.Max((int)Mathf.Round(tallyAmount / effectCount), 1f);
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Tally thefts/break-ins and murders for starting Thieves Guild and Dark Brotherhood quests
@@ -1342,31 +1516,96 @@ namespace DaggerfallWorkshop.Game.Entity
             return 0;
         }
 
+        #region Modded Section Part 2
+
+        public int CurrentTallyCount(DFCareer.Skills skill)
+        {
+            int i = (int)skill;
+            int reflexesMod = 0x10000 - (((int)reflexes - 2) << 13);
+            int calculatedSkillUses = (skillUses[i] * reflexesMod) >> 16;
+            return calculatedSkillUses;
+        }
+
+        public int TallysNeededToAdvance(DFCareer.Skills skill)
+        {
+            int i = (int)skill;
+            int skillAdvancementMultiplier = DaggerfallSkills.GetAdvancementMultiplier((DFCareer.Skills)i);
+            float careerAdvancementMultiplier = Career.AdvancementMultiplier;
+            int usesNeededForAdvancement = FormulaHelper.CalculateSkillUsesForAdvancement(skills.GetPermanentSkillValue(i), skillAdvancementMultiplier, careerAdvancementMultiplier, level);
+            usesNeededForAdvancement = PrimaryAttributeModifier(i, usesNeededForAdvancement);
+            return usesNeededForAdvancement;
+        }
+
+        public void ModdedRaiseSkills(int skillId) // Experimentation with "instant" skill level ups, broken op without balancing first, etc.
+        {
+            const int youAreNowAMasterOfTextID = 4020;
+            Debug.LogFormat("The Skill enum, {0}", skillId);
+            int skillAdvancementMultiplier = DaggerfallSkills.GetAdvancementMultiplier((DFCareer.Skills)skillId);
+            float careerAdvancementMultiplier = Career.AdvancementMultiplier;
+            int usesNeededForAdvancement = FormulaHelper.CalculateSkillUsesForAdvancement(skills.GetPermanentSkillValue(skillId), skillAdvancementMultiplier, careerAdvancementMultiplier, level);
+            Debug.LogFormat("Requires, {0} uses to advance.", usesNeededForAdvancement);
+            usesNeededForAdvancement = PrimaryAttributeModifier(skillId, usesNeededForAdvancement);
+            Debug.LogFormat("Requires, {0} uses to advance, AFTER Primary Attribute Modifiers.", usesNeededForAdvancement);
+            int reflexesMod = 0x10000 - (((int)reflexes - 2) << 13);
+            int calculatedSkillUses = (skillUses[skillId] * reflexesMod) >> 16;
+            Debug.LogFormat("The current uses for it is, {0}.", calculatedSkillUses);
+            if (calculatedSkillUses >= usesNeededForAdvancement)
+            {
+                skillUses[skillId] = 0;
+                if (skills.GetPermanentSkillValue(skillId) < 100 && (skills.GetPermanentSkillValue(skillId) < 95 || !AlreadyMasteredASkill()))
+                {
+                    skills.SetPermanentSkillValue(skillId, (short)(skills.GetPermanentSkillValue(skillId) + 1));
+                    SetSkillRecentlyIncreased(skillId);
+                    SetCurrentLevelUpSkillSum();
+                    DaggerfallUI.Instance.PopupMessage(TextManager.Instance.GetLocalizedText("skillImprove").Replace("%s", DaggerfallUnity.Instance.TextProvider.GetSkillName((DFCareer.Skills)skillId)));
+                    if (skills.GetPermanentSkillValue(skillId) == 100)
+                    {
+                        List<DFCareer.Skills> primarySkills = GetPrimarySkills();
+                        if (primarySkills.Contains((DFCareer.Skills)skillId))
+                        {
+                            ITextProvider textProvider = DaggerfallUnity.Instance.TextProvider;
+                            TextFile.Token[] tokens;
+                            tokens = textProvider.GetRSCTokens(youAreNowAMasterOfTextID);
+                            if (tokens != null && tokens.Length > 0)
+                            {
+                                DaggerfallMessageBox messageBox = new DaggerfallMessageBox(DaggerfallUI.UIManager);
+                                messageBox.SetTextTokens(tokens);
+                                messageBox.ClickAnywhereToClose = true;
+                                messageBox.ParentPanel.BackgroundColor = Color.clear;
+                                messageBox.Show();
+                            }
+                            DaggerfallUI.Instance.PlayOneShot(SoundClips.ArenaFanfareLevelUp);
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Raise skills if conditions are met.
         /// </summary>
         public void RaiseSkills()
         {
             const int youAreNowAMasterOfTextID = 4020;
-
             DaggerfallDateTime now = DaggerfallUnity.Instance.WorldTime.Now;
-            if ((now.ToClassicDaggerfallTime() - timeOfLastSkillIncreaseCheck) <= 360)
+            if ((now.ToClassicDaggerfallTime() - timeOfLastSkillIncreaseCheck) <= 240)
                 return;
-
             timeOfLastSkillIncreaseCheck = now.ToClassicDaggerfallTime();
-
             for (short i = 0; i < skillUses.Length; i++)
             {
+                Debug.LogFormat("The Skill enum, {0}", i);
                 int skillAdvancementMultiplier = DaggerfallSkills.GetAdvancementMultiplier((DFCareer.Skills)i);
                 float careerAdvancementMultiplier = Career.AdvancementMultiplier;
                 int usesNeededForAdvancement = FormulaHelper.CalculateSkillUsesForAdvancement(skills.GetPermanentSkillValue(i), skillAdvancementMultiplier, careerAdvancementMultiplier, level);
+                Debug.LogFormat("Requires, {0} uses to advance.", usesNeededForAdvancement);
+                usesNeededForAdvancement = PrimaryAttributeModifier(i, usesNeededForAdvancement);
+                Debug.LogFormat("Requires, {0} uses to advance, AFTER Primary Attribute Modifiers.", usesNeededForAdvancement);
                 int reflexesMod = 0x10000 - (((int)reflexes - 2) << 13);
                 int calculatedSkillUses = (skillUses[i] * reflexesMod) >> 16;
-
+                Debug.LogFormat("The current uses for it is, {0}.", calculatedSkillUses);
                 if (calculatedSkillUses >= usesNeededForAdvancement)
                 {
                     skillUses[i] = 0;
-
                     if (skills.GetPermanentSkillValue(i) < 100 && (skills.GetPermanentSkillValue(i) < 95 || !AlreadyMasteredASkill()))
                     {
                         skills.SetPermanentSkillValue(i, (short)(skills.GetPermanentSkillValue(i) + 1));
@@ -1395,10 +1634,85 @@ namespace DaggerfallWorkshop.Game.Entity
                     }
                 }
             }
-
             if (CheckForLevelUp())
                 DaggerfallUI.PostMessage(DaggerfallUIMessages.dfuiOpenCharacterSheetWindow);
         }
+
+        private int PrimaryAttributeModifier(int skillId, int usesNeededForAdvancement)
+        {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+            int playerPrimAttrib = 0;
+            float primAttrSkillMod = 0;
+            float luckSkillMod = 0;
+            int playerLuck = 0;
+            switch (skillId)
+            {
+                default:
+                    return usesNeededForAdvancement;
+                case 33:
+                case 19:
+                case 34:
+                case 30:
+                case 29:
+                case 15:
+                case 28:
+                case 16:
+                    playerPrimAttrib = (player.Stats.PermanentAgility - 50) * -1; // agility
+                    primAttrSkillMod = (playerPrimAttrib * .008f) + 1;
+                    break;
+                case 17:
+                    playerPrimAttrib = player.Stats.PermanentEndurance - 50; // endurance
+                    primAttrSkillMod = (playerPrimAttrib * .008f) + 1;
+                    break;
+                case 11:
+                case 9:
+                case 7:
+                case 6:
+                case 5:
+                case 12:
+                case 13:
+                case 0:
+                case 8:
+                case 4:
+                case 10:
+                    playerPrimAttrib = (player.Stats.PermanentIntelligence - 50) * -1; // intelligence
+                    primAttrSkillMod = (playerPrimAttrib * .008f) + 1;
+                    break;
+                case 1:
+                case 14:
+                case 2:
+                    playerPrimAttrib = (player.Stats.PermanentPersonality - 50) * -1; // personality
+                    primAttrSkillMod = (playerPrimAttrib * .008f) + 1;
+                    break;
+                case 20:
+                case 21:
+                    playerPrimAttrib = (player.Stats.PermanentSpeed - 50) * -1; // speed
+                    primAttrSkillMod = (playerPrimAttrib * .008f) + 1;
+                    break;
+                case 31:
+                case 32:
+                case 18:
+                case 3:
+                    playerPrimAttrib = (player.Stats.PermanentStrength - 50) * -1; // strength
+                    primAttrSkillMod = (playerPrimAttrib * .008f) + 1;
+                    break;
+                case 25:
+                case 22:
+                case 24:
+                case 27:
+                case 23:
+                case 26:
+                    playerPrimAttrib = (player.Stats.PermanentWillpower - 50) * -1; // willpower
+                    primAttrSkillMod = (playerPrimAttrib * .008f) + 1;
+                    break;
+            }
+            playerLuck = (player.Stats.PermanentLuck - 50) * -1; // luck
+            luckSkillMod = (playerLuck * .004f);
+            float totalSkillMod = primAttrSkillMod + luckSkillMod;
+            return Mathf.Max((int)Mathf.Round(usesNeededForAdvancement * totalSkillMod), 1);
+        }
+
+        #endregion
 
         /// <summary>
         /// Gets whether the player has already become master of a skill.

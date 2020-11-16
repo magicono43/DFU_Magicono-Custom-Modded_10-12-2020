@@ -148,16 +148,21 @@ namespace DaggerfallWorkshop
             if (!IsMagicallyHeld)
             {
                 int chance = 0;
-                player.TallySkill(DFCareer.Skills.Lockpicking, 1);
+                int lockpickSuccessCheck = 0;
                 chance = FormulaHelper.CalculateInteriorLockpickingChance(player.Level, CurrentLockValue, player.Skills.GetLiveSkillValue(DFCareer.Skills.Lockpicking));
 
                 if (Dice100.FailedRoll(chance))
                 {
+                    player.TallySkill(DFCareer.Skills.Lockpicking, 1, lockpickSuccessCheck);
+
                     Game.DaggerfallUI.Instance.PopupMessage(TextManager.Instance.GetLocalizedText("lockpickingFailure"));
                     FailedSkillLevel = player.Skills.GetLiveSkillValue(DFCareer.Skills.Lockpicking);
                 }
                 else
                 {
+                    lockpickSuccessCheck = 1;
+                    player.TallySkill(DFCareer.Skills.Lockpicking, 1, lockpickSuccessCheck, CurrentLockValue);
+
                     Game.DaggerfallUI.Instance.PopupMessage(TextManager.Instance.GetLocalizedText("lockpickingSuccess"));
                     CurrentLockValue = 0;
 

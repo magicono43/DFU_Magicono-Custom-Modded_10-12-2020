@@ -902,10 +902,13 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                 // Calculate the weight of all items picked from shelves, then get chance of shoplifting success.
                 int weightAndNumItems = (int)basketItems.GetWeight() + basketItems.Count;
                 int chanceBeingDetected = FormulaHelper.CalculateShopliftingChance(PlayerEntity, buildingDiscoveryData.quality, weightAndNumItems);
-                PlayerEntity.TallySkill(DFCareer.Skills.Pickpocket, 1);
+                int pickpocketSuccessCheck = 0;
 
                 if (Dice100.FailedRoll(chanceBeingDetected))
                 {
+                    pickpocketSuccessCheck = 1;
+                    PlayerEntity.TallySkill(DFCareer.Skills.Pickpocket, 1, pickpocketSuccessCheck, basketItems.Count);
+
                     DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("stealSuccess"), 2);
                     RaiseOnTradeHandler(basketItems.GetNumItems(), 0);
                     PlayerEntity.Items.TransferAll(basketItems);
@@ -913,6 +916,8 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                 }
                 else
                 {   // Register crime and start spawning guards.
+                    PlayerEntity.TallySkill(DFCareer.Skills.Pickpocket, 1, pickpocketSuccessCheck);
+
                     DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("stealFailure"), 2);
                     RaiseOnTradeHandler(0, 0);
                     PlayerEntity.CrimeCommitted = PlayerEntity.Crimes.Theft;
@@ -1042,7 +1047,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                     DaggerfallUI.Instance.PlayOneShot(SoundClips.ParchmentScratching);
                 else
                     DaggerfallUI.Instance.PlayOneShot(SoundClips.GoldPieces);
-                PlayerEntity.TallySkill(DFCareer.Skills.Mercantile, 1);
+                PlayerEntity.TallySkill(DFCareer.Skills.Mercantile, 1, tradePrice, basketItems.Count);
                 Refresh();
             }
             CloseWindow();

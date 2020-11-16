@@ -1480,17 +1480,20 @@ namespace DaggerfallWorkshop.Game
         void Pickpocket(DaggerfallEntityBehaviour target = null)
         {
             const int foundNothingValuableTextId = 8999;
+            int pickpocketSuccessCheck = 0;
 
             PlayerEntity player = GameManager.Instance.PlayerEntity;
             EnemyEntity enemyEntity = null;
             if (target != null)
                 enemyEntity = target.Entity as EnemyEntity;
-            player.TallySkill(DFCareer.Skills.Pickpocket, 1);
 
             int chance = Formulas.FormulaHelper.CalculatePickpocketingChance(player, enemyEntity);
 
             if (Dice100.SuccessRoll(chance))
             {
+                pickpocketSuccessCheck = 1;
+                player.TallySkill(DFCareer.Skills.Pickpocket, 1, pickpocketSuccessCheck);
+
                 if (Dice100.FailedRoll(33))
                 {
                     int pinchedGoldPieces = Random.Range(0, 6) + 1;
@@ -1517,6 +1520,8 @@ namespace DaggerfallWorkshop.Game
             }
             else
             {
+                player.TallySkill(DFCareer.Skills.Pickpocket, 1, pickpocketSuccessCheck);
+
                 string notSuccessfulMessage = TextManager.Instance.GetLocalizedText("youAreNotSuccessful");
                 DaggerfallUI.Instance.PopupMessage(notSuccessfulMessage);
 

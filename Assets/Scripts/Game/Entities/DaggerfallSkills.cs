@@ -398,6 +398,8 @@ namespace DaggerfallWorkshop.Game.Entity
 
         #region Static Methods
 
+        #region Modded Section
+
         public static DFCareer.Stats GetPrimaryStat(DFCareer.Skills skill)
         {
             switch (skill)
@@ -545,6 +547,8 @@ namespace DaggerfallWorkshop.Game.Entity
                     return 0;
             }
         }
+
+        #endregion
 
         public static bool IsLanguageSkill(DFCareer.Skills skill)
         {

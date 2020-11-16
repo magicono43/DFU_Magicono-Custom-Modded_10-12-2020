@@ -274,6 +274,8 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         TextFile.Token[] CreateSkillTokens(DFCareer.Skills skill, bool twoColumn = false, int startPosition = 0)
         {
             bool highlight = playerEntity.GetSkillRecentlyIncreased(skill);
+            int currentTallyCount = PlayerEntity.CurrentTallyCount(skill);
+            int tallysNeededForAdvance = PlayerEntity.TallysNeededToAdvance(skill);
 
             List<TextFile.Token> tokens = new List<TextFile.Token>();
             TextFile.Formatting formatting = highlight ? TextFile.Formatting.TextHighlight : TextFile.Formatting.Text;
@@ -281,6 +283,10 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             TextFile.Token skillNameToken = new TextFile.Token();
             skillNameToken.formatting = formatting;
             skillNameToken.text = DaggerfallUnity.Instance.TextProvider.GetSkillName(skill);
+
+            TextFile.Token skillTallyTrackerToken = new TextFile.Token();
+            skillTallyTrackerToken.formatting = formatting;
+            skillTallyTrackerToken.text = string.Format("{0} / {1}", currentTallyCount, tallysNeededForAdvance);
 
             TextFile.Token skillValueToken = new TextFile.Token();
             skillValueToken.formatting = formatting;
@@ -303,6 +309,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                 tokens.Add(skillNameToken);
                 tokens.Add(tabToken);
                 tokens.Add(tabToken);
+                tokens.Add(skillTallyTrackerToken);
                 tokens.Add(tabToken);
                 tokens.Add(skillValueToken);
                 tokens.Add(tabToken);
@@ -316,7 +323,10 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                     tokens.Add(positioningToken);
                 }
                 tokens.Add(skillNameToken);
-                positioningToken.x = startPosition + 85;
+                positioningToken.x = startPosition + 55;
+                tokens.Add(positioningToken);
+                tokens.Add(skillTallyTrackerToken);
+                positioningToken.x = startPosition + 95; // + 85 Default
                 tokens.Add(positioningToken);
                 tokens.Add(skillValueToken);
                 positioningToken.x = startPosition + 112;
