@@ -115,6 +115,11 @@ namespace DaggerfallWorkshop.Game.Items
                         return DaggerfallUnity.Instance.TextProvider.GetArmorMaterialName((ArmorMaterialTypes)parent.nativeMaterialValue);
                     case ItemGroups.Weapons:
                         return DaggerfallUnity.Instance.TextProvider.GetWeaponMaterialName((WeaponMaterialTypes)parent.nativeMaterialValue);
+                    case ItemGroups.UselessItems2:
+                        if (parent.TemplateIndex == 810)
+                            return DaggerfallUnity.Instance.TextProvider.GetWeaponMaterialName((WeaponMaterialTypes)parent.nativeMaterialValue);
+                        else
+                            return base.Material();
                     default:
                         return base.Material();
                 }

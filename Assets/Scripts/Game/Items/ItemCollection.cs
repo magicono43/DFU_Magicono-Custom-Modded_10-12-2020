@@ -667,6 +667,7 @@ namespace DaggerfallWorkshop.Game.Items
                     checkItem.ItemGroup == itemGroup && checkItem.GroupIndex == groupIndex &&
                     checkItem.PotionRecipeKey == item.PotionRecipeKey &&
                     checkItem.IsSummoned == item.IsSummoned &&
+                    checkItem.nativeMaterialValue == item.nativeMaterialValue &&
                     checkItem.IsStackable())
                     return checkItem;
             }

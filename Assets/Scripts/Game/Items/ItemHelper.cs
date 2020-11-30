@@ -301,6 +301,14 @@ namespace DaggerfallWorkshop.Game.Items
                 result = string.Format("{0} {1}", materialName, result);
             }
 
+            // Resolve ingot material
+            if (item.TemplateIndex == 810)
+            {
+                WeaponMaterialTypes material = (WeaponMaterialTypes)item.nativeMaterialValue;
+                string materialName = DaggerfallUnity.Instance.TextProvider.GetWeaponMaterialName(material);
+                result = string.Format("{0} {1}", materialName, result);
+            }
+
             // Resolve potion names
             if (item.IsPotion)
                 return MacroHelper.GetValue("%po", item);
@@ -718,6 +726,10 @@ namespace DaggerfallWorkshop.Game.Items
                     if (item.IsPotion)
                         return textProvider.GetRSCTokens(potionTextId);
 
+                    // Handle The Ingot Custom Item
+                    if (item.TemplateIndex == 810)
+                        return GetCustomIngotItemTokens();
+
                     // Handle Azura's Star
                     if (item.legacyMagic != null && item.legacyMagic[0].type == EnchantmentTypes.SpecialArtifactEffect && item.legacyMagic[0].param == 9)
                         return textProvider.GetRSCTokens(soulTrapTextId);
@@ -878,6 +890,18 @@ namespace DaggerfallWorkshop.Game.Items
             tokens[15] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
             tokens[16] = TextFile.CreateTextToken("Brittleness: %bri");
             tokens[17] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            return tokens;
+        }
+
+        private static TextFile.Token[] GetCustomIngotItemTokens()
+        {
+            TextFile.Token[] tokens = new TextFile.Token[6];
+            tokens[0] = TextFile.CreateTextToken("%mat %it");
+            tokens[1] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[2] = TextFile.CreateTextToken("Worth: %wth gold");
+            tokens[3] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
+            tokens[4] = TextFile.CreateTextToken("Weight: %kg kilograms");
+            tokens[5] = TextFile.CreateFormatToken(TextFile.Formatting.JustifyCenter);
             return tokens;
         }
 

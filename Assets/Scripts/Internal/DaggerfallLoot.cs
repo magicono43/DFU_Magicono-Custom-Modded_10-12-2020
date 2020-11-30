@@ -255,6 +255,11 @@ namespace DaggerfallWorkshop
                                         ArmorMaterialTypes material = FormulaHelper.RandomArmorMaterial(playerEntity.Level);
                                         ItemBuilder.ApplyArmorSettings(item, playerEntity.Gender, playerEntity.Race, material);
                                     }
+                                    else if (item.TemplateIndex == 810)
+                                    {
+                                        WeaponMaterialTypes material = FormulaHelper.RandomMaterial(playerEntity.Level);
+                                        ItemBuilder.ApplyIngotMaterial(item, material);
+                                    }
 
                                     items.AddItem(item);
                                 }

@@ -4305,7 +4305,8 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (item.IsIngredient || item.IsPotion ||
                 item.IsOfTemplate(ItemGroups.Currency, (int)Currency.Gold_pieces) ||
                 item.IsOfTemplate(ItemGroups.Weapons, (int)Weapons.Arrow) ||
-                item.IsOfTemplate(ItemGroups.UselessItems2, (int)UselessItems2.Oil))
+                item.IsOfTemplate(ItemGroups.UselessItems2, (int)UselessItems2.Oil) ||
+                item.IsOfTemplate(ItemGroups.UselessItems2, 810)) // Template Index of my custom Ingot items are 810
                 return true;
             else
                 return false;

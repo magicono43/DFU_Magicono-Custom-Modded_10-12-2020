@@ -539,6 +539,72 @@ namespace DaggerfallWorkshop.Game.Items
             armor.dyeColor = DaggerfallUnity.Instance.ItemHelper.GetArmorDyeColor(material);
         }
 
+        /*/// <summary>
+        /// Generates a weapon.
+        /// </summary>
+        /// <param name="weapon"></param>
+        /// <param name="material">Ignored for arrows</param>
+        /// <returns></returns>
+        public static DaggerfallUnityItem CreateWeapon(Weapons weapon, WeaponMaterialTypes material)
+        {
+            // Create item
+            int groupIndex = DaggerfallUnity.Instance.ItemHelper.GetGroupIndex(ItemGroups.Weapons, (int)weapon);
+            DaggerfallUnityItem newItem = new DaggerfallUnityItem(ItemGroups.Weapons, groupIndex);
+
+            if (weapon == Weapons.Arrow)
+            {   // Handle arrows
+                newItem.stackCount = UnityEngine.Random.Range(1, 20 + 1);
+                newItem.currentCondition = 0; // not sure if this is necessary, but classic does it
+            }
+            else
+            {
+                ApplyWeaponMaterial(newItem, material);
+            }
+            return newItem;
+        }
+
+        /// <summary>
+        /// Creates random weapon.
+        /// </summary>
+        /// <param name="playerLevel">Player level for material type.</param>
+        /// <returns>DaggerfallUnityItem</returns>
+        public static DaggerfallUnityItem CreateRandomWeapon(int playerLevel)
+        {
+            // Create a random weapon type, including any custom items registered as weapons
+            ItemHelper itemHelper = DaggerfallUnity.Instance.ItemHelper;
+            Array enumArray = itemHelper.GetEnumArray(ItemGroups.Weapons);
+            int[] customItemTemplates = itemHelper.GetCustomItemsForGroup(ItemGroups.Weapons);
+
+            int groupIndex = UnityEngine.Random.Range(0, enumArray.Length + customItemTemplates.Length);
+            DaggerfallUnityItem newItem;
+            if (groupIndex < enumArray.Length)
+                newItem = new DaggerfallUnityItem(ItemGroups.Weapons, groupIndex);
+            else
+                newItem = CreateItem(ItemGroups.Weapons, customItemTemplates[groupIndex - enumArray.Length]);
+
+            // Random weapon material
+            WeaponMaterialTypes material = FormulaHelper.RandomMaterial(playerLevel);
+            ApplyWeaponMaterial(newItem, material);
+
+            // Handle arrows
+            if (groupIndex == 18)
+            {
+                newItem.stackCount = UnityEngine.Random.Range(1, 20 + 1);
+                newItem.currentCondition = 0; // not sure if this is necessary, but classic does it
+                newItem.nativeMaterialValue = 0; // Arrows don't have a material
+            }
+
+            return newItem;
+        }*/
+
+        /// <summary>Set material and adjust weapon stats accordingly</summary>
+        public static void ApplyIngotMaterial(DaggerfallUnityItem ingot, WeaponMaterialTypes material)
+        {
+            ingot.nativeMaterialValue = (int)material;
+            ingot = SetItemPropertiesByMaterial(ingot, material);
+            ingot.dyeColor = DaggerfallUnity.Instance.ItemHelper.GetWeaponDyeColor(material);
+        }
+
         /// <summary>
         /// Creates random magic item in same manner as classic.
         /// </summary>
