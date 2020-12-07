@@ -207,6 +207,40 @@ namespace DaggerfallWorkshop.Game.Items
         }
 
         /// <summary>
+        /// Check if item type of specific material exists in this collection.
+        /// </summary>
+        /// <param name="itemGroup">Item group.</param>
+        /// <param name="itemIndex">Template index.</param>
+        /// <returns>True if collection contains an item of this type.</returns>
+        public bool Contains(ItemGroups itemGroup, int itemIndex, int requestedMat = -1)
+        {
+            foreach (DaggerfallUnityItem item in items.Values)
+            {
+                int materialIndex = Formulas.FormulaHelper.CalculateItemIngotMaterial(item);
+
+                if (requestedMat == materialIndex && item.ItemGroup == itemGroup && item.TemplateIndex == itemIndex)
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Check if item of specific TemplateIndex, ItemGroup, and optionally string (this is mostly so it overloads properly) exists in this collection.
+        /// </summary>
+        /// <param name="itemGroup">Item group.</param>
+        /// <param name="itemIndex">Template index.</param>
+        /// <returns>True if collection contains an item of this type.</returns>
+        public bool Contains(ItemGroups itemGroup, int itemIndex, string words = "") // I'll probably just give this a different name later instead of trying to overload poorly like an idiot.
+        {
+            foreach (DaggerfallUnityItem item in items.Values)
+            {
+                if (item.ItemGroup == itemGroup && item.TemplateIndex == itemIndex)
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Adds an item to this collection.
         /// </summary>
         /// <param name="item">Item to add.</param>
@@ -355,6 +389,24 @@ namespace DaggerfallWorkshop.Game.Items
             foreach (DaggerfallUnityItem item in items.Values)
             {
                 if (item.ItemGroup == itemGroup && item.GroupIndex == groupIndex)
+                    return item;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Get the first of an item type and material from this collection.
+        /// </summary>
+        /// <param name="itemGroup">Item group.</param>
+        /// <param name="itemIndex">Template index.</param>
+        /// <returns>An item of this type, or null if none found.</returns>
+        public DaggerfallUnityItem GetItem(ItemGroups itemGroup, int itemIndex, int requestedMat = -1)
+        {
+            foreach (DaggerfallUnityItem item in items.Values)
+            {
+                int materialIndex = Formulas.FormulaHelper.CalculateItemIngotMaterial(item);
+
+                if (requestedMat == materialIndex && item.ItemGroup == itemGroup && item.TemplateIndex == itemIndex)
                     return item;
             }
             return null;
@@ -604,6 +656,39 @@ namespace DaggerfallWorkshop.Game.Items
                 else
                 {
                     if (item.IsOfTemplate(itemGroup, templateIndex))
+                    {
+                        results.Add(item);
+                    }
+                }
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Linear search that returns all items of particular group, template, and materialvalue from this collection.
+        /// Does not change items in this collection.
+        /// For speed purposes returns actual item reference not a clone.
+        /// </summary>
+        /// <param name="itemGroup">Item group.</param>
+        /// <param name="templateIndex">Item template index. Use -1 to match group only.</param>
+        /// <returns>List of item references.</returns>
+        public List<DaggerfallUnityItem> SearchItems(ItemGroups itemGroup, int templateIndex = -1, int requestedMat = -1)
+        {
+            List<DaggerfallUnityItem> results = new List<DaggerfallUnityItem>();
+            foreach (DaggerfallUnityItem item in items.Values)
+            {
+                int materialIndex = Formulas.FormulaHelper.CalculateItemIngotMaterial(item);
+                if (templateIndex == -1)
+                {
+                    if (requestedMat == materialIndex && item.ItemGroup == itemGroup)
+                    {
+                        results.Add(item);
+                    }
+                }
+                else
+                {
+                    if (requestedMat == materialIndex && item.IsOfTemplate(itemGroup, templateIndex))
                     {
                         results.Add(item);
                     }

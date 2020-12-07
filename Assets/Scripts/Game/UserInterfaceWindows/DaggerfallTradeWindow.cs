@@ -21,6 +21,7 @@ using DaggerfallWorkshop.Game.Items;
 using DaggerfallWorkshop.Game.UserInterface;
 using DaggerfallWorkshop.Game.Utility;
 using DaggerfallWorkshop.Utility;
+//using ShopItemReservesMain;
 using UnityEngine;
 
 namespace DaggerfallWorkshop.Game.UserInterfaceWindows
@@ -52,6 +53,17 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         Panel costPanel;
         TextLabel costLabel;
         TextLabel goldLabel;
+
+        TextLabel ironIngotLabel;
+        TextLabel steelIngotLabel;
+        TextLabel silverIngotLabel;
+        TextLabel elvenIngotLabel;
+        TextLabel dwarvenIngotLabel;
+        TextLabel mithrilIngotLabel;
+        TextLabel adamantiumIngotLabel;
+        TextLabel ebonyIngotLabel;
+        TextLabel orcishIngotLabel;
+        TextLabel daedricIngotLabel;
 
         Panel actionButtonsPanel;
         Button selectButton;
@@ -92,6 +104,10 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         protected ItemCollection basketItems = new ItemCollection();
 
         protected int cost = 0;
+        public int costAfterMaterials = 0;
+        public int[] totalIngotRequire = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public int[] shopMatsNeeded = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public int[] missingMatsValues = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         bool usingIdentifySpell = false;
         DaggerfallUnityItem itemBeingRepaired;
 
@@ -223,6 +239,10 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             SetupAccessoryElements();
             SetupItemListScrollers();
 
+            // Ingot cost/requirements display, only for repair service window
+            if (WindowMode == WindowModes.Repair)
+                SetupIngotCost();
+
             // Highlight purchasable items
             if (WindowMode == WindowModes.Buy)
             {
@@ -255,6 +275,8 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             UpdateLocalTargetIcon();
             UpdateRemoteTargetIcon();
             // UpdateRepairTimes(false);
+            if (WindowMode == WindowModes.Repair)
+                UpdateIngotCostDisplay(totalIngotRequire);
             UpdateCostAndGold();
             SelectWagon(false);
         }
@@ -275,9 +297,10 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         string RepairItemLabelTextHandler(DaggerfallUnityItem item)
         {
             bool repairDone = item.RepairData.IsBeingRepaired() ? item.RepairData.IsRepairFinished() : item.currentCondition == item.maxCondition;
-            return repairDone ? 
-                    TextManager.Instance.GetLocalizedText("repairDone") : 
-                    TextManager.Instance.GetLocalizedText("repairDays").Replace("%d", item.RepairData.EstimatedDaysUntilRepaired().ToString());
+            return repairDone ?
+                    TextManager.Instance.GetLocalizedText("repairDone") :
+                    item.RepairData.EstimatedHoursUntilRepaired().ToString() + " hours";
+                    //TextManager.Instance.GetLocalizedText("repairDays").Replace("%d", item.RepairData.EstimatedHoursUntilRepaired().ToString());
         }
 
         void SetupCostAndGold()
@@ -286,6 +309,51 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             costPanel.BackgroundTexture = costPanelTexture;
             costLabel = DaggerfallUI.AddDefaultShadowedTextLabel(new Vector2(28, 2), costPanel);
             goldLabel = DaggerfallUI.AddDefaultShadowedTextLabel(new Vector2(68, 2), costPanel);
+        }
+
+        void SetupIngotCost()
+        {
+            ironIngotLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, new Vector2(267, 17), string.Empty, NativePanel);
+            ironIngotLabel.TextScale = 0.90f;
+            ironIngotLabel.Text = totalIngotRequire[0].ToString();
+
+            steelIngotLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, new Vector2(267, 28), string.Empty, NativePanel);
+            steelIngotLabel.TextScale = 0.90f;
+            steelIngotLabel.Text = totalIngotRequire[1].ToString();
+
+            silverIngotLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, new Vector2(295, 17), string.Empty, NativePanel);
+            silverIngotLabel.TextScale = 0.90f;
+            silverIngotLabel.Text = totalIngotRequire[2].ToString();
+
+            elvenIngotLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, new Vector2(281, 17), string.Empty, NativePanel);
+            elvenIngotLabel.TextScale = 0.90f;
+            elvenIngotLabel.Text = totalIngotRequire[3].ToString();
+
+            dwarvenIngotLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, new Vector2(295, 28), string.Empty, NativePanel);
+            dwarvenIngotLabel.TextScale = 0.90f;
+            dwarvenIngotLabel.Text = totalIngotRequire[4].ToString();
+
+            mithrilIngotLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, new Vector2(281, 28), string.Empty, NativePanel);
+            mithrilIngotLabel.TextScale = 0.90f;
+            mithrilIngotLabel.Text = totalIngotRequire[5].ToString();
+
+            adamantiumIngotLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, new Vector2(295, 37), string.Empty, NativePanel);
+            adamantiumIngotLabel.TextScale = 0.90f;
+            adamantiumIngotLabel.Text = totalIngotRequire[6].ToString();
+
+            ebonyIngotLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, new Vector2(281, 37), string.Empty, NativePanel);
+            ebonyIngotLabel.TextScale = 0.90f;
+            ebonyIngotLabel.Text = totalIngotRequire[7].ToString();
+
+            orcishIngotLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, new Vector2(267, 37), string.Empty, NativePanel);
+            orcishIngotLabel.TextScale = 0.90f;
+            orcishIngotLabel.Text = totalIngotRequire[8].ToString();
+
+            daedricIngotLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, new Vector2(309, 28), string.Empty, NativePanel);
+            daedricIngotLabel.TextScale = 0.90f;
+            daedricIngotLabel.Text = totalIngotRequire[9].ToString();
+
+            UpdateIngotCostDisplay(totalIngotRequire);
         }
 
         protected override void SetupActionButtons()
@@ -408,6 +476,8 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             base.Refresh(refreshPaperDoll);
 
             UpdateRepairTimes(false);
+            if (WindowMode == WindowModes.Repair)
+                UpdateIngotCostDisplay(totalIngotRequire);
             UpdateCostAndGold();
         }
 
@@ -419,6 +489,11 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         {
             bool modeActionEnabled = false;
             cost = 0;
+
+            for (int i = 0; i < totalIngotRequire.Length; i++)
+            {
+                totalIngotRequire[i] = 0;
+            }
 
             if (WindowMode == WindowModes.Buy && basketItems != null)
             {
@@ -463,6 +538,10 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                             {
                                 modeActionEnabled = true;
                                 cost += FormulaHelper.CalculateItemRepairCost(item.value, buildingDiscoveryData.quality, item.currentCondition, item.maxCondition, Guild) * item.stackCount;
+
+                                int ingotMaterialIndex = FormulaHelper.CalculateItemIngotMaterial(item);
+                                if (ingotMaterialIndex >= 0)
+                                    totalIngotRequire[ingotMaterialIndex] += FormulaHelper.CalculateItemIngotCost(item);
                             }
                             break;
                         case WindowModes.Identify:
@@ -479,7 +558,365 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             }
             costLabel.Text = cost.ToString();
             goldLabel.Text = PlayerEntity.GetGoldAmount().ToString();
+            if (WindowMode == WindowModes.Repair)
+                UpdateIngotCostDisplay(totalIngotRequire);
             modeActionButton.Enabled = modeActionEnabled;
+        }
+
+        public void UpdateIngotCostDisplay(int[] totalIngotRequire)
+        {
+            ironIngotLabel.Text = totalIngotRequire[0].ToString();
+            steelIngotLabel.Text = totalIngotRequire[1].ToString();
+            silverIngotLabel.Text = totalIngotRequire[2].ToString();
+            elvenIngotLabel.Text = totalIngotRequire[3].ToString();
+            dwarvenIngotLabel.Text = totalIngotRequire[4].ToString();
+            mithrilIngotLabel.Text = totalIngotRequire[5].ToString();
+            adamantiumIngotLabel.Text = totalIngotRequire[6].ToString();
+            ebonyIngotLabel.Text = totalIngotRequire[7].ToString();
+            orcishIngotLabel.Text = totalIngotRequire[8].ToString();
+            daedricIngotLabel.Text = totalIngotRequire[9].ToString();
+        }
+
+        public bool NoMatsNeededChecker()
+        {
+            int emptyChecker = 0;
+
+            for (int i = 0; i < totalIngotRequire.Length; i++)
+            {
+                emptyChecker += totalIngotRequire[i];
+            }
+
+            if (emptyChecker <= 0)
+                return true;
+            else
+                return false;
+        }
+
+        public bool PlayerInventoryMaterialChecker()
+        {
+            int[] totalInvIngotCount = PlayerTotalInventoryIngotCount();
+
+            for (int i = 0; i < totalInvIngotCount.Length; i++)
+            {
+                if (totalIngotRequire[i] > totalInvIngotCount[i]) // If required ingot amount is greater than total ingot amount player has in inventory for any ingot type then return false.
+                    return false;
+            }
+
+            return true;
+        }
+
+        public bool ShopInventoryMaterialChecker()
+        {
+            int currentBuildingID = GameManager.Instance.PlayerEnterExit.BuildingDiscoveryData.buildingKey;
+            LimitedGoldShops.ShopData sd;
+            int[] totalShopInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            if (LimitedGoldShops.LimitedGoldShops.ShopBuildingData.TryGetValue(currentBuildingID, out sd))
+                totalShopInvIngotCount = sd.IngotReserve;
+
+            int[] totalPlayerInvIngotCount = PlayerTotalInventoryIngotCount();
+            int[] totalInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            for (int i = 0; i < totalInvIngotCount.Length; i++)
+            {
+                totalInvIngotCount[i] = totalPlayerInvIngotCount[i] + totalShopInvIngotCount[i];
+
+                if (totalIngotRequire[i] > totalInvIngotCount[i]) // If required ingot amount is greater than total ingot amount player has in inventory for any ingot type then return false.
+                    return false;
+            }
+
+            return true;
+        }
+
+        public void RemoveIngotsFromInventory()
+        {
+            int[] mainInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] wagonInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] reserveIngotCountUsed = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] totalIngotsNeeded = totalIngotRequire;
+
+            ItemCollection mainInvItems = PlayerEntity.Items; // Not sure if this encompasses all items in the entity inventory, including wagon or not, will have to see, otherwise might want to use "otheritems" instead.
+            ItemCollection wagonInvItems = null;
+
+            mainInvIngotCount = PlayerMainInventoryIngotCount();
+
+            if (PlayerEntity.Items.Contains(ItemGroups.Transportation, (int)Transportation.Small_cart))
+            {
+                wagonInvItems = PlayerEntity.WagonItems;
+                wagonInvIngotCount = PlayerWagonInventoryIngotCount();
+            }
+
+            for (int i = 0; i < totalIngotsNeeded.Length; i++)
+            {
+                for (int j = 0; j < totalIngotsNeeded[i]; j++)
+                {
+                    if (mainInvItems.Contains(ItemGroups.UselessItems2, 810, i))
+                    {
+                        mainInvItems.RemoveOne(mainInvItems.GetItem(ItemGroups.UselessItems2, 810, i));
+                    }
+                    else if (PlayerEntity.Items.Contains(ItemGroups.Transportation, (int)Transportation.Small_cart) && wagonInvItems != null && wagonInvItems.Contains(ItemGroups.UselessItems2, 810, i))
+                    {
+                        wagonInvItems.RemoveOne(wagonInvItems.GetItem(ItemGroups.UselessItems2, 810, i));
+                    }
+                }
+            }
+        }
+
+        public void AddSoldIngotsToShopReserves()
+        {
+            for (int i = 0; i < shopMatsNeeded.Length; i++)
+            {
+                if (remoteItems.Contains(ItemGroups.UselessItems2, 810, i))
+                {
+                    DaggerfallUnityItem ingot = remoteItems.GetItem(ItemGroups.UselessItems2, 810, i);
+                    shopMatsNeeded[i] -= ingot.stackCount;
+                }
+            }
+        }
+
+        public int CalculateAddedMaterialCost (int[] shopIngotsUsed)
+        {
+            int totalMatCost = 0;
+            uint minutes = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime();
+            int holidayId = FormulaHelper.GetHolidayId(minutes, GameManager.Instance.PlayerGPS.CurrentRegionIndex);
+
+            for (int i = 0; i < shopIngotsUsed.Length; i++)
+            {
+                if (shopIngotsUsed[i] == 0)
+                    continue;
+
+                DaggerfallUnityItem matItem = ItemBuilder.CreateItem(ItemGroups.UselessItems2, 810);
+                ItemBuilder.ApplyWeaponMaterial(matItem, (WeaponMaterialTypes)i);
+
+                if (holidayId == (int)DFLocation.Holidays.Merchants_Festival && Guild == null)
+                    matItem.value /= 2;
+
+                totalMatCost += FormulaHelper.CalculateCost(matItem.value, buildingDiscoveryData.quality) * 2 * shopIngotsUsed[i]; // will obviously want to change this value based on other factors later, but for now just value times 2.
+            }
+
+            return totalMatCost;
+        }
+
+        public int[] ShopIngotCountNeeded(bool missingAmountCheck)
+        {
+            int[] mainInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] wagonInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] reserveIngotCountUsed = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] totalIngotsNeeded = totalIngotRequire;
+
+            ItemCollection mainInvItems = PlayerEntity.Items;
+            ItemCollection wagonInvItems = null;
+
+            mainInvIngotCount = PlayerMainInventoryIngotCount();
+
+            if (PlayerEntity.Items.Contains(ItemGroups.Transportation, (int)Transportation.Small_cart))
+            {
+                wagonInvItems = PlayerEntity.WagonItems;
+                wagonInvIngotCount = PlayerWagonInventoryIngotCount();
+            }
+
+            if (missingAmountCheck)
+            {
+                int currentBuildingID = GameManager.Instance.PlayerEnterExit.BuildingDiscoveryData.buildingKey;
+                LimitedGoldShops.ShopData sd;
+                int[] totalShopInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                if (LimitedGoldShops.LimitedGoldShops.ShopBuildingData.TryGetValue(currentBuildingID, out sd))
+                    totalShopInvIngotCount = sd.IngotReserve;
+
+                int[] totalPlayerInvIngotCount = PlayerTotalInventoryIngotCount();
+                int[] totalInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+                for (int i = 0; i < totalInvIngotCount.Length; i++)
+                {
+                    if (totalIngotsNeeded[i] > 0)
+                    {
+                        totalInvIngotCount[i] = totalPlayerInvIngotCount[i] + totalShopInvIngotCount[i];
+                        reserveIngotCountUsed[i] = (totalInvIngotCount[i] - totalIngotsNeeded[i]) * -1;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < totalIngotsNeeded.Length; i++)
+                {
+                    reserveIngotCountUsed[i] = Mathf.Max(totalIngotsNeeded[i] - (mainInvIngotCount[i] + wagonInvIngotCount[i]), 0);
+                }
+            }
+
+            return reserveIngotCountUsed;
+        }
+
+        public int[] PlayerMainInventoryIngotCount()
+        {
+            int[] mainInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            ItemCollection mainInvItems = PlayerEntity.Items; // Not sure if this encompasses all items in the entity inventory, including wagon or not, will have to see, otherwise might want to use "otheritems" instead.
+            List<DaggerfallUnityItem> mainInvIngots = mainInvItems.SearchItems(ItemGroups.UselessItems2, 810);
+
+            foreach (DaggerfallUnityItem ingot in mainInvIngots)
+            {
+                int ingotMaterialIndex = FormulaHelper.CalculateItemIngotMaterial(ingot);
+                if (ingotMaterialIndex >= 0)
+                    mainInvIngotCount[ingotMaterialIndex] += ingot.stackCount;
+            }
+
+            return mainInvIngotCount;
+        }
+
+        public int[] PlayerWagonInventoryIngotCount()
+        {
+            int[] wagonInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            ItemCollection wagonInvItems = PlayerEntity.WagonItems;
+            List<DaggerfallUnityItem> wagonInvIngots = wagonInvItems.SearchItems(ItemGroups.UselessItems2, 810);
+
+            foreach (DaggerfallUnityItem ingot in wagonInvIngots)
+            {
+                int ingotMaterialIndex = FormulaHelper.CalculateItemIngotMaterial(ingot);
+                if (ingotMaterialIndex >= 0)
+                    wagonInvIngotCount[ingotMaterialIndex] += ingot.stackCount;
+            }
+
+            return wagonInvIngotCount;
+        }
+
+        public int[] PlayerTotalInventoryIngotCount()
+        {
+            int[] mainInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] wagonInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] totalInvIngotCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            mainInvIngotCount = PlayerMainInventoryIngotCount();
+
+            if (PlayerEntity.Items.Contains(ItemGroups.Transportation, (int)Transportation.Small_cart))
+            {
+                wagonInvIngotCount = PlayerWagonInventoryIngotCount();
+            }
+
+            for (int i = 0; i < totalInvIngotCount.Length; i++)
+            {
+                totalInvIngotCount[i] = mainInvIngotCount[i] + wagonInvIngotCount[i];
+            }
+
+            return totalInvIngotCount;
+        }
+
+        public TextFile.Token[] RepairMatRequirementTextTokenAssembler(int offerAmount)
+        {
+            TextFile.Token[] tokens = DaggerfallUnity.Instance.TextProvider.CreateTokens(
+                        TextFile.Formatting.JustifyCenter,
+                        "So here is the list of materials",
+                        "i'll need to complete your order.",
+                        "");
+
+            tokens = TextFile.AppendTokens(tokens, MatReqTextTokenFiller(false), false);
+
+            TextFile.Token[] exitToken = DaggerfallUnity.Instance.TextProvider.CreateTokens(
+                        TextFile.Formatting.JustifyCenter,
+                        "And the cost of labor should be about",
+                        offerAmount + " gold from my estimate.",
+                        "That amount sound fair to you?");
+
+            tokens = TextFile.AppendTokens(tokens, exitToken, true);
+
+            return tokens;
+        }
+
+        public TextFile.Token[] MissingMatsInfoTextTokenAssembler()
+        {
+            TextFile.Token[] tokens = DaggerfallUnity.Instance.TextProvider.CreateTokens(
+                        TextFile.Formatting.JustifyCenter,
+                        "It appears neither of us has the needed",
+                        "materials to complete this order fully.",
+                        "What's currently missing is...",
+                        "");
+
+            tokens = TextFile.AppendTokens(tokens, MatReqTextTokenFiller(true), false);
+
+            TextFile.Token[] exitToken = DaggerfallUnity.Instance.TextProvider.CreateTokens(
+                        TextFile.Formatting.JustifyCenter,
+                        "Bring me those listed materials, or",
+                        "give me a few days and I may have",
+                        "what's required in my next restocking",
+                        "caravan. Until then, I can't fulfill",
+                        "this order.");
+
+            tokens = TextFile.AppendTokens(tokens, exitToken, true);
+
+            return tokens;
+        }
+
+        public TextFile.Token[] MatReqTextTokenFiller(bool showMissingMats)
+        {
+            TextFile.Token[] tokens = null;
+            int[] matList;
+
+            if (showMissingMats)
+                matList = missingMatsValues;
+            else
+                matList = totalIngotRequire;
+
+            if (matList[0] > 0)
+            {
+                string ironMat = matList[0].ToString() + " Iron Ingots";
+                TextFile.Token[] iron = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, ironMat);
+                tokens = TextFile.AppendTokens(tokens, iron, false);
+            }
+            if (matList[1] > 0)
+            {
+                string steelMat = matList[1].ToString() + " Steel Ingots";
+                TextFile.Token[] steel = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, steelMat);
+                tokens = TextFile.AppendTokens(tokens, steel, false);
+            }
+            if (matList[2] > 0)
+            {
+                string silverMat = matList[2].ToString() + " Silver Ingots";
+                TextFile.Token[] silver = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, silverMat);
+                tokens = TextFile.AppendTokens(tokens, silver, false);
+            }
+            if (matList[3] > 0)
+            {
+                string elvenMat = matList[3].ToString() + " Elven Ingots";
+                TextFile.Token[] elven = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, elvenMat);
+                tokens = TextFile.AppendTokens(tokens, elven, false);
+            }
+            if (matList[4] > 0)
+            {
+                string dwarvenMat = matList[4].ToString() + " Dwarven Ingots";
+                TextFile.Token[] dwarven = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, dwarvenMat);
+                tokens = TextFile.AppendTokens(tokens, dwarven, false);
+            }
+            if (matList[5] > 0)
+            {
+                string mithrilMat = matList[5].ToString() + " Mithril Ingots";
+                TextFile.Token[] mithril = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, mithrilMat);
+                tokens = TextFile.AppendTokens(tokens, mithril, false);
+            }
+            if (matList[6] > 0)
+            {
+                string adamantiumMat = matList[6].ToString() + " Adamantium Ingots";
+                TextFile.Token[] adamantium = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, adamantiumMat);
+                tokens = TextFile.AppendTokens(tokens, adamantium, false);
+            }
+            if (matList[7] > 0)
+            {
+                string ebonyMat = matList[7].ToString() + " Ebony Ingots";
+                TextFile.Token[] ebony = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, ebonyMat);
+                tokens = TextFile.AppendTokens(tokens, ebony, false);
+            }
+            if (matList[8] > 0)
+            {
+                string orcishMat = matList[8].ToString() + " Orcish Ingots";
+                TextFile.Token[] orcish = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, orcishMat);
+                tokens = TextFile.AppendTokens(tokens, orcish, false);
+            }
+            if (matList[9] > 0)
+            {
+                string daedricMat = matList[9].ToString() + " Daedric Ingots";
+                TextFile.Token[] daedric = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, daedricMat);
+                tokens = TextFile.AppendTokens(tokens, daedric, false);
+            }
+
+            return tokens;
         }
 
         protected int GetTradePrice()
@@ -858,6 +1295,22 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             sender.CloseWindow();
             if (messageBoxButton == DaggerfallMessageBox.MessageBoxButtons.Yes)
             {
+                int ingotMaterialIndex = FormulaHelper.CalculateItemIngotMaterial(itemBeingRepaired);
+                if (ingotMaterialIndex >= 0)
+                    totalIngotRequire[ingotMaterialIndex] += FormulaHelper.CalculateItemIngotCost(itemBeingRepaired);
+                for (int i = 0; i < totalIngotRequire.Length; i++)
+                {
+                    if (totalIngotRequire[i] == 0)
+                        continue;
+
+                    for (int j = 0; j < totalIngotRequire[i]; j++)
+                    {
+                        DaggerfallUnityItem matItem = ItemBuilder.CreateItem(ItemGroups.UselessItems2, 810);
+                        ItemBuilder.ApplyWeaponMaterial(matItem, (WeaponMaterialTypes)i);
+                        PlayerEntity.Items.AddItem(matItem);
+                    }
+                }
+
                 TakeItemFromRepair(itemBeingRepaired);
             }
         }
@@ -989,6 +1442,8 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         protected virtual void ConfirmTrade_OnButtonClick(DaggerfallMessageBox sender, DaggerfallMessageBox.MessageBoxButtons messageBoxButton)
         {
             bool receivedLetterOfCredit = false;
+            TextFile.Token[] tokens = null;
+
             if (messageBoxButton == DaggerfallMessageBox.MessageBoxButtons.Yes)
             {
                 // Proceed with trade.
@@ -1009,6 +1464,8 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                             GameManager.Instance.PlayerEntity.Items.AddItem(loc, Items.ItemCollection.AddPosition.Front);
                             receivedLetterOfCredit = true;
                         }
+                        if (remoteItems.Contains(ItemGroups.UselessItems2, 810, ""))
+                            AddSoldIngotsToShopReserves();
                         RaiseOnTradeHandler(remoteItems.GetNumItems(), tradePrice);
                         remoteItems.Clear();
                         break;
@@ -1020,15 +1477,43 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                         break;
 
                     case WindowModes.Repair:
-                        PlayerEntity.DeductGoldAmount(tradePrice);
-                        if (DaggerfallUnity.Settings.InstantRepairs)
+                        if (PlayerInventoryMaterialChecker())
                         {
-                            foreach (DaggerfallUnityItem item in remoteItemsFiltered)
-                                item.currentCondition = item.maxCondition;
+                            RemoveIngotsFromInventory();
+                            PlayerEntity.DeductGoldAmount(tradePrice);
+                            if (DaggerfallUnity.Settings.InstantRepairs)
+                            {
+                                foreach (DaggerfallUnityItem item in remoteItemsFiltered)
+                                    item.currentCondition = item.maxCondition;
+                            }
+                            else
+                            {
+                                UpdateRepairTimes(true);
+                            }
                         }
                         else
                         {
-                            UpdateRepairTimes(true);
+                            if (ShopInventoryMaterialChecker())
+                            {
+                                CloseWindow();
+                                shopMatsNeeded = ShopIngotCountNeeded(false);
+                                tokens = CustomTextTokenHolder.RepairServiceTextTokens(1);
+                                DaggerfallMessageBox messageBox = new DaggerfallMessageBox(uiManager, this);
+                                messageBox.SetTextTokens(tokens, this);
+                                messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.Yes);
+                                messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.No);
+                                messageBox.OnButtonClick += ConfirmCostReevaluate_OnButtonClick;
+                                uiManager.PushWindow(messageBox);
+                                Refresh();
+                                return;
+                            }
+                            else
+                            {
+                                CloseWindow();
+                                DaggerfallUI.MessageBox("You don't have enough materials to fill this order.");
+                                Refresh(); // What happens when player AND the shop does not have enough ingots in their inventories for the order. Cancel transaction just like not enough gold.
+                                return;
+                            }
                         }
                         RaiseOnTradeHandler(remoteItems.GetNumItems(), tradePrice);
                         break;
@@ -1047,12 +1532,67 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                     DaggerfallUI.Instance.PlayOneShot(SoundClips.ParchmentScratching);
                 else
                     DaggerfallUI.Instance.PlayOneShot(SoundClips.GoldPieces);
-                PlayerEntity.TallySkill(DFCareer.Skills.Mercantile, 1, tradePrice, basketItems.Count);
+                PlayerEntity.TallySkill(DFCareer.Skills.Mercantile, 1);
+                LimitedGoldShops.LimitedGoldShops.TradeUpdateShopGold(WindowMode, tradePrice, shopMatsNeeded);
+                //UpdateShopGoldDisplay();
                 Refresh();
             }
             CloseWindow();
             if (receivedLetterOfCredit)
                 DaggerfallUI.MessageBox(TextManager.Instance.GetLocalizedText("letterOfCredit"));
+        }
+
+        protected virtual void ConfirmCostReevaluate_OnButtonClick(DaggerfallMessageBox sender, DaggerfallMessageBox.MessageBoxButtons messageBoxButton)
+        {
+            int tradePrice = GetTradePrice();
+            int[] shopSupplyUsed = shopMatsNeeded;
+            int addedMatCost = CalculateAddedMaterialCost(shopSupplyUsed);
+            costAfterMaterials = tradePrice + addedMatCost;
+            TextFile.Token[] tokens = CustomTextTokenHolder.RepairServiceTextTokens(2, costAfterMaterials);
+
+            CloseWindow();
+            if (messageBoxButton == DaggerfallMessageBox.MessageBoxButtons.Yes)
+            {
+                DaggerfallMessageBox messageBox = new DaggerfallMessageBox(uiManager, this);
+                messageBox.SetTextTokens(tokens, this);
+                messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.Yes);
+                messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.No);
+                messageBox.OnButtonClick += ConfirmUsingShopReserves_OnButtonClick;
+                uiManager.PushWindow(messageBox);
+            }
+        }
+
+        protected virtual void ConfirmUsingShopReserves_OnButtonClick(DaggerfallMessageBox sender, DaggerfallMessageBox.MessageBoxButtons messageBoxButton)
+        {
+            const int notEnoughGoldId = 454;
+
+            CloseWindow();
+            if (messageBoxButton == DaggerfallMessageBox.MessageBoxButtons.Yes)
+            {
+                if (PlayerEntity.GetGoldAmount() < costAfterMaterials)
+                {
+                    DaggerfallUI.MessageBox(notEnoughGoldId);
+                }
+                else
+                {
+                    RemoveIngotsFromInventory();
+                    PlayerEntity.DeductGoldAmount(costAfterMaterials);
+                    if (DaggerfallUnity.Settings.InstantRepairs)
+                    {
+                        foreach (DaggerfallUnityItem item in remoteItemsFiltered)
+                            item.currentCondition = item.maxCondition;
+                    }
+                    else
+                    {
+                        UpdateRepairTimes(true);
+                    }
+                    RaiseOnTradeHandler(remoteItems.GetNumItems(), costAfterMaterials);
+                    DaggerfallUI.Instance.PlayOneShot(SoundClips.GoldPieces);
+                    PlayerEntity.TallySkill(DFCareer.Skills.Mercantile, 1);
+                    LimitedGoldShops.LimitedGoldShops.TradeUpdateShopGold(WindowMode, costAfterMaterials, shopMatsNeeded);
+                    Refresh();
+                }
+            }
         }
 
         #endregion
@@ -1065,10 +1605,78 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             const int notEnoughGoldId = 454;
             int msgOffset = 0;
             int tradePrice = GetTradePrice();
+            TextFile.Token[] tokens = null;
 
-            if (WindowMode != WindowModes.Sell && WindowMode != WindowModes.SellMagic && PlayerEntity.GetGoldAmount() < tradePrice)
+            int currentBuildingID = GameManager.Instance.PlayerEnterExit.BuildingDiscoveryData.buildingKey;
+            int goldSupply = 0;
+            //int shopAttitude = 0; // For now, 0 = Nice Attitude and 1 = Bad Attitude.
+
+            if (WindowMode == WindowModes.Sell && goldSupply <= 0)
+            {
+                int buildQual = GameManager.Instance.PlayerEnterExit.BuildingDiscoveryData.quality;
+                /*tokens = SIRTextTokenHolder.ShopTextTokensNice(4);
+                if (buildQual <= 3) // 01 - 03
+                {
+                    if (shopAttitude == 0)
+                        tokens = SIRTextTokenHolder.ShopTextTokensNice(5);
+                    else
+                        tokens = SIRTextTokenHolder.ShopTextTokensMean(4);
+                }
+                else if (buildQual <= 7) // 04 - 07
+                {
+                    if (shopAttitude == 0)
+                        tokens = SIRTextTokenHolder.ShopTextTokensNice(6);
+                    else
+                        tokens = SIRTextTokenHolder.ShopTextTokensMean(5);
+                }
+                else if (buildQual <= 13) // 08 - 13
+                {
+                    if (shopAttitude == 0)
+                        tokens = SIRTextTokenHolder.ShopTextTokensNice(4);
+                    else
+                        tokens = SIRTextTokenHolder.ShopTextTokensMean(6);
+                }
+                else if (buildQual <= 17) // 14 - 17
+                {
+                    if (shopAttitude == 0)
+                        tokens = SIRTextTokenHolder.ShopTextTokensNice(7);
+                    else
+                        tokens = SIRTextTokenHolder.ShopTextTokensMean(7);
+                }
+                else                      // 18 - 20
+                {
+                    if (shopAttitude == 0)
+                        tokens = SIRTextTokenHolder.ShopTextTokensNice(8);
+                    else
+                        tokens = SIRTextTokenHolder.ShopTextTokensMean(8);
+                }*/
+
+                DaggerfallMessageBox noGoldShop = new DaggerfallMessageBox(DaggerfallUI.UIManager, this);
+                noGoldShop.SetTextTokens(tokens, this);
+                noGoldShop.ClickAnywhereToClose = true;
+                uiManager.PushWindow(noGoldShop);
+            }
+            else if (WindowMode != WindowModes.Sell && WindowMode != WindowModes.SellMagic && PlayerEntity.GetGoldAmount() < tradePrice)
             {
                 DaggerfallUI.MessageBox(notEnoughGoldId);
+            }
+            else if (WindowMode == WindowModes.Repair)
+            {
+                if (NoMatsNeededChecker())
+                {
+                    tokens = CustomTextTokenHolder.RepairServiceTextTokens(3, tradePrice);
+                }
+                else
+                {
+                    tokens = RepairMatRequirementTextTokenAssembler(tradePrice); // Text tokens to show what materials will be required for this order
+                }
+
+                DaggerfallMessageBox messageBox = new DaggerfallMessageBox(uiManager, this);
+                messageBox.SetTextTokens(tokens, this);
+                messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.Yes);
+                messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.No);
+                messageBox.OnButtonClick += ConfirmTrade_OnButtonClick;
+                uiManager.PushWindow(messageBox);
             }
             else
             {
@@ -1083,7 +1691,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                     msgOffset += 3;
 
                 DaggerfallMessageBox messageBox = new DaggerfallMessageBox(uiManager, this);
-                TextFile.Token[] tokens = DaggerfallUnity.Instance.TextProvider.GetRandomTokens(tradeMessageBaseId + msgOffset);
+                tokens = DaggerfallUnity.Instance.TextProvider.GetRandomTokens(tradeMessageBaseId + msgOffset);
                 messageBox.SetTextTokens(tokens, this);
                 messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.Yes);
                 messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.No);

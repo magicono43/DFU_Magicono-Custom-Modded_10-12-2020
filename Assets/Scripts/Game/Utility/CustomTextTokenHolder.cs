@@ -76,4 +76,46 @@ public class CustomTextTokenHolder
                     "Text Token Not Found");
         }
     }
+
+    public static TextFile.Token[] RepairServiceTextTokens(int index, int cost = 0)
+    {
+        if (index == 1)
+        {
+            return DaggerfallUnity.Instance.TextProvider.CreateTokens(
+                TextFile.Formatting.JustifyCenter,
+                "You don't appear to have the needed materials",
+                "on your person. After checking my emergency",
+                "stock I seem to have the remaining materials",
+                "needed to fill your order. Would you like me",
+                "to cover the missing materials to complete",
+                "your order? I'll have to charge extra for the",
+                "use of my reserves, i'm sure you understand.");
+        }
+        else if (index == 2)
+        {
+            return DaggerfallUnity.Instance.TextProvider.CreateTokens(
+                TextFile.Formatting.JustifyCenter,
+                "Alright, with the added cost of my reserve",
+                "stock added in. The final cost for this",
+                "order is " + cost + " gold, plus any materials",
+                "that you brought along. Does that sound",
+                "reasonable to you?");
+        }
+        else if (index == 3)
+        {
+            return DaggerfallUnity.Instance.TextProvider.CreateTokens(
+                TextFile.Formatting.JustifyCenter,
+                "This order won't require any special materials",
+                "to bring this stuff back, good as new, not with",
+                "a skilled professional such as myself, hehe.",
+                "My labor will set you back " + cost + " gold,",
+                "how does that sound?");
+        }
+        else
+        {
+            return DaggerfallUnity.Instance.TextProvider.CreateTokens(
+                    TextFile.Formatting.JustifyCenter,
+                    "Text Token Not Found");
+        }
+    }
 }

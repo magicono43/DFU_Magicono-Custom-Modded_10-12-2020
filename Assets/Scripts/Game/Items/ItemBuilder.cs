@@ -561,41 +561,23 @@ namespace DaggerfallWorkshop.Game.Items
                 ApplyWeaponMaterial(newItem, material);
             }
             return newItem;
-        }
+        }*/
 
         /// <summary>
-        /// Creates random weapon.
+        /// Creates random ingot.
         /// </summary>
         /// <param name="playerLevel">Player level for material type.</param>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomWeapon(int playerLevel)
+        public static DaggerfallUnityItem CreateRandomIngot(int playerLevel)
         {
-            // Create a random weapon type, including any custom items registered as weapons
-            ItemHelper itemHelper = DaggerfallUnity.Instance.ItemHelper;
-            Array enumArray = itemHelper.GetEnumArray(ItemGroups.Weapons);
-            int[] customItemTemplates = itemHelper.GetCustomItemsForGroup(ItemGroups.Weapons);
-
-            int groupIndex = UnityEngine.Random.Range(0, enumArray.Length + customItemTemplates.Length);
-            DaggerfallUnityItem newItem;
-            if (groupIndex < enumArray.Length)
-                newItem = new DaggerfallUnityItem(ItemGroups.Weapons, groupIndex);
-            else
-                newItem = CreateItem(ItemGroups.Weapons, customItemTemplates[groupIndex - enumArray.Length]);
+            DaggerfallUnityItem newItem = CreateItem(ItemGroups.UselessItems2, 810);
 
             // Random weapon material
             WeaponMaterialTypes material = FormulaHelper.RandomMaterial(playerLevel);
             ApplyWeaponMaterial(newItem, material);
 
-            // Handle arrows
-            if (groupIndex == 18)
-            {
-                newItem.stackCount = UnityEngine.Random.Range(1, 20 + 1);
-                newItem.currentCondition = 0; // not sure if this is necessary, but classic does it
-                newItem.nativeMaterialValue = 0; // Arrows don't have a material
-            }
-
             return newItem;
-        }*/
+        }
 
         /// <summary>Set material and adjust weapon stats accordingly</summary>
         public static void ApplyIngotMaterial(DaggerfallUnityItem ingot, WeaponMaterialTypes material)

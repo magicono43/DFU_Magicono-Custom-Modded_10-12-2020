@@ -75,21 +75,21 @@ namespace DaggerfallWorkshop.Game.Items
             }
         }
 
-        public int DaysUntilRepaired()
+        public int HoursUntilRepaired()
         {
-            return GetDaysLeftUntil(GetTimeDone());
+            return GetHoursLeftUntil(GetTimeDone());
         }
 
-        public int EstimatedDaysUntilRepaired()
+        public int EstimatedHoursUntilRepaired()
         {
-            return GetDaysLeftUntil(GetEstimatedTimeDone());
+            return GetHoursLeftUntil(GetEstimatedTimeDone());
         }
 
-        private int GetDaysLeftUntil(ulong time)
+        private int GetHoursLeftUntil(ulong time)
         {
             ulong timeNow = DaggerfallUnity.Instance.WorldTime.Now.ToSeconds();
             float timeLeft = time - timeNow;
-            return (int)Mathf.Ceil(timeLeft / DaggerfallDateTime.SecondsPerDay);
+            return (int)Mathf.Ceil(timeLeft / DaggerfallDateTime.SecondsPerHour);
         }
 
         public ItemRepairData_v1 GetSaveData()

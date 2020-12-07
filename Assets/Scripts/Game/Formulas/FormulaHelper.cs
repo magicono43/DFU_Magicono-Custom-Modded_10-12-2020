@@ -4128,6 +4128,148 @@ namespace DaggerfallWorkshop.Game.Formulas
             return cost;
         }
 
+        public static int CalculateItemIngotMaterial(DaggerfallUnityItem item)
+        {
+            if (item.ItemGroup == ItemGroups.Weapons || item.ItemGroup == ItemGroups.Armor || (item.ItemGroup == ItemGroups.UselessItems2 && item.TemplateIndex == 810))
+            {
+                switch(item.nativeMaterialValue)
+                {
+                    case (int)WeaponMaterialTypes.Iron:
+                    case (int)ArmorMaterialTypes.Iron:
+                        if (item.ItemGroup == ItemGroups.Armor && item.nativeMaterialValue == (int)ArmorMaterialTypes.Leather)
+                            return -1;
+                        else
+                            return 0;
+                    case (int)WeaponMaterialTypes.Steel:
+                    case (int)ArmorMaterialTypes.Steel:
+                        return 1;
+                    case (int)WeaponMaterialTypes.Silver:
+                    case (int)ArmorMaterialTypes.Silver:
+                        return 2;
+                    case (int)WeaponMaterialTypes.Elven:
+                    case (int)ArmorMaterialTypes.Elven:
+                        return 3;
+                    case (int)WeaponMaterialTypes.Dwarven:
+                    case (int)ArmorMaterialTypes.Dwarven:
+                        return 4;
+                    case (int)WeaponMaterialTypes.Mithril:
+                    case (int)ArmorMaterialTypes.Mithril:
+                        return 5;
+                    case (int)WeaponMaterialTypes.Adamantium:
+                    case (int)ArmorMaterialTypes.Adamantium:
+                        return 6;
+                    case (int)WeaponMaterialTypes.Ebony:
+                    case (int)ArmorMaterialTypes.Ebony:
+                        return 7;
+                    case (int)WeaponMaterialTypes.Orcish:
+                    case (int)ArmorMaterialTypes.Orcish:
+                        return 8;
+                    case (int)WeaponMaterialTypes.Daedric:
+                    case (int)ArmorMaterialTypes.Daedric:
+                        return 9;
+                    default:
+                        return -1;
+                }
+            }
+            return -1;
+        }
+
+        public static int CalculateItemIngotCost(DaggerfallUnityItem item)
+        {
+            if (item.ItemGroup == ItemGroups.Weapons)
+            {
+                switch(item.TemplateIndex)
+                {
+                    case (int)Weapons.Dagger:
+                    case (int)Weapons.Tanto:
+                        if (item.ConditionPercentage <= 40)
+                            return 1;
+                        else
+                            return 0;
+                    case (int)Weapons.Shortsword:
+                    case (int)Weapons.Wakazashi:
+                    case (int)Weapons.Staff:
+                    case (int)Weapons.Short_Bow:
+                    case (int)Weapons.Long_Bow:
+                        if (item.ConditionPercentage <= 55)
+                            return 1;
+                        else
+                            return 0;
+                    case (int)Weapons.Broadsword:
+                    case (int)Weapons.Katana:
+                    case (int)Weapons.Longsword:
+                    case (int)Weapons.Saber:
+                    case (int)Weapons.Battle_Axe:
+                    case (int)Weapons.Mace:
+                        if (item.ConditionPercentage >= 76)
+                            return 0;
+                        else if (item.ConditionPercentage <= 75 && item.ConditionPercentage >= 41)
+                            return 1;
+                        else
+                            return 2;
+                    case (int)Weapons.Claymore:
+                    case (int)Weapons.Dai_Katana:
+                    case (int)Weapons.War_Axe:
+                    case (int)Weapons.Flail:
+                    case (int)Weapons.Warhammer:
+                        if (item.ConditionPercentage >= 76)
+                            return 0;
+                        else if (item.ConditionPercentage <= 75 && item.ConditionPercentage >= 61)
+                            return 1;
+                        else if (item.ConditionPercentage <= 60 && item.ConditionPercentage >= 41)
+                            return 2;
+                        else
+                            return 3;
+                    default:
+                        return 0;
+                }
+            }
+            else if (item.ItemGroup == ItemGroups.Armor)
+            {
+                switch(item.TemplateIndex)
+                {
+                    case (int)Armor.Helm:
+                    case (int)Armor.Right_Pauldron:
+                    case (int)Armor.Left_Pauldron:
+                    case (int)Armor.Gauntlets:
+                    case (int)Armor.Boots:
+                    case (int)Armor.Buckler:
+                        if (item.ConditionPercentage >= 61)
+                            return 0;
+                        else if (item.ConditionPercentage <= 60 && item.ConditionPercentage >= 41)
+                            return 1;
+                        else
+                            return 2;
+                    case (int)Armor.Cuirass:
+                    case (int)Armor.Greaves:
+                    case (int)Armor.Round_Shield:
+                    case (int)Armor.Kite_Shield:
+                        if (item.ConditionPercentage >= 61)
+                            return 0;
+                        else if (item.ConditionPercentage <= 60 && item.ConditionPercentage >= 41)
+                            return 1;
+                        else if (item.ConditionPercentage <= 40 && item.ConditionPercentage >= 16)
+                            return 2;
+                        else
+                            return 3;
+                    case (int)Armor.Tower_Shield:
+                        if (item.ConditionPercentage >= 76)
+                            return 0;
+                        else if (item.ConditionPercentage <= 75 && item.ConditionPercentage >= 61)
+                            return 1;
+                        else if (item.ConditionPercentage <= 60 && item.ConditionPercentage >= 41)
+                            return 2;
+                        else if (item.ConditionPercentage <= 40 && item.ConditionPercentage >= 16)
+                            return 3;
+                        else
+                            return 4;
+                    default:
+                        return 0;
+                }
+            }
+            return 0;
+        }
+
         public static int CalculateItemRepairCost(int baseItemValue, int shopQuality, int condition, int max, IGuild guild)
         {
             Func<int, int, int, int, IGuild, int> del;
@@ -4154,8 +4296,8 @@ namespace DaggerfallWorkshop.Game.Formulas
         public static int CalculateItemRepairTime(int condition, int max)
         {
             int damage = max - condition;
-            int repairTime = (damage * DaggerfallDateTime.SecondsPerDay / 1000);
-            return Mathf.Max(repairTime, DaggerfallDateTime.SecondsPerDay);
+            int repairTime = (damage * DaggerfallDateTime.SecondsPerHour / 20); // This seems to work for now. I obviously want to do a lot more to this value as well later on. Such as factoring in simulated "busyness" of the smith to increase or decrease repair times. Also change times based on different factors like the rarity/exoticness of the material as well as location such as smiths in the Orsinium area having shorter repair times or something like that, etc.
+            return Mathf.Max(repairTime, DaggerfallDateTime.SecondsPerHour);
         }
 
         public static int CalculateItemIdentifyCost(int baseItemValue, IGuild guild)
