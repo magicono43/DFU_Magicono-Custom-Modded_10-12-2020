@@ -39,7 +39,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
 
         const string nativeImgName = "CUST01I0.IMG";
         const string nativeImgOverlayName = "CUST02I0.IMG";
-        const int maxItems = 11;
+        const int maxItems = 7;
         const int maxLabels = maxItems * 2;
         const int labelSpacing = 8;
         const int tandemLabelSpacing = 6;
