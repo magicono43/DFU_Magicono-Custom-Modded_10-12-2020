@@ -1444,12 +1444,26 @@ namespace DaggerfallWorkshop.Game.Items
             }
         }
 
-        public void AssignEnemyStartingEquipment(PlayerEntity player, EnemyEntity enemyEntity, int variant)
+        public void AssignEnemyStartingEquipment(PlayerEntity player, EnemyEntity enemyEntity, int[] traits)
         {
             int itemLevel = player.Level;
             Genders playerGender = player.Gender;
             Races race = player.Race;
             int chance = 0;
+
+            int[] enemyEquipTableProperties = EnemyBasics.EnemyEquipTableCalculator(enemyEntity, traits);
+            DaggerfallUnityItem[] equipmentItems = { null, null, null, null, null, null, null, null, null, null };
+
+            // Assign the material values of weapons and armors (if made of metal), possibly do this with a loop of some kind going through another method to determine the material values, mostly place-holder since I need to rework rarity of materials and such later anyway.
+            for (int i = 0; i < 2; i++)
+            {
+                equipmentItems[i] = DefineEquippedInHands(i, enemyEntity, traits, enemyEquipTableProperties);
+            }
+
+            for (int i = 7; i < enemyEquipTableProperties.Length; i++)
+            {
+                equipmentItems[i - 4] = DefineEquippedOnBody(i - 4, enemyEntity, traits, enemyEquipTableProperties);
+            }
 
             // City watch never have items above iron or steel
             if (enemyEntity.EntityType == EntityTypes.EnemyClass && enemyEntity.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch)
@@ -1556,6 +1570,49 @@ namespace DaggerfallWorkshop.Game.Items
                     }
                 }
             }
+        }
+
+        public DaggerfallUnityItem DefineEquippedInHands(int index, EnemyEntity enemy, int[] traits, int[] equipTableProps)
+        {
+            DaggerfallUnityItem item = null;
+            int enemyLevel = enemy.Level;
+
+            if (index == 0) // Primary Weapon
+            {
+                if (equipTableProps[index] == -1)
+                    return null;
+                else
+                {
+                    item = ItemBuilder.CreateWeapon((Weapons)equipTableProps[index], FormulaHelper.RandomMaterial(enemyLevel)); // Enemy level for now, but will change, when I have idea how i'll do material distrubution. 
+                }
+            }
+
+            if (index == 1) // Secondary Weapon
+            {
+                if (equipTableProps[index] == -1)
+                    return null;
+                else
+                {
+
+                }
+            }
+
+            if (index == 2) // Shield
+            {
+                if (equipTableProps[index] == -1)
+                    return null;
+                else
+                {
+
+                }
+            }
+
+            return null;
+        }
+
+        public DaggerfallUnityItem DefineEquippedOnBody(int index, EnemyEntity enemy, int[] traits, int[] equipTableProps)
+        {
+
         }
 
         #endregion

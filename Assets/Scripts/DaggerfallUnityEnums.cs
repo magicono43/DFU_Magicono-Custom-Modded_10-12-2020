@@ -257,6 +257,58 @@ namespace DaggerfallWorkshop
     }
 
     /// <summary>
+    /// Various Personality Quirks for enemies to have assigned to them, currently used in loot generation.
+    /// </summary>
+    public enum MobilePersonalityQuirks
+    {
+        None = -1,
+        Prepared = 0,
+        Reckless = 1,
+        Cautious = 2,
+        Cowardly = 3,
+        Curious = 4,
+        Addict = 5,
+        Nyctophobic = 6,
+        Nyctophilic = 7,
+        Hoarder = 8,
+        Vain = 9,
+        Greedy = 10,
+        Glutton = 11,
+        Faster = 12,
+        Untrusting = 13,
+        Sadistic = 14,
+        Romantic = 15,
+        Necrophiliac = 16,
+        Alcoholic = 17,
+    }
+
+    /// <summary>
+    /// Various Personality Interests for enemies to have assigned to them, currently used in loot generation.
+    /// </summary>
+    public enum MobilePersonalityInterests
+    {
+        None = -1,
+        God_Fearing = 0,
+        Occultist = 1,
+        Childish = 2,
+        Musical = 3,
+        Artistic = 4,
+        Collector = 5,
+        Survivalist = 6,
+        Hunter = 7,
+        Fetishist = 8,
+        Brewer = 9,
+        Anthophile = 10,
+        Bookworm = 11,
+        Cartographer = 12,
+        Fisher = 13,
+        Diver = 14,
+        Magic_Collector = 15,
+        Writer = 16,
+        Handy = 17,
+    }
+
+    /// <summary>
     /// Mobile teams.
     /// </summary>
     public enum MobileTeams

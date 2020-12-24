@@ -106,7 +106,7 @@ namespace DaggerfallWorkshop.Game.Entity
 
         public bool WabbajackActive { get; set; }
 
-        public delegate void EnemyStartingEquipment(PlayerEntity player, EnemyEntity enemyEntity, int variant);
+        public delegate void EnemyStartingEquipment(PlayerEntity player, EnemyEntity enemyEntity, int[] traits);
         public static EnemyStartingEquipment AssignEnemyEquipment = DaggerfallUnity.Instance.ItemHelper.AssignEnemyStartingEquipment;
 
         #endregion
@@ -228,11 +228,11 @@ namespace DaggerfallWorkshop.Game.Entity
             {
                 careerIndex = mobileEnemy.ID - 128;
                 career = GetClassCareerTemplate((ClassCareers)careerIndex);
-                stats.SetPermanentFromCareer(career);
+                stats.SetPermanentFromCareer(career); // I may have a better way to alter the attributes of individual enemy entities, this seems to be where it originates from, will possibly alter later on. 
 
                 // Enemy class is levelled to player and uses similar health rules
                 // City guards are 3 to 6 levels above the player
-                level = GameManager.Instance.PlayerEntity.Level;
+                level = GameManager.Instance.PlayerEntity.Level; // Definitely going to want to mess with this a lot eventually, this is apparently what makes the human enemies equal to the player level, will alter that. 
                 if (careerIndex == (int)MobileTypes.Knight_CityWatch)
                     level += UnityEngine.Random.Range(3, 7);
 
@@ -262,26 +262,17 @@ namespace DaggerfallWorkshop.Game.Entity
                 skills.SetPermanentSkillValue(i, skillsLevel);
             }
 
-            // Generate loot table items
-            DaggerfallLoot.GenerateItems(mobileEnemy.LootTableKey, items);
+            int[] personalityTraits = DaggerfallWorkshop.Utility.EnemyBasics.EnemyPersonalityTraitGenerator(this);
+            // May put the method for the "context based" inventory modifiers here, but first i'll have to figure out how i'm going to do that exactly first. 
 
             // Enemy classes and some monsters use equipment
-            if (careerIndex == (int)MonsterCareers.Orc || careerIndex == (int)MonsterCareers.OrcShaman)
+            if (EquipmentUser())
             {
-                SetEnemyEquipment(0);
+                SetEnemyEquipment(personalityTraits);
             }
-            else if (careerIndex == (int)MonsterCareers.Centaur || careerIndex == (int)MonsterCareers.OrcSergeant)
-            {
-                SetEnemyEquipment(1);
-            }
-            else if (careerIndex == (int)MonsterCareers.OrcWarlord)
-            {
-                SetEnemyEquipment(2);
-            }
-            else if (entityType == EntityTypes.EnemyClass)
-            {
-                SetEnemyEquipment(UnityEngine.Random.Range(0, 2)); // 0 or 1
-            }
+
+            // Generate loot table items, changed to generate below the equipment setting part, as I think it makes more sense anyway. 
+            DaggerfallLoot.GenerateItems(mobileEnemy.LootTableKey, items);
 
             // Assign spell lists
             if (entityType == EntityTypes.EnemyMonster)
@@ -332,13 +323,13 @@ namespace DaggerfallWorkshop.Game.Entity
                 DaggerfallLoot.RandomlyAddPotionRecipe(2, items);
             }
 
-            FillVitalSigns();
+            FillVitalSigns(); // Could use this to set enemies health and other vitals at a lower level when they first spawn, to simulate them being already wounded or something. 
         }
 
-        public void SetEnemyEquipment(int variant)
+        public void SetEnemyEquipment(int[] traits)
         {
             // Assign the enemies starting equipment.
-            AssignEnemyEquipment(GameManager.Instance.PlayerEntity, this, variant);
+            AssignEnemyEquipment(GameManager.Instance.PlayerEntity, this, traits);
 
             // Initialize armor values to 100 (no armor)
             for (int i = 0; i < ArmorValues.Length; i++)
@@ -414,6 +405,80 @@ namespace DaggerfallWorkshop.Game.Entity
                     continue;
                 }
                 AddSpell(bundle);
+            }
+        }
+
+        public bool EquipmentUser()
+        {
+            if (entityType == EntityTypes.EnemyClass)
+                return true;
+
+            switch(careerIndex)
+            {
+                case (int)MonsterCareers.Rat:
+                case (int)MonsterCareers.GiantBat:
+                case (int)MonsterCareers.GrizzlyBear:
+                case (int)MonsterCareers.SabertoothTiger:
+                case (int)MonsterCareers.Spider:
+                case (int)MonsterCareers.Slaughterfish:
+                case (int)MonsterCareers.GiantScorpion:
+                case (int)MonsterCareers.Imp:
+                case (int)MonsterCareers.Spriggan:
+                case (int)MonsterCareers.Nymph:
+                case (int)MonsterCareers.Harpy:
+                case (int)MonsterCareers.Dragonling:
+                case (int)MonsterCareers.Dragonling_Alternate:
+                case (int)MonsterCareers.Dreugh:
+                case (int)MonsterCareers.Lamia:
+                case (int)MonsterCareers.Werewolf:
+                case (int)MonsterCareers.Wereboar:
+                case (int)MonsterCareers.FireAtronach:
+                case (int)MonsterCareers.IronAtronach:
+                case (int)MonsterCareers.FleshAtronach:
+                case (int)MonsterCareers.IceAtronach:
+                case (int)MonsterCareers.Ghost:
+                case (int)MonsterCareers.Mummy:
+                case (int)MonsterCareers.DaedraSeducer:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        public static bool EquipmentUser(EnemyEntity enemy) // Overload that can be used by outside scripts, probably a bit messy, but whatever it works.
+        {
+            if (enemy.EntityType == EntityTypes.EnemyClass)
+                return true;
+
+            switch (enemy.CareerIndex)
+            {
+                case (int)MonsterCareers.Rat:
+                case (int)MonsterCareers.GiantBat:
+                case (int)MonsterCareers.GrizzlyBear:
+                case (int)MonsterCareers.SabertoothTiger:
+                case (int)MonsterCareers.Spider:
+                case (int)MonsterCareers.Slaughterfish:
+                case (int)MonsterCareers.GiantScorpion:
+                case (int)MonsterCareers.Imp:
+                case (int)MonsterCareers.Spriggan:
+                case (int)MonsterCareers.Nymph:
+                case (int)MonsterCareers.Harpy:
+                case (int)MonsterCareers.Dragonling:
+                case (int)MonsterCareers.Dragonling_Alternate:
+                case (int)MonsterCareers.Dreugh:
+                case (int)MonsterCareers.Lamia:
+                case (int)MonsterCareers.Werewolf:
+                case (int)MonsterCareers.Wereboar:
+                case (int)MonsterCareers.FireAtronach:
+                case (int)MonsterCareers.IronAtronach:
+                case (int)MonsterCareers.FleshAtronach:
+                case (int)MonsterCareers.IceAtronach:
+                case (int)MonsterCareers.Ghost:
+                case (int)MonsterCareers.Mummy:
+                case (int)MonsterCareers.DaedraSeducer:
+                    return false;
+                default:
+                    return true;
             }
         }
 
