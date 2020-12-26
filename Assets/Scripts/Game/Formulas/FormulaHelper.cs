@@ -4469,6 +4469,58 @@ namespace DaggerfallWorkshop.Game.Formulas
             return 0;
         }
 
+        public static WeaponMaterialTypes RandomMaterial(int enemyLevel = -1, int buildingQuality = -1)
+        {
+            float[] regionMods = PlayerGPS.RegionMaterialSupplyCreator();
+            int [] matRolls = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            if (enemyLevel > -1)
+            {
+
+            }
+
+            if (buildingQuality > -1)
+            {
+
+            }
+
+            for (int i = 0; i < ItemBuilder.materialsByRarity.Length; i++)
+            {
+                int randomModifier = UnityEngine.Random.Range(0, (int)Mathf.Ceil(512 / (ItemBuilder.materialsByRarity[i] * 0.25f) * regionMods[i]));
+                matRolls[i] = randomModifier;
+            }
+
+            int max = matRolls[0];
+            int index = 0;
+
+            for (int i = 0; i < matRolls.Length; i++)
+            {
+                if (index == i)
+                    continue;
+
+                if (max == matRolls[i])
+                {
+                    int coinFlip = Dice100.Roll();
+                    if (coinFlip <= 50)
+                        continue;
+                    else
+                    {
+                        max = matRolls[i];
+                        index = i;
+                        continue;
+                    }
+                }
+
+                if (max < matRolls[i])
+                {
+                    max = matRolls[i];
+                    index = i;
+                }
+            }
+
+            return (WeaponMaterialTypes)index;
+        }
+
         /// <summary>
         /// Gets a random material based on player level.
         /// Note, this is called by default RandomArmorMaterial function.
@@ -4496,9 +4548,9 @@ namespace DaggerfallWorkshop.Game.Formulas
             int material = 0; // initialize to iron
 
             // The higher combinedModifiers is, the higher the material
-            while (ItemBuilder.materialsByModifier[material] < combinedModifiers)
+            while (ItemBuilder.materialsByRarity[material] < combinedModifiers)
             {
-                combinedModifiers -= ItemBuilder.materialsByModifier[material++];
+                combinedModifiers -= ItemBuilder.materialsByRarity[material++];
             }
 
             return (WeaponMaterialTypes)(material);

@@ -504,6 +504,152 @@ namespace DaggerfallWorkshop
             return query.ToList();
         }
 
+        public static float[] RegionMaterialSupplyCreator()
+        {
+            float[] regionSupplyMods = new float[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            int currentRegionIndex = GameManager.Instance.PlayerGPS.CurrentRegionIndex;
+
+            switch (currentRegionIndex)
+            {
+                case (int)RegionIndexValues.The_Alikr_Desert:
+                    regionSupplyMods = new float[] { 4, 2, 0.75f, 2, 0.25f, 0.25f, 0.75f, 1.5f, 0.25f, 1 };
+                    break;
+                case (int)RegionIndexValues.The_Dragontail_Mountains:
+                    regionSupplyMods = new float[] { 2, 1, 2, 0.75f, 1.5f, 0.75f, 3, 3, 0.75f, 0.25f };
+                    break;
+                case (int)RegionIndexValues.Dwynnen:
+                    regionSupplyMods = new float[] { 1.5f, 0.75f, 2, 0.25f, 4, 1.5f, 0.5f, 0.25f, 0.75f, 0.1f };
+                    break;
+                case (int)RegionIndexValues.The_Isle_of_Balfiera:
+                    regionSupplyMods = new float[] { 1.5f, 1, 0.5f, 1.5f, 2, 3, 2, 0.25f, 1, 0.5f };
+                    break;
+                case (int)RegionIndexValues.Dakfron:
+                    regionSupplyMods = new float[] { 3, 2.5f, 1, 2, 0.75f, 0.1f, 1.5f, 3, 0.5f, 0.5f };
+                    break;
+                case (int)RegionIndexValues.The_Wrothgarian_Mountains:
+                    regionSupplyMods = new float[] { 4, 3, 0.75f, 0.1f, 2, 0.1f, 0.25f, 1.5f, 1.5f, 0.05f };
+                    break;
+                case (int)RegionIndexValues.Daggerfall:
+                    regionSupplyMods = new float[] { 2.5f, 1, 1, 1, 1.5f, 2.5f, 1, 0.1f, 0.25f, 0.25f };
+                    break;
+                case (int)RegionIndexValues.Glenpoint:
+                    regionSupplyMods = new float[] { 2.5f, 1.5f, 2, 0.5f, 1.5f, 1.5f, 1.5f, 0.25f, 0.25f, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Betony:
+                    regionSupplyMods = new float[] { 1.5f, 0.5f, 0.5f, 2, 0.75f, 4, 0.1f, 0.05f, 0.1f, 0.5f };
+                    break;
+                case (int)RegionIndexValues.Sentinel:
+                    regionSupplyMods = new float[] { 3.5f, 2.5f, 0.75f, 1.5f, 0.5f, 1.5f, 0.75f, 0.25f, 0.25f, 0.5f };
+                    break;
+                case (int)RegionIndexValues.Anticlere:
+                    regionSupplyMods = new float[] { 2, 1.5f, 1, 0.5f, 3, 2, 0.75f, 0.1f, 0.5f, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Lainlyn:
+                    regionSupplyMods = new float[] { 1, 0.75f, 1, 0.75f, 1, 2.5f, 1.5f, 0.75f, 1, 0.25f };
+                    break;
+                case (int)RegionIndexValues.Wayrest:
+                    regionSupplyMods = new float[] { 2.5f, 2, 0.5f, 0.75f, 1, 2, 1, 2, 2, 0.1f };
+                    break;
+                case (int)RegionIndexValues.The_Orsinium_Area:
+                    regionSupplyMods = new float[] { 3, 3, 0.75f, 0.1f, 1.5f, 0.25f, 0.25f, 1.5f, 4, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Northmoor:
+                    regionSupplyMods = new float[] { 2.5f, 1.5f, 3, 0.25f, 1.5f, 2, 1.5f, 0.1f, 0.25f, 0.05f };
+                    break;
+                case (int)RegionIndexValues.Menevia:
+                    regionSupplyMods = new float[] { 2, 1.5f, 0.5f, 0.5f, 1.5f, 2.5f, 1.5f, 1, 2.5f, 0.25f };
+                    break;
+                case (int)RegionIndexValues.Alcaire:
+                    regionSupplyMods = new float[] { 2.5f, 2, 1, 0.75f, 2, 2, 0.5f, 0.5f, 1, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Koegria:
+                    regionSupplyMods = new float[] { 2.5f, 2, 1, 0.25f, 2.5f, 1.5f, 0.75f, 0.5f, 1, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Bhoriane:
+                    regionSupplyMods = new float[] { 1, 0.75f, 1, 0.5f, 3, 2, 1.5f, 0.25f, 0.75f, 0.25f };
+                    break;
+                case (int)RegionIndexValues.Kambria:
+                    regionSupplyMods = new float[] { 1.5f, 1, 1.5f, 0.1f, 3, 0.75f, 0.5f, 0.5f, 0.75f, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Phrygias:
+                    regionSupplyMods = new float[] { 2, 1, 3, 0.1f, 3, 0.75f, 0.75f, 0.25f, 0.75f, 0.05f };
+                    break;
+                case (int)RegionIndexValues.Urvaius:
+                    regionSupplyMods = new float[] { 2, 1.5f, 1.5f, 0.1f, 3, 0.5f, 0.75f, 0.25f, 0.5f, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Ykalon:
+                    regionSupplyMods = new float[] { 2.5f, 2, 2.5f, 0.1f, 2.5f, 0.75f, 1.5f, 0.25f, 0.5f, 0.05f };
+                    break;
+                case (int)RegionIndexValues.Daenia:
+                    regionSupplyMods = new float[] { 3, 4, 1.5f, 0.1f, 2.5f, 0.5f, 1.5f, 0.25f, 0.5f, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Shalgora:
+                    regionSupplyMods = new float[] { 2.5f, 2, 1.5f, 0.75f, 2.5f, 1.5f, 1.5f, 0.25f, 0.5f, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Abibon_Gora:
+                    regionSupplyMods = new float[] { 2.5f, 1, 0.25f, 3.5f, 0.1f, 1.5f, 0.25f, 0.1f, 0.1f, 1.5f };
+                    break;
+                case (int)RegionIndexValues.Kairou:
+                    regionSupplyMods = new float[] { 2.5f, 1.5f, 0.5f, 3, 0.1f, 1.5f, 0.25f, 0.1f, 0.1f, 1.25f };
+                    break;
+                case (int)RegionIndexValues.Pothago:
+                    regionSupplyMods = new float[] { 2, 1, 0.5f, 3, 0.1f, 1.5f, 0.5f, 0.1f, 0.25f, 1.25f };
+                    break;
+                case (int)RegionIndexValues.Myrkwasa:
+                    regionSupplyMods = new float[] { 3.5f, 2.5f, 0.5f, 1.5f, 0.25f, 0.75f, 0.5f, 0.25f, 0.25f, 0.75f };
+                    break;
+                case (int)RegionIndexValues.Ayasofya:
+                    regionSupplyMods = new float[] { 2.5f, 2, 1, 1, 0.5f, 1, 1, 0.5f, 0.5f, 0.5f };
+                    break;
+                case (int)RegionIndexValues.Tigonus:
+                    regionSupplyMods = new float[] { 2, 1.5f, 1, 1, 0.75f, 2, 1.5f, 0.25f, 0.5f, 0.5f };
+                    break;
+                case (int)RegionIndexValues.Kozanset:
+                    regionSupplyMods = new float[] { 1.5f, 1, 1.5f, 0.5f, 1, 0.75f, 2, 0.75f, 0.75f, 0.25f };
+                    break;
+                case (int)RegionIndexValues.Satakalaam:
+                    regionSupplyMods = new float[] { 1, 0.5f, 1, 0.5f, 1, 2, 1.5f, 1, 1, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Totambu:
+                    regionSupplyMods = new float[] { 1, 0.75f, 1, 0.25f, 1, 0.75f, 2, 1.5f, 0.75f, 0.25f };
+                    break;
+                case (int)RegionIndexValues.Mournoth:
+                    regionSupplyMods = new float[] { 1.5f, 1, 1, 0.5f, 2, 1.5f, 1.5f, 2.5f, 1, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Ephesus:
+                    regionSupplyMods = new float[] { 1.5f, 1, 3, 0.75f, 1.5f, 0.25f, 2.5f, 2.5f, 0.75f, 0.25f };
+                    break;
+                case (int)RegionIndexValues.Santaki:
+                    regionSupplyMods = new float[] { 3, 4, 1.5f, 1, 0.75f, 0.25f, 2, 2.5f, 0.75f, 0.5f };
+                    break;
+                case (int)RegionIndexValues.Antiphyllos:
+                    regionSupplyMods = new float[] { 3.5f, 2.5f, 1, 1.5f, 0.25f, 0.5f, 1, 1, 0.5f, 0.75f };
+                    break;
+                case (int)RegionIndexValues.Bergama:
+                    regionSupplyMods = new float[] { 3.5f, 4, 0.75f, 2, 0.25f, 0.1f, 0.75f, 1, 0.25f, 1 };
+                    break;
+                case (int)RegionIndexValues.Gavaudon:
+                    regionSupplyMods = new float[] { 3, 3.5f, 0.25f, 0.25f, 2, 1, 0.75f, 4, 1.5f, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Tulune:
+                    regionSupplyMods = new float[] { 2, 1, 1.5f, 0.75f, 1, 2.5f, 1, 0.1f, 0.1f, 0.25f };
+                    break;
+                case (int)RegionIndexValues.Glenumbra_Moors:
+                    regionSupplyMods = new float[] { 2, 1, 2, 0.5f, 1, 2, 1, 0.1f, 0.1f, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Ilessan_Hills:
+                    regionSupplyMods = new float[] { 3, 2, 2, 0.1f, 2, 0.5f, 2, 0.25f, 0.25f, 0.1f };
+                    break;
+                case (int)RegionIndexValues.Cybiades:
+                    regionSupplyMods = new float[] { 2, 1, 0.75f, 2.5f, 0.25f, 4, 0.5f, 0.1f, 0.5f, 0.25f };
+                    break;
+                default:
+                    break;
+            }
+
+            return regionSupplyMods;
+        }
+
         #endregion
 
         #region Private Methods

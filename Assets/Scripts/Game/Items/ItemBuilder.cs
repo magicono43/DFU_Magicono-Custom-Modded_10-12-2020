@@ -39,7 +39,7 @@ namespace DaggerfallWorkshop.Game.Items
         // This array is used to pick random material values.
         // The array is traversed, subtracting each value from a sum until the sum is less than the next value.
         // Steel through Daedric, or Iron if sum is less than the first value.
-        public static readonly byte[] materialsByModifier = { 64, 128, 10, 21, 13, 8, 5, 3, 2, 5 };
+        public static readonly short[] materialsByRarity = { 4, 6, 8, 10, 20, 14, 32, 24, 16, 52 };
         //public static readonly byte[] materialsByModifier = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; // Has something to do with drop-chance and rarity, it's weird.
 
         // Weight multipliers by material type. Iron through Daedric. Weight is baseWeight * value / 4.

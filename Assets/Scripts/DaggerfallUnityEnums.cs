@@ -51,6 +51,58 @@ namespace DaggerfallWorkshop
     }
 
     /// <summary>
+    /// Index Values for all of the regions in the game that have usable locations, currently used in loot generation and pricing.
+    /// </summary>
+    public enum RegionIndexValues
+    {
+        None = -1,
+        The_Alikr_Desert = 0,
+        The_Dragontail_Mountains = 1,
+        Dwynnen = 5,
+        The_Isle_of_Balfiera = 9,
+        Dakfron = 11,
+        The_Wrothgarian_Mountains = 16,
+        Daggerfall = 17,
+        Glenpoint = 18,
+        Betony = 19,
+        Sentinel = 20,
+        Anticlere = 21,
+        Lainlyn = 22,
+        Wayrest = 23,
+        The_Orsinium_Area = 26,
+        Northmoor = 32,
+        Menevia = 33,
+        Alcaire = 34,
+        Koegria = 35,
+        Bhoriane = 36,
+        Kambria = 37,
+        Phrygias = 38,
+        Urvaius = 39,
+        Ykalon = 40,
+        Daenia = 41,
+        Shalgora = 42,
+        Abibon_Gora = 43,
+        Kairou = 44,
+        Pothago = 45,
+        Myrkwasa = 46,
+        Ayasofya = 47,
+        Tigonus = 48,
+        Kozanset = 49,
+        Satakalaam = 50,
+        Totambu = 51,
+        Mournoth = 52,
+        Ephesus = 53,
+        Santaki = 54,
+        Antiphyllos = 55,
+        Bergama = 56,
+        Gavaudon = 57,
+        Tulune = 58,
+        Glenumbra_Moors = 59,
+        Ilessan_Hills = 60,
+        Cybiades = 61,
+    }
+
+    /// <summary>
     /// Location climate usage options.
     /// </summary>
     public enum LocationClimateUse
