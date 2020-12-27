@@ -231,6 +231,8 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         {
             PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
             ItemCollection items = new ItemCollection();
+            int playerLuck = playerEntity.Stats.LiveLuck;
+            int hallQuality = buildingDiscoveryData.quality;
             int numOfItems = (buildingDiscoveryData.quality / 2) + 1;
 
             // Seed random from game time to rotate magic stock every 24 game hours
@@ -244,7 +246,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                 for (int i = 0; i <= numOfItems; i++)
                 {
                     // Create magic item which is already identified
-                    DaggerfallUnityItem magicItem = ItemBuilder.CreateRandomMagicItem(playerEntity.Level, playerEntity.Gender, playerEntity.Race);
+                    DaggerfallUnityItem magicItem = ItemBuilder.CreateRandomMagicItem(playerEntity.Gender, playerEntity.Race, -1, hallQuality, playerLuck);
                     magicItem.IdentifyItem();
                     items.AddItem(magicItem);
                 }

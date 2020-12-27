@@ -1703,6 +1703,7 @@ namespace Wenzil.Console
 
                 GameObject player = GameObject.FindGameObjectWithTag("Player");
                 PlayerEntity playerEntity = player.GetComponent<DaggerfallEntityBehaviour>().Entity as PlayerEntity;
+                int playerLuck = playerEntity.Stats.LiveLuck;
                 ItemCollection items = playerEntity.Items;
                 DaggerfallUnityItem newItem = null;
 
@@ -1731,10 +1732,10 @@ namespace Wenzil.Console
                             newItem = ItemBuilder.CreateRandomBook();
                             break;
                         case "weapon":
-                            newItem = ItemBuilder.CreateRandomWeapon(playerEntity.Level);
+                            newItem = ItemBuilder.CreateRandomWeapon(-1, -1, playerLuck);
                             break;
                         case "armor":
-                            newItem = ItemBuilder.CreateRandomArmor(playerEntity.Level, playerEntity.Gender, playerEntity.Race);
+                            newItem = ItemBuilder.CreateRandomArmor(playerEntity.Gender, playerEntity.Race, -1, -1, playerLuck);
                             break;
                         case "cloth":
                             newItem = ItemBuilder.CreateRandomClothing(playerEntity.Gender, playerEntity.Race);
@@ -1749,7 +1750,7 @@ namespace Wenzil.Console
                             newItem = ItemBuilder.CreateRandomlyFilledSoulTrap();
                             break;
                         case "magic":
-                            newItem = ItemBuilder.CreateRandomMagicItem(playerEntity.Level, playerEntity.Gender, playerEntity.Race);
+                            newItem = ItemBuilder.CreateRandomMagicItem(playerEntity.Gender, playerEntity.Race, -1, -1, playerLuck);
                             break;
                         case "drug":
                             newItem = ItemBuilder.CreateRandomDrug();
@@ -1764,7 +1765,7 @@ namespace Wenzil.Console
                             newItem = ItemBuilder.CreateItem(ItemGroups.MiscItems, (int)MiscItems.Soul_trap);
                             break;
                         case "ingot":
-                            newItem = ItemBuilder.CreateRandomIngot(playerEntity.Level);
+                            newItem = ItemBuilder.CreateRandomIngot(-1, -1, playerLuck);
                             break;
                         default:
                             return "unrecognized keyword. see usage";

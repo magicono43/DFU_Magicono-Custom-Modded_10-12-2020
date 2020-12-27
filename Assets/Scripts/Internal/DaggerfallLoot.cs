@@ -136,6 +136,7 @@ namespace DaggerfallWorkshop
             DFLocation.BuildingTypes buildingType = buildingData.buildingType;
             int shopQuality = buildingData.quality;
             Game.Entity.PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+            int playerLuck = playerEntity.Stats.LiveLuck;
             ItemHelper itemHelper = DaggerfallUnity.Instance.ItemHelper;
             byte[] itemGroups = { 0 };
 
@@ -205,9 +206,9 @@ namespace DaggerfallWorkshop
                                 {
                                     DaggerfallUnityItem item = null;
                                     if (itemGroup == ItemGroups.Weapons)
-                                        item = ItemBuilder.CreateWeapon(j + Weapons.Dagger, FormulaHelper.RandomMaterial(playerEntity.Level));
+                                        item = ItemBuilder.CreateWeapon(j + Weapons.Dagger, FormulaHelper.RandomMaterial(-1, shopQuality, playerLuck));
                                     else if (itemGroup == ItemGroups.Armor)
-                                        item = ItemBuilder.CreateArmor(playerEntity.Gender, playerEntity.Race, j + Armor.Cuirass, FormulaHelper.RandomArmorMaterial(playerEntity.Level));
+                                        item = ItemBuilder.CreateArmor(playerEntity.Gender, playerEntity.Race, j + Armor.Cuirass, FormulaHelper.RandomArmorMaterial(-1, shopQuality, playerLuck));
                                     else if (itemGroup == ItemGroups.MensClothing)
                                     {
                                         item = ItemBuilder.CreateMensClothing(j + MensClothing.Straps, playerEntity.Race);
@@ -220,7 +221,7 @@ namespace DaggerfallWorkshop
                                     }
                                     else if (itemGroup == ItemGroups.MagicItems)
                                     {
-                                        item = ItemBuilder.CreateRandomMagicItem(playerEntity.Level, playerEntity.Gender, playerEntity.Race);
+                                        item = ItemBuilder.CreateRandomMagicItem(playerEntity.Gender, playerEntity.Race, -1, shopQuality, playerLuck);
                                     }
                                     else
                                     {
@@ -247,17 +248,17 @@ namespace DaggerfallWorkshop
                                     // Setup specific group stats
                                     if (itemGroup == ItemGroups.Weapons)
                                     {
-                                        WeaponMaterialTypes material = FormulaHelper.RandomMaterial(playerEntity.Level);
+                                        WeaponMaterialTypes material = FormulaHelper.RandomMaterial(-1, shopQuality, playerLuck);
                                         ItemBuilder.ApplyWeaponMaterial(item, material);
                                     }
                                     else if (itemGroup == ItemGroups.Armor)
                                     {
-                                        ArmorMaterialTypes material = FormulaHelper.RandomArmorMaterial(playerEntity.Level);
+                                        ArmorMaterialTypes material = FormulaHelper.RandomArmorMaterial(-1, shopQuality, playerLuck);
                                         ItemBuilder.ApplyArmorSettings(item, playerEntity.Gender, playerEntity.Race, material);
                                     }
                                     else if (item.TemplateIndex == 810)
                                     {
-                                        WeaponMaterialTypes material = FormulaHelper.RandomMaterial(playerEntity.Level);
+                                        WeaponMaterialTypes material = FormulaHelper.RandomMaterial(-1, shopQuality, playerLuck);
                                         ItemBuilder.ApplyIngotMaterial(item, material);
                                     }
 
@@ -277,10 +278,11 @@ namespace DaggerfallWorkshop
 
             DFLocation.BuildingTypes buildingType = buildingData.buildingType;
             uint modelIndex = (uint) TextureRecord;
-            //int buildingQuality = buildingData.quality;
+            int buildingQuality = buildingData.quality;
             byte[] privatePropertyList = null;
             DaggerfallUnityItem item = null;
             Game.Entity.PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+            int playerLuck = playerEntity.Stats.LiveLuck;
 
             if (buildingType < DFLocation.BuildingTypes.House5)
             {
@@ -325,7 +327,7 @@ namespace DaggerfallWorkshop
                     {
                         if (itemGroup == ItemGroups.MagicItems)
                         {
-                            item = ItemBuilder.CreateRandomMagicItem(playerEntity.Level, playerEntity.Gender, playerEntity.Race);
+                            item = ItemBuilder.CreateRandomMagicItem(playerEntity.Gender, playerEntity.Race, -1, buildingQuality, playerLuck);
                         }
                         else if (itemGroup == ItemGroups.Books)
                         {
@@ -334,9 +336,9 @@ namespace DaggerfallWorkshop
                         else
                         {
                             if (itemGroup == ItemGroups.Weapons)
-                                item = ItemBuilder.CreateRandomWeapon(playerEntity.Level);
+                                item = ItemBuilder.CreateRandomWeapon(-1, buildingQuality, playerLuck);
                             else if (itemGroup == ItemGroups.Armor)
-                                item = ItemBuilder.CreateRandomArmor(playerEntity.Level, playerEntity.Gender, playerEntity.Race);
+                                item = ItemBuilder.CreateRandomArmor(playerEntity.Gender, playerEntity.Race, -1, buildingQuality, playerLuck);
                             else
                             {
                                 System.Array enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(itemGroup);

@@ -1446,7 +1446,7 @@ namespace DaggerfallWorkshop.Game.Items
 
         public void AssignEnemyStartingEquipment(PlayerEntity player, EnemyEntity enemyEntity, int[] traits)
         {
-            int itemLevel = player.Level;
+            int enemyLevel = enemyEntity.Level;
             Genders playerGender = player.Gender;
             Races race = player.Race;
             int chance = 0;
@@ -1473,7 +1473,7 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 // right-hand weapon
                 int item = UnityEngine.Random.Range((int)Weapons.Broadsword, (int)(Weapons.Longsword) + 1);
-                DaggerfallUnityItem weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaHelper.RandomMaterial(itemLevel));
+                DaggerfallUnityItem weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaHelper.RandomMaterial(enemyLevel));
                 enemyEntity.ItemEquipTable.EquipItem(weapon, true, false);
                 enemyEntity.Items.AddItem(weapon);
 
@@ -1483,7 +1483,7 @@ namespace DaggerfallWorkshop.Game.Items
                 item = UnityEngine.Random.Range((int)Armor.Buckler, (int)(Armor.Round_Shield) + 1);
                 if (Dice100.SuccessRoll(chance))
                 {
-                    DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, (Items.Armor)item, FormulaHelper.RandomArmorMaterial(itemLevel));
+                    DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, (Items.Armor)item, FormulaHelper.RandomArmorMaterial(enemyLevel));
                     enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
                     enemyEntity.Items.AddItem(armor);
                 }
@@ -1491,7 +1491,7 @@ namespace DaggerfallWorkshop.Game.Items
                 else if (Dice100.SuccessRoll(chance))
                 {
                     item = UnityEngine.Random.Range((int)Weapons.Dagger, (int)(Weapons.Shortsword) + 1);
-                    weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaHelper.RandomMaterial(itemLevel));
+                    weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaHelper.RandomMaterial(enemyLevel));
                     enemyEntity.ItemEquipTable.EquipItem(weapon, true, false);
                     enemyEntity.Items.AddItem(weapon);
                 }
@@ -1500,7 +1500,7 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 // right-hand weapon
                 int item = UnityEngine.Random.Range((int)Weapons.Claymore, (int)(Weapons.Battle_Axe) + 1);
-                DaggerfallUnityItem weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaHelper.RandomMaterial(itemLevel));
+                DaggerfallUnityItem weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaHelper.RandomMaterial(enemyLevel));
                 enemyEntity.ItemEquipTable.EquipItem(weapon, true, false);
                 enemyEntity.Items.AddItem(weapon);
 
@@ -1512,42 +1512,42 @@ namespace DaggerfallWorkshop.Game.Items
             // helm
             if (Dice100.SuccessRoll(chance))
             {
-                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Helm, FormulaHelper.RandomArmorMaterial(itemLevel));
+                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Helm, FormulaHelper.RandomArmorMaterial(enemyLevel));
                 enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
                 enemyEntity.Items.AddItem(armor);
             }
             // right pauldron
             if (Dice100.SuccessRoll(chance))
             {
-                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Right_Pauldron, FormulaHelper.RandomArmorMaterial(itemLevel));
+                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Right_Pauldron, FormulaHelper.RandomArmorMaterial(enemyLevel));
                 enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
                 enemyEntity.Items.AddItem(armor);
             }
             // left pauldron
             if (Dice100.SuccessRoll(chance))
             {
-                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Left_Pauldron, FormulaHelper.RandomArmorMaterial(itemLevel));
+                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Left_Pauldron, FormulaHelper.RandomArmorMaterial(enemyLevel));
                 enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
                 enemyEntity.Items.AddItem(armor);
             }
             // cuirass
             if (Dice100.SuccessRoll(chance))
             {
-                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Cuirass, FormulaHelper.RandomArmorMaterial(itemLevel));
+                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Cuirass, FormulaHelper.RandomArmorMaterial(enemyLevel));
                 enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
                 enemyEntity.Items.AddItem(armor);
             }
             // greaves
             if (Dice100.SuccessRoll(chance))
             {
-                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Greaves, FormulaHelper.RandomArmorMaterial(itemLevel));
+                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Greaves, FormulaHelper.RandomArmorMaterial(enemyLevel));
                 enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
                 enemyEntity.Items.AddItem(armor);
             }
             // boots
             if (Dice100.SuccessRoll(chance))
             {
-                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Boots, FormulaHelper.RandomArmorMaterial(itemLevel));
+                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Boots, FormulaHelper.RandomArmorMaterial(enemyLevel));
                 enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
                 enemyEntity.Items.AddItem(armor);
             }

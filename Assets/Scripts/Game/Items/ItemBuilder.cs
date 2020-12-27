@@ -395,7 +395,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// </summary>
         /// <param name="playerLevel">Player level for material type.</param>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomWeapon(int playerLevel)
+        public static DaggerfallUnityItem CreateRandomWeapon(int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
         {
             // Create a random weapon type, including any custom items registered as weapons
             ItemHelper itemHelper = DaggerfallUnity.Instance.ItemHelper;
@@ -410,7 +410,7 @@ namespace DaggerfallWorkshop.Game.Items
                 newItem = CreateItem(ItemGroups.Weapons, customItemTemplates[groupIndex - enumArray.Length]);
  
             // Random weapon material
-            WeaponMaterialTypes material = FormulaHelper.RandomMaterial(playerLevel);
+            WeaponMaterialTypes material = FormulaHelper.RandomMaterial(enemyLevel, buildingQuality, playerLuck);
             ApplyWeaponMaterial(newItem, material);
 
             // Handle arrows
@@ -463,7 +463,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// <param name="gender">Gender armor is created for.</param>
         /// <param name="race">Race armor is created for.</param>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomArmor(int playerLevel, Genders gender, Races race)
+        public static DaggerfallUnityItem CreateRandomArmor(Genders gender, Races race, int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
         {
             // Create a random armor type, including any custom items registered as armor
             ItemHelper itemHelper = DaggerfallUnity.Instance.ItemHelper;
@@ -477,7 +477,7 @@ namespace DaggerfallWorkshop.Game.Items
             else
                 newItem = CreateItem(ItemGroups.Armor, customItemTemplates[groupIndex - enumArray.Length]);
 
-            ApplyArmorSettings(newItem, gender, race, FormulaHelper.RandomArmorMaterial(playerLevel));
+            ApplyArmorSettings(newItem, gender, race, FormulaHelper.RandomArmorMaterial(enemyLevel, buildingQuality, playerLuck));
 
             return newItem;
         }
@@ -568,12 +568,12 @@ namespace DaggerfallWorkshop.Game.Items
         /// </summary>
         /// <param name="playerLevel">Player level for material type.</param>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomIngot(int playerLevel)
+        public static DaggerfallUnityItem CreateRandomIngot(int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
         {
             DaggerfallUnityItem newItem = CreateItem(ItemGroups.UselessItems2, 810);
 
             // Random weapon material
-            WeaponMaterialTypes material = FormulaHelper.RandomMaterial(playerLevel);
+            WeaponMaterialTypes material = FormulaHelper.RandomMaterial(enemyLevel, buildingQuality, playerLuck);
             ApplyWeaponMaterial(newItem, material);
 
             return newItem;
@@ -591,9 +591,9 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates random magic item in same manner as classic.
         /// </summary>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomMagicItem(int playerLevel, Genders gender, Races race)
+        public static DaggerfallUnityItem CreateRandomMagicItem(Genders gender, Races race, int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
         {
-            return CreateRegularMagicItem(chooseAtRandom, playerLevel, gender, race);
+            return CreateRegularMagicItem(chooseAtRandom, playerLuck, gender, race);
         }
 
         /// <summary>
@@ -605,7 +605,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// <param name="race">The race to create an item for.</param>
         /// <returns>DaggerfallUnityItem</returns>
         /// <exception cref="Exception">When a base item cannot be created.</exception>
-        public static DaggerfallUnityItem CreateRegularMagicItem(int chosenItem, int playerLevel, Genders gender, Races race)
+        public static DaggerfallUnityItem CreateRegularMagicItem(int chosenItem, int playerLuck, Genders gender, Races race)
         {
             byte[] itemGroups0 = { 2, 3, 6, 10, 12, 14, 25 };
             byte[] itemGroups1 = { 2, 3, 6, 12, 25 };
@@ -642,14 +642,14 @@ namespace DaggerfallWorkshop.Game.Items
             // Create the base item
             if (group == ItemGroups.Weapons)
             {
-                newItem = CreateRandomWeapon(playerLevel);
+                newItem = CreateRandomWeapon(-1, -1, playerLuck);
 
                 // No arrows as enchanted items
                 while (newItem.GroupIndex == 18)
-                    newItem = CreateRandomWeapon(playerLevel);
+                    newItem = CreateRandomWeapon(-1, -1, playerLuck);
             }
             else if (group == ItemGroups.Armor)
-                newItem = CreateRandomArmor(playerLevel, gender, race);
+                newItem = CreateRandomArmor(gender, race, -1, -1, playerLuck);
             else if (group == ItemGroups.MensClothing || group == ItemGroups.WomensClothing)
                 newItem = CreateRandomClothing(gender, race);
             else if (group == ItemGroups.ReligiousItems)

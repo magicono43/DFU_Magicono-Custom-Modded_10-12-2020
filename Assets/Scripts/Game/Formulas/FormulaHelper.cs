@@ -4469,24 +4469,44 @@ namespace DaggerfallWorkshop.Game.Formulas
             return 0;
         }
 
-        public static WeaponMaterialTypes RandomMaterial(int enemyLevel = -1, int buildingQuality = -1)
+        public static WeaponMaterialTypes RandomMaterial(int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
         {
             float[] regionMods = PlayerGPS.RegionMaterialSupplyCreator();
+            float[] enemyLevelLootMods = new float[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            float[] buildingQualityLootMods = new float[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            float[] playerLuckLootMods = new float[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             int [] matRolls = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-            if (enemyLevel > -1)
+            if (enemyLevel > 1)
             {
-
+                int eLev = enemyLevel;
+                enemyLevelLootMods = new float[] { 1, 0.03f*eLev+1, 1, 1, 0.03f*eLev+1, 0.03f*eLev+1, 0.02f*eLev+1, 0.02f*eLev+1, 0.02f*eLev+1, 0.01f*eLev+1 };
             }
 
-            if (buildingQuality > -1)
+            if (buildingQuality > 1)
             {
+                int bQ = buildingQuality;
+                buildingQualityLootMods = new float[] { 1, 0.05f*bQ+1, 1, 1, 0.05f*bQ+1, 0.05f*bQ+1, 0.03f*bQ+1, 0.03f*bQ+1, 0.03f*bQ+1, 0.02f*bQ+1 };
+            }
 
+            if (playerLuck > 0)
+            {
+                int pL = playerLuck;
+                if (pL < 50)
+                {
+                    pL = Mathf.Clamp((int)Mathf.Round(pL / 5) -10, -10, -1) * -1;
+                    playerLuckLootMods = new float[] { 0.05f*pL+1, -0.02f*pL+1, 0.05f*pL+1, 0.05f*pL+1, -0.02f*pL+1, -0.02f*pL+1, -0.04f*pL+1, -0.04f*pL+1, -0.04f*pL+1, -0.06f*pL+1 };
+                }
+                else if (pL > 50)
+                {
+                    pL = Mathf.Clamp((int)Mathf.Round(pL / 5), 1, 10);
+                    playerLuckLootMods = new float[] { -0.02f*pL+1, 0.03f*pL+1, -0.02f*pL+1, -0.02f*pL+1, 0.03f*pL+1, 0.03f*pL+1, 0.02f*pL+1, 0.02f*pL+1, 0.02f*pL+1, 0.01f*pL+1 };
+                }
             }
 
             for (int i = 0; i < ItemBuilder.materialsByRarity.Length; i++)
             {
-                int randomModifier = UnityEngine.Random.Range(0, (int)Mathf.Ceil(512 / (ItemBuilder.materialsByRarity[i] * 0.25f) * regionMods[i]));
+                int randomModifier = UnityEngine.Random.Range(0, (int)Mathf.Ceil(512 / (ItemBuilder.materialsByRarity[i] * 0.25f) * regionMods[i] * enemyLevelLootMods[i] * buildingQualityLootMods[i] * playerLuckLootMods[i]));
                 matRolls[i] = randomModifier;
             }
 
@@ -4522,65 +4542,14 @@ namespace DaggerfallWorkshop.Game.Formulas
         }
 
         /// <summary>
-        /// Gets a random material based on player level.
-        /// Note, this is called by default RandomArmorMaterial function.
-        /// </summary>
-        /// <param name="playerLevel">Player level, possibly adjusted.</param>
-        /// <returns>WeaponMaterialTypes value of material selected.</returns>
-        public static WeaponMaterialTypes RandomMaterial(int playerLevel)
-        {
-            Func<int, WeaponMaterialTypes> del;
-            if (TryGetOverride("RandomMaterial", out del))
-                return del(playerLevel);
-
-            int levelModifier = (playerLevel - 10);
-
-            if (levelModifier >= 0)
-                levelModifier *= 2;
-            else
-                levelModifier *= 4;
-
-            int randomModifier = UnityEngine.Random.Range(0, 256);
-
-            int combinedModifiers = levelModifier + randomModifier;
-            combinedModifiers = Mathf.Clamp(combinedModifiers, 0, 256);
-
-            int material = 0; // initialize to iron
-
-            // The higher combinedModifiers is, the higher the material
-            while (ItemBuilder.materialsByRarity[material] < combinedModifiers)
-            {
-                combinedModifiers -= ItemBuilder.materialsByRarity[material++];
-            }
-
-            return (WeaponMaterialTypes)(material);
-        }
-
-        /// <summary>
         /// Gets a random armor material based on player level.
         /// </summary>
         /// <param name="playerLevel">Player level, possibly adjusted.</param>
         /// <returns>ArmorMaterialTypes value of material selected.</returns>
-        public static ArmorMaterialTypes RandomArmorMaterial(int playerLevel)
+        public static ArmorMaterialTypes RandomArmorMaterial(int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
         {
-            Func<int, ArmorMaterialTypes> del;
-            if (TryGetOverride("RandomArmorMaterial", out del))
-                return del(playerLevel);
-
-            // Random armor material
-            int roll = Dice100.Roll();
-            if (roll >= 70)
-            {
-                if (roll >= 90)
-                {
-                    WeaponMaterialTypes plateMaterial = FormulaHelper.RandomMaterial(playerLevel);
-                    return (ArmorMaterialTypes)(0x0200 + plateMaterial);
-                }
-                else
-                    return ArmorMaterialTypes.Chain;
-            }
-            else
-                return ArmorMaterialTypes.Leather;
+            WeaponMaterialTypes plateMaterial = FormulaHelper.RandomMaterial(enemyLevel, buildingQuality, playerLuck);
+            return (ArmorMaterialTypes)(0x0200 + plateMaterial);
         }
 
         #endregion
