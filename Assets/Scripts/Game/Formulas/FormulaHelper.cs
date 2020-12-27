@@ -4546,10 +4546,26 @@ namespace DaggerfallWorkshop.Game.Formulas
         /// </summary>
         /// <param name="playerLevel">Player level, possibly adjusted.</param>
         /// <returns>ArmorMaterialTypes value of material selected.</returns>
-        public static ArmorMaterialTypes RandomArmorMaterial(int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
+        public static ArmorMaterialTypes RandomArmorMaterial(int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1, int armorType = -1)
         {
-            WeaponMaterialTypes plateMaterial = FormulaHelper.RandomMaterial(enemyLevel, buildingQuality, playerLuck);
-            return (ArmorMaterialTypes)(0x0200 + plateMaterial);
+            if (armorType == -1)
+            {
+                armorType = EnemyBasics.PickOneOf(0, 1, 2, 2); // I'll likely want to do a more complicated system for this, but for now it's simple and will work for this purpose. 
+            }
+
+            if (armorType == 0)
+            {
+                return ArmorMaterialTypes.Leather;
+            }
+            else if (armorType == 1)
+            {
+                return ArmorMaterialTypes.Chain;
+            }
+            else
+            {
+                WeaponMaterialTypes plateMaterial = FormulaHelper.RandomMaterial(enemyLevel, buildingQuality, playerLuck);
+                return (ArmorMaterialTypes)(0x0200 + plateMaterial);
+            }
         }
 
         #endregion

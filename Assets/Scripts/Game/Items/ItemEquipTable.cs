@@ -612,6 +612,9 @@ namespace DaggerfallWorkshop.Game.Items
         /// </summary>
         public static ItemHands GetItemHands(DaggerfallUnityItem item)
         {
+            if (item == null)
+                return ItemHands.None;
+
             // Must be of group Weapons or Armor (for shields)
             if (item.ItemGroup != ItemGroups.Weapons &&
                 item.ItemGroup != ItemGroups.Armor)

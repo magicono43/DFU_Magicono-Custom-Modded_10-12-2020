@@ -491,10 +491,7 @@ namespace DaggerfallWorkshop.Game
                 case DaggerfallUIMessages.dfuiOpenSpellBookWindow:
                     if (!GameManager.Instance.PlayerSpellCasting.IsPlayingAnim)
                     {
-                        if (GameManager.Instance.PlayerEntity.Items.Contains(Items.ItemGroups.MiscItems, (int)Items.MiscItems.Spellbook))
-                            uiManager.PushWindow(dfSpellBookWindow);
-                        else
-                            AddHUDText(TextManager.Instance.GetLocalizedText("noSpellbook"));
+                        uiManager.PushWindow(dfSpellBookWindow);
                     }
                     break;
                 case DaggerfallUIMessages.dfuiOpenUseMagicItemWindow:
