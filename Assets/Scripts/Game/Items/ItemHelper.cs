@@ -1313,6 +1313,119 @@ namespace DaggerfallWorkshop.Game.Items
         }
 
         /// <summary>
+        /// Gets the subject type for the given book by its ID value.
+        /// </summary>
+        public BookSubjects GetBookSubject(int bookID)
+        {
+            switch (bookID)
+            {
+                case (int)BookByID.Biography_of_Queen_Barenziah_Vol_I:
+                case (int)BookByID.Biography_of_Queen_Barenziah_Vol_II:
+                case (int)BookByID.Biography_of_Queen_Barenziah_Vol_III:
+                case (int)BookByID.Galerion_the_Mystic:
+                case (int)BookByID.King_Edward_Part_I:
+                case (int)BookByID.King_Edward_Part_II:
+                case (int)BookByID.King_Edward_Part_III:
+                case (int)BookByID.King_Edward_Part_IV:
+                case (int)BookByID.King_Edward_Part_V:
+                case (int)BookByID.King_Edward_Part_VI:
+                case (int)BookByID.King_Edward_Part_VII:
+                case (int)BookByID.King_Edward_Part_VIII:
+                case (int)BookByID.King_Edward_Part_IX:
+                case (int)BookByID.King_Edward_Part_X:
+                case (int)BookByID.King_Edward_Part_XI:
+                case (int)BookByID.King_Edward_Part_XII:
+                case (int)BookByID.The_Madness_of_Pelagius:
+                case (int)BookByID.The_Real_Barenziah:
+                case (int)BookByID.The_Real_Barenziah_Part_II:
+                case (int)BookByID.The_Real_Barenziah_Part_III:
+                case (int)BookByID.The_Real_Barenziah_Part_IV:
+                case (int)BookByID.The_Real_Barenziah_Part_V:
+                case (int)BookByID.The_Real_Barenziah_Part_VI:
+                case (int)BookByID.The_Real_Barenziah_Part_VII:
+                case (int)BookByID.The_Real_Barenziah_Part_VIII:
+                case (int)BookByID.The_Real_Barenziah_Part_IX:
+                case (int)BookByID.The_Real_Barenziah_Part_X:
+                    return BookSubjects.Biography;
+                case (int)BookByID.The_Brothers_of_Darkness:
+                case (int)BookByID.Confessions_of_a_Thief:
+                case (int)BookByID.Origin_of_the_Mages_Guild:
+                    return BookSubjects.Faction_Related;
+                case (int)BookByID.The_Arrowshot_Woman:
+                case (int)BookByID.The_Asylum_Ball:
+                case (int)BookByID.Bankers_Bet:
+                case (int)BookByID.Broken_Diamonds:
+                case (int)BookByID.Divad_the_Singer:
+                case (int)BookByID.A_Dubious_Tale_of_the_Crystal_Tower:
+                case (int)BookByID.The_Epic_of_the_Grey_Falcon:
+                case (int)BookByID.The_Healers_Tale:
+                case (int)BookByID.The_Legend_of_Lovers_Lament:
+                case (int)BookByID.The_Light_and_The_Dark:
+                case (int)BookByID.Oelanders_Hammer:
+                case (int)BookByID.The_Sage:
+                case (int)BookByID.The_Story_of_Lyrisius:
+                case (int)BookByID.A_Tale_of_Kieran:
+                    return BookSubjects.Fiction;
+                case (int)BookByID.Brief_History_of_the_Empire_Part_I:
+                case (int)BookByID.Brief_History_of_the_Empire_Part_II:
+                case (int)BookByID.Brief_History_of_the_Empire_Part_III:
+                case (int)BookByID.Brief_History_of_the_Empire_Part_IV:
+                case (int)BookByID.The_Fall_of_the_Usurper:
+                case (int)BookByID.The_War_Of_Betony_by_Favte:
+                case (int)BookByID.The_War_Of_Betony_by_Newgate:
+                case (int)BookByID.Fragment_On_Artaeum:
+                case (int)BookByID.A_History_of_Daggerfall:
+                case (int)BookByID.Maras_Tear:
+                case (int)BookByID.The_Pig_Children:
+                case (int)BookByID.Redguards_History_and_Heroes:
+                case (int)BookByID.The_Wild_Elves:
+                    return BookSubjects.History_Lore;
+                case (int)BookByID.Jokes:
+                    return BookSubjects.Humor;
+                case (int)BookByID.Etiquette_With_Rulers:
+                case (int)BookByID.The_Faerie:
+                case (int)BookByID.Ghraewaj:
+                case (int)BookByID.Holidays_of_the_Iliac_Bay:
+                case (int)BookByID.Mysticism:
+                case (int)BookByID.On_Lycanthropy:
+                case (int)BookByID.On_Oblivion:
+                case (int)BookByID.A_Scholars_Guide_to_Nymphs:
+                case (int)BookByID.Special_Flora_of_Tamriel:
+                case (int)BookByID.Vampires_of_the_Iliac_Bay_Part_I:
+                case (int)BookByID.Vampires_of_the_Iliac_Bay_Part_II:
+                    return BookSubjects.Instruction_Research;
+                case (int)BookByID.The_MemoryStone:
+                case (int)BookByID.Wabbajack:
+                    return BookSubjects.Journals_Logs;
+                case (int)BookByID.Notes_For_Redguard_History:
+                    return BookSubjects.Notes_Letters;
+                case (int)BookByID.Fools_Ebony_Part_the_Oneth:
+                case (int)BookByID.Fools_Ebony_Part_the_Twoth:
+                case (int)BookByID.Fools_Ebony_Part_the_Threeth:
+                case (int)BookByID.Fools_Ebony_Part_the_Fourth:
+                case (int)BookByID.Fools_Ebony_Part_the_Fiveth:
+                case (int)BookByID.Fools_Ebony_Part_the_Sixth:
+                case (int)BookByID.Rude_Song:
+                    return BookSubjects.Plays_Poetry_Riddles;
+                case (int)BookByID.Legal_Basics:
+                    return BookSubjects.Politics_Law;
+                case (int)BookByID.Arkay_The_God:
+                case (int)BookByID.The_Ebon_Arm:
+                case (int)BookByID.The_First_Scroll_of_Baan_Dar:
+                case (int)BookByID.Invocation_of_Azura:
+                case (int)BookByID.Ius_Animal_God:
+                case (int)BookByID.Of_Jephre:
+                case (int)BookByID.The_Old_Ways:
+                    return BookSubjects.Religion_Prophecy;
+                case (int)BookByID.The_Alikr:
+                case (int)BookByID.Wayrest_Jewel_of_the_Bay:
+                    return BookSubjects.Travel;
+                default:
+                    return BookSubjects.None;
+            }
+        }
+
+        /// <summary>
         /// Ensures that a player has a valid spellbook item on load.
         /// </summary>
         public void ValidateSpellbookItem(PlayerEntity playerEntity)
