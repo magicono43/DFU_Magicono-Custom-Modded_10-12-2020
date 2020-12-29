@@ -66,8 +66,12 @@ namespace DaggerfallWorkshop
         /// Generates items in the given item collection based on loot table key.
         /// Any existing items will be destroyed.
         /// </summary>
-        public static void GenerateItems(string LootTableKey, ItemCollection collection)
+        public static void GenerateItems(ItemCollection collection, int[] traits, EnemyEntity enemyEnt = null)
         {
+            DaggerfallEntity enemy = enemyEnt as DaggerfallEntity; // This may not work as i'm expecting, will have to see. 
+
+            int[] enemyPredefLootTableProperties = EnemyBasics.EnemyPredefLootTableCalculator(enemy, traits);
+
             LootChanceMatrix matrix = LootTables.GetMatrix(LootTableKey);
             DaggerfallUnityItem[] newitems = LootTables.GenerateRandomLoot(matrix, GameManager.Instance.PlayerEntity);
 

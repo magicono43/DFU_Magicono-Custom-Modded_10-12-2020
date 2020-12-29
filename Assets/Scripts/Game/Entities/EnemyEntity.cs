@@ -272,7 +272,7 @@ namespace DaggerfallWorkshop.Game.Entity
             }
 
             // Generate loot table items, changed to generate below the equipment setting part, as I think it makes more sense anyway. 
-            DaggerfallLoot.GenerateItems(mobileEnemy.LootTableKey, items);
+            DaggerfallLoot.GenerateItems(items, personalityTraits, this);
 
             // Assign spell lists
             if (entityType == EntityTypes.EnemyMonster)
