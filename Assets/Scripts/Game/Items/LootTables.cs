@@ -267,12 +267,70 @@ namespace DaggerfallWorkshop.Game.Items
             }
 
             // Ingredients
-            TargetedIngredients(AITarget, predefLootProps, items);
+            bool customIngredCheck = TargetedIngredients(AITarget, predefLootProps, items);
 
-            RandomIngredient(matrix.C1 * playerEntity.Level, ItemGroups.CreatureIngredients1, items);
+            if (!customIngredCheck)
+            {
+                if (predefLootProps[1] > 0)
+                {
+                    for (int i = 1; i < predefLootProps[1]; i++)
+                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MiscPlantIngredients));
+                }
 
-            // Random magic item
-            chance = matrix.MI;
+                if (predefLootProps[2] > 0)
+                {
+                    for (int i = 1; i < predefLootProps[2]; i++)
+                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
+                }
+
+                if (predefLootProps[3] > 0)
+                {
+                    for (int i = 1; i < predefLootProps[3]; i++)
+                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FruitPlantIngredients));
+                }
+
+                if (predefLootProps[4] > 0)
+                {
+                    for (int i = 1; i < predefLootProps[4]; i++)
+                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.AnimalPartIngredients));
+                }
+
+                if (predefLootProps[5] > 0)
+                {
+                    for (int i = 1; i < predefLootProps[5]; i++)
+                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.CreatureIngredients));
+                }
+
+                if (predefLootProps[6] > 0)
+                {
+                    for (int i = 1; i < predefLootProps[6]; i++)
+                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.SolventIngredients));
+                }
+
+                if (predefLootProps[7] > 0)
+                {
+                    for (int i = 1; i < predefLootProps[7]; i++)
+                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MetalIngredients));
+                }
+            }
+
+            // Random Gems
+            if (extraLootProps[2] > 0)
+            {
+                for (int i = 1; i < extraLootProps[2]; i++)
+                {
+                    items.Add(ItemBuilder.CreateRandomGem());
+                }
+            }
+
+            // Random books
+            if (predefLootProps[8] > 0)
+            {
+                AddBooksBasedOnSubject(AITarget, predefLootProps[8], items); // I'll likely have to make a "create random book by subject" method similar to the ingredient ones, will do after shower. 
+            }
+
+                // Random magic item
+                chance = matrix.MI;
             while (Dice100.SuccessRoll((int)chance))
             {
                 items.Add(ItemBuilder.CreateRandomMagicItem(playerEntity.Level, playerEntity.Gender, playerEntity.Race));
@@ -284,14 +342,6 @@ namespace DaggerfallWorkshop.Game.Items
             while (Dice100.SuccessRoll((int)chance))
             {
                 items.Add(ItemBuilder.CreateRandomClothing(playerEntity.Gender, playerEntity.Race));
-                chance *= 0.5f;
-            }
-
-            // Random books
-            chance = matrix.BK;
-            while (Dice100.SuccessRoll((int)chance))
-            {
-                items.Add(ItemBuilder.CreateRandomBook());
                 chance *= 0.5f;
             }
 
@@ -313,39 +363,218 @@ namespace DaggerfallWorkshop.Game.Items
 
         #region Private Methods
 
-        static void TargetedIngredients(EnemyEntity AITarget, int[] predefLootProps, List<DaggerfallUnityItem> targetItems)
+        static bool TargetedIngredients(EnemyEntity AITarget, int[] predefLootProps, List<DaggerfallUnityItem> targetItems)
         {
-            switch (AITarget.CareerIndex)
+            if (AITarget.EntityType == EntityTypes.EnemyClass)
             {
-                case 0:
-                case 3:
-                    for (int i = 1; i < predefLootProps[4]; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
-                    return;
-                case 4:
-                case 5:
-                    for (int i = 1; i < predefLootProps[4]; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth));
-                    return;
-                case 6:
-                    for (int i = 1; i < predefLootProps[4]; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom));
-                    return;
-                case 11:
-                    for (int i = 1; i < predefLootProps[4]; i++)
-                    {
-                        if (Dice100.SuccessRoll(95))
+                return false;
+            }
+            else
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case 0:
+                    case 3:
+                        for (int i = 1; i < predefLootProps[4]; i++)
                             targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
-                        else
+                        return true;
+                    case 4:
+                    case 5:
+                        for (int i = 1; i < predefLootProps[4]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth));
+                        return true;
+                    case 6:
+                        for (int i = 1; i < predefLootProps[4]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom));
+                        return true;
+                    case 11:
+                        for (int i = 1; i < predefLootProps[4]; i++)
+                        {
+                            if (Dice100.SuccessRoll(95))
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
+                            else
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl));
+                        }
+                        return true;
+                    case 20:
+                        for (int i = 1; i < predefLootProps[4]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Giant_scorpion_stinger));
+                        return true;
+                    case 2:
+                        for (int i = 1; i < predefLootProps[1]; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MiscPlantIngredients));
+                        for (int i = 1; i < predefLootProps[2]; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
+                        for (int i = 1; i < predefLootProps[3]; i++)
+                        {
+                            if (Dice100.SuccessRoll(90))
+                                targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FruitPlantIngredients));
+                            else
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, (int)Gems.Amber));
+                        }
+                        return true;
+                    case 10:
+                        for (int i = 1; i < predefLootProps[2]; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair));
+                        return true;
+                    case 13:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Harpy_Feather));
+                        return true;
+                    case 16:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Giant_blood));
+                        return true;
+                    case 22:
+                        for (int i = 1; i < predefLootProps[1]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.MiscPlantIngredients, (int)MiscPlantIngredients.Root_tendrils));
+                        for (int i = 1; i < predefLootProps[7]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Lodestone));
+                        return true;
+                    case 34:
+                        for (int i = 1; i < predefLootProps[4]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                        {
+                            if (Dice100.SuccessRoll(40))
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dragons_scales));
+                            else
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Fairy_dragon_scales));
+                        }
+                        return true;
+                    case 40:
+                        for (int i = 1; i < predefLootProps[4]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth));
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                        {
+                            if (Dice100.SuccessRoll(80))
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dragons_scales));
+                            else
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Fairy_dragon_scales));
+                        }
+                        return true;
+                    case 41:
+                        for (int i = 1; i < predefLootProps[4]; i++)
                             targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl));
-                    }
-                    return;
-                case 20:
-                    for (int i = 1; i < predefLootProps[4]; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Giant_scorpion_stinger));
-                    return;
-                default:
-                    return;
+                        return true;
+                    case 42:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                        {
+                            if (Dice100.SuccessRoll(35))
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair));
+                            else
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Gorgon_snake));
+                        }
+                        return true;
+                    case 9:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Werewolfs_blood));
+                        return true;
+                    case 14:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Wereboar_tusk));
+                        return true;
+                    case 35:
+                        for (int i = 1; i < predefLootProps[7]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur));
+                        return true;
+                    case 36:
+                        for (int i = 1; i < predefLootProps[7]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Iron));
+                        return true;
+                    case 37:
+                        for (int i = 1; i < predefLootProps[6]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor));
+                        return true;
+                    case 38:
+                        for (int i = 1; i < predefLootProps[6]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water));
+                        return true;
+                    case 18:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Ectoplasm));
+                        return true;
+                    case 19:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Mummy_wrappings));
+                        return true;
+                    case 23:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                        {
+                            if (Dice100.SuccessRoll(70))
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Ectoplasm));
+                            else
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Wraith_essence));
+                        }
+                        return true;
+                    case 28:
+                    case 30:
+                        for (int i = 1; i < predefLootProps[4]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.CreatureIngredients));
+                        return true;
+                    case 32:
+                    case 33:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Lich_dust));
+                        return true;
+                    case 25:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        for (int i = 1; i < predefLootProps[6]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water));
+                        return true;
+                    case 26:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        for (int i = 1; i < predefLootProps[7]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur));
+                        return true;
+                    case 27:
+                        for (int i = 1; i < predefLootProps[4]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth));
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        return true;
+                    case 29:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        for (int i = 1; i < predefLootProps[6]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Elixir_vitae));
+                        return true;
+                    case 31:
+                        for (int i = 1; i < predefLootProps[5]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        for (int i = 1; i < predefLootProps[6]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor));
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        static void AddBooksBasedOnSubject(EnemyEntity AITarget, int bookAmount, List<DaggerfallUnityItem> targetItems)
+        {
+            if (AITarget.EntityType == EntityTypes.EnemyClass)
+            {
+                return;
+            }
+            else
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case 0:
+                    case 3:
+                        for (int i = 1; i < predefLootProps[4]; i++)
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
+                        return;
+                    default:
+                        return;
+                }
             }
         }
 

@@ -55,6 +55,20 @@ namespace DaggerfallWorkshop.Game.Items
         QuestItems = 25,
         MiscItems = 26,
         Currency = 27,
+        Biography_Books = 28,
+        Faction_Related_Books = 29,
+        Fiction_Books = 30,
+        History_Lore_Books = 31,
+        Humor_Books = 32,
+        Instruction_Research_Books = 33,
+        Journals_Logs_Books = 34,
+        Notes_Letters_Books = 35,
+        Plays_Poetry_Riddles_Books = 36,
+        Politics_Law_Books = 37,
+        Religion_Prophecy_Books = 38,
+        Travel_Books = 39,
+        Informational_Books = 40,
+        No_Topic_Books = 41,
     }
 
     /// <summary>
@@ -592,87 +606,12 @@ namespace DaggerfallWorkshop.Game.Items
         Gold_pieces = 276,
     }
 
-    public enum BookByID
+    public enum Biography_Books
     {
-        None = -1,
-        The_First_Scroll_of_Baan_Dar = 0,
-        A_Tale_of_Kieran = 1,
-        Fragment_On_Artaeum = 2,
-        The_Wild_Elves = 3,
-        Redguards_History_and_Heroes = 4,
-        Arkay_The_God = 5,
-        The_Faerie = 6,
-        Oelanders_Hammer = 7,
-        The_Pig_Children = 8,
-        The_Old_Ways = 9,
-        Ghraewaj = 20,
-        A_Scholars_Guide_to_Nymphs = 21,
-        The_MemoryStone = 22,
-        Legal_Basics = 25,
-        The_Brothers_of_Darkness = 26,
-        Special_Flora_of_Tamriel = 27,
-        Brief_History_of_the_Empire_Part_I = 28,
-        Brief_History_of_the_Empire_Part_II = 29,
-        Brief_History_of_the_Empire_Part_III = 30,
-        Brief_History_of_the_Empire_Part_IV = 31,
-        The_Epic_of_the_Grey_Falcon = 32,
-        Holidays_of_the_Iliac_Bay = 33,
-        Broken_Diamonds = 34,
-        The_Legend_of_Lovers_Lament = 35,
-        On_Lycanthropy = 36,
-        The_Story_of_Lyrisius = 37,
-        Origin_of_the_Mages_Guild = 38,
-        The_Asylum_Ball = 39,
-        Mysticism = 40,
-        The_Fall_of_the_Usurper = 41,
-        The_Madness_of_Pelagius = 42,
-        The_Real_Barenziah = 43,
-        The_Real_Barenziah_Part_II = 44,
-        The_Real_Barenziah_Part_III = 45,
-        The_Real_Barenziah_Part_IV = 46,
-        The_Real_Barenziah_Part_V = 47,
-        The_Real_Barenziah_Part_VI = 48,
-        The_Real_Barenziah_Part_VII = 49,
-        The_Real_Barenziah_Part_VIII = 50,
-        The_Real_Barenziah_Part_IX = 51,
-        The_Real_Barenziah_Part_X = 52,
-        On_Oblivion = 53,
-        The_Sage = 54,
-        The_Light_and_The_Dark = 55,
-        Confessions_of_a_Thief = 56,
-        Vampires_of_the_Iliac_Bay_Part_I = 57,
-        Vampires_of_the_Iliac_Bay_Part_II = 58,
         Biography_of_Queen_Barenziah_Vol_I = 59,
         Biography_of_Queen_Barenziah_Vol_II = 60,
-        A_History_of_Daggerfall = 61,
-        A_Dubious_Tale_of_the_Crystal_Tower = 62,
-        An_Overview_of_Gods_and_Worship = 63,
-        Wayrest_Jewel_of_the_Bay = 64,
-        Wabbajack = 65,
-        Galerion_the_Mystic = 66,
-        The_Ebon_Arm = 67,
-        Rude_Song = 68,
-        Maras_Tear = 69,
-        Jokes = 70,
-        Ius_Animal_God = 71,
-        The_Healers_Tale = 72,
-        Of_Jephre = 73,
-        Fools_Ebony_Part_the_Oneth = 74,
-        Fools_Ebony_Part_the_Twoth = 75,
-        Fools_Ebony_Part_the_Threeth = 76,
-        Fools_Ebony_Part_the_Fourth = 77,
-        Fools_Ebony_Part_the_Fiveth = 78,
-        Etiquette_With_Rulers = 79,
-        Invocation_of_Azura = 80,
-        The_Arrowshot_Woman = 81,
-        Bankers_Bet = 82,
-        The_War_Of_Betony_by_Favte = 83,
-        The_War_Of_Betony_by_Newgate = 84,
-        The_Alikr = 85,
-        Divad_the_Singer = 86,
-        Notes_For_Redguard_History = 87,
-        Fools_Ebony_Part_the_Sixth = 88,
         Biography_of_Queen_Barenziah_Vol_III = 89,
+        Galerion_the_Mystic = 66,
         King_Edward_Part_I = 100,
         King_Edward_Part_II = 101,
         King_Edward_Part_III = 102,
@@ -685,5 +624,133 @@ namespace DaggerfallWorkshop.Game.Items
         King_Edward_Part_X = 109,
         King_Edward_Part_XI = 110,
         King_Edward_Part_XII = 111,
+        The_Madness_of_Pelagius = 42,
+        The_Real_Barenziah = 43,
+        The_Real_Barenziah_Part_II = 44,
+        The_Real_Barenziah_Part_III = 45,
+        The_Real_Barenziah_Part_IV = 46,
+        The_Real_Barenziah_Part_V = 47,
+        The_Real_Barenziah_Part_VI = 48,
+        The_Real_Barenziah_Part_VII = 49,
+        The_Real_Barenziah_Part_VIII = 50,
+        The_Real_Barenziah_Part_IX = 51,
+        The_Real_Barenziah_Part_X = 52,
+    }
+
+    public enum Faction_Related_Books
+    {
+        The_Brothers_of_Darkness = 26,
+        Confessions_of_a_Thief = 56,
+        Origin_of_the_Mages_Guild = 38,
+    }
+
+    public enum Fiction_Books
+    {
+        The_Arrowshot_Woman = 81,
+        The_Asylum_Ball = 39,
+        Bankers_Bet = 82,
+        Broken_Diamonds = 34,
+        Divad_the_Singer = 86,
+        A_Dubious_Tale_of_the_Crystal_Tower = 62,
+        The_Epic_of_the_Grey_Falcon = 32,
+        The_Healers_Tale = 72,
+        The_Legend_of_Lovers_Lament = 35,
+        The_Light_and_The_Dark = 55,
+        Oelanders_Hammer = 7,
+        The_Sage = 54,
+        The_Story_of_Lyrisius = 37,
+        A_Tale_of_Kieran = 1,
+    }
+
+    public enum History_Lore_Books
+    {
+        Brief_History_of_the_Empire_Part_I = 28,
+        Brief_History_of_the_Empire_Part_II = 29,
+        Brief_History_of_the_Empire_Part_III = 30,
+        Brief_History_of_the_Empire_Part_IV = 31,
+        The_Fall_of_the_Usurper = 41,
+        The_War_Of_Betony_by_Favte = 83,
+        The_War_Of_Betony_by_Newgate = 84,
+        Fragment_On_Artaeum = 2,
+        A_History_of_Daggerfall = 61,
+        Maras_Tear = 69,
+        The_Pig_Children = 8,
+        Redguards_History_and_Heroes = 4,
+        The_Wild_Elves = 3,
+    }
+
+    public enum Humor_Books
+    {
+        Jokes = 70,
+    }
+
+    public enum Instruction_Research_Books
+    {
+        Etiquette_With_Rulers = 79,
+        The_Faerie = 6,
+        Ghraewaj = 20,
+        Holidays_of_the_Iliac_Bay = 33,
+        Mysticism = 40,
+        On_Lycanthropy = 36,
+        On_Oblivion = 53,
+        A_Scholars_Guide_to_Nymphs = 21,
+        Special_Flora_of_Tamriel = 27,
+        Vampires_of_the_Iliac_Bay_Part_I = 57,
+        Vampires_of_the_Iliac_Bay_Part_II = 58,
+    }
+
+    public enum Journals_Logs_Books
+    {
+        The_MemoryStone = 22,
+        Wabbajack = 65,
+    }
+
+    public enum Notes_Letters_Books
+    {
+        Notes_For_Redguard_History = 87,
+    }
+
+    public enum Plays_Poetry_Riddles_Books
+    {
+        Fools_Ebony_Part_the_Oneth = 74,
+        Fools_Ebony_Part_the_Twoth = 75,
+        Fools_Ebony_Part_the_Threeth = 76,
+        Fools_Ebony_Part_the_Fourth = 77,
+        Fools_Ebony_Part_the_Fiveth = 78,
+        Fools_Ebony_Part_the_Sixth = 88,
+        Rude_Song = 68,
+    }
+
+    public enum Politics_Law_Books
+    {
+        Legal_Basics = 25,
+    }
+
+    public enum Religion_Prophecy_Books
+    {
+        Arkay_The_God = 5,
+        The_Ebon_Arm = 67,
+        The_First_Scroll_of_Baan_Dar = 0,
+        Invocation_of_Azura = 80,
+        Ius_Animal_God = 71,
+        Of_Jephre = 73,
+        The_Old_Ways = 9,
+        An_Overview_of_Gods_and_Worship = 63,
+    }
+
+    public enum Travel_Books
+    {
+        The_Alikr = 85,
+        Wayrest_Jewel_of_the_Bay = 64,
+    }
+
+    public enum Informational_Books
+    {
+        None = -1,
+    }
+
+    public enum No_Topic_Books
+    {
+        None = -1,
     }
 }

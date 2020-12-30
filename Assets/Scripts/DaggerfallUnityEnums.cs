@@ -561,27 +561,6 @@ namespace DaggerfallWorkshop
     }
 
     /// <summary>
-    /// The Various Subjects That Books In Daggerfall Generally Fall Under, used for loot generation discrimination. 
-    /// </summary>
-    public enum BookSubjects
-    {
-        None = -1,
-        Biography = 0,
-        Faction_Related = 1,
-        Fiction = 2,
-        History_Lore = 3,
-        Humor = 4,
-        Instruction_Research = 5,
-        Journals_Logs = 6,
-        Notes_Letters = 7,
-        Plays_Poetry_Riddles = 8,
-        Politics_Law = 9,
-        Religion_Prophecy = 10,
-        Travel = 11,
-        Informational = 12, // Most of my custom books will likely come under this category. 
-    }
-
-    /// <summary>
     /// Quick AudioSource presets for DaggerfallAudioSource.
     /// These make minor changes to peer AudioSource component.
     /// </summary>

@@ -5251,9 +5251,11 @@ namespace DaggerfallWorkshop.Utility
                         equipTableProps[7] = UnityEngine.Random.Range(2, 7 + 1);
                         break;
                     case 34:
+                        equipTableProps[4] = UnityEngine.Random.Range(2, 6 + 1);
                         equipTableProps[5] = UnityEngine.Random.Range(1, 3 + 1);
                         break;
                     case 40:
+                        equipTableProps[4] = UnityEngine.Random.Range(3, 8 + 1);
                         equipTableProps[5] = UnityEngine.Random.Range(3, 10 + 1);
                         break;
                     case 41:
@@ -5291,7 +5293,7 @@ namespace DaggerfallWorkshop.Utility
                         equipTableProps[5] = UnityEngine.Random.Range(2, 5 + 1);
                         break;
                     case 14:
-                        equipTableProps[7] = PickOneOf(0, 1, 1, 2);
+                        equipTableProps[5] = PickOneOf(0, 1, 1, 2);
                         break;
                     case 35:
                         equipTableProps[7] = UnityEngine.Random.Range(2, 9 + 1);
@@ -5323,20 +5325,20 @@ namespace DaggerfallWorkshop.Utility
                     case 28:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 20 + 1);
                         equipTableProps[4] = UnityEngine.Random.Range(0, 3 + 1);
-                        equipTableProps[5] = PickOneOf(0, 1, 2);
+                        equipTableProps[5] = PickOneOf(0, 1);
                         equipTableProps[8] = PickOneOf(0, 0, 1);
                         equipTableProps[9] = 1;
                         break;
                     case 30:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 45 + 1);
                         equipTableProps[4] = UnityEngine.Random.Range(0, 3 + 1);
-                        equipTableProps[5] = PickOneOf(0, 1, 2);
+                        equipTableProps[5] = PickOneOf(0, 1, 1, 2);
                         equipTableProps[8] = PickOneOf(1, 1, 1, 2);
                         equipTableProps[9] = 1;
                         break;
                     case 32:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 15 + 1);
-                        equipTableProps[4] = UnityEngine.Random.Range(2, 5 + 1);
+                        equipTableProps[5] = UnityEngine.Random.Range(2, 5 + 1);
                         equipTableProps[8] = PickOneOf(2, 2, 2, 3);
                         equipTableProps[9] = 1;
                         break;
@@ -5352,7 +5354,7 @@ namespace DaggerfallWorkshop.Utility
                         break;
                     case 26:
                         equipTableProps[5] = 1;
-                        equipTableProps[6] = UnityEngine.Random.Range(1, 5 + 1);
+                        equipTableProps[7] = UnityEngine.Random.Range(1, 5 + 1);
                         break;
                     case 27:
                         equipTableProps[4] = UnityEngine.Random.Range(0, 7 + 1);
