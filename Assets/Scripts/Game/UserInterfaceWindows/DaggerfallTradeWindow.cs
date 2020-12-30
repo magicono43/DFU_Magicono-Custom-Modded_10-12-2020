@@ -120,7 +120,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         static Dictionary<DFLocation.BuildingTypes, List<ItemGroups>> storeBuysItemType = new Dictionary<DFLocation.BuildingTypes, List<ItemGroups>>()
         {
             { DFLocation.BuildingTypes.Alchemist, new List<ItemGroups>()
-                { ItemGroups.Gems, ItemGroups.CreatureIngredients1, ItemGroups.CreatureIngredients2, ItemGroups.CreatureIngredients3, ItemGroups.PlantIngredients1, ItemGroups.PlantIngredients2, ItemGroups.MiscellaneousIngredients1, ItemGroups.MiscellaneousIngredients2, ItemGroups.MetalIngredients } },
+                { ItemGroups.Gems, ItemGroups.MiscPlantIngredients, ItemGroups.FlowerPlantIngredients, ItemGroups.FruitPlantIngredients, ItemGroups.AnimalPartIngredients, ItemGroups.CreatureIngredients, ItemGroups.SolventIngredients, ItemGroups.MetalIngredients } },
             { DFLocation.BuildingTypes.Armorer, new List<ItemGroups>()
                 { ItemGroups.Armor, ItemGroups.Weapons } },
             { DFLocation.BuildingTypes.Bookseller, new List<ItemGroups>()

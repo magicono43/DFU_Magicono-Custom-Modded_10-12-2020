@@ -4594,6 +4594,188 @@ namespace DaggerfallWorkshop.Utility
             return equipTableProps;
         }
 
+        public static void TraitExtraLootModCalculator(DaggerfallEntity enemy, int[] traits, int[] equipTableProps, int[] extraLootProps, out int[] finalEquipTableProps, out int[] finalExtraLootProps)
+        {
+            finalEquipTableProps = equipTableProps;
+            finalExtraLootProps = extraLootProps;
+
+            if (traits[0] == -1 && traits[1] == -1 && traits[2] == -1)
+                return;
+
+            if (traits[0] > -1 || traits[1] > -1)
+            {
+                if (traits[0] == (int)MobilePersonalityQuirks.Prepared || traits[1] == (int)MobilePersonalityQuirks.Prepared)
+                {
+                    finalEquipTableProps[0] = (int)Mathf.Ceil(finalEquipTableProps[0] * 1.5f);
+                    finalExtraLootProps[0] = (int)Mathf.Ceil(finalExtraLootProps[0] * 1.5f);
+                    finalExtraLootProps[1] = (finalExtraLootProps[1] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[1] * 2) : finalExtraLootProps[1] = 1;
+                    finalExtraLootProps[4] = (int)Mathf.Ceil(equipTableProps[4] * 2f);
+                    finalExtraLootProps[5] = (int)Mathf.Ceil(equipTableProps[5] * 1.5f);
+                    finalExtraLootProps[7] = (finalExtraLootProps[7] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[7] * 1.5f) : finalExtraLootProps[1] = 1;
+                    finalExtraLootProps[8] = (finalExtraLootProps[8] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[8] * 2) : finalExtraLootProps[1] = 1;
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Reckless || traits[1] == (int)MobilePersonalityQuirks.Reckless)
+                {
+                    finalEquipTableProps[0] = (int)Mathf.Floor(finalEquipTableProps[0] * 0.75f);
+                    finalExtraLootProps[0] = (int)Mathf.Floor(finalExtraLootProps[0] * 0.5f);
+                    finalExtraLootProps[1] = (int)Mathf.Floor(finalExtraLootProps[1] * 0.5f);
+                    finalExtraLootProps[4] = (int)Mathf.Floor(equipTableProps[4] * 0.75f);
+                    finalExtraLootProps[5] = (int)Mathf.Floor(equipTableProps[5] * 0.5f);
+                    finalExtraLootProps[7] = (int)Mathf.Floor(equipTableProps[7] * 0.75f);
+                    finalExtraLootProps[8] = (int)Mathf.Floor(equipTableProps[8] * 0.75f);
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Cautious || traits[1] == (int)MobilePersonalityQuirks.Cautious)
+                {
+                    finalEquipTableProps[0] = (int)Mathf.Ceil(finalEquipTableProps[0] * 1.25f);
+                    finalExtraLootProps[0] = (int)Mathf.Ceil(finalExtraLootProps[0] * 1.25f);
+                    finalExtraLootProps[1] = (finalExtraLootProps[1] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[1] * 1.5f) : finalExtraLootProps[1] = 1;
+                    finalExtraLootProps[4] = (int)Mathf.Ceil(equipTableProps[4] * 1.5f);
+                    finalExtraLootProps[5] = (int)Mathf.Ceil(equipTableProps[5] * 2f);
+                    finalExtraLootProps[7] = (finalExtraLootProps[7] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[7] * 2f) : finalExtraLootProps[1] = 1;
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Curious || traits[1] == (int)MobilePersonalityQuirks.Curious)
+                {
+                    finalEquipTableProps[8] = (finalEquipTableProps[8] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[8] * 1.5f) : finalEquipTableProps[8] = 1;
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Addict || traits[1] == (int)MobilePersonalityQuirks.Addict)
+                {
+                    finalEquipTableProps[0] = (int)Mathf.Floor(finalEquipTableProps[0] * 0.35f);
+                    finalExtraLootProps[1] = (int)Mathf.Floor(finalExtraLootProps[1] * 0.5f);
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Nyctophobic || traits[1] == (int)MobilePersonalityQuirks.Nyctophobic)
+                {
+                    finalExtraLootProps[5] = (finalExtraLootProps[5] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[5] * 3f) : finalExtraLootProps[5] = 1;
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Nyctophilic || traits[1] == (int)MobilePersonalityQuirks.Nyctophilic)
+                {
+                    finalExtraLootProps[5] = 0;
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Hoarder || traits[1] == (int)MobilePersonalityQuirks.Hoarder)
+                {
+                    finalEquipTableProps[0] = (int)Mathf.Ceil(finalEquipTableProps[0] * 1.15f);
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Vain || traits[1] == (int)MobilePersonalityQuirks.Vain)
+                {
+                    finalEquipTableProps[0] = (int)Mathf.Ceil(finalEquipTableProps[0] * 1.65f);
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Greedy || traits[1] == (int)MobilePersonalityQuirks.Greedy)
+                {
+                    finalEquipTableProps[0] = (int)Mathf.Ceil(finalEquipTableProps[0] * 2.25f);
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Glutton || traits[1] == (int)MobilePersonalityQuirks.Glutton)
+                {
+                    finalExtraLootProps[4] = (finalExtraLootProps[4] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[4] * 3f) : finalExtraLootProps[4] = 2;
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Faster || traits[1] == (int)MobilePersonalityQuirks.Faster)
+                {
+                    finalExtraLootProps[4] = 0;
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Romantic || traits[1] == (int)MobilePersonalityQuirks.Romantic)
+                {
+                    finalEquipTableProps[2] = (finalEquipTableProps[2] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[2] * 1.5f) : finalEquipTableProps[2] = 1;
+                    finalExtraLootProps[2] = (finalExtraLootProps[2] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[2] * 1.5f) : finalExtraLootProps[2] = 1;
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Alcoholic || traits[1] == (int)MobilePersonalityQuirks.Alcoholic)
+                {
+                    finalEquipTableProps[0] = (int)Mathf.Floor(finalEquipTableProps[0] * 0.50f);
+                }
+            }
+
+            if (traits[2] > -1)
+            {
+                if (traits[2] == (int)MobilePersonalityInterests.God_Fearing || traits[2] == (int)MobilePersonalityInterests.Occultist)
+                {
+                    finalExtraLootProps[6] = (finalExtraLootProps[6] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[6] * 2) : finalExtraLootProps[6] = 1;
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Collector)
+                {
+                    finalEquipTableProps[7] = (finalEquipTableProps[7] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[7] * 1.5f) : finalEquipTableProps[7] = 1;
+                    finalExtraLootProps[2] = (finalExtraLootProps[2] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[2] * 1.5f) : finalExtraLootProps[2] = 1;
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Survivalist)
+                {
+                    finalEquipTableProps[3] = (finalEquipTableProps[3] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[3] * 2f) : finalEquipTableProps[3] = 2;
+                    finalExtraLootProps[0] = (finalExtraLootProps[0] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[0] * 2f) : finalExtraLootProps[0] = 6;
+                    finalExtraLootProps[10] = 1;
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Hunter)
+                {
+                    finalExtraLootProps[0] = (finalExtraLootProps[2] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[2] * 2.5f) : finalExtraLootProps[2] = 12;
+                    finalExtraLootProps[4] = (finalExtraLootProps[4] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[4] * 1.5f) : finalExtraLootProps[4] = 2;
+                    finalExtraLootProps[10] = 1;
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Brewer)
+                {
+                    finalEquipTableProps[1] = (finalEquipTableProps[1] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[1] * 1.5f) : finalEquipTableProps[1] = 1;
+                    finalEquipTableProps[2] = (finalEquipTableProps[2] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[2] * 1.5f) : finalEquipTableProps[2] = 1;
+                    finalEquipTableProps[3] = (finalEquipTableProps[3] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[3] * 1.5f) : finalEquipTableProps[3] = 1;
+                    finalEquipTableProps[6] = (finalEquipTableProps[6] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[6] * 1.5f) : finalEquipTableProps[6] = 1;
+                    finalExtraLootProps[1] = (finalExtraLootProps[1] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[1] * 1.5f) : finalExtraLootProps[1] = 2;
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Anthophile)
+                {
+                    finalEquipTableProps[1] = (finalEquipTableProps[1] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[1] * 3f) : finalEquipTableProps[1] = 2;
+                    finalEquipTableProps[2] = (finalEquipTableProps[2] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[2] * 3f) : finalEquipTableProps[2] = 2;
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Bookworm)
+                {
+                    finalEquipTableProps[8] = (finalEquipTableProps[8] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[8] * 2f) : finalEquipTableProps[8] = 2;
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Cartographer)
+                {
+                    finalExtraLootProps[11] = PickOneOf(2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4);
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Fisher)
+                {
+                    finalEquipTableProps[4] = (finalEquipTableProps[4] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[4] * 2f) : finalEquipTableProps[4] = 2;
+                    finalExtraLootProps[4] = (finalExtraLootProps[4] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[4] * 1.5f) : finalExtraLootProps[4] = 1;
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Diver)
+                {
+                    finalEquipTableProps[4] = (finalEquipTableProps[4] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[4] * 2.5f) : finalEquipTableProps[4] = 3;
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Magic_Collector)
+                {
+                    finalExtraLootProps[3] = PickOneOf(1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3);
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Writer)
+                {
+                    finalEquipTableProps[8] = (finalEquipTableProps[8] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[8] * 1.5f) : finalEquipTableProps[8] = 1;
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Handy)
+                {
+                    finalExtraLootProps[8] = (finalExtraLootProps[8] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[8] * 2f) : finalExtraLootProps[8] = 2;
+                }
+            }
+
+            return;
+        }
+
         public static int[] EnemyEquipTableCalculator(DaggerfallEntity enemy, int[] traits)
         {
             // Index meanings: 0 = primaryWeapon, 1 = secondaryWeapon, 2 = shield, 3 = armorCoverage, 4 = usesPoison 0 or 1 bool, 5 = poisonApplied, 6-12 = armorSlots -1-2 Nothing to Plate armor.
@@ -4842,248 +5024,553 @@ namespace DaggerfallWorkshop.Utility
 
         public static int[] EnemyPredefLootTableCalculator(DaggerfallEntity enemy, int[] traits)
         {
-            // Index meanings: 0 = goldCarried, 1 = secondaryWeapon, 2 = shield, 3 = armorCoverage, 4 = usesPoison 0 or 1 bool, 5 = poisonApplied, 6-12 = armorSlots -1-2 Nothing to Plate armor.
+            // Index meanings: 0 = goldCarried, 1 = miscPlants, 2 = flowerPlants, 3 = fruitPlants, 4 = animalParts, 5 = creatureParts, 6 = solvent, 7 = metals, 8 = books, 9 = clothing bool, 10 = extras bool.
             // Main variable used in determining enemy loot/equipment values for purposes of targeted loot generation based on many context related variables.
-            int[] equipTableProps = { -1, -1, -1, -1, 0, -1, -1, -1, -1, -1, -1, -1, -1 };
+            int[] equipTableProps = { -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
             EnemyEntity AITarget = enemy as EnemyEntity;
+            int level = enemy.Level;
 
-            if (EnemyEntity.EquipmentUser(AITarget))
+            if (AITarget.EntityType == EntityTypes.EnemyClass)
             {
-                if (AITarget.EntityType == EntityTypes.EnemyClass) // Since the enemy classes have dynamic levels, I could add some amount per level they are and see how that works out.
+                switch (AITarget.CareerIndex)
                 {
-                    switch (AITarget.CareerIndex)
-                    {
-                        case (int)ClassCareers.Mage:
-                            equipTableProps[0] = (int)Weapons.Staff;
-                            equipTableProps[1] = PickOneOf(-1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Spellsword:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Battle_Axe, (int)Weapons.Broadsword, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Mace);
-                            equipTableProps[1] = PickOneOf(-1, (int)Weapons.Dagger, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Short_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Battlemage:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Broadsword, (int)Weapons.Saber, (int)Weapons.Longsword, (int)Weapons.Katana, (int)Weapons.Claymore, (int)Weapons.Dai_Katana);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Staff, (int)Weapons.Warhammer, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Sorcerer:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Mace, (int)Weapons.Flail, (int)Weapons.Warhammer);
-                            equipTableProps[1] = PickOneOf(-1, -1, (int)Weapons.Dagger, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Tanto, (int)Weapons.Mace);
-                            equipTableProps[3] = PickOneOf(-1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Healer:
-                            equipTableProps[0] = (int)Weapons.Staff;
-                            equipTableProps[1] = PickOneOf(-1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword);
-                            equipTableProps[2] = PickOneOf(-1, (int)Armor.Buckler, (int)Armor.Round_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Nightblade:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[2] = PickOneOf(-1, (int)Armor.Buckler);
-                            equipTableProps[3] = 0;
-                            equipTableProps[4] = PickOneOf(0, 1, 1);
-                            equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Bard:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Short_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Burglar:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[3] = PickOneOf(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Rogue:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
-                            equipTableProps[1] = PickOneOf(-1, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer);
-                            equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps[4] = PickOneOf(0, 0, 0, 0, 1);
-                            equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Acrobat:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Thief:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler);
-                            equipTableProps[3] = PickOneOf(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Assassin:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps[4] = 1;
-                            equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Monk:
-                            equipTableProps[0] = (int)Weapons.Staff;
-                            equipTableProps[1] = PickOneOf(-1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Archer:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[3] = PickOneOf(-1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps[4] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-                            equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Ranger:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Broadsword, (int)Weapons.Battle_Axe, (int)Weapons.Mace, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps[4] = PickOneOf(0, 0, 0, 0, 1);
-                            equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Barbarian:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Warrior:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Dagger, (int)Weapons.Tanto);
-                            equipTableProps[2] = PickOneOf(-1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case (int)ClassCareers.Knight:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Dagger, (int)Weapons.Tanto);
-                            equipTableProps[2] = PickOneOf(-1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        default:
-                            return equipTableProps;
-                    }
-                }
-                else
-                {
-                    switch (AITarget.CareerIndex)
-                    {
-                        case 7:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 8:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, 4, 6, 7);
-                            equipTableProps[4] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-                            equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 12:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, -1, -1, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 15:
-                            equipTableProps[0] = (int)Weapons.Battle_Axe;
-                            equipTableProps[2] = PickOneOf((int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 17:
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 21:
-                            equipTableProps[0] = (int)Weapons.Staff;
-                            equipTableProps[1] = PickOneOf(-1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 23:
-                            equipTableProps[0] = (int)Weapons.Longsword;
-                            break;
-                        case 24:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 25:
-                            equipTableProps[0] = (int)Weapons.Warhammer;
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 26:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Claymore, (int)Weapons.Dai_Katana);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 27:
-                            equipTableProps[0] = (int)Weapons.War_Axe;
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 31:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 28:
-                        case 30:
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-                            equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
-                            break;
-                        case 32:
-                        case 33:
-                            equipTableProps[0] = (int)Weapons.Staff;
-                            break;
-                        default:
-                            return equipTableProps;
-                    }
+                    case (int)ClassCareers.Mage:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 8 * (int)Mathf.Ceil(level / 2) + 1); // I'll definitely have to alter these gold values later, but for now will work.
+                        equipTableProps[1] = PickOneOf(0, 1, 2);
+                        equipTableProps[2] = PickOneOf(0, 1, 2);
+                        equipTableProps[3] = PickOneOf(0, 1);
+                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 1, 1, 2);
+                        equipTableProps[6] = PickOneOf(0, 0, 1);
+                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 1);
+                        equipTableProps[8] = PickOneOf(1, 1, 2, 2, 2, 2, 2, 3, 3, 4);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Spellsword:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 10 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[1] = PickOneOf(0, 1, 2);
+                        equipTableProps[2] = PickOneOf(0, 1);
+                        equipTableProps[3] = PickOneOf(0, 1, 2);
+                        equipTableProps[5] = PickOneOf(0, 0, 1, 1, 2);
+                        equipTableProps[6] = PickOneOf(0, 1);
+                        equipTableProps[7] = PickOneOf(0, 0, 0, 1);
+                        equipTableProps[8] = PickOneOf(1, 1, 1, 1, 2, 2, 2, 3);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Battlemage:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 12 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[1] = PickOneOf(0, 1);
+                        equipTableProps[2] = PickOneOf(0, 1);
+                        equipTableProps[3] = PickOneOf(0, 1);
+                        equipTableProps[5] = PickOneOf(0, 1, 1, 2, 2);
+                        equipTableProps[6] = PickOneOf(0, 1);
+                        equipTableProps[7] = PickOneOf(0, 0, 0, 1);
+                        equipTableProps[8] = PickOneOf(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Sorcerer:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 6 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[1] = PickOneOf(0, 1);
+                        equipTableProps[2] = PickOneOf(0, 1, 2);
+                        equipTableProps[3] = PickOneOf(0, 1, 2);
+                        equipTableProps[5] = PickOneOf(0, 0, 1);
+                        equipTableProps[6] = PickOneOf(0, 1, 1, 2);
+                        equipTableProps[7] = PickOneOf(0, 0, 0, 1, 1, 2);
+                        equipTableProps[8] = PickOneOf(1, 1, 1, 2, 2, 2, 3);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Healer:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 4 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[1] = PickOneOf(0, 1, 2);
+                        equipTableProps[2] = PickOneOf(1, 2);
+                        equipTableProps[3] = PickOneOf(1, 2, 3);
+                        equipTableProps[4] = PickOneOf(0, 1);
+                        equipTableProps[5] = PickOneOf(0, 1, 1, 2);
+                        equipTableProps[6] = PickOneOf(0, 1, 2);
+                        equipTableProps[7] = PickOneOf(0, 0, 1);
+                        equipTableProps[8] = PickOneOf(1, 1, 1, 2);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Nightblade:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 14 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[1] = PickOneOf(0, 1);
+                        equipTableProps[2] = PickOneOf(2, 2, 2, 3, 3, 4);
+                        equipTableProps[3] = PickOneOf(1, 1, 1, 2);
+                        equipTableProps[4] = PickOneOf(1, 2, 2, 3);
+                        equipTableProps[5] = PickOneOf(1, 2);
+                        equipTableProps[6] = PickOneOf(1, 1, 1, 2, 2, 3);
+                        equipTableProps[7] = PickOneOf(0, 1, 1, 1, 2);
+                        equipTableProps[8] = PickOneOf(0, 0, 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Bard:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 9 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[7] = PickOneOf(0, 0, 0, 1, 1, 2);
+                        equipTableProps[8] = PickOneOf(0, 1, 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Burglar:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 19 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[7] = PickOneOf(1, 1, 1, 2, 2, 3, 4);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Rogue:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 15 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[7] = PickOneOf(0, 1, 1, 2, 2);
+                        equipTableProps[9] = 1;
+                        break;
+                    case (int)ClassCareers.Acrobat:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 6 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[2] = PickOneOf(0, 0, 1, 1, 1, 2, 2);
+                        equipTableProps[9] = 1;
+                        break;
+                    case (int)ClassCareers.Thief:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 16 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[7] = PickOneOf(1, 1, 1, 2, 2, 3);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Assassin:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 14 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[1] = PickOneOf(0, 1);
+                        equipTableProps[2] = PickOneOf(1, 2);
+                        equipTableProps[3] = PickOneOf(1, 2);
+                        equipTableProps[4] = PickOneOf(1, 1, 2);
+                        equipTableProps[5] = PickOneOf(0, 0, 1);
+                        equipTableProps[6] = PickOneOf(1, 1, 1, 2, 2);
+                        equipTableProps[7] = PickOneOf(0, 0, 1, 1, 2);
+                        equipTableProps[8] = PickOneOf(0, 0, 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Monk:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 2 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[8] = PickOneOf(0, 1, 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Archer:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 11 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[2] = PickOneOf(0, 1, 2);
+                        equipTableProps[3] = PickOneOf(0, 1, 2);
+                        equipTableProps[4] = PickOneOf(0, 1, 1, 2);
+                        equipTableProps[5] = PickOneOf(0, 0, 0, 1);
+                        equipTableProps[6] = PickOneOf(0, 1, 1, 1, 2);
+                        equipTableProps[7] = PickOneOf(0, 0, 1, 2);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Ranger:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 5 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[1] = PickOneOf(1, 2, 2, 3);
+                        equipTableProps[2] = PickOneOf(1, 2, 2, 3);
+                        equipTableProps[3] = PickOneOf(2, 2, 2, 2, 3, 3, 4);
+                        equipTableProps[4] = PickOneOf(2, 2, 2, 2, 2, 3, 3, 4);
+                        equipTableProps[5] = PickOneOf(0, 1, 1, 1, 2);
+                        equipTableProps[6] = PickOneOf(0, 0, 0, 1);
+                        equipTableProps[8] = PickOneOf(0, 0, 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Barbarian:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 6 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Warrior:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 13 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case (int)ClassCareers.Knight:
+                        equipTableProps[0] = UnityEngine.Random.Range(1 * level, 10 * (int)Mathf.Ceil(level / 2) + 1);
+                        equipTableProps[5] = PickOneOf(0, 1);
+                        equipTableProps[8] = PickOneOf(0, 0, 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    default:
+                        return equipTableProps;
                 }
             }
             else
             {
-                return equipTableProps;
+                switch (AITarget.CareerIndex)
+                {
+                    case 0:
+                    case 3:
+                        equipTableProps[4] = UnityEngine.Random.Range(0, 8 + 1);
+                        break;
+                    case 4:
+                    case 5:
+                    case 11:
+                        equipTableProps[4] = UnityEngine.Random.Range(0, 12 + 1);
+                        break;
+                    case 6:
+                        equipTableProps[4] = UnityEngine.Random.Range(0, 4 + 1);
+                        break;
+                    case 20:
+                        equipTableProps[4] = 1;
+                        break;
+                    case 1:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 9 + 1);
+                        equipTableProps[1] = PickOneOf(0, 1);
+                        equipTableProps[2] = PickOneOf(0, 1);
+                        equipTableProps[3] = PickOneOf(0, 1);
+                        equipTableProps[7] = PickOneOf(0, 0, 0, 1, 1, 2);
+                        break;
+                    case 2:
+                        equipTableProps[1] = UnityEngine.Random.Range(2, 8 + 1);
+                        equipTableProps[2] = UnityEngine.Random.Range(1, 5 + 1);
+                        equipTableProps[3] = UnityEngine.Random.Range(1, 3 + 1);
+                        break;
+                    case 8:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 18 + 1);
+                        break;
+                    case 10:
+                        equipTableProps[2] = UnityEngine.Random.Range(2, 6 + 1);
+                        equipTableProps[5] = PickOneOf(1, 1, 1, 2, 2, 3);
+                        break;
+                    case 13:
+                        equipTableProps[5] = UnityEngine.Random.Range(3, 10 + 1);
+                        break;
+                    case 16:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 31 + 1);
+                        equipTableProps[5] = UnityEngine.Random.Range(1, 5 + 1);
+                        break;
+                    case 22:
+                        equipTableProps[1] = UnityEngine.Random.Range(0, 3 + 1);
+                        equipTableProps[7] = UnityEngine.Random.Range(2, 7 + 1);
+                        break;
+                    case 34:
+                        equipTableProps[5] = UnityEngine.Random.Range(1, 3 + 1);
+                        break;
+                    case 40:
+                        equipTableProps[5] = UnityEngine.Random.Range(3, 10 + 1);
+                        break;
+                    case 41:
+                        equipTableProps[4] = UnityEngine.Random.Range(0, 4 + 1);
+                        break;
+                    case 42:
+                        equipTableProps[5] = UnityEngine.Random.Range(3, 7 + 1);
+                        break;
+                    case 7:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 10 + 1);
+                        equipTableProps[9] = 1;
+                        break;
+                    case 12:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 25 + 1);
+                        equipTableProps[9] = 1;
+                        break;
+                    case 21:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 16 + 1);
+                        equipTableProps[1] = PickOneOf(0, 1, 2);
+                        equipTableProps[2] = PickOneOf(1, 2);
+                        equipTableProps[3] = PickOneOf(1, 2, 3);
+                        equipTableProps[4] = PickOneOf(0, 1);
+                        equipTableProps[5] = PickOneOf(0, 1, 1, 2);
+                        equipTableProps[6] = PickOneOf(0, 1, 2);
+                        equipTableProps[7] = PickOneOf(0, 0, 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case 24:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 49 + 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case 9:
+                        equipTableProps[5] = UnityEngine.Random.Range(2, 5 + 1);
+                        break;
+                    case 14:
+                        equipTableProps[7] = PickOneOf(0, 1, 1, 2);
+                        break;
+                    case 35:
+                        equipTableProps[7] = UnityEngine.Random.Range(2, 9 + 1);
+                        break;
+                    case 36:
+                        equipTableProps[7] = UnityEngine.Random.Range(2, 9 + 1);
+                        break;
+                    case 37:
+                        equipTableProps[6] = UnityEngine.Random.Range(1, 5 + 1);
+                        break;
+                    case 38:
+                        equipTableProps[6] = UnityEngine.Random.Range(2, 7 + 1);
+                        break;
+                    case 15:
+                        equipTableProps[9] = 1;
+                        break;
+                    case 17:
+                        equipTableProps[9] = 1;
+                        break;
+                    case 18:
+                        equipTableProps[5] = UnityEngine.Random.Range(1, 2 + 1);
+                        break;
+                    case 19:
+                        equipTableProps[5] = UnityEngine.Random.Range(1, 3 + 1);
+                        break;
+                    case 23:
+                        equipTableProps[5] = UnityEngine.Random.Range(2, 5 + 1);
+                        break;
+                    case 28:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 20 + 1);
+                        equipTableProps[4] = UnityEngine.Random.Range(0, 3 + 1);
+                        equipTableProps[5] = PickOneOf(0, 1, 2);
+                        equipTableProps[8] = PickOneOf(0, 0, 1);
+                        equipTableProps[9] = 1;
+                        break;
+                    case 30:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 45 + 1);
+                        equipTableProps[4] = UnityEngine.Random.Range(0, 3 + 1);
+                        equipTableProps[5] = PickOneOf(0, 1, 2);
+                        equipTableProps[8] = PickOneOf(1, 1, 1, 2);
+                        equipTableProps[9] = 1;
+                        break;
+                    case 32:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 15 + 1);
+                        equipTableProps[4] = UnityEngine.Random.Range(2, 5 + 1);
+                        equipTableProps[8] = PickOneOf(2, 2, 2, 3);
+                        equipTableProps[9] = 1;
+                        break;
+                    case 33:
+                        equipTableProps[0] = UnityEngine.Random.Range(0, 35 + 1);
+                        equipTableProps[5] = UnityEngine.Random.Range(3, 6 + 1);
+                        equipTableProps[8] = PickOneOf(2, 2, 2, 3, 3, 4);
+                        equipTableProps[9] = 1;
+                        break;
+                    case 25:
+                        equipTableProps[5] = 1;
+                        equipTableProps[6] = UnityEngine.Random.Range(1, 5 + 1);
+                        break;
+                    case 26:
+                        equipTableProps[5] = 1;
+                        equipTableProps[6] = UnityEngine.Random.Range(1, 5 + 1);
+                        break;
+                    case 27:
+                        equipTableProps[4] = UnityEngine.Random.Range(0, 7 + 1);
+                        equipTableProps[5] = 1;
+                        equipTableProps[9] = 1;
+                        break;
+                    case 29:
+                        equipTableProps[5] = 1;
+                        equipTableProps[6] = UnityEngine.Random.Range(0, 3 + 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    case 31:
+                        equipTableProps[5] = 1;
+                        equipTableProps[6] = UnityEngine.Random.Range(0, 4 + 1);
+                        equipTableProps[9] = 1;
+                        equipTableProps[10] = 1;
+                        break;
+                    default:
+                        return equipTableProps;
+                }
             }
 
-            equipTableProps = TraitEquipModCalculator(enemy, traits, equipTableProps);
-
             return equipTableProps;
+        }
+
+        public static int[] EnemyExtraLootCalculator(DaggerfallEntity enemy, int[] traits, int[] predefLootProps)
+        {
+            // Index meanings: 0 = arrows, 1 = potions, 2 = gems, 3 = magicItems, 4 = foodItems, 5 = lightSources, 6 = religiousItems, 7 = bandages, 8 = repairTools, 9 = drugs, 10 = extraWeapons, 11 = maps. 
+            // Main variable used in determining enemy loot/equipment values for purposes of targeted loot generation based on many context related variables.
+            int[] extraLootProps = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            EnemyEntity AITarget = enemy as EnemyEntity;
+            int level = enemy.Level;
+
+            if (AITarget.EntityType == EntityTypes.EnemyClass)
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case (int)ClassCareers.Mage:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 1);
+                        extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Spellsword:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Battlemage:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 1);
+                        extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Sorcerer:
+                        extraLootProps[1] = PickOneOf(1, 1, 1, 1, 1, 2, 2, 3);
+                        extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Healer:
+                        extraLootProps[1] = PickOneOf(1, 1, 1, 2);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[6] = UnityEngine.Random.Range(2, 4 + 1);
+                        extraLootProps[7] = UnityEngine.Random.Range(3, 6 + 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Nightblade:
+                        extraLootProps[1] = PickOneOf(0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[10] = 1;
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Bard:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(2, 2, 3);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[9] = PickOneOf(0, 1, 1, 1, 1, 1, 2, 2);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Burglar:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[2] = PickOneOf(0, 0, 1, 1, 1, 1, 1, 2);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Rogue:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Acrobat:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Thief:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[2] = PickOneOf(0, 0, 0, 0, 0, 1, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Assassin:
+                        extraLootProps[0] = UnityEngine.Random.Range(5, 16 + 1);
+                        extraLootProps[1] = PickOneOf(0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[9] = PickOneOf(0, 0, 0, 1, 1, 1, 1, 2);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Monk:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[6] = UnityEngine.Random.Range(1, 3 + 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Archer:
+                        extraLootProps[0] = UnityEngine.Random.Range(16, 35 + 1);
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[8] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Ranger:
+                        extraLootProps[0] = UnityEngine.Random.Range(9, 26 + 1);
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(2, 2, 3);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[8] = PickOneOf(0, 0, 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Barbarian:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[7] = UnityEngine.Random.Range(1, 4 + 1);
+                        extraLootProps[8] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Warrior:
+                        extraLootProps[0] = UnityEngine.Random.Range(5, 20 + 1);
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[8] = PickOneOf(0, 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case (int)ClassCareers.Knight:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(1, 2);
+                        extraLootProps[5] = PickOneOf(1, 2);
+                        extraLootProps[6] = UnityEngine.Random.Range(1, 2 + 1);
+                        extraLootProps[8] = PickOneOf(0, 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    default:
+                        return extraLootProps;
+                }
+            }
+            else
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case 7:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(0, 1);
+                        extraLootProps[5] = PickOneOf(0, 1);
+                        extraLootProps[8] = PickOneOf(0, 0, 0, 0, 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case 12:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 1);
+                        extraLootProps[4] = PickOneOf(0, 1);
+                        extraLootProps[5] = PickOneOf(0, 1);
+                        extraLootProps[8] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case 21:
+                        extraLootProps[1] = PickOneOf(0, 0, 1);
+                        extraLootProps[4] = PickOneOf(0, 1);
+                        extraLootProps[5] = PickOneOf(0, 1);
+                        extraLootProps[6] = UnityEngine.Random.Range(1, 3 + 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case 24:
+                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
+                        extraLootProps[2] = PickOneOf(0, 0, 1, 1, 1, 1, 1, 1, 2);
+                        extraLootProps[4] = PickOneOf(0, 1, 2);
+                        extraLootProps[5] = PickOneOf(0, 1);
+                        extraLootProps[8] = PickOneOf(0, 0, 1);
+                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    case 29:
+                    case 31:
+                        extraLootProps[2] = PickOneOf(0, 0, 1, 1, 1, 1, 2, 2, 2, 3);
+                        extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        break;
+                    default:
+                        return extraLootProps;
+                }
+            }
+
+            return extraLootProps;
         }
 
         public static int[] EnemyPersonalityTraitGenerator(DaggerfallEntity enemy) // Array Index 0 and 1 are both Quirks, Index 2 is an Interest.

@@ -764,14 +764,13 @@ namespace DaggerfallWorkshop.Game.Items
             Array enumArray;
             switch (ingredientGroup)
             {
-                case ItemGroups.CreatureIngredients1:
-                case ItemGroups.CreatureIngredients2:
-                case ItemGroups.CreatureIngredients3:
+                case ItemGroups.MiscPlantIngredients:
+                case ItemGroups.FlowerPlantIngredients:
+                case ItemGroups.FruitPlantIngredients:
+                case ItemGroups.AnimalPartIngredients:
+                case ItemGroups.CreatureIngredients:
+                case ItemGroups.SolventIngredients:
                 case ItemGroups.MetalIngredients:
-                case ItemGroups.MiscellaneousIngredients1:
-                case ItemGroups.MiscellaneousIngredients2:
-                case ItemGroups.PlantIngredients1:
-                case ItemGroups.PlantIngredients2:
                     enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ingredientGroup);
                     groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
                     break;
@@ -793,33 +792,30 @@ namespace DaggerfallWorkshop.Game.Items
         {
             // Randomise ingredient group
             ItemGroups itemGroup;
-            int group = UnityEngine.Random.Range(0, 8);
+            int group = UnityEngine.Random.Range(0, 7);
             Array enumArray;
             switch (group)
             {
                 case 0:
-                    itemGroup = ItemGroups.CreatureIngredients1;
+                    itemGroup = ItemGroups.MiscPlantIngredients;
                     break;
                 case 1:
-                    itemGroup = ItemGroups.CreatureIngredients2;
+                    itemGroup = ItemGroups.FlowerPlantIngredients;
                     break;
                 case 2:
-                    itemGroup = ItemGroups.CreatureIngredients3;
+                    itemGroup = ItemGroups.FruitPlantIngredients;
                     break;
                 case 3:
-                    itemGroup = ItemGroups.MetalIngredients;
+                    itemGroup = ItemGroups.AnimalPartIngredients;
                     break;
                 case 4:
-                    itemGroup = ItemGroups.MiscellaneousIngredients1;
+                    itemGroup = ItemGroups.CreatureIngredients;
                     break;
                 case 5:
-                    itemGroup = ItemGroups.MiscellaneousIngredients2;
+                    itemGroup = ItemGroups.SolventIngredients;
                     break;
                 case 6:
-                    itemGroup = ItemGroups.PlantIngredients1;
-                    break;
-                case 7:
-                    itemGroup = ItemGroups.PlantIngredients2;
+                    itemGroup = ItemGroups.MetalIngredients;
                     break;
                 default:
                     return null;

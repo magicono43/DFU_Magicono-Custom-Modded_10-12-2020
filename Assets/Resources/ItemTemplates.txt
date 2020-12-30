@@ -1041,7 +1041,7 @@
     },
     {
         "index": 52,
-        "name": "Gryphon's Feather",
+        "name": "Harpy's Feather",
         "baseWeight": 0.25,
         "hitPoints": 20,
         "capacityOrTarget": 0,

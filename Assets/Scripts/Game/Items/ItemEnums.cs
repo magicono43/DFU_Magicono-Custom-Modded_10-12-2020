@@ -42,20 +42,19 @@ namespace DaggerfallWorkshop.Game.Items
         WomensClothing = 12,
         Paintings = 13,
         Gems = 14,
-        PlantIngredients1 = 15,
-        PlantIngredients2 = 16,
-        CreatureIngredients1 = 17,
-        CreatureIngredients2 = 18,
-        CreatureIngredients3 = 19,
-        MiscellaneousIngredients1 = 20,
+        MiscPlantIngredients = 15,
+        FlowerPlantIngredients = 16,
+        FruitPlantIngredients = 17,
+        AnimalPartIngredients = 18,
+        CreatureIngredients = 19,
+        SolventIngredients = 20,
         MetalIngredients = 21,
-        MiscellaneousIngredients2 = 22,
-        Transportation = 23,
-        Deeds = 24,
-        Jewellery = 25,
-        QuestItems = 26,
-        MiscItems = 27,
-        Currency = 28,
+        Transportation = 22,
+        Deeds = 23,
+        Jewellery = 24,
+        QuestItems = 25,
+        MiscItems = 26,
+        Currency = 27,
     }
 
     /// <summary>
@@ -436,89 +435,82 @@ namespace DaggerfallWorkshop.Game.Items
         Amber = 7,
     }
 
-    public enum PlantIngredients1 //checked
+    public enum MiscPlantIngredients
     {
         Twigs = 8,
         Green_leaves = 9,
-        Red_flowers = 10,
-        Yellow_flowers = 11,
         Root_tendrils = 12,
         Root_bulb = 13,
         Pine_branch = 14,
-        Green_berries = 15,
-        Red_berries = 16,
-        Yellow_berries = 17,
-        Clover = 18,
-        Red_rose = 19,
-        Yellow_rose = 20,
-        Red_poppy = 23,
-        Golden_poppy = 25,
-    }
-
-    public enum PlantIngredients2  //checked
-    {
-        Twigs = 8,
-        Green_leaves = 9,
-        Red_flowers = 10,
-        Yellow_flowers = 11,
-        Root_tendrils = 12,
-        Root_bulb = 13,
-        Green_berries = 15,
-        Red_berries = 16,
-        Yellow_berries = 17,
-        Black_rose = 21,
-        White_rose = 22,
-        Black_poppy = 24,
-        White_poppy = 26,
         Ginkgo_leaves = 27,
         Bamboo = 28,
         Palm = 29,
         Aloe = 30,
+    }
+
+    public enum FlowerPlantIngredients
+    {
+        Red_Flowers = 10,
+        Yellow_Flowers = 11,
+        Clover = 18,
+        Red_rose = 19,
+        Yellow_rose = 20,
+        Black_rose = 21,
+        White_rose = 22,
+        Red_poppy = 23,
+        Black_poppy = 24,
+        Golden_poppy = 25,
+        White_poppy = 26,
+    }
+
+    public enum FruitPlantIngredients
+    {
+        Green_berries = 15,
+        Red_berries = 16,
+        Yellow_berries = 17,
         Fig = 31,
         Cactus = 32,
     }
 
-    public enum CreatureIngredients1  //checked
+    public enum AnimalPartIngredients
+    {
+        Spider_venom = 41,
+        Snake_venom = 43,
+        Giant_scorpion_stinger = 47,
+        Small_scorpion_stinger = 48,
+        Big_tooth = 56,
+        Medium_tooth = 57,
+        Small_tooth = 58,
+        Ivory = 76,
+        Pearl = 77,
+    }
+
+    public enum CreatureIngredients
     {
         Werewolfs_blood = 33,
+        Wereboar_tusk = 34,
         Fairy_dragon_scales = 35,
+        Nymph_hair = 36,
+        Unicorn_horn = 37,
         Wraith_essence = 38,
         Ectoplasm = 39,
         Ghouls_tongue = 40,
-        Spider_venom = 41,
         Troll_blood = 42,
-        Snake_venom = 43,
         Gorgon_snake = 44,
         Lich_dust = 45,
+        Dragons_scales = 46,
+        Mummy_wrappings = 49,
         Giant_blood = 50,
         Basilisk_eye = 51,
+        Harpy_Feather = 52,
         Daedra_heart = 53,
         Saints_hair = 54,
         Orcs_blood = 61,
     }
 
-    public enum CreatureIngredients2  //checked
-    {
-        Dragons_scales = 46,
-        Giant_scorpion_stinger = 47,
-        Small_scorpion_stinger = 48,
-        Mummy_wrappings = 49,
-        Gryphon_Feather = 52,
-    }
-
-    public enum CreatureIngredients3 //checked
-    {
-        Wereboar_tusk = 34,
-        Nymph_hair = 36,
-        Unicorn_horn = 37,
-    }
-
-    public enum MiscellaneousIngredients1  //checked
+    public enum SolventIngredients
     {
         Holy_relic = 55,
-        Big_tooth = 56,
-        Medium_tooth = 57,
-        Small_tooth = 58,
         Pure_water = 59,
         Rain_water = 60,
         Elixir_vitae = 62,
@@ -539,12 +531,6 @@ namespace DaggerfallWorkshop.Game.Items
         Silver = 73,
         Gold = 74,
         Platinum = 75,
-    }
-
-    public enum MiscellaneousIngredients2 //checked
-    {
-        Ivory = 76,
-        Pearl = 77,
     }
 
     public enum Transportation  //Checked

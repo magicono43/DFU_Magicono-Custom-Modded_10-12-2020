@@ -276,15 +276,6 @@ namespace DaggerfallWorkshop.Game.Items
             if (!item.IsIdentified || item.IsArtifact)
                 return result;
 
-            // Differentiate plant ingredients with 2 variants
-            if (differentiatePlantIngredients)
-            {
-                if (item.ItemGroup == ItemGroups.PlantIngredients1 && item.TemplateIndex < 18)
-                    return string.Format("{0} {1}", result, TextManager.Instance.GetLocalizedText("northern"));
-                if (item.ItemGroup == ItemGroups.PlantIngredients2 && item.TemplateIndex < 18)
-                    return string.Format("{0} {1}", result, TextManager.Instance.GetLocalizedText("southern"));
-            }
-
             // Resolve weapon material
             if (item.ItemGroup == ItemGroups.Weapons && item.TemplateIndex != (int)Weapons.Arrow)
             {
@@ -1279,22 +1270,20 @@ namespace DaggerfallWorkshop.Game.Items
                     return Enum.GetValues(typeof(Paintings));
                 case ItemGroups.Gems:
                     return Enum.GetValues(typeof(Gems));
-                case ItemGroups.PlantIngredients1:
-                    return Enum.GetValues(typeof(PlantIngredients1));
-                case ItemGroups.PlantIngredients2:
-                    return Enum.GetValues(typeof(PlantIngredients2));
-                case ItemGroups.CreatureIngredients1:
-                    return Enum.GetValues(typeof(CreatureIngredients1));
-                case ItemGroups.CreatureIngredients2:
-                    return Enum.GetValues(typeof(CreatureIngredients2));
-                case ItemGroups.CreatureIngredients3:
-                    return Enum.GetValues(typeof(CreatureIngredients3));
-                case ItemGroups.MiscellaneousIngredients1:
-                    return Enum.GetValues(typeof(MiscellaneousIngredients1));
+                case ItemGroups.MiscPlantIngredients:
+                    return Enum.GetValues(typeof(MiscPlantIngredients));
+                case ItemGroups.FlowerPlantIngredients:
+                    return Enum.GetValues(typeof(FlowerPlantIngredients));
+                case ItemGroups.FruitPlantIngredients:
+                    return Enum.GetValues(typeof(FruitPlantIngredients));
+                case ItemGroups.AnimalPartIngredients:
+                    return Enum.GetValues(typeof(AnimalPartIngredients));
+                case ItemGroups.CreatureIngredients:
+                    return Enum.GetValues(typeof(CreatureIngredients));
+                case ItemGroups.SolventIngredients:
+                    return Enum.GetValues(typeof(SolventIngredients));
                 case ItemGroups.MetalIngredients:
                     return Enum.GetValues(typeof(MetalIngredients));
-                case ItemGroups.MiscellaneousIngredients2:
-                    return Enum.GetValues(typeof(MiscellaneousIngredients2));
                 case ItemGroups.Transportation:
                     return Enum.GetValues(typeof(Transportation));
                 case ItemGroups.Deeds:
