@@ -74,11 +74,10 @@ namespace DaggerfallWorkshop
 
             enemyPredefLootTableProperties = EnemyBasics.EnemyPredefLootTableCalculator(enemy, traits);
             enemyExtraLootProperties = EnemyBasics.EnemyExtraLootCalculator(enemy, traits, enemyPredefLootTableProperties);
-            EnemyBasics.TraitExtraLootModCalculator(enemy, traits, enemyPredefLootTableProperties, enemyExtraLootProperties, out enemyPredefLootTableProperties, out enemyExtraLootProperties);
+            EnemyBasics.TraitExtraLootModCalculator(traits, enemyPredefLootTableProperties, enemyExtraLootProperties, out enemyPredefLootTableProperties, out enemyExtraLootProperties);
             // Now will start actually creating the items based on enemyPredefLootTableProperties and enemyExtraLootProperties, after that is done, likely add the "flavor" items from the traits afterward. 
 
-            LootChanceMatrix matrix = LootTables.GetMatrix(LootTableKey);
-            DaggerfallUnityItem[] newitems = LootTables.GenerateRandomLoot(matrix, GameManager.Instance.PlayerEntity);
+            DaggerfallUnityItem[] newitems = LootTables.GenerateEnemyLoot(enemy, traits, enemyPredefLootTableProperties, enemyExtraLootProperties);
 
             FormulaHelper.ModifyFoundLootItems(ref newitems);
 

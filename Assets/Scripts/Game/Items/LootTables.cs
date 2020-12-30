@@ -13,6 +13,7 @@ using UnityEngine;
 using DaggerfallWorkshop.Game.Entity;
 using System.Collections.Generic;
 using DaggerfallWorkshop.Game.Utility;
+using DaggerfallWorkshop.Game.Formulas;
 
 namespace DaggerfallWorkshop.Game.Items
 {
@@ -228,7 +229,125 @@ namespace DaggerfallWorkshop.Game.Items
             return items.ToArray();
         }
 
+        public static DaggerfallUnityItem[] GenerateEnemyLoot(DaggerfallEntity enemy, int[] traits, int[] predefLootProps, int[] extraLootProps)
+        {
+            int level = enemy.Level;
+            EnemyEntity AITarget = enemy as EnemyEntity;
+            float chance;
+            List<DaggerfallUnityItem> items = new List<DaggerfallUnityItem>();
+
+            // Reseed random
+            Random.InitState(items.GetHashCode());
+
+            // Add gold
+            if (predefLootProps[0] > 0)
+            {
+                items.Add(ItemBuilder.CreateGoldPieces(predefLootProps[0]));
+            }
+
+            // Extra weapon
+            if (extraLootProps[10] > 0)
+            {
+                for (int i = 1; i < extraLootProps[10]; i++)
+                {
+                    if (i == 1 && AITarget.EntityType == EntityTypes.EnemyClass && AITarget.CareerIndex == (int)ClassCareers.Nightblade)
+                    {
+                        items.Add(ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Longsword), WeaponMaterialTypes.Silver));
+                        continue;
+                    }
+
+                    if (traits[2] == (int)MobilePersonalityInterests.Survivalist || traits[2] == (int)MobilePersonalityInterests.Hunter)
+                    {
+                        items.Add(ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow), FormulaHelper.RandomMaterial(level)));
+                        continue;
+                    }
+                    else
+                        items.Add(ItemBuilder.CreateRandomWeapon(level));
+                }
+            }
+
+            // Ingredients
+            TargetedIngredients(AITarget, predefLootProps, items);
+
+            RandomIngredient(matrix.C1 * playerEntity.Level, ItemGroups.CreatureIngredients1, items);
+
+            // Random magic item
+            chance = matrix.MI;
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                items.Add(ItemBuilder.CreateRandomMagicItem(playerEntity.Level, playerEntity.Gender, playerEntity.Race));
+                chance *= 0.5f;
+            }
+
+            // Random clothes
+            chance = matrix.CL;
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                items.Add(ItemBuilder.CreateRandomClothing(playerEntity.Gender, playerEntity.Race));
+                chance *= 0.5f;
+            }
+
+            // Random books
+            chance = matrix.BK;
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                items.Add(ItemBuilder.CreateRandomBook());
+                chance *= 0.5f;
+            }
+
+            // Random religious item
+            chance = matrix.RL;
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                items.Add(ItemBuilder.CreateRandomReligiousItem());
+                chance *= 0.5f;
+            }
+
+            return items.ToArray();
+        }
+
+        public static int PickOneOf(params int[] values) // Pango provided assistance in making this much cleaner way of doing the random value choice part, awesome.
+        {
+            return values[UnityEngine.Random.Range(0, values.Length)];
+        }
+
         #region Private Methods
+
+        static void TargetedIngredients(EnemyEntity AITarget, int[] predefLootProps, List<DaggerfallUnityItem> targetItems)
+        {
+            switch (AITarget.CareerIndex)
+            {
+                case 0:
+                case 3:
+                    for (int i = 1; i < predefLootProps[4]; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
+                    return;
+                case 4:
+                case 5:
+                    for (int i = 1; i < predefLootProps[4]; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth));
+                    return;
+                case 6:
+                    for (int i = 1; i < predefLootProps[4]; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom));
+                    return;
+                case 11:
+                    for (int i = 1; i < predefLootProps[4]; i++)
+                    {
+                        if (Dice100.SuccessRoll(95))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
+                        else
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl));
+                    }
+                    return;
+                case 20:
+                    for (int i = 1; i < predefLootProps[4]; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Giant_scorpion_stinger));
+                    return;
+                default:
+                    return;
+            }
+        }
 
         static void RandomIngredient(float chance, ItemGroups ingredientGroup, List<DaggerfallUnityItem> targetItems)
         {

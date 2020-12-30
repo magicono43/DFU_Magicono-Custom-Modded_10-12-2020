@@ -4594,7 +4594,7 @@ namespace DaggerfallWorkshop.Utility
             return equipTableProps;
         }
 
-        public static void TraitExtraLootModCalculator(DaggerfallEntity enemy, int[] traits, int[] equipTableProps, int[] extraLootProps, out int[] finalEquipTableProps, out int[] finalExtraLootProps)
+        public static void TraitExtraLootModCalculator(int[] traits, int[] equipTableProps, int[] extraLootProps, out int[] finalEquipTableProps, out int[] finalExtraLootProps)
         {
             finalEquipTableProps = equipTableProps;
             finalExtraLootProps = extraLootProps;
@@ -4711,14 +4711,14 @@ namespace DaggerfallWorkshop.Utility
                 {
                     finalEquipTableProps[3] = (finalEquipTableProps[3] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[3] * 2f) : finalEquipTableProps[3] = 2;
                     finalExtraLootProps[0] = (finalExtraLootProps[0] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[0] * 2f) : finalExtraLootProps[0] = 6;
-                    finalExtraLootProps[10] = 1;
+                    finalExtraLootProps[10] = (finalExtraLootProps[10] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[10] * 2f) : finalExtraLootProps[10] = 1;
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Hunter)
                 {
                     finalExtraLootProps[0] = (finalExtraLootProps[2] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[2] * 2.5f) : finalExtraLootProps[2] = 12;
                     finalExtraLootProps[4] = (finalExtraLootProps[4] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[4] * 1.5f) : finalExtraLootProps[4] = 2;
-                    finalExtraLootProps[10] = 1;
+                    finalExtraLootProps[10] = (finalExtraLootProps[10] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[10] * 2f) : finalExtraLootProps[10] = 1;
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Brewer)
