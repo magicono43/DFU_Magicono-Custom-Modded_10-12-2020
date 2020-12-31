@@ -292,6 +292,113 @@ namespace DaggerfallWorkshop.Game.Items
         }
 
         /// <summary>
+        /// Creates a random book from any of the subject groups.
+        /// Passing a non-book subject group will return null.
+        /// </summary>
+        /// <param name="ingredientGroup">Ingredient group.</param>
+        /// <returns>DaggerfallUnityItem</returns>
+        public static DaggerfallUnityItem CreateRandomBookOfSpecificSubject(ItemGroups bookSubject)
+        {
+            int groupIndex;
+            Array enumArray;
+            switch (bookSubject)
+            {
+                case ItemGroups.Biography_Books:
+                case ItemGroups.Faction_Related_Books:
+                case ItemGroups.Fiction_Books:
+                case ItemGroups.History_Lore_Books:
+                case ItemGroups.Humor_Books:
+                case ItemGroups.Instruction_Research_Books:
+                case ItemGroups.Journals_Logs_Books:
+                case ItemGroups.Notes_Letters_Books:
+                case ItemGroups.Plays_Poetry_Riddles_Books:
+                case ItemGroups.Politics_Law_Books:
+                case ItemGroups.Religion_Prophecy_Books:
+                case ItemGroups.Travel_Books:
+                case ItemGroups.Informational_Books:
+                case ItemGroups.No_Topic_Books:
+                    enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(bookSubject);
+                    groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
+                    break;
+                default:
+                    return null;
+            }
+
+            // Create item
+            DaggerfallUnityItem book = CreateBook(groupIndex);
+
+            return book;
+        }
+
+        /// <summary>
+        /// Creates a random book of a random subject group.
+        /// </summary>
+        /// <returns>DaggerfallUnityItem</returns>
+        public static DaggerfallUnityItem CreateRandomBookOfRandomSubject()
+        {
+            // Randomise ingredient group
+            ItemGroups itemGroup;
+            int group = UnityEngine.Random.Range(0, 12); // Keeping this range to 12 for now, until I actually add books to the "Informational and no_topic" subjects, otherwise will just give a null. 
+            Array enumArray;
+            switch (group)
+            {
+                case 0:
+                    itemGroup = ItemGroups.Biography_Books;
+                    break;
+                case 1:
+                    itemGroup = ItemGroups.Faction_Related_Books;
+                    break;
+                case 2:
+                    itemGroup = ItemGroups.Fiction_Books;
+                    break;
+                case 3:
+                    itemGroup = ItemGroups.History_Lore_Books;
+                    break;
+                case 4:
+                    itemGroup = ItemGroups.Humor_Books;
+                    break;
+                case 5:
+                    itemGroup = ItemGroups.Instruction_Research_Books;
+                    break;
+                case 6:
+                    itemGroup = ItemGroups.Journals_Logs_Books;
+                    break;
+                case 7:
+                    itemGroup = ItemGroups.Notes_Letters_Books;
+                    break;
+                case 8:
+                    itemGroup = ItemGroups.Plays_Poetry_Riddles_Books;
+                    break;
+                case 9:
+                    itemGroup = ItemGroups.Politics_Law_Books;
+                    break;
+                case 10:
+                    itemGroup = ItemGroups.Religion_Prophecy_Books;
+                    break;
+                case 11:
+                    itemGroup = ItemGroups.Travel_Books;
+                    break;
+                case 12:
+                    itemGroup = ItemGroups.Informational_Books;
+                    break;
+                case 13:
+                    itemGroup = ItemGroups.No_Topic_Books;
+                    break;
+                default:
+                    return null;
+            }
+
+            // Randomise book within group
+            enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(itemGroup);
+            int groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
+
+            // Create item
+            DaggerfallUnityItem book = CreateBook(groupIndex);
+
+            return book;
+        }
+
+        /// <summary>
         /// Creates a new random religious item.
         /// </summary>
         /// <returns>DaggerfallUnityItem.</returns>

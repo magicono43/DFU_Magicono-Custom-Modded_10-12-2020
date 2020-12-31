@@ -329,12 +329,13 @@ namespace DaggerfallWorkshop.Game.Items
                 AddBooksBasedOnSubject(AITarget, predefLootProps[8], items); // I'll likely have to make a "create random book by subject" method similar to the ingredient ones, will do after shower. 
             }
 
-                // Random magic item
-                chance = matrix.MI;
-            while (Dice100.SuccessRoll((int)chance))
+            // Random magic items
+            if (extraLootProps[3] > 0)
             {
-                items.Add(ItemBuilder.CreateRandomMagicItem(playerEntity.Level, playerEntity.Gender, playerEntity.Race));
-                chance *= 0.5f;
+                for (int i = 1; i < extraLootProps[2]; i++)
+                {
+                    items.Add(ItemBuilder.CreateRandomMagicItem(playerEntity.Level, playerEntity.Gender, playerEntity.Race)); // Work on this next, will likely have to edit/redo the MagicItem Creating Method. 
+                }
             }
 
             // Random clothes
@@ -561,18 +562,71 @@ namespace DaggerfallWorkshop.Game.Items
         {
             if (AITarget.EntityType == EntityTypes.EnemyClass)
             {
-                return;
+                switch (AITarget.CareerIndex)
+                {
+                    case (int)ClassCareers.Mage:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 33, 33, 33, 33, 33, 33, 28, 30, 30, 30, 31, 31, 32, 34, 36, 36, 39)));
+                        return;
+                    case (int)ClassCareers.Spellsword:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 33, 33, 33, 28, 28, 30, 30, 30, 30, 30, 31, 31, 32, 34, 36, 36, 39)));
+                        return;
+                    case (int)ClassCareers.Battlemage:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 33, 28, 28, 28, 30, 30, 30, 30, 30, 30, 31, 31, 32, 34, 36, 36, 39)));
+                        return;
+                    case (int)ClassCareers.Sorcerer:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 28, 28, 30, 30, 30, 30, 30, 30, 30, 31, 31, 31, 32, 34, 36, 36, 39)));
+                        return;
+                    case (int)ClassCareers.Healer:
+                    case (int)ClassCareers.Monk:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(38, 38, 38, 38, 38, 38, 38, 38, 33, 28, 30, 30, 31, 31, 31, 32, 34, 36, 39, 39)));
+                        return;
+                    case (int)ClassCareers.Nightblade:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 29, 30, 30, 30, 30, 30, 30, 31, 31, 33, 33, 34, 35, 36, 36, 37, 38, 38, 39)));
+                        return;
+                    case (int)ClassCareers.Bard:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 29, 30, 30, 30, 31, 31, 31, 32, 32, 34, 35, 36, 36, 36, 36, 38, 38, 39)));
+                        return;
+                    case (int)ClassCareers.Assassin:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 29, 29, 29, 30, 30, 31, 31, 31, 31, 33, 33, 34, 35, 36, 37, 37, 38, 39)));
+                        return;
+                    case (int)ClassCareers.Ranger:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 29, 30, 30, 31, 31, 31, 32, 33, 33, 33, 33, 34, 35, 36, 38, 39, 39, 39)));
+                        return;
+                    case (int)ClassCareers.Knight:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 28, 30, 30, 30, 31, 31, 31, 36, 36, 36, 36, 37, 37, 38, 38, 38, 38, 39)));
+                        return;
+                    default:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
+                        return;
+                }
             }
             else
             {
                 switch (AITarget.CareerIndex)
                 {
-                    case 0:
-                    case 3:
-                        for (int i = 1; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
+                    case 21:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 30, 30, 30, 30, 31, 31, 33, 33, 36, 38, 38, 38, 38, 38, 38, 38, 38, 38, 39)));
+                        return;
+                    case 32:
+                    case 33:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 30, 30, 31, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 34, 35, 35, 36, 38, 39)));
                         return;
                     default:
+                        for (int i = 1; i < bookAmount; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
                         return;
                 }
             }
