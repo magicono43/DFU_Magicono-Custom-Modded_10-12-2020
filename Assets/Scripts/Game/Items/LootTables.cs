@@ -231,9 +231,9 @@ namespace DaggerfallWorkshop.Game.Items
 
         public static DaggerfallUnityItem[] GenerateEnemyLoot(DaggerfallEntity enemy, int[] traits, int[] predefLootProps, int[] extraLootProps)
         {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
             int level = enemy.Level;
             EnemyEntity AITarget = enemy as EnemyEntity;
-            float chance;
             List<DaggerfallUnityItem> items = new List<DaggerfallUnityItem>();
 
             // Reseed random
@@ -243,6 +243,102 @@ namespace DaggerfallWorkshop.Game.Items
             if (predefLootProps[0] > 0)
             {
                 items.Add(ItemBuilder.CreateGoldPieces(predefLootProps[0]));
+            }
+
+            // Arrows
+            if (extraLootProps[0] > 0)
+            {
+                DaggerfallUnityItem arrowPile = ItemBuilder.CreateWeapon(Weapons.Arrow, WeaponMaterialTypes.Iron);
+                arrowPile.stackCount = extraLootProps[0];
+                items.Add(arrowPile);
+            }
+
+            // Random Potions
+            if (extraLootProps[1] > 0)
+            {
+                for (int i = 1; i < extraLootProps[1]; i++)
+                {
+                    items.Add(ItemBuilder.CreateRandomPotion()); // The whole Potion Recipe ID thing is a bit too confusing for me at this moment, so I can't specify what potions should be allowed, will work for now though. 
+                }
+            }
+
+            // Random books
+            if (predefLootProps[8] > 0)
+            {
+                AddBooksBasedOnSubject(AITarget, predefLootProps[8], items);
+            }
+
+            // Random Gems
+            if (extraLootProps[2] > 0)
+            {
+                for (int i = 1; i < extraLootProps[2]; i++)
+                {
+                    items.Add(ItemBuilder.CreateRandomGem());
+                }
+            }
+
+            // Random magic items
+            if (extraLootProps[3] > 0)
+            {
+                for (int i = 1; i < extraLootProps[3]; i++)
+                {
+                    items.Add(ItemBuilder.CreateRandomMagicItem(player.Gender, player.Race, level));
+                }
+            }
+
+            // Food/Ration Items
+            if (extraLootProps[4] > 0)
+            {
+                // Items not yet implemented. 
+            }
+
+            // Light sources
+            if (extraLootProps[5] > 0)
+            {
+                for (int i = 1; i < extraLootProps[5]; i++)
+                {
+                    if (i == 1 && Dice100.SuccessRoll(15))
+                    {
+                        items.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, (int)UselessItems2.Lantern));
+                        DaggerfallUnityItem lampOil = ItemBuilder.CreateItem(ItemGroups.UselessItems2, (int)UselessItems2.Oil);
+                        lampOil.stackCount = UnityEngine.Random.Range(0, 4 + 1);
+                        items.Add(lampOil);
+                        continue;
+                    }
+                    items.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf((int)UselessItems2.Candle, (int)UselessItems2.Torch)));
+                }
+            }
+
+            // Random religious items
+            if (extraLootProps[6] > 0)
+            {
+                for (int i = 1; i < extraLootProps[6]; i++)
+                {
+                    items.Add(ItemBuilder.CreateRandomReligiousItem());
+                }
+            }
+
+            // Bandages
+            if (extraLootProps[7] > 0)
+            {
+                DaggerfallUnityItem bandages = ItemBuilder.CreateItem(ItemGroups.UselessItems2, (int)UselessItems2.Bandage);
+                bandages.stackCount = extraLootProps[7];
+                items.Add(bandages);
+            }
+
+            // Repair tools
+            if (extraLootProps[8] > 0)
+            {
+                // Items not yet implemented. 
+            }
+
+            // Drugs
+            if (extraLootProps[9] > 0)
+            {
+                for (int i = 1; i < extraLootProps[9]; i++)
+                {
+                    items.Add(ItemBuilder.CreateRandomDrug());
+                }
             }
 
             // Extra weapon
@@ -264,6 +360,21 @@ namespace DaggerfallWorkshop.Game.Items
                     else
                         items.Add(ItemBuilder.CreateRandomWeapon(level));
                 }
+            }
+
+            // Maps
+            if (extraLootProps[11] > 0)
+            {
+                for (int i = 1; i < extraLootProps[11]; i++)
+                {
+                    items.Add(new DaggerfallUnityItem(ItemGroups.MiscItems, 8));
+                }
+            }
+
+            // Random clothes
+            if (predefLootProps[9] > 0)
+            {
+                AddClothesBasedOnEnemy(player.Gender, player.Race, AITarget, items); // Will obviously have to change this later on when I add the location specific context variables of this loot system. 
             }
 
             // Ingredients
@@ -314,44 +425,10 @@ namespace DaggerfallWorkshop.Game.Items
                 }
             }
 
-            // Random Gems
-            if (extraLootProps[2] > 0)
+            // Extra flavor/junk items (mostly based on personality traits, if present)
+            if (predefLootProps[10] > 0)
             {
-                for (int i = 1; i < extraLootProps[2]; i++)
-                {
-                    items.Add(ItemBuilder.CreateRandomGem());
-                }
-            }
-
-            // Random books
-            if (predefLootProps[8] > 0)
-            {
-                AddBooksBasedOnSubject(AITarget, predefLootProps[8], items); // I'll likely have to make a "create random book by subject" method similar to the ingredient ones, will do after shower. 
-            }
-
-            // Random magic items
-            if (extraLootProps[3] > 0)
-            {
-                for (int i = 1; i < extraLootProps[2]; i++)
-                {
-                    items.Add(ItemBuilder.CreateRandomMagicItem(playerEntity.Level, playerEntity.Gender, playerEntity.Race)); // Work on this next, will likely have to edit/redo the MagicItem Creating Method. 
-                }
-            }
-
-            // Random clothes
-            chance = matrix.CL;
-            while (Dice100.SuccessRoll((int)chance))
-            {
-                items.Add(ItemBuilder.CreateRandomClothing(playerEntity.Gender, playerEntity.Race));
-                chance *= 0.5f;
-            }
-
-            // Random religious item
-            chance = matrix.RL;
-            while (Dice100.SuccessRoll((int)chance))
-            {
-                items.Add(ItemBuilder.CreateRandomReligiousItem());
-                chance *= 0.5f;
+                // Items and method not yet implemented. 
             }
 
             return items.ToArray();
@@ -366,6 +443,8 @@ namespace DaggerfallWorkshop.Game.Items
 
         static bool TargetedIngredients(EnemyEntity AITarget, int[] predefLootProps, List<DaggerfallUnityItem> targetItems)
         {
+            DaggerfallUnityItem ingredients = null;
+
             if (AITarget.EntityType == EntityTypes.EnemyClass)
             {
                 return false;
@@ -376,17 +455,20 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     case 0:
                     case 3:
-                        for (int i = 1; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
+                        ingredients.stackCount = predefLootProps[4];
+                        targetItems.Add(ingredients);
                         return true;
                     case 4:
                     case 5:
-                        for (int i = 1; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
+                        ingredients.stackCount = predefLootProps[4];
+                        targetItems.Add(ingredients);
                         return true;
                     case 6:
-                        for (int i = 1; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom);
+                        ingredients.stackCount = predefLootProps[4];
+                        targetItems.Add(ingredients);
                         return true;
                     case 11:
                         for (int i = 1; i < predefLootProps[4]; i++)
@@ -398,8 +480,9 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 20:
-                        for (int i = 1; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Giant_scorpion_stinger));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Giant_scorpion_stinger);
+                        ingredients.stackCount = predefLootProps[4];
+                        targetItems.Add(ingredients);
                         return true;
                     case 2:
                         for (int i = 1; i < predefLootProps[1]; i++)
@@ -417,26 +500,32 @@ namespace DaggerfallWorkshop.Game.Items
                     case 10:
                         for (int i = 1; i < predefLootProps[2]; i++)
                             targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
                         return true;
                     case 13:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Harpy_Feather));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Harpy_Feather);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
                         return true;
                     case 16:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Giant_blood));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Giant_blood);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
                         return true;
                     case 22:
-                        for (int i = 1; i < predefLootProps[1]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.MiscPlantIngredients, (int)MiscPlantIngredients.Root_tendrils));
-                        for (int i = 1; i < predefLootProps[7]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Lodestone));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.MiscPlantIngredients, (int)MiscPlantIngredients.Root_tendrils);
+                        ingredients.stackCount = predefLootProps[1];
+                        targetItems.Add(ingredients);
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Lodestone);
+                        ingredients.stackCount = predefLootProps[7];
+                        targetItems.Add(ingredients);
                         return true;
                     case 34:
-                        for (int i = 1; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
+                        ingredients.stackCount = predefLootProps[4];
+                        targetItems.Add(ingredients);
                         for (int i = 1; i < predefLootProps[5]; i++)
                         {
                             if (Dice100.SuccessRoll(40))
@@ -446,8 +535,9 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 40:
-                        for (int i = 1; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
+                        ingredients.stackCount = predefLootProps[4];
+                        targetItems.Add(ingredients);
                         for (int i = 1; i < predefLootProps[5]; i++)
                         {
                             if (Dice100.SuccessRoll(80))
@@ -457,8 +547,9 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 41:
-                        for (int i = 1; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl);
+                        ingredients.stackCount = predefLootProps[4];
+                        targetItems.Add(ingredients);
                         return true;
                     case 42:
                         for (int i = 1; i < predefLootProps[5]; i++)
@@ -470,36 +561,44 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 9:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Werewolfs_blood));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Werewolfs_blood);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
                         return true;
                     case 14:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Wereboar_tusk));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Wereboar_tusk);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
                         return true;
                     case 35:
-                        for (int i = 1; i < predefLootProps[7]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur);
+                        ingredients.stackCount = predefLootProps[7];
+                        targetItems.Add(ingredients);
                         return true;
                     case 36:
-                        for (int i = 1; i < predefLootProps[7]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Iron));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Iron);
+                        ingredients.stackCount = predefLootProps[7];
+                        targetItems.Add(ingredients);
                         return true;
                     case 37:
-                        for (int i = 1; i < predefLootProps[6]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor);
+                        ingredients.stackCount = predefLootProps[6];
+                        targetItems.Add(ingredients);
                         return true;
                     case 38:
-                        for (int i = 1; i < predefLootProps[6]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water);
+                        ingredients.stackCount = predefLootProps[6];
+                        targetItems.Add(ingredients);
                         return true;
                     case 18:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Ectoplasm));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Ectoplasm);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
                         return true;
                     case 19:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Mummy_wrappings));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Mummy_wrappings);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
                         return true;
                     case 23:
                         for (int i = 1; i < predefLootProps[5]; i++)
@@ -512,45 +611,57 @@ namespace DaggerfallWorkshop.Game.Items
                         return true;
                     case 28:
                     case 30:
-                        for (int i = 1; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
+                        ingredients.stackCount = predefLootProps[4];
+                        targetItems.Add(ingredients);
                         for (int i = 1; i < predefLootProps[5]; i++)
                             targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.CreatureIngredients));
                         return true;
                     case 32:
                     case 33:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Lich_dust));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Lich_dust);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
                         return true;
                     case 25:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
-                        for (int i = 1; i < predefLootProps[6]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water);
+                        ingredients.stackCount = predefLootProps[6];
+                        targetItems.Add(ingredients);
                         return true;
                     case 26:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
-                        for (int i = 1; i < predefLootProps[7]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur);
+                        ingredients.stackCount = predefLootProps[7];
+                        targetItems.Add(ingredients);
                         return true;
                     case 27:
-                        for (int i = 1; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth));
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
+                        ingredients.stackCount = predefLootProps[4];
+                        targetItems.Add(ingredients);
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
                         return true;
                     case 29:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
-                        for (int i = 1; i < predefLootProps[6]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Elixir_vitae));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Elixir_vitae);
+                        ingredients.stackCount = predefLootProps[6];
+                        targetItems.Add(ingredients);
                         return true;
                     case 31:
-                        for (int i = 1; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
-                        for (int i = 1; i < predefLootProps[6]; i++)
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor));
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
+                        ingredients.stackCount = predefLootProps[5];
+                        targetItems.Add(ingredients);
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor);
+                        ingredients.stackCount = predefLootProps[6];
+                        targetItems.Add(ingredients);
                         return true;
                     default:
                         return false;
@@ -627,6 +738,282 @@ namespace DaggerfallWorkshop.Game.Items
                     default:
                         for (int i = 1; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
+                        return;
+                }
+            }
+        }
+
+        static void AddClothesBasedOnEnemy(Genders playerGender, Races playerRace, EnemyEntity AITarget, List<DaggerfallUnityItem> targetItems)
+        {
+            Genders enemyGender = AITarget.Gender;
+
+            if (AITarget.EntityType == EntityTypes.EnemyClass)
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case (int)ClassCareers.Mage:
+                        if (enemyGender == Genders.Male)
+                        {
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Plain_robes, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        else
+                        {
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Plain_robes, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        return;
+                    case (int)ClassCareers.Spellsword:
+                    case (int)ClassCareers.Battlemage:
+                    case (int)ClassCareers.Sorcerer:
+                    case (int)ClassCareers.Bard:
+                    case (int)ClassCareers.Burglar:
+                    case (int)ClassCareers.Rogue:
+                    case (int)ClassCareers.Thief:
+                    case (int)ClassCareers.Archer:
+                    case (int)ClassCareers.Warrior:
+                    case (int)ClassCareers.Knight:
+                        if (enemyGender == Genders.Male)
+                        {
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        else
+                        {
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        return;
+                    case (int)ClassCareers.Healer:
+                        if (enemyGender == Genders.Male)
+                        {
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Priest_robes, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_cloak, (int)MensClothing.Casual_cloak, (int)MensClothing.Formal_cloak), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        else
+                        {
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Priestess_robes, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Casual_cloak, (int)WomensClothing.Casual_cloak, (int)WomensClothing.Formal_cloak), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        return;
+                    case (int)ClassCareers.Nightblade:
+                    case (int)ClassCareers.Assassin:
+                    case (int)ClassCareers.Ranger:
+                        if (enemyGender == Genders.Male)
+                        {
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        else
+                        {
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                        }
+                        return;
+                    case (int)ClassCareers.Acrobat:
+                        if (enemyGender == Genders.Male)
+                        {
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Khajiit_suit, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        else
+                        {
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Khajiit_suit, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        return;
+                    case (int)ClassCareers.Monk:
+                        if (enemyGender == Genders.Male)
+                        {
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Sash, (int)MensClothing.Toga, (int)MensClothing.Kimono, (int)MensClothing.Armbands, (int)MensClothing.Vest), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(25))
+                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        else
+                        {
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(25))
+                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        return;
+                    case (int)ClassCareers.Barbarian:
+                        if (enemyGender == Genders.Male)
+                        {
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Sash, (int)MensClothing.Armbands, (int)MensClothing.Fancy_Armbands, (int)MensClothing.Straps, (int)MensClothing.Challenger_Straps, (int)MensClothing.Champion_straps), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        else
+                        {
+                            targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Loincloth, (int)WomensClothing.Wrap, (int)WomensClothing.Long_skirt), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        return;
+                    default:
+                        if (enemyGender == Genders.Male)
+                        {
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                        }
+                        else
+                        {
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                        }
+                        return;
+                }
+            }
+            else
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case 7:
+                    case 12:
+                    case 21:
+                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        if (Dice100.SuccessRoll(50))
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Straps, (int)MensClothing.Challenger_Straps), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        if (Dice100.SuccessRoll(50))
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        return;
+                    case 24:
+                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        if (Dice100.SuccessRoll(50))
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Challenger_Straps, (int)MensClothing.Champion_straps), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        if (Dice100.SuccessRoll(50))
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Formal_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        return;
+                    case 15:
+                    case 17:
+                        if (playerGender == Genders.Male)
+                        {
+                            if (Dice100.SuccessRoll(20))
+                                targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(20))
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(20))
+                                targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                        }
+                        else
+                        {
+                            if (Dice100.SuccessRoll(20))
+                                targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(20))
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(20))
+                                targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            if (Dice100.SuccessRoll(10))
+                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                        }
+                        return;
+                    case 28:
+                        targetItems.Add(ItemBuilder.CreateRandomShirt(Genders.Female, playerRace));
+                        targetItems.Add(ItemBuilder.CreateRandomPants(Genders.Female, playerRace));
+                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Female, playerRace));
+                        targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, DyeColors.Grey));
+                        if (Dice100.SuccessRoll(50))
+                            targetItems.Add(ItemBuilder.CreateRandomBra(Genders.Female, playerRace));
+                        return;
+                    case 30:
+                        targetItems.Add(ItemBuilder.CreateRandomShirt(Genders.Male, playerRace));
+                        targetItems.Add(ItemBuilder.CreateRandomPants(Genders.Male, playerRace));
+                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace));
+                        targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, DyeColors.Grey));
+                        return;
+                    case 32:
+                    case 33:
+                        if (playerGender == Genders.Male)
+                        {
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        else
+                        {
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            if (Dice100.SuccessRoll(50))
+                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        return;
+                    case 27:
+                        if (playerGender == Genders.Male)
+                        {
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Loincloth, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        else
+                        {
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Loincloth, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        }
+                        return;
+                    case 29:
+                        if (Dice100.SuccessRoll(50))
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Eodoric, (int)WomensClothing.Formal_eodoric, (int)WomensClothing.Strapless_dress), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        if (Dice100.SuccessRoll(20))
+                            targetItems.Add(ItemBuilder.CreateRandomBra(Genders.Female, playerRace));
+                        return;
+                    case 31:
+                        targetItems.Add(ItemBuilder.CreateRandomPants(Genders.Male, playerRace));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_cloak, (int)MensClothing.Formal_cloak), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        if (Dice100.SuccessRoll(50))
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(Genders.Male, playerRace));
+                        return;
+                    default:
                         return;
                 }
             }

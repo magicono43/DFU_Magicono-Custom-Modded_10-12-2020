@@ -231,6 +231,115 @@ namespace DaggerfallWorkshop.Game.Items
         }
 
         /// <summary>
+        /// Creates a new shirt item of random variant.
+        /// </summary>
+        public static DaggerfallUnityItem CreateRandomShirt(Genders gender, Races race)
+        {
+            DaggerfallUnityItem newItem;
+
+            if (gender == Genders.Male)
+            {
+                newItem = CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Kimono, (int)MensClothing.Short_shirt_with_belt, (int)MensClothing.Short_shirt, (int)MensClothing.Dwynnen_surcoat,
+                    (int)MensClothing.Short_tunic, (int)MensClothing.Formal_tunic, (int)MensClothing.Toga, (int)MensClothing.Reversible_tunic, (int)MensClothing.Long_shirt, (int)MensClothing.Long_shirt_with_belt,
+                    (int)MensClothing.Short_shirt_closed_top, (int)MensClothing.Short_shirt_closed_top2, (int)MensClothing.Long_shirt_closed_top, (int)MensClothing.Long_shirt_closed_top2, (int)MensClothing.Open_Tunic,
+                    (int)MensClothing.Anticlere_Surcoat, (int)MensClothing.Short_shirt_unchangeable, (int)MensClothing.Long_shirt_unchangeable, (int)MensClothing.Vest, (int)MensClothing.Eodoric), race);
+            }
+            else
+            {
+                newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Peasant_blouse, (int)WomensClothing.Eodoric, (int)WomensClothing.Formal_eodoric, (int)WomensClothing.Casual_dress,
+                    (int)WomensClothing.Strapless_dress, (int)WomensClothing.Short_shirt, (int)WomensClothing.Short_shirt_belt, (int)WomensClothing.Long_shirt, (int)WomensClothing.Long_shirt_belt,
+                    (int)WomensClothing.Short_shirt_closed, (int)WomensClothing.Short_shirt_closed_belt, (int)WomensClothing.Short_shirt_unchangeable, (int)WomensClothing.Long_shirt_closed,
+                    (int)WomensClothing.Long_shirt_closed_belt, (int)WomensClothing.Long_shirt_unchangeable, (int)WomensClothing.Open_tunic, (int)WomensClothing.Vest), race);
+            }
+
+            SetRace(newItem, race);
+
+            // Random dye colour
+            newItem.dyeColor = RandomClothingDye();
+
+            // Random variant
+            SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
+
+            return newItem;
+        }
+
+        /// <summary>
+        /// Creates a new pants item of random variant.
+        /// </summary>
+        public static DaggerfallUnityItem CreateRandomPants(Genders gender, Races race)
+        {
+            DaggerfallUnityItem newItem;
+
+            if (gender == Genders.Male)
+            {
+                newItem = CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_pants, (int)MensClothing.Breeches, (int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt,
+                    (int)MensClothing.Loincloth, (int)MensClothing.Wrap), race);
+            }
+            else
+            {
+                newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Casual_pants, (int)WomensClothing.Loincloth, (int)WomensClothing.Wrap, (int)WomensClothing.Long_skirt,
+                    (int)WomensClothing.Tights), race);
+            }
+
+            SetRace(newItem, race);
+
+            // Random dye colour
+            newItem.dyeColor = RandomClothingDye();
+
+            // Random variant
+            SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
+
+            return newItem;
+        }
+
+        /// <summary>
+        /// Creates a new shoes item of random variant.
+        /// </summary>
+        public static DaggerfallUnityItem CreateRandomShoes(Genders gender, Races race)
+        {
+            DaggerfallUnityItem newItem;
+
+            if (gender == Genders.Male)
+            {
+                newItem = CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals, (int)MensClothing.Boots, (int)MensClothing.Tall_Boots), race);
+            }
+            else
+            {
+                newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals, (int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), race);
+            }
+
+            SetRace(newItem, race);
+
+            // Random dye colour
+            newItem.dyeColor = RandomClothingDye();
+
+            // Random variant
+            SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
+
+            return newItem;
+        }
+
+        /// <summary>
+        /// Creates a new bra item of random variant.
+        /// </summary>
+        public static DaggerfallUnityItem CreateRandomBra(Genders gender, Races race)
+        {
+            DaggerfallUnityItem newItem;
+
+            newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Brassier, (int)WomensClothing.Brassier, (int)WomensClothing.Brassier,(int)WomensClothing.Formal_brassier), race);
+
+            SetRace(newItem, race);
+
+            // Random dye colour
+            newItem.dyeColor = RandomClothingDye();
+
+            // Random variant
+            SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
+
+            return newItem;
+        }
+
+        /// <summary>
         /// Creates a new book.
         /// </summary>
         /// <param name="fileName">The name of the books resource.</param>
@@ -700,7 +809,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// <returns>DaggerfallUnityItem</returns>
         public static DaggerfallUnityItem CreateRandomMagicItem(Genders gender, Races race, int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
         {
-            return CreateRegularMagicItem(chooseAtRandom, playerLuck, gender, race);
+            return CreateRegularMagicItem(chooseAtRandom, enemyLevel, playerLuck, gender, race);
         }
 
         /// <summary>
@@ -712,7 +821,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// <param name="race">The race to create an item for.</param>
         /// <returns>DaggerfallUnityItem</returns>
         /// <exception cref="Exception">When a base item cannot be created.</exception>
-        public static DaggerfallUnityItem CreateRegularMagicItem(int chosenItem, int playerLuck, Genders gender, Races race)
+        public static DaggerfallUnityItem CreateRegularMagicItem(int chosenItem, int enemylevel, int playerLuck, Genders gender, Races race)
         {
             byte[] itemGroups0 = { 2, 3, 6, 10, 12, 14, 25 };
             byte[] itemGroups1 = { 2, 3, 6, 12, 25 };
@@ -749,14 +858,14 @@ namespace DaggerfallWorkshop.Game.Items
             // Create the base item
             if (group == ItemGroups.Weapons)
             {
-                newItem = CreateRandomWeapon(-1, -1, playerLuck);
+                newItem = CreateRandomWeapon(enemylevel, -1, playerLuck);
 
                 // No arrows as enchanted items
                 while (newItem.GroupIndex == 18)
-                    newItem = CreateRandomWeapon(-1, -1, playerLuck);
+                    newItem = CreateRandomWeapon(enemylevel, -1, playerLuck);
             }
             else if (group == ItemGroups.Armor)
-                newItem = CreateRandomArmor(gender, race, -1, -1, playerLuck);
+                newItem = CreateRandomArmor(gender, race, enemylevel, -1, playerLuck);
             else if (group == ItemGroups.MensClothing || group == ItemGroups.WomensClothing)
                 newItem = CreateRandomClothing(gender, race);
             else if (group == ItemGroups.ReligiousItems)
@@ -1033,6 +1142,11 @@ namespace DaggerfallWorkshop.Game.Items
         #endregion
 
         #region Static Utility Methods
+
+        public static int PickOneOf(params int[] values) // Pango provided assistance in making this much cleaner way of doing the random value choice part, awesome.
+        {
+            return values[UnityEngine.Random.Range(0, values.Length)];
+        }
 
         public static void SetRace(DaggerfallUnityItem item, Races race)
         {
