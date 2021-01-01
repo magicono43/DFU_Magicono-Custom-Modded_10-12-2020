@@ -269,12 +269,11 @@ namespace DaggerfallWorkshop.Game.Items
             }
 
             // Random Ingots
-            if (Dice100.SuccessRoll(IngotDropChance(AITarget)))
+            float ingotChance = IngotDropChance(AITarget);
+            while (Dice100.SuccessRoll((int)ingotChance))
             {
-                for (int i = 1; i < extraLootProps[2]; i++)
-                {
-                    items.Add(ItemBuilder.CreateRandomGem());
-                }
+                items.Add(ItemBuilder.CreateRandomIngot(AITarget.Level));
+                ingotChance *= 0.5f;
             }
 
             // Random Gems
@@ -1029,34 +1028,49 @@ namespace DaggerfallWorkshop.Game.Items
             }
         }
 
-        public static int IngotDropChance(EnemyEntity AITarget)
+        public static float IngotDropChance(EnemyEntity AITarget)
         {
+            int level = AITarget.Level;
+
             if (AITarget.EntityType == EntityTypes.EnemyClass)
             {
                 switch (AITarget.CareerIndex)
                 {
-                    case (int)ClassCareers.Mage:
-                        for (int i = 1; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 33, 33, 33, 33, 33, 33, 28, 30, 30, 30, 31, 31, 32, 34, 36, 36, 39)));
-                        return;
+                    case (int)ClassCareers.Spellsword:
+                    case (int)ClassCareers.Battlemage:
+                        return 7.5f + (0.5f * level);
+                    case (int)ClassCareers.Burglar:
+                    case (int)ClassCareers.Rogue:
+                    case (int)ClassCareers.Thief:
+                        return 15f + (1.5f * level);
+                    case (int)ClassCareers.Archer:
+                    case (int)ClassCareers.Barbarian:
+                    case (int)ClassCareers.Warrior:
+                    case (int)ClassCareers.Knight:
+                        return 10f + (1f * level);
                     default:
-                        for (int i = 1; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
-                        return;
+                        return 0f;
                 }
             }
             else
             {
                 switch (AITarget.CareerIndex)
                 {
+                    case 8:
+                    case 16:
+                        return 2f;
+                    case 7:
+                        return 5f;
+                    case 12:
+                        return 10f;
                     case 21:
-                        for (int i = 1; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 30, 30, 30, 30, 31, 31, 33, 33, 36, 38, 38, 38, 38, 38, 38, 38, 38, 38, 39)));
-                        return;
+                        return 3f;
+                    case 24:
+                        return 20f;
+                    case 31:
+                        return 40f;
                     default:
-                        for (int i = 1; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
-                        return;
+                        return 0f;
                 }
             }
         }
