@@ -434,10 +434,9 @@ namespace DaggerfallWorkshop.Game.Items
             }
 
             // Extra flavor/junk items (mostly based on personality traits, if present)
-            if (predefLootProps[10] > 0)
+            if (traits[0] > -1 || traits[1] > -1 || traits[2] > -1)
             {
-                sdfasdfsdfe;
-                // Items and method not yet implemented. 
+                PersonalityTraitFlavorItemsGenerator(AITarget, traits, items); // Items not yet implemented. 
             }
 
             return items.ToArray();
@@ -445,10 +444,178 @@ namespace DaggerfallWorkshop.Game.Items
 
         public static int PickOneOf(params int[] values) // Pango provided assistance in making this much cleaner way of doing the random value choice part, awesome.
         {
-            return values[UnityEngine.Random.Range(0, values.Length)];
+            return values[Random.Range(0, values.Length)];
         }
 
         #region Private Methods
+
+        static void PersonalityTraitFlavorItemsGenerator(EnemyEntity AITarget, int[] traits, List<DaggerfallUnityItem> targetItems)
+        {
+            int level = AITarget.Level;
+
+            if (traits[0] > -1 || traits[1] > -1)
+            {
+                if (traits[0] == (int)MobilePersonalityQuirks.Curious || traits[1] == (int)MobilePersonalityQuirks.Curious)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Addict || traits[1] == (int)MobilePersonalityQuirks.Addict)
+                {
+                    int randRange = Random.Range(2, 6 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Hoarder || traits[1] == (int)MobilePersonalityQuirks.Hoarder)
+                {
+                    int randRange = Random.Range(6, 18 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Vain || traits[1] == (int)MobilePersonalityQuirks.Vain)
+                {
+                    int randRange = Random.Range(2, 7 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Untrusting || traits[1] == (int)MobilePersonalityQuirks.Untrusting)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished.
+                    // This won't work the same as the others, since it in theory will be placing existing items into a seperate lock-box inventory type of item, will need a lot of work on this one eventually.
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Sadistic || traits[1] == (int)MobilePersonalityQuirks.Sadistic)
+                {
+                    int randRange = Random.Range(1, 4 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Romantic || traits[1] == (int)MobilePersonalityQuirks.Romantic)
+                {
+                    int randRange = Random.Range(2, 4 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Alcoholic || traits[1] == (int)MobilePersonalityQuirks.Alcoholic)
+                {
+                    int randRange = Random.Range(2, 6 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+            }
+
+            if (traits[2] > -1)
+            {
+                if (traits[2] == (int)MobilePersonalityInterests.God_Fearing)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Occultist)
+                {
+                    int randRange = Random.Range(2, 4 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Childish)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Artistic)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Collector)
+                {
+                    int randRange = Random.Range(4, 11 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Survivalist)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Hunter)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Fetishist)
+                {
+                    int randRange = Random.Range(2, 4 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Brewer)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Cartographer)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Fisher)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Diver)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Writer)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Handy)
+                {
+                    int randRange = Random.Range(1, 3 + 1);
+                    for (int i = 1; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                }
+            }
+
+            return;
+        }
 
         static bool TargetedIngredients(EnemyEntity AITarget, int[] predefLootProps, List<DaggerfallUnityItem> targetItems)
         {
