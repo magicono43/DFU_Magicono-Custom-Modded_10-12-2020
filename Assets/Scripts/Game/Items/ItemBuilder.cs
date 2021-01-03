@@ -154,7 +154,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// <param name="variant">Variant to use. If not set, a random variant will be selected.</param>
         /// <param name="dye">Dye to use</param>
         /// <returns>DaggerfallUnityItem.</returns>
-        public static DaggerfallUnityItem CreateMensClothing(MensClothing item, Races race, int variant = -1, DyeColors dye = DyeColors.Blue)
+        public static DaggerfallUnityItem CreateMensClothing(MensClothing item, Races race, int variant = -1, int minCond = -1, int maxCond = -1, DyeColors dye = DyeColors.Blue)
         {
             // Create item
             int groupIndex = DaggerfallUnity.Instance.ItemHelper.GetGroupIndex(ItemGroups.MensClothing, (int)item);
@@ -169,6 +169,12 @@ namespace DaggerfallWorkshop.Game.Items
             SetVariant(newItem, variant);
             newItem.dyeColor = dye;
 
+            if (minCond > -1 && maxCond > -1)
+            {
+                float condPercentMod = UnityEngine.Random.Range(minCond, maxCond + 1) / 100f;
+                newItem.currentCondition = (int)Mathf.Ceil(newItem.maxCondition * condPercentMod);
+            }
+
             return newItem;
         }
 
@@ -180,7 +186,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// <param name="variant">Variant to use. If not set, a random variant will be selected.</param>
         /// <param name="dye">Dye to use</param>
         /// <returns>DaggerfallUnityItem.</returns>
-        public static DaggerfallUnityItem CreateWomensClothing(WomensClothing item, Races race, int variant = -1, DyeColors dye = DyeColors.Blue)
+        public static DaggerfallUnityItem CreateWomensClothing(WomensClothing item, Races race, int variant = -1, int minCond = -1, int maxCond = -1, DyeColors dye = DyeColors.Blue)
         {
             // Create item
             int groupIndex = DaggerfallUnity.Instance.ItemHelper.GetGroupIndex(ItemGroups.WomensClothing, (int)item);
@@ -194,6 +200,12 @@ namespace DaggerfallWorkshop.Game.Items
             SetRace(newItem, race);
             SetVariant(newItem, variant);
             newItem.dyeColor = dye;
+
+            if (minCond > -1 && maxCond > -1)
+            {
+                float condPercentMod = UnityEngine.Random.Range(minCond, maxCond + 1) / 100f;
+                newItem.currentCondition = (int)Mathf.Ceil(newItem.maxCondition * condPercentMod);
+            }
 
             return newItem;
         }
@@ -233,7 +245,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// <summary>
         /// Creates a new shirt item of random variant.
         /// </summary>
-        public static DaggerfallUnityItem CreateRandomShirt(Genders gender, Races race)
+        public static DaggerfallUnityItem CreateRandomShirt(Genders gender, Races race, int minCond = -1, int maxCond = -1)
         {
             DaggerfallUnityItem newItem;
 
@@ -242,14 +254,14 @@ namespace DaggerfallWorkshop.Game.Items
                 newItem = CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Kimono, (int)MensClothing.Short_shirt_with_belt, (int)MensClothing.Short_shirt, (int)MensClothing.Dwynnen_surcoat,
                     (int)MensClothing.Short_tunic, (int)MensClothing.Formal_tunic, (int)MensClothing.Toga, (int)MensClothing.Reversible_tunic, (int)MensClothing.Long_shirt, (int)MensClothing.Long_shirt_with_belt,
                     (int)MensClothing.Short_shirt_closed_top, (int)MensClothing.Short_shirt_closed_top2, (int)MensClothing.Long_shirt_closed_top, (int)MensClothing.Long_shirt_closed_top2, (int)MensClothing.Open_Tunic,
-                    (int)MensClothing.Anticlere_Surcoat, (int)MensClothing.Short_shirt_unchangeable, (int)MensClothing.Long_shirt_unchangeable, (int)MensClothing.Vest, (int)MensClothing.Eodoric), race);
+                    (int)MensClothing.Anticlere_Surcoat, (int)MensClothing.Short_shirt_unchangeable, (int)MensClothing.Long_shirt_unchangeable, (int)MensClothing.Vest, (int)MensClothing.Eodoric), race, -1, minCond, maxCond);
             }
             else
             {
                 newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Peasant_blouse, (int)WomensClothing.Eodoric, (int)WomensClothing.Formal_eodoric, (int)WomensClothing.Casual_dress,
                     (int)WomensClothing.Strapless_dress, (int)WomensClothing.Short_shirt, (int)WomensClothing.Short_shirt_belt, (int)WomensClothing.Long_shirt, (int)WomensClothing.Long_shirt_belt,
                     (int)WomensClothing.Short_shirt_closed, (int)WomensClothing.Short_shirt_closed_belt, (int)WomensClothing.Short_shirt_unchangeable, (int)WomensClothing.Long_shirt_closed,
-                    (int)WomensClothing.Long_shirt_closed_belt, (int)WomensClothing.Long_shirt_unchangeable, (int)WomensClothing.Open_tunic, (int)WomensClothing.Vest), race);
+                    (int)WomensClothing.Long_shirt_closed_belt, (int)WomensClothing.Long_shirt_unchangeable, (int)WomensClothing.Open_tunic, (int)WomensClothing.Vest), race, -1, minCond, maxCond);
             }
 
             SetRace(newItem, race);
@@ -266,19 +278,19 @@ namespace DaggerfallWorkshop.Game.Items
         /// <summary>
         /// Creates a new pants item of random variant.
         /// </summary>
-        public static DaggerfallUnityItem CreateRandomPants(Genders gender, Races race)
+        public static DaggerfallUnityItem CreateRandomPants(Genders gender, Races race, int minCond = -1, int maxCond = -1)
         {
             DaggerfallUnityItem newItem;
 
             if (gender == Genders.Male)
             {
                 newItem = CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_pants, (int)MensClothing.Breeches, (int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt,
-                    (int)MensClothing.Loincloth, (int)MensClothing.Wrap), race);
+                    (int)MensClothing.Loincloth, (int)MensClothing.Wrap), race, -1, minCond, maxCond);
             }
             else
             {
                 newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Casual_pants, (int)WomensClothing.Loincloth, (int)WomensClothing.Wrap, (int)WomensClothing.Long_skirt,
-                    (int)WomensClothing.Tights), race);
+                    (int)WomensClothing.Tights), race, -1, minCond, maxCond);
             }
 
             SetRace(newItem, race);
@@ -295,17 +307,17 @@ namespace DaggerfallWorkshop.Game.Items
         /// <summary>
         /// Creates a new shoes item of random variant.
         /// </summary>
-        public static DaggerfallUnityItem CreateRandomShoes(Genders gender, Races race)
+        public static DaggerfallUnityItem CreateRandomShoes(Genders gender, Races race, int minCond = -1, int maxCond = -1)
         {
             DaggerfallUnityItem newItem;
 
             if (gender == Genders.Male)
             {
-                newItem = CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals, (int)MensClothing.Boots, (int)MensClothing.Tall_Boots), race);
+                newItem = CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals, (int)MensClothing.Boots, (int)MensClothing.Tall_Boots), race, -1, minCond, maxCond);
             }
             else
             {
-                newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals, (int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), race);
+                newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals, (int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), race, -1, minCond, maxCond);
             }
 
             SetRace(newItem, race);
@@ -322,11 +334,11 @@ namespace DaggerfallWorkshop.Game.Items
         /// <summary>
         /// Creates a new bra item of random variant.
         /// </summary>
-        public static DaggerfallUnityItem CreateRandomBra(Genders gender, Races race)
+        public static DaggerfallUnityItem CreateRandomBra(Genders gender, Races race, int minCond = -1, int maxCond = -1)
         {
             DaggerfallUnityItem newItem;
 
-            newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Brassier, (int)WomensClothing.Brassier, (int)WomensClothing.Brassier,(int)WomensClothing.Formal_brassier), race);
+            newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Brassier, (int)WomensClothing.Brassier, (int)WomensClothing.Brassier,(int)WomensClothing.Formal_brassier), race, -1, minCond, maxCond);
 
             SetRace(newItem, race);
 

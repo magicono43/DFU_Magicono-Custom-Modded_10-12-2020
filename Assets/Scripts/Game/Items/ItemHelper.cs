@@ -1466,19 +1466,31 @@ namespace DaggerfallWorkshop.Game.Items
             int enemyLevel = enemyEntity.Level;
             Genders playerGender = player.Gender;
             Races race = player.Race;
+            float condPercentMod = 1f;
 
             int[] enemyEquipTableProperties = EnemyBasics.EnemyEquipTableCalculator(enemyEntity, traits);
             DaggerfallUnityItem[] equipmentItems = { null, null, null, null, null, null, null, null, null, null };
 
-            // Assign the material values of weapons and armors (if made of metal), possibly do this with a loop of some kind going through another method to determine the material values, mostly place-holder since I need to rework rarity of materials and such later anyway.
             for (int i = 0; i < 2; i++)
             {
                 equipmentItems[i] = DefineEquippedInHands(i, enemyEntity, traits, enemyEquipTableProperties, player);
+
+                if (equipmentItems[i] != null)
+                {
+                    condPercentMod = UnityEngine.Random.Range(enemyEquipTableProperties[13], enemyEquipTableProperties[14] + 1) / 100f;
+                    equipmentItems[i].currentCondition = (int)Mathf.Ceil(equipmentItems[i].maxCondition * condPercentMod);
+                }
             }
 
-            for (int i = 7; i < enemyEquipTableProperties.Length; i++)
+            for (int i = 7; i < 12; i++) // Might have to redo the values of this loop if it's not working correctly later?
             {
                 equipmentItems[i - 4] = DefineEquippedOnBody(i - 4, enemyEntity, traits, enemyEquipTableProperties, player);
+
+                if (equipmentItems[i - 4] != null)
+                {
+                    condPercentMod = UnityEngine.Random.Range(enemyEquipTableProperties[13], enemyEquipTableProperties[14] + 1) / 100f;
+                    equipmentItems[i - 4].currentCondition = (int)Mathf.Ceil(equipmentItems[i - 4].maxCondition * condPercentMod);
+                }
             }
 
 
@@ -1580,7 +1592,7 @@ namespace DaggerfallWorkshop.Game.Items
                     return null;
                 else
                 {
-                    item = ItemBuilder.CreateWeapon((Weapons)equipTableProps[index], FormulaHelper.RandomMaterial(enemyLevel)); // Enemy level for now, but will change, when I have idea how i'll do material distrubution.
+                    item = ItemBuilder.CreateWeapon((Weapons)equipTableProps[index], FormulaHelper.RandomMaterial(enemyLevel));
                     return item;
                 }
             }

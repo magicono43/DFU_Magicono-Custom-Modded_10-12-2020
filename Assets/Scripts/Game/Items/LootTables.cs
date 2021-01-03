@@ -233,6 +233,8 @@ namespace DaggerfallWorkshop.Game.Items
         {
             PlayerEntity player = GameManager.Instance.PlayerEntity;
             int level = enemy.Level;
+            int[] enemyLootCondMods = EnemyLootConditionCalculator(enemy, traits);
+            float condPercentMod = 1f;
             EnemyEntity AITarget = enemy as EnemyEntity;
             List<DaggerfallUnityItem> items = new List<DaggerfallUnityItem>();
 
@@ -290,7 +292,15 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 for (int i = 1; i < extraLootProps[3]; i++)
                 {
-                    items.Add(ItemBuilder.CreateRandomMagicItem(player.Gender, player.Race, level));
+                    DaggerfallUnityItem magicItem = ItemBuilder.CreateRandomMagicItem(player.Gender, player.Race, level);
+
+                    if (magicItem != null)
+                    {
+                        condPercentMod = Random.Range(enemyLootCondMods[0], enemyLootCondMods[1] + 1) / 100f;
+                        magicItem.currentCondition = (int)Mathf.Ceil(magicItem.maxCondition * condPercentMod);
+                    }
+
+                    items.Add(magicItem);
                 }
             }
 
@@ -337,7 +347,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Repair tools
             if (extraLootProps[8] > 0)
             {
-                // Items not yet implemented. 
+                // Items not yet implemented.
             }
 
             // Drugs
@@ -356,17 +366,25 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     if (i == 1 && AITarget.EntityType == EntityTypes.EnemyClass && AITarget.CareerIndex == (int)ClassCareers.Nightblade)
                     {
-                        items.Add(ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Longsword), WeaponMaterialTypes.Silver));
+                        DaggerfallUnityItem extraWep = ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Longsword), WeaponMaterialTypes.Silver);
+                        condPercentMod = Random.Range(enemyLootCondMods[0], enemyLootCondMods[1] + 1) / 100f;
+                        extraWep.currentCondition = (int)Mathf.Ceil(extraWep.maxCondition * condPercentMod);
                         continue;
                     }
 
                     if (traits[2] == (int)MobilePersonalityInterests.Survivalist || traits[2] == (int)MobilePersonalityInterests.Hunter)
                     {
-                        items.Add(ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow), FormulaHelper.RandomMaterial(level)));
+                        DaggerfallUnityItem extraWep = ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow), FormulaHelper.RandomMaterial(level));
+                        condPercentMod = Random.Range(enemyLootCondMods[0], enemyLootCondMods[1] + 1) / 100f;
+                        extraWep.currentCondition = (int)Mathf.Ceil(extraWep.maxCondition * condPercentMod);
                         continue;
                     }
                     else
-                        items.Add(ItemBuilder.CreateRandomWeapon(level));
+                    {
+                        DaggerfallUnityItem extraWep = ItemBuilder.CreateRandomWeapon(level);
+                        condPercentMod = Random.Range(enemyLootCondMods[0], enemyLootCondMods[1] + 1) / 100f;
+                        extraWep.currentCondition = (int)Mathf.Ceil(extraWep.maxCondition * condPercentMod);
+                    }
                 }
             }
 
@@ -382,7 +400,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Random clothes
             if (predefLootProps[9] > 0)
             {
-                AddClothesBasedOnEnemy(player.Gender, player.Race, AITarget, items); // Will obviously have to change this later on when I add the location specific context variables of this loot system. 
+                AddClothesBasedOnEnemy(player.Gender, player.Race, AITarget, enemyLootCondMods, items); // Will obviously have to change this later on when I add the location specific context variables of this loot system. 
             }
 
             // Ingredients
@@ -436,7 +454,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Extra flavor/junk items (mostly based on personality traits, if present)
             if (traits[0] > -1 || traits[1] > -1 || traits[2] > -1)
             {
-                PersonalityTraitFlavorItemsGenerator(AITarget, traits, items); // Items not yet implemented. 
+                PersonalityTraitFlavorItemsGenerator(AITarget, traits, items); // Items not yet implemented.
             }
 
             return items.ToArray();
@@ -919,7 +937,7 @@ namespace DaggerfallWorkshop.Game.Items
             }
         }
 
-        static void AddClothesBasedOnEnemy(Genders playerGender, Races playerRace, EnemyEntity AITarget, List<DaggerfallUnityItem> targetItems)
+        static void AddClothesBasedOnEnemy(Genders playerGender, Races playerRace, EnemyEntity AITarget, int[] condMods,List<DaggerfallUnityItem> targetItems)
         {
             Genders enemyGender = AITarget.Gender;
 
@@ -930,21 +948,21 @@ namespace DaggerfallWorkshop.Game.Items
                     case (int)ClassCareers.Mage:
                         if (enemyGender == Genders.Male)
                         {
-                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Plain_robes, playerRace, -1, ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Plain_robes, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
-                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Plain_robes, playerRace, -1, ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Plain_robes, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     case (int)ClassCareers.Spellsword:
@@ -959,41 +977,41 @@ namespace DaggerfallWorkshop.Game.Items
                     case (int)ClassCareers.Knight:
                         if (enemyGender == Genders.Male)
                         {
-                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
-                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     case (int)ClassCareers.Healer:
                         if (enemyGender == Genders.Male)
                         {
-                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Priest_robes, playerRace, -1, ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Priest_robes, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_cloak, (int)MensClothing.Casual_cloak, (int)MensClothing.Formal_cloak), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_cloak, (int)MensClothing.Casual_cloak, (int)MensClothing.Formal_cloak), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
-                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Priestess_robes, playerRace, -1, ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Priestess_robes, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Casual_cloak, (int)WomensClothing.Casual_cloak, (int)WomensClothing.Formal_cloak), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Casual_cloak, (int)WomensClothing.Casual_cloak, (int)WomensClothing.Formal_cloak), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     case (int)ClassCareers.Nightblade:
@@ -1001,91 +1019,91 @@ namespace DaggerfallWorkshop.Game.Items
                     case (int)ClassCareers.Ranger:
                         if (enemyGender == Genders.Male)
                         {
-                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
-                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace, condMods[0], condMods[1]));
                         }
                         return;
                     case (int)ClassCareers.Acrobat:
                         if (enemyGender == Genders.Male)
                         {
-                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Khajiit_suit, playerRace, -1, ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Khajiit_suit, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
-                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Khajiit_suit, playerRace, -1, ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Khajiit_suit, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     case (int)ClassCareers.Monk:
                         if (enemyGender == Genders.Male)
                         {
-                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Sash, (int)MensClothing.Toga, (int)MensClothing.Kimono, (int)MensClothing.Armbands, (int)MensClothing.Vest), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Sash, (int)MensClothing.Toga, (int)MensClothing.Kimono, (int)MensClothing.Armbands, (int)MensClothing.Vest), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(25))
-                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
-                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(25))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     case (int)ClassCareers.Barbarian:
                         if (enemyGender == Genders.Male)
                         {
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Sash, (int)MensClothing.Armbands, (int)MensClothing.Fancy_Armbands, (int)MensClothing.Straps, (int)MensClothing.Challenger_Straps, (int)MensClothing.Champion_straps), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Sash, (int)MensClothing.Armbands, (int)MensClothing.Fancy_Armbands, (int)MensClothing.Straps, (int)MensClothing.Challenger_Straps, (int)MensClothing.Champion_straps), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
-                            targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Loincloth, (int)WomensClothing.Wrap, (int)WomensClothing.Long_skirt), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Loincloth, (int)WomensClothing.Wrap, (int)WomensClothing.Long_skirt), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     default:
                         if (enemyGender == Genders.Male)
                         {
-                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
                         }
                         else
                         {
-                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
-                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
+                            targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace, condMods[0], condMods[1]));
                         }
                         return;
                 }
@@ -1097,97 +1115,97 @@ namespace DaggerfallWorkshop.Game.Items
                     case 7:
                     case 12:
                     case 21:
-                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace));
-                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace, condMods[0], condMods[1]));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(50))
-                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Straps, (int)MensClothing.Challenger_Straps), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Straps, (int)MensClothing.Challenger_Straps), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(50))
-                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         return;
                     case 24:
-                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace));
-                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace, condMods[0], condMods[1]));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(50))
-                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Challenger_Straps, (int)MensClothing.Champion_straps), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Challenger_Straps, (int)MensClothing.Champion_straps), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(50))
-                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Formal_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Formal_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         return;
                     case 15:
                     case 17:
                         if (playerGender == Genders.Male)
                         {
                             if (Dice100.SuccessRoll(20))
-                                targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(20))
-                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(20))
-                                targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
                         }
                         else
                         {
                             if (Dice100.SuccessRoll(20))
-                                targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomShirt(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(20))
-                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(20))
-                                targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(10))
-                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace));
+                                targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace, condMods[0], condMods[1]));
                         }
                         return;
                     case 28:
-                        targetItems.Add(ItemBuilder.CreateRandomShirt(Genders.Female, playerRace));
-                        targetItems.Add(ItemBuilder.CreateRandomPants(Genders.Female, playerRace));
-                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Female, playerRace));
-                        targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, DyeColors.Grey));
+                        targetItems.Add(ItemBuilder.CreateRandomShirt(Genders.Female, playerRace, condMods[0], condMods[1]));
+                        targetItems.Add(ItemBuilder.CreateRandomPants(Genders.Female, playerRace, condMods[0], condMods[1]));
+                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Female, playerRace, condMods[0], condMods[1]));
+                        targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1], DyeColors.Grey));
                         if (Dice100.SuccessRoll(50))
-                            targetItems.Add(ItemBuilder.CreateRandomBra(Genders.Female, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomBra(Genders.Female, playerRace, condMods[0], condMods[1]));
                         return;
                     case 30:
-                        targetItems.Add(ItemBuilder.CreateRandomShirt(Genders.Male, playerRace));
-                        targetItems.Add(ItemBuilder.CreateRandomPants(Genders.Male, playerRace));
-                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace));
-                        targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, DyeColors.Grey));
+                        targetItems.Add(ItemBuilder.CreateRandomShirt(Genders.Male, playerRace, condMods[0], condMods[1]));
+                        targetItems.Add(ItemBuilder.CreateRandomPants(Genders.Male, playerRace, condMods[0], condMods[1]));
+                        targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace, condMods[0], condMods[1]));
+                        targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1], DyeColors.Grey));
                         return;
                     case 32:
                     case 33:
                         if (playerGender == Genders.Male)
                         {
-                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
-                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     case 27:
                         if (playerGender == Genders.Male)
                         {
-                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Loincloth, playerRace, -1, ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Loincloth, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
-                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Loincloth, playerRace, -1, ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Loincloth, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     case 29:
                         if (Dice100.SuccessRoll(50))
-                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Eodoric, (int)WomensClothing.Formal_eodoric, (int)WomensClothing.Strapless_dress), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Eodoric, (int)WomensClothing.Formal_eodoric, (int)WomensClothing.Strapless_dress), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(20))
-                            targetItems.Add(ItemBuilder.CreateRandomBra(Genders.Female, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomBra(Genders.Female, playerRace, condMods[0], condMods[1]));
                         return;
                     case 31:
-                        targetItems.Add(ItemBuilder.CreateRandomPants(Genders.Male, playerRace));
-                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, ItemBuilder.RandomClothingDye()));
-                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_cloak, (int)MensClothing.Formal_cloak), playerRace, -1, ItemBuilder.RandomClothingDye()));
+                        targetItems.Add(ItemBuilder.CreateRandomPants(Genders.Male, playerRace, condMods[0], condMods[1]));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_cloak, (int)MensClothing.Formal_cloak), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(50))
-                            targetItems.Add(ItemBuilder.CreateRandomShirt(Genders.Male, playerRace));
+                            targetItems.Add(ItemBuilder.CreateRandomShirt(Genders.Male, playerRace, condMods[0], condMods[1]));
                         return;
                     default:
                         return;
@@ -1240,6 +1258,229 @@ namespace DaggerfallWorkshop.Game.Items
                         return 0f;
                 }
             }
+        }
+
+        public static int[] EnemyLootConditionCalculator(DaggerfallEntity enemy, int[] traits)
+        {
+            // Index meanings: 0 = minCond%, 1 = maxCond%.
+            int[] equipTableProps = { -1, -1 };
+
+            EnemyEntity AITarget = enemy as EnemyEntity;
+
+            if (EnemyEntity.EquipmentUser(AITarget))
+            {
+                if (AITarget.EntityType == EntityTypes.EnemyClass)
+                {
+                    switch (AITarget.CareerIndex)
+                    {
+                        case (int)ClassCareers.Mage:
+                            equipTableProps[0] = 60;
+                            equipTableProps[1] = 20;
+                            break;
+                        case (int)ClassCareers.Spellsword:
+                            equipTableProps[0] = 70;
+                            equipTableProps[1] = 30;
+                            break;
+                        case (int)ClassCareers.Battlemage:
+                            equipTableProps[0] = 70;
+                            equipTableProps[1] = 30;
+                            break;
+                        case (int)ClassCareers.Sorcerer:
+                            equipTableProps[0] = 60;
+                            equipTableProps[1] = 20;
+                            break;
+                        case (int)ClassCareers.Healer:
+                            equipTableProps[0] = 65;
+                            equipTableProps[1] = 25;
+                            break;
+                        case (int)ClassCareers.Nightblade:
+                            equipTableProps[0] = 80;
+                            equipTableProps[1] = 40;
+                            break;
+                        case (int)ClassCareers.Bard:
+                            equipTableProps[0] = 70;
+                            equipTableProps[1] = 30;
+                            break;
+                        case (int)ClassCareers.Burglar:
+                            equipTableProps[0] = 60;
+                            equipTableProps[1] = 20;
+                            break;
+                        case (int)ClassCareers.Rogue:
+                            equipTableProps[0] = 60;
+                            equipTableProps[1] = 20;
+                            break;
+                        case (int)ClassCareers.Acrobat:
+                            equipTableProps[0] = 65;
+                            equipTableProps[1] = 25;
+                            break;
+                        case (int)ClassCareers.Thief:
+                            equipTableProps[0] = 60;
+                            equipTableProps[1] = 20;
+                            break;
+                        case (int)ClassCareers.Assassin:
+                            equipTableProps[0] = 80;
+                            equipTableProps[1] = 40;
+                            break;
+                        case (int)ClassCareers.Monk:
+                            equipTableProps[0] = 65;
+                            equipTableProps[1] = 25;
+                            break;
+                        case (int)ClassCareers.Archer:
+                            equipTableProps[0] = 75;
+                            equipTableProps[1] = 35;
+                            break;
+                        case (int)ClassCareers.Ranger:
+                            equipTableProps[0] = 70;
+                            equipTableProps[1] = 30;
+                            break;
+                        case (int)ClassCareers.Barbarian:
+                            equipTableProps[0] = 60;
+                            equipTableProps[1] = 20;
+                            break;
+                        case (int)ClassCareers.Warrior:
+                            equipTableProps[0] = 80;
+                            equipTableProps[1] = 40;
+                            break;
+                        case (int)ClassCareers.Knight:
+                            equipTableProps[0] = 85;
+                            equipTableProps[1] = 45;
+                            break;
+                        default:
+                            return equipTableProps;
+                    }
+                }
+                else
+                {
+                    switch (AITarget.CareerIndex)
+                    {
+                        case 7:
+                            equipTableProps[0] = 70;
+                            equipTableProps[1] = 30;
+                            break;
+                        case 8:
+                            equipTableProps[0] = 55;
+                            equipTableProps[1] = 15;
+                            break;
+                        case 12:
+                            equipTableProps[0] = 75;
+                            equipTableProps[1] = 35;
+                            break;
+                        case 15:
+                            equipTableProps[0] = 45;
+                            equipTableProps[1] = 5;
+                            break;
+                        case 17:
+                            equipTableProps[0] = 45;
+                            equipTableProps[1] = 5;
+                            break;
+                        case 21:
+                            equipTableProps[0] = 60;
+                            equipTableProps[1] = 20;
+                            break;
+                        case 23:
+                            equipTableProps[0] = 50;
+                            equipTableProps[1] = 10;
+                            break;
+                        case 24:
+                            equipTableProps[0] = 80;
+                            equipTableProps[1] = 40;
+                            break;
+                        case 25:
+                            equipTableProps[0] = 55;
+                            equipTableProps[1] = 15;
+                            break;
+                        case 26:
+                            equipTableProps[0] = 55;
+                            equipTableProps[1] = 15;
+                            break;
+                        case 27:
+                            equipTableProps[0] = 55;
+                            equipTableProps[1] = 15;
+                            break;
+                        case 29:
+                            equipTableProps[0] = 65;
+                            equipTableProps[1] = 25;
+                            break;
+                        case 31:
+                            equipTableProps[0] = 75;
+                            equipTableProps[1] = 35;
+                            break;
+                        case 28:
+                        case 30:
+                            equipTableProps[0] = 65;
+                            equipTableProps[1] = 25;
+                            break;
+                        case 32:
+                        case 33:
+                            equipTableProps[0] = 60;
+                            equipTableProps[1] = 20;
+                            break;
+                        default:
+                            return equipTableProps;
+                    }
+                }
+            }
+            else
+            {
+                return equipTableProps;
+            }
+
+            equipTableProps = TraitLootConditionCalculator(enemy, traits, equipTableProps);
+
+            return equipTableProps;
+        }
+
+        public static int[] TraitLootConditionCalculator(DaggerfallEntity enemy, int[] traits, int[] equipTableProps)
+        {
+            if (traits[0] == (int)MobilePersonalityQuirks.Prepared || traits[1] == (int)MobilePersonalityQuirks.Prepared)
+            {
+                equipTableProps[0] = (int)Mathf.Clamp(equipTableProps[0] + 15, 1, 95);
+                equipTableProps[1] = (int)Mathf.Clamp(equipTableProps[1] + 15, 1, 95);
+            }
+
+            if (traits[0] == (int)MobilePersonalityQuirks.Reckless || traits[1] == (int)MobilePersonalityQuirks.Reckless)
+            {
+                equipTableProps[0] = (int)Mathf.Clamp(equipTableProps[0] - 15, 1, 95);
+                equipTableProps[1] = (int)Mathf.Clamp(equipTableProps[1] - 15, 1, 95);
+            }
+
+            if (traits[0] == (int)MobilePersonalityQuirks.Cautious || traits[1] == (int)MobilePersonalityQuirks.Cautious)
+            {
+                equipTableProps[0] = (int)Mathf.Clamp(equipTableProps[0] + 5, 1, 95);
+                equipTableProps[1] = (int)Mathf.Clamp(equipTableProps[1] + 5, 1, 95);
+            }
+
+            if (traits[0] == (int)MobilePersonalityQuirks.Hoarder || traits[1] == (int)MobilePersonalityQuirks.Hoarder)
+            {
+                equipTableProps[0] = (int)Mathf.Clamp(equipTableProps[0] - 10, 1, 95);
+                equipTableProps[1] = (int)Mathf.Clamp(equipTableProps[1] - 10, 1, 95);
+            }
+
+            if (traits[2] == (int)MobilePersonalityInterests.Collector)
+            {
+                equipTableProps[0] = (int)Mathf.Clamp(equipTableProps[0] + 5, 1, 95);
+                equipTableProps[1] = (int)Mathf.Clamp(equipTableProps[1] + 5, 1, 95);
+            }
+
+            if (traits[2] == (int)MobilePersonalityInterests.Survivalist)
+            {
+                equipTableProps[0] = (int)Mathf.Clamp(equipTableProps[0] + 10, 1, 95);
+                equipTableProps[1] = (int)Mathf.Clamp(equipTableProps[1] + 10, 1, 95);
+            }
+
+            if (traits[2] == (int)MobilePersonalityInterests.Diver)
+            {
+                equipTableProps[0] = (int)Mathf.Clamp(equipTableProps[0] - 5, 1, 95);
+                equipTableProps[1] = (int)Mathf.Clamp(equipTableProps[1] - 5, 1, 95);
+            }
+
+            if (traits[2] == (int)MobilePersonalityInterests.Handy)
+            {
+                equipTableProps[0] = (int)Mathf.Clamp(equipTableProps[0] + 15, 1, 95);
+                equipTableProps[1] = (int)Mathf.Clamp(equipTableProps[1] + 15, 1, 95);
+            }
+
+            return equipTableProps;
         }
 
         static void RandomIngredient(float chance, ItemGroups ingredientGroup, List<DaggerfallUnityItem> targetItems)

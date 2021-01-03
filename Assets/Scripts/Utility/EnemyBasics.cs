@@ -4565,6 +4565,18 @@ namespace DaggerfallWorkshop.Utility
 
         public static int[] TraitEquipModCalculator(DaggerfallEntity enemy, int[] traits, int[] equipTableProps)
         {
+            if (traits[0] == (int)MobilePersonalityQuirks.Prepared || traits[1] == (int)MobilePersonalityQuirks.Prepared)
+            {
+                equipTableProps[13] = (int)Mathf.Clamp(equipTableProps[13] + 15, 1, 95);
+                equipTableProps[14] = (int)Mathf.Clamp(equipTableProps[14] + 15, 1, 95);
+            }
+
+            if (traits[0] == (int)MobilePersonalityQuirks.Reckless || traits[1] == (int)MobilePersonalityQuirks.Reckless)
+            {
+                equipTableProps[13] = (int)Mathf.Clamp(equipTableProps[13] - 15, 1, 95);
+                equipTableProps[14] = (int)Mathf.Clamp(equipTableProps[14] - 15, 1, 95);
+            }
+
             if (traits[0] == (int)MobilePersonalityQuirks.Cautious || traits[1] == (int)MobilePersonalityQuirks.Cautious)
             {
                 for (int i = 7; i < equipTableProps.Length; i++)
@@ -4572,6 +4584,9 @@ namespace DaggerfallWorkshop.Utility
                     if (equipTableProps[i] > -1 && equipTableProps[i] < 2)
                         equipTableProps[i] += 1;
                 }
+
+                equipTableProps[13] = (int)Mathf.Clamp(equipTableProps[13] + 5, 1, 95);
+                equipTableProps[14] = (int)Mathf.Clamp(equipTableProps[14] + 5, 1, 95);
             }
 
             if (traits[0] == (int)MobilePersonalityQuirks.Cowardly || traits[1] == (int)MobilePersonalityQuirks.Cowardly)
@@ -4582,6 +4597,12 @@ namespace DaggerfallWorkshop.Utility
                 }
             }
 
+            if (traits[0] == (int)MobilePersonalityQuirks.Hoarder || traits[1] == (int)MobilePersonalityQuirks.Hoarder)
+            {
+                equipTableProps[13] = (int)Mathf.Clamp(equipTableProps[13] - 10, 1, 95);
+                equipTableProps[14] = (int)Mathf.Clamp(equipTableProps[14] - 10, 1, 95);
+            }
+
             if (traits[0] == (int)MobilePersonalityQuirks.Sadistic || traits[1] == (int)MobilePersonalityQuirks.Sadistic)
             {
                 if (equipTableProps[4] == 0)
@@ -4589,6 +4610,30 @@ namespace DaggerfallWorkshop.Utility
                     equipTableProps[4] = PickOneOf(0, 0, 1);
                     equipTableProps[5] = PickOneOf((int)Poisons.Nux_Vomica, (int)Poisons.Nux_Vomica, (int)Poisons.Moonseed, (int)Poisons.Moonseed, (int)Poisons.Pyrrhic_Acid);
                 }
+            }
+
+            if (traits[2] == (int)MobilePersonalityInterests.Collector)
+            {
+                equipTableProps[13] = (int)Mathf.Clamp(equipTableProps[13] + 5, 1, 95);
+                equipTableProps[14] = (int)Mathf.Clamp(equipTableProps[14] + 5, 1, 95);
+            }
+
+            if (traits[2] == (int)MobilePersonalityInterests.Survivalist)
+            {
+                equipTableProps[13] = (int)Mathf.Clamp(equipTableProps[13] + 10, 1, 95);
+                equipTableProps[14] = (int)Mathf.Clamp(equipTableProps[14] + 10, 1, 95);
+            }
+
+            if (traits[2] == (int)MobilePersonalityInterests.Diver)
+            {
+                equipTableProps[13] = (int)Mathf.Clamp(equipTableProps[13] - 5, 1, 95);
+                equipTableProps[14] = (int)Mathf.Clamp(equipTableProps[14] - 5, 1, 95);
+            }
+
+            if (traits[2] == (int)MobilePersonalityInterests.Handy)
+            {
+                equipTableProps[13] = (int)Mathf.Clamp(equipTableProps[13] + 15, 1, 95);
+                equipTableProps[14] = (int)Mathf.Clamp(equipTableProps[14] + 15, 1, 95);
             }
 
             return equipTableProps;
@@ -4778,9 +4823,9 @@ namespace DaggerfallWorkshop.Utility
 
         public static int[] EnemyEquipTableCalculator(DaggerfallEntity enemy, int[] traits)
         {
-            // Index meanings: 0 = primaryWeapon, 1 = secondaryWeapon, 2 = shield, 3 = armorCoverage, 4 = usesPoison 0 or 1 bool, 5 = poisonApplied, 6-12 = armorSlots -1-2 Nothing to Plate armor.
+            // Index meanings: 0 = primaryWeapon, 1 = secondaryWeapon, 2 = shield, 3 = armorCoverage, 4 = usesPoison 0 or 1 bool, 5 = poisonApplied, 6-12 = armorSlots -1-2 Nothing to Plate armor, 13 = minCond%, 14 = maxCond%.
             // Main variable used in determining enemy loot/equipment values for purposes of targeted loot generation based on many context related variables.
-            int[] equipTableProps = { -1, -1, -1, -1, 0, -1, -1, -1, -1, -1, -1, -1, -1 };
+            int[] equipTableProps = { -1, -1, -1, -1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 
             EnemyEntity AITarget = enemy as EnemyEntity;
 
@@ -4796,6 +4841,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler);
                             equipTableProps[3] = PickOneOf(-1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 60;
+                            equipTableProps[14] = 20;
                             break;
                         case (int)ClassCareers.Spellsword:
                             equipTableProps[0] = PickOneOf((int)Weapons.Battle_Axe, (int)Weapons.Broadsword, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Mace);
@@ -4803,6 +4850,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 70;
+                            equipTableProps[14] = 30;
                             break;
                         case (int)ClassCareers.Battlemage:
                             equipTableProps[0] = PickOneOf((int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Broadsword, (int)Weapons.Saber, (int)Weapons.Longsword, (int)Weapons.Katana, (int)Weapons.Claymore, (int)Weapons.Dai_Katana);
@@ -4810,12 +4859,16 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield);
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 70;
+                            equipTableProps[14] = 30;
                             break;
                         case (int)ClassCareers.Sorcerer:
                             equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Mace, (int)Weapons.Flail, (int)Weapons.Warhammer);
                             equipTableProps[1] = PickOneOf(-1, -1, (int)Weapons.Dagger, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Tanto, (int)Weapons.Mace);
                             equipTableProps[3] = PickOneOf(-1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 60;
+                            equipTableProps[14] = 20;
                             break;
                         case (int)ClassCareers.Healer:
                             equipTableProps[0] = (int)Weapons.Staff;
@@ -4823,6 +4876,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, (int)Armor.Buckler, (int)Armor.Round_Shield);
                             equipTableProps[3] = PickOneOf(-1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 65;
+                            equipTableProps[14] = 25;
                             break;
                         case (int)ClassCareers.Nightblade:
                             equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
@@ -4832,6 +4887,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[4] = PickOneOf(0, 1, 1);
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 80;
+                            equipTableProps[14] = 40;
                             break;
                         case (int)ClassCareers.Bard:
                             equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
@@ -4839,12 +4896,16 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
                             equipTableProps[3] = PickOneOf(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 70;
+                            equipTableProps[14] = 30;
                             break;
                         case (int)ClassCareers.Burglar:
                             equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
                             equipTableProps[1] = PickOneOf(-1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
                             equipTableProps[3] = PickOneOf(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 60;
+                            equipTableProps[14] = 20;
                             break;
                         case (int)ClassCareers.Rogue:
                             equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
@@ -4854,12 +4915,16 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[4] = PickOneOf(0, 0, 0, 0, 1);
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 60;
+                            equipTableProps[14] = 20;
                             break;
                         case (int)ClassCareers.Acrobat:
                             equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
                             equipTableProps[1] = PickOneOf(-1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
                             equipTableProps[3] = PickOneOf(-1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 65;
+                            equipTableProps[14] = 25;
                             break;
                         case (int)ClassCareers.Thief:
                             equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
@@ -4867,6 +4932,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler);
                             equipTableProps[3] = PickOneOf(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 60;
+                            equipTableProps[14] = 20;
                             break;
                         case (int)ClassCareers.Assassin:
                             equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer);
@@ -4875,11 +4942,15 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[4] = 1;
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 80;
+                            equipTableProps[14] = 40;
                             break;
                         case (int)ClassCareers.Monk:
                             equipTableProps[0] = (int)Weapons.Staff;
                             equipTableProps[1] = PickOneOf(-1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 65;
+                            equipTableProps[14] = 25;
                             break;
                         case (int)ClassCareers.Archer:
                             equipTableProps[0] = PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
@@ -4888,6 +4959,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[4] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 75;
+                            equipTableProps[14] = 35;
                             break;
                         case (int)ClassCareers.Ranger:
                             equipTableProps[0] = PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
@@ -4897,6 +4970,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[4] = PickOneOf(0, 0, 0, 0, 1);
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 70;
+                            equipTableProps[14] = 30;
                             break;
                         case (int)ClassCareers.Barbarian:
                             equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
@@ -4904,6 +4979,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
                             equipTableProps[3] = PickOneOf(-1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 60;
+                            equipTableProps[14] = 20;
                             break;
                         case (int)ClassCareers.Warrior:
                             equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
@@ -4911,6 +4988,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 80;
+                            equipTableProps[14] = 40;
                             break;
                         case (int)ClassCareers.Knight:
                             equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
@@ -4918,6 +4997,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 85;
+                            equipTableProps[14] = 45;
                             break;
                         default:
                             return equipTableProps;
@@ -4933,6 +5014,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 70;
+                            equipTableProps[14] = 30;
                             break;
                         case 8:
                             equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
@@ -4942,6 +5025,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[4] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 55;
+                            equipTableProps[14] = 15;
                             break;
                         case 12:
                             equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
@@ -4949,16 +5034,22 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 75;
+                            equipTableProps[14] = 35;
                             break;
                         case 15:
                             equipTableProps[0] = (int)Weapons.Battle_Axe;
                             equipTableProps[2] = PickOneOf((int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
                             equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 45;
+                            equipTableProps[14] = 5;
                             break;
                         case 17:
                             equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 45;
+                            equipTableProps[14] = 5;
                             break;
                         case 21:
                             equipTableProps[0] = (int)Weapons.Staff;
@@ -4966,9 +5057,13 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield);
                             equipTableProps[3] = PickOneOf(-1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 60;
+                            equipTableProps[14] = 20;
                             break;
                         case 23:
                             equipTableProps[0] = (int)Weapons.Longsword;
+                            equipTableProps[13] = 50;
+                            equipTableProps[14] = 10;
                             break;
                         case 24:
                             equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
@@ -4976,36 +5071,50 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 80;
+                            equipTableProps[14] = 40;
                             break;
                         case 25:
                             equipTableProps[0] = (int)Weapons.Warhammer;
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 55;
+                            equipTableProps[14] = 15;
                             break;
                         case 26:
                             equipTableProps[0] = PickOneOf((int)Weapons.Claymore, (int)Weapons.Dai_Katana);
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 55;
+                            equipTableProps[14] = 15;
                             break;
                         case 27:
                             equipTableProps[0] = (int)Weapons.War_Axe;
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 55;
+                            equipTableProps[14] = 15;
                             break;
                         case 31:
                             equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
                             equipTableProps[2] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
                             equipTableProps[3] = PickOneOf(0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 75;
+                            equipTableProps[14] = 35;
                             break;
                         case 28:
                         case 30:
                             equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
+                            equipTableProps[13] = 65;
+                            equipTableProps[14] = 25;
                             break;
                         case 32:
                         case 33:
                             equipTableProps[0] = (int)Weapons.Staff;
+                            equipTableProps[13] = 60;
+                            equipTableProps[14] = 20;
                             break;
                         default:
                             return equipTableProps;
