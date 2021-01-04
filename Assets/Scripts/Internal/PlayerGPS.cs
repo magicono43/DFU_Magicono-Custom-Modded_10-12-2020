@@ -650,6 +650,37 @@ namespace DaggerfallWorkshop
             return regionSupplyMods;
         }
 
+        // I'm putting this on hold for a bit, until I think of more things, or when I start putting in the actual survival mechanics and such for outdoor environments and such, etc.
+        /*public static float[] ClimateAndWeatherSpecificLootModifiers()
+        {
+            float[] regionSupplyMods = new float[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            int climate = GameManager.Instance.PlayerGPS.CurrentClimateIndex;
+
+            switch (climate)
+            {
+                case (int)MapsFile.Climates.Ocean:
+                    regionSupplyMods = new float[] { 4, 2, 0.75f, 2, 0.25f, 0.25f, 0.75f, 1.5f, 0.25f, 1 };
+                    break;
+                default:
+                    break;
+            }
+
+            if (!GameManager.Instance.PlayerEnterExit.IsPlayerInsideDungeon && !GameManager.Instance.PlayerEnterExit.IsPlayerInsideBuilding)
+            {
+                bool isRaining = GameManager.Instance.WeatherManager.IsRaining;
+                bool isOvercast = GameManager.Instance.WeatherManager.IsOvercast;
+                bool isStorming = GameManager.Instance.WeatherManager.IsStorming;
+                bool isSnowing = GameManager.Instance.WeatherManager.IsSnowing;
+
+                if (isRaining)
+                {
+
+                }
+            }
+
+             return regionSupplyMods;
+        }*/
+
         #endregion
 
         #region Private Methods

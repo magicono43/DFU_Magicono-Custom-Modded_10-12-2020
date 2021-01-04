@@ -5635,7 +5635,7 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
                         break;
                     default:
-                        return extraLootProps;
+                        break;
                 }
             }
             else
@@ -5677,11 +5677,79 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
                         break;
                     default:
-                        return extraLootProps;
+                        break;
                 }
             }
 
+            int locationContext = DetermineEnemyLocationContext(enemy); // A very basic implementation of this "location context" specific loot modifier thing, but it should work for now. 
+            if (locationContext == 0)
+            {
+                extraLootProps[4] = 0;
+                extraLootProps[5] = 0;
+            }
+
             return extraLootProps;
+        }
+
+        public static int DetermineEnemyLocationContext(DaggerfallEntity enemy)
+        {
+            // -1 = Nothing, 0 = Resident, 1 = Raider.
+            MobileTeams team = enemy.Team;
+            int playerLocation = GameManager.Instance.PlayerGPS.CurrentLocationIndex;
+            DFRegion.DungeonTypes dungType = DFRegion.DungeonTypes.NoDungeon;
+            if (playerLocation > -1)
+                dungType = GameManager.Instance.PlayerGPS.CurrentRegion.MapTable[playerLocation].DungeonType;
+
+            if (dungType != DFRegion.DungeonTypes.NoDungeon)
+            {
+                switch(dungType)
+                {
+                    case DFRegion.DungeonTypes.Mine:
+                    case DFRegion.DungeonTypes.NaturalCave:
+                    case DFRegion.DungeonTypes.Coven:
+                    case DFRegion.DungeonTypes.HarpyNest:
+                    case DFRegion.DungeonTypes.RuinedCastle:
+                    case DFRegion.DungeonTypes.SpiderNest:
+                    case DFRegion.DungeonTypes.GiantStronghold:
+                    case DFRegion.DungeonTypes.VolcanicCaves:
+                    case DFRegion.DungeonTypes.ScorpionNest:
+                        return 1;
+                    case DFRegion.DungeonTypes.HumanStronghold:
+                    case DFRegion.DungeonTypes.DesecratedTemple:
+                    case DFRegion.DungeonTypes.Laboratory:
+                        if (team == MobileTeams.KnightsAndMages)
+                            return 0;
+                        else
+                            return 1;
+                    case DFRegion.DungeonTypes.Prison:
+                    case DFRegion.DungeonTypes.BarbarianStronghold:
+                        if (team == MobileTeams.Criminals)
+                            return 0;
+                        else
+                            return 1;
+                    case DFRegion.DungeonTypes.Crypt:
+                    case DFRegion.DungeonTypes.VampireHaunt:
+                    case DFRegion.DungeonTypes.Cemetery:
+                        if (team == MobileTeams.Undead)
+                            return 0;
+                        else
+                            return 1;
+                    case DFRegion.DungeonTypes.OrcStronghold:
+                        if (team == MobileTeams.Orcs)
+                            return 0;
+                        else
+                            return 1;
+                    case DFRegion.DungeonTypes.DragonsDen:
+                        if (team == MobileTeams.Dragonlings)
+                            return 0;
+                        else
+                            return 1;
+                    default:
+                        return -1;
+                }
+            }
+
+            return -1;
         }
 
         public static int[] EnemyPersonalityTraitGenerator(DaggerfallEntity enemy) // Array Index 0 and 1 are both Quirks, Index 2 is an Interest.

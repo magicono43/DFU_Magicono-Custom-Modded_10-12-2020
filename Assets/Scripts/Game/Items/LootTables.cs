@@ -117,10 +117,12 @@ namespace DaggerfallWorkshop.Game.Items
             "N", // Cemetery
             };
 
+            int[] traits = { -1, -1, -1 };
+
             // Get loot table key
             if (locationIndex < lootTableKeys.Length)
             {
-                DaggerfallLoot.GenerateItems(lootTableKeys[locationIndex], loot.Items);
+                DaggerfallLoot.GenerateItems(loot.Items, traits);
 
                 // Randomly add map
                 char key = lootTableKeys[locationIndex][0];
@@ -174,31 +176,6 @@ namespace DaggerfallWorkshop.Game.Items
             while (Dice100.SuccessRoll((int)chance))
             {
                 items.Add(ItemBuilder.CreateRandomWeapon(playerEntity.Level));
-                chance *= 0.5f;
-            }
-
-            // Random armor
-            chance = matrix.AM;
-            while (Dice100.SuccessRoll((int)chance))
-            {
-                items.Add(ItemBuilder.CreateRandomArmor(playerEntity.Level, playerEntity.Gender, playerEntity.Race));
-                chance *= 0.5f;
-            }
-
-            // Random ingredients
-            RandomIngredient(matrix.C1 * playerEntity.Level, ItemGroups.CreatureIngredients1, items);
-            RandomIngredient(matrix.C2 * playerEntity.Level, ItemGroups.CreatureIngredients2, items);
-            RandomIngredient(matrix.C3, ItemGroups.CreatureIngredients3, items);
-            RandomIngredient(matrix.P1 * playerEntity.Level, ItemGroups.PlantIngredients1, items);
-            RandomIngredient(matrix.P2 * playerEntity.Level, ItemGroups.PlantIngredients2, items);
-            RandomIngredient(matrix.M1, ItemGroups.MiscellaneousIngredients1, items);
-            RandomIngredient(matrix.M2, ItemGroups.MiscellaneousIngredients2, items);
-
-            // Random magic item
-            chance = matrix.MI;
-            while (Dice100.SuccessRoll((int)chance))
-            {
-                items.Add(ItemBuilder.CreateRandomMagicItem(playerEntity.Level, playerEntity.Gender, playerEntity.Race));
                 chance *= 0.5f;
             }
 
@@ -452,10 +429,10 @@ namespace DaggerfallWorkshop.Game.Items
             }
 
             // Extra flavor/junk items (mostly based on personality traits, if present)
-            if (traits[0] > -1 || traits[1] > -1 || traits[2] > -1)
+            /*if (traits[0] > -1 || traits[1] > -1 || traits[2] > -1)
             {
                 PersonalityTraitFlavorItemsGenerator(AITarget, traits, items); // Items not yet implemented.
-            }
+            }*/
 
             return items.ToArray();
         }
