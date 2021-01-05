@@ -122,7 +122,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Get loot table key
             if (locationIndex < lootTableKeys.Length)
             {
-                DaggerfallLoot.GenerateItems(loot.Items, traits);
+                //DaggerfallLoot.GenerateItems(loot.Items, traits);
 
                 // Randomly add map
                 char key = lootTableKeys[locationIndex][0];
@@ -221,7 +221,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Add gold
             if (predefLootProps[0] > 0)
             {
-                items.Add(ItemBuilder.CreateGoldPieces(predefLootProps[0]));
+                items.Add(ItemBuilder.CreateGoldPieces(predefLootProps[0])); // Will have to work on this amount, it feels a bit off, too low. 
             }
 
             // Arrows
@@ -372,6 +372,12 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     items.Add(new DaggerfallUnityItem(ItemGroups.MiscItems, 8));
                 }
+            }
+
+            // Potion Recipes
+            if (traits[2] == (int)MobilePersonalityInterests.Brewer)
+            {
+                DaggerfallLoot.RandomlyAddPotionRecipe(100, items); // I'll expand on this later on, probably add another parameter to extra loot method, but for now it's good enough. 
             }
 
             // Random clothes
@@ -914,7 +920,7 @@ namespace DaggerfallWorkshop.Game.Items
             }
         }
 
-        static void AddClothesBasedOnEnemy(Genders playerGender, Races playerRace, EnemyEntity AITarget, int[] condMods,List<DaggerfallUnityItem> targetItems)
+        static void AddClothesBasedOnEnemy(Genders playerGender, Races playerRace, EnemyEntity AITarget, int[] condMods, List<DaggerfallUnityItem> targetItems)
         {
             Genders enemyGender = AITarget.Gender;
 

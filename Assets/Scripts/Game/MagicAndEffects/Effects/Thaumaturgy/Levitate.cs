@@ -44,9 +44,9 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("levitation"),
                 125,
                 DefaultEffectSettings(),
-                (int)Items.MiscellaneousIngredients1.Pure_water,
-                (int)Items.MiscellaneousIngredients1.Nectar,
-                (int)Items.CreatureIngredients1.Ectoplasm);
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.CreatureIngredients.Ectoplasm);
 
             AssignPotionRecipes(levitation);
         }

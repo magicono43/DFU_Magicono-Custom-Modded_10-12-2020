@@ -802,7 +802,7 @@ namespace DaggerfallWorkshop.Game.Items
 
             // Random weapon material
             WeaponMaterialTypes material = FormulaHelper.RandomMaterial(enemyLevel, buildingQuality, playerLuck);
-            ApplyWeaponMaterial(newItem, material);
+            ApplyIngotMaterial(newItem, material);
 
             return newItem;
         }

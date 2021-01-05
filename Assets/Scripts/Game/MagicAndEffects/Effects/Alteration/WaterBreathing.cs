@@ -44,9 +44,9 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("waterBreathing"),
                 100,
                 DefaultEffectSettings(),
-                (int)Items.MiscellaneousIngredients1.Rain_water,
-                (int)Items.MiscellaneousIngredients1.Elixir_vitae,
-                (int)Items.MiscellaneousIngredients2.Ivory);
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.SolventIngredients.Elixir_vitae,
+                (int)Items.AnimalPartIngredients.Ivory);
 
             waterBreathing.TextureRecord = 32;
             AssignPotionRecipes(waterBreathing);

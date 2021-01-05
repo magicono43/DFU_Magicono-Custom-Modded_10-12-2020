@@ -47,9 +47,9 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("stamina"),
                 25,
                 staminaSettings,
-                (int)Items.MiscellaneousIngredients1.Pure_water,
-                (int)Items.PlantIngredients2.Aloe,
-                (int)Items.PlantIngredients2.Ginkgo_leaves);
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.MiscPlantIngredients.Aloe,
+                (int)Items.MiscPlantIngredients.Ginkgo_leaves);
 
             // Assign recipe
             AssignPotionRecipes(stamina);

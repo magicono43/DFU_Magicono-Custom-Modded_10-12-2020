@@ -291,7 +291,7 @@ namespace DaggerfallWorkshop.Game.Questing
             if (itemClass == (int)ItemGroups.MagicItems)
             {
                 Entity.PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
-                result = ItemBuilder.CreateRegularMagicItem(itemSubClass, playerEntity.Stats.LiveLuck, playerEntity.Gender, playerEntity.Race);
+                result = ItemBuilder.CreateRegularMagicItem(itemSubClass, -1, playerEntity.Stats.LiveLuck, playerEntity.Gender, playerEntity.Race);
             }
             // Handle books
             else if (itemClass == (int)ItemGroups.Books)

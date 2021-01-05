@@ -1946,8 +1946,8 @@ namespace Wenzil.Console
                     return usage;
 
                 return AddItemHelper.Execute(args, x => x.Parse<Genders>() == Genders.Male ?
-                    ItemBuilder.CreateMensClothing(x.Parse<MensClothing>(), x.Parse<Races>(), -1, x.Parse<DyeColors>()) :
-                    ItemBuilder.CreateWomensClothing(x.Parse<WomensClothing>(), x.Parse<Races>(), -1, x.Parse<DyeColors>())
+                    ItemBuilder.CreateMensClothing(x.Parse<MensClothing>(), x.Parse<Races>(), -1, -1, -1, x.Parse<DyeColors>()) :
+                    ItemBuilder.CreateWomensClothing(x.Parse<WomensClothing>(), x.Parse<Races>(), -1, -1, -1, x.Parse<DyeColors>())
                 );
             }
         }

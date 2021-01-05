@@ -48,10 +48,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("shadowForm"),
                 200,
                 DefaultEffectSettings(),
-                (int)Items.MiscellaneousIngredients1.Rain_water,
-                (int)Items.MiscellaneousIngredients1.Nectar,
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.SolventIngredients.Nectar,
                 (int)Items.Gems.Malachite,
-                (int)Items.PlantIngredients2.Black_rose);
+                (int)Items.FlowerPlantIngredients.Black_rose);
 
             shadowForm.TextureRecord = 33;
             AssignPotionRecipes(shadowForm);

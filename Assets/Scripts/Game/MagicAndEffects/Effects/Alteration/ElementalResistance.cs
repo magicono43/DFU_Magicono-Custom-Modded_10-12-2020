@@ -101,37 +101,37 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("resistFire"),
                 75,
                 resistSettings,
-                (int)Items.MiscellaneousIngredients1.Ichor,
+                (int)Items.SolventIngredients.Ichor,
                 (int)Items.Gems.Amber,
-                (int)Items.PlantIngredients1.Red_flowers,
-                (int)Items.CreatureIngredients1.Fairy_dragon_scales,
-                (int)Items.PlantIngredients2.Cactus);
+                (int)Items.FlowerPlantIngredients.Red_Flowers,
+                (int)Items.CreatureIngredients.Fairy_dragon_scales,
+                (int)Items.FruitPlantIngredients.Cactus);
 
             PotionRecipe resistFrost = new PotionRecipe(
                 TextManager.Instance.GetLocalizedText("resistFrost"),
                 75,
                 resistSettings,
-                (int)Items.MiscellaneousIngredients1.Ichor,
+                (int)Items.SolventIngredients.Ichor,
                 (int)Items.Gems.Turquoise,
-                (int)Items.PlantIngredients1.Pine_branch,
-                (int)Items.PlantIngredients2.White_rose);
+                (int)Items.MiscPlantIngredients.Pine_branch,
+                (int)Items.FlowerPlantIngredients.White_rose);
 
             PotionRecipe resistShock = new PotionRecipe(
                 TextManager.Instance.GetLocalizedText("resistShock"),
                 75,
                 resistSettings,
-                (int)Items.MiscellaneousIngredients1.Ichor,
+                (int)Items.SolventIngredients.Ichor,
                 (int)Items.MetalIngredients.Lodestone,
-                (int)Items.PlantIngredients1.Red_berries);
+                (int)Items.FruitPlantIngredients.Red_berries);
 
             EffectSettings poisonResistSettings = SetEffectChance(DefaultEffectSettings(), 5, 19, 1);
             PotionRecipe resistPoison = new PotionRecipe(
                 TextManager.Instance.GetLocalizedText("resistPoison"),
                 125,
                 poisonResistSettings,
-                (int)Items.MiscellaneousIngredients1.Ichor,
-                (int)Items.CreatureIngredients1.Snake_venom,
-                (int)Items.PlantIngredients1.Golden_poppy);
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.AnimalPartIngredients.Snake_venom,
+                (int)Items.FlowerPlantIngredients.Golden_poppy);
 
             // Assign potion recipes
             resistFire.TextureRecord = 34;

@@ -46,10 +46,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("curePoison"),
                 200,
                 cureSettings,
-                (int)Items.MiscellaneousIngredients1.Ichor,
-                (int)Items.CreatureIngredients2.Giant_scorpion_stinger,
-                (int)Items.MiscellaneousIngredients1.Small_tooth,
-                (int)Items.MiscellaneousIngredients2.Pearl);
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.AnimalPartIngredients.Giant_scorpion_stinger,
+                (int)Items.AnimalPartIngredients.Small_tooth,
+                (int)Items.AnimalPartIngredients.Pearl);
 
             curePoison.TextureRecord = 35;
             AssignPotionRecipes(curePoison);

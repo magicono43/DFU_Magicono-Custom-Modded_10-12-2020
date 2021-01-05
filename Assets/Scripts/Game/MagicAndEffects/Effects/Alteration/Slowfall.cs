@@ -46,9 +46,9 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("slowFalling"),
                 100,
                 DefaultEffectSettings(),
-                (int)Items.MiscellaneousIngredients1.Pure_water,
-                (int)Items.PlantIngredients2.White_poppy,
-                (int)Items.PlantIngredients2.Black_poppy);
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FlowerPlantIngredients.White_poppy,
+                (int)Items.FlowerPlantIngredients.Black_poppy);
 
             AssignPotionRecipes(slowFalling);
         }

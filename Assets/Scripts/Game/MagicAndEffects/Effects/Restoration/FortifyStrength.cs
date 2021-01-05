@@ -49,9 +49,9 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("orcStrength"),
                 50,
                 orcStrengthSettings,
-                (int)Items.CreatureIngredients1.Orcs_blood,
+                (int)Items.CreatureIngredients.Orcs_blood,
                 (int)Items.MetalIngredients.Iron,
-                (int)Items.MiscellaneousIngredients1.Pure_water);
+                (int)Items.SolventIngredients.Pure_water);
 
             // Assign recipe
             orcStrength.TextureRecord = 13;

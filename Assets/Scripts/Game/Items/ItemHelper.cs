@@ -1471,7 +1471,7 @@ namespace DaggerfallWorkshop.Game.Items
             int[] enemyEquipTableProperties = EnemyBasics.EnemyEquipTableCalculator(enemyEntity, traits);
             DaggerfallUnityItem[] equipmentItems = { null, null, null, null, null, null, null, null, null, null };
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 equipmentItems[i] = DefineEquippedInHands(i, enemyEntity, traits, enemyEquipTableProperties, player);
 
@@ -1482,7 +1482,7 @@ namespace DaggerfallWorkshop.Game.Items
                 }
             }
 
-            for (int i = 7; i < 12; i++) // Might have to redo the values of this loop if it's not working correctly later?
+            for (int i = 6; i < 13; i++) // Might have to redo the values of this loop if it's not working correctly later?
             {
                 equipmentItems[i - 4] = DefineEquippedOnBody(i - 4, enemyEntity, traits, enemyEquipTableProperties, player);
 
@@ -1628,6 +1628,7 @@ namespace DaggerfallWorkshop.Game.Items
             int enemyLevel = enemy.Level;
             Genders playerGender = player.Gender;
             Races race = player.Race;
+            index += 4;
 
             /*// City watch never have items above iron or steel
             if (enemy.EntityType == EntityTypes.EnemyClass && enemy.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch) // Might Use this somehow later, more refined.

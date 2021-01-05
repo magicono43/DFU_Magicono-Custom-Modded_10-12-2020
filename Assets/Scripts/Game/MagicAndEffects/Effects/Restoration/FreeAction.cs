@@ -45,10 +45,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("freeAction"),
                 125,
                 cureSettings,
-                (int)Items.MiscellaneousIngredients1.Ichor,
-                (int)Items.CreatureIngredients1.Spider_venom,
-                (int)Items.PlantIngredients1.Twigs,
-                (int)Items.PlantIngredients2.Bamboo);
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.AnimalPartIngredients.Spider_venom,
+                (int)Items.MiscPlantIngredients.Twigs,
+                (int)Items.MiscPlantIngredients.Bamboo);
 
             freeAction.TextureRecord = 14;
             AssignPotionRecipes(freeAction);

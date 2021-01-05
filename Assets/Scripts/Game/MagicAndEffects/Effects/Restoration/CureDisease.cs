@@ -46,9 +46,9 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("cureDisease"),
                 100,
                 cureSettings,
-                (int)Items.MiscellaneousIngredients1.Elixir_vitae,
-                (int)Items.PlantIngredients2.Fig,
-                (int)Items.MiscellaneousIngredients1.Big_tooth);
+                (int)Items.SolventIngredients.Elixir_vitae,
+                (int)Items.FruitPlantIngredients.Fig,
+                (int)Items.AnimalPartIngredients.Big_tooth);
 
             EffectSettings purificationSettings = SetEffectChance(DefaultEffectSettings(), 1, 10, 1);
             purificationSettings = SetEffectMagnitude(purificationSettings, 5, 5, 19, 19, 1);
@@ -56,14 +56,14 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("purification"),
                 500,
                 purificationSettings,
-                (int)Items.MiscellaneousIngredients1.Elixir_vitae,
-                (int)Items.MiscellaneousIngredients1.Nectar,
-                (int)Items.MiscellaneousIngredients1.Rain_water,
-                (int)Items.PlantIngredients2.Fig,
-                (int)Items.MiscellaneousIngredients1.Big_tooth,
-                (int)Items.CreatureIngredients1.Ectoplasm,
+                (int)Items.SolventIngredients.Elixir_vitae,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.FruitPlantIngredients.Fig,
+                (int)Items.AnimalPartIngredients.Big_tooth,
+                (int)Items.CreatureIngredients.Ectoplasm,
                 (int)Items.Gems.Diamond,
-                (int)Items.CreatureIngredients2.Mummy_wrappings);
+                (int)Items.CreatureIngredients.Mummy_wrappings);
             purification.AddSecondaryEffect(HealHealth.EffectKey);
             purification.AddSecondaryEffect(InvisibilityNormal.EffectKey);
 

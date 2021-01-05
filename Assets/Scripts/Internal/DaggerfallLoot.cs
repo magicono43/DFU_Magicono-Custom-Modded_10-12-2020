@@ -19,6 +19,7 @@ using DaggerfallWorkshop.Game.MagicAndEffects;
 using DaggerfallWorkshop.Game.Formulas;
 using DaggerfallConnect.FallExe;
 using DaggerfallWorkshop.Game.Entity;
+using System.Collections.Generic;
 
 namespace DaggerfallWorkshop
 {
@@ -116,6 +117,20 @@ namespace DaggerfallWorkshop
                 int recipeKey = PotionRecipe.classicRecipeKeys[recipeIdx];
                 DaggerfallUnityItem potionRecipe = new DaggerfallUnityItem(ItemGroups.MiscItems, 4) { PotionRecipeKey = recipeKey };
                 collection.AddItem(potionRecipe);
+            }
+        }
+
+        /// <summary>
+        /// Randomly add a potion recipe
+        /// </summary>
+        public static void RandomlyAddPotionRecipe(int chance, List<DaggerfallUnityItem> targetItems)
+        {
+            if (Dice100.SuccessRoll(chance))
+            {
+                int recipeIdx = Random.Range(0, PotionRecipe.classicRecipeKeys.Length);
+                int recipeKey = PotionRecipe.classicRecipeKeys[recipeIdx];
+                DaggerfallUnityItem potionRecipe = new DaggerfallUnityItem(ItemGroups.MiscItems, 4) { PotionRecipeKey = recipeKey };
+                targetItems.Add(potionRecipe);
             }
         }
 

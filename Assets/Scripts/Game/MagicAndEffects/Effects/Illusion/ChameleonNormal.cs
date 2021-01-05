@@ -48,11 +48,11 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("chameleonForm"),
                 200,
                 DefaultEffectSettings(),
-                (int)Items.MiscellaneousIngredients1.Rain_water,
-                (int)Items.MiscellaneousIngredients1.Nectar,
-                (int)Items.PlantIngredients2.Green_leaves,
-                (int)Items.PlantIngredients2.Yellow_flowers,
-                (int)Items.PlantIngredients2.Red_berries);
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.MiscPlantIngredients.Green_leaves,
+                (int)Items.FlowerPlantIngredients.Yellow_Flowers,
+                (int)Items.FruitPlantIngredients.Red_berries);
 
             chameleonForm.TextureRecord = 33;
             AssignPotionRecipes(chameleonForm);

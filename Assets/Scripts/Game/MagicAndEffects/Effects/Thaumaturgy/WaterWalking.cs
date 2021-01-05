@@ -44,9 +44,9 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("waterWalking"),
                 50,
                 DefaultEffectSettings(),
-                (int)Items.MiscellaneousIngredients1.Pure_water,
-                (int)Items.PlantIngredients2.Palm,
-                (int)Items.PlantIngredients1.Yellow_rose,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.MiscPlantIngredients.Palm,
+                (int)Items.FlowerPlantIngredients.Yellow_rose,
                 (int)Items.MetalIngredients.Sulphur);
 
             waterWalking.TextureRecord = 32;

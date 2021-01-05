@@ -263,16 +263,15 @@ namespace DaggerfallWorkshop.Game.Entity
             }
 
             int[] personalityTraits = DaggerfallWorkshop.Utility.EnemyBasics.EnemyPersonalityTraitGenerator(this);
-            // May put the method for the "context based" inventory modifiers here, but first i'll have to figure out how i'm going to do that exactly first. 
+            // May put the method for the "context based" inventory modifiers here, but first i'll have to figure out how i'm going to do that exactly first.
+
+            DaggerfallLoot.GenerateItems(items, personalityTraits, this);
 
             // Enemy classes and some monsters use equipment
             if (EquipmentUser())
             {
                 SetEnemyEquipment(personalityTraits);
             }
-
-            // Generate loot table items, changed to generate below the equipment setting part, as I think it makes more sense anyway. 
-            DaggerfallLoot.GenerateItems(items, personalityTraits, this);
 
             // Assign spell lists
             if (entityType == EntityTypes.EnemyMonster)

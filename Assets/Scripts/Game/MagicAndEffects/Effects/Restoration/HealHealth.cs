@@ -47,10 +47,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("healing"),
                 50,
                 healingSettings,
-                (int)Items.MiscellaneousIngredients1.Elixir_vitae,
-                (int)Items.PlantIngredients1.Red_berries,
+                (int)Items.SolventIngredients.Elixir_vitae,
+                (int)Items.FruitPlantIngredients.Red_berries,
                 (int)Items.MetalIngredients.Mercury,
-                (int)Items.CreatureIngredients1.Troll_blood);
+                (int)Items.CreatureIngredients.Troll_blood);
 
             // Second recipe variant: Magnitude 5-5 + 19-19 per 1 levels
             EffectSettings healTrueSettings = SetEffectMagnitude(DefaultEffectSettings(), 5, 5, 19, 19, 1);
@@ -58,10 +58,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("healTrue"),
                 100,
                 healTrueSettings,
-                (int)Items.MiscellaneousIngredients1.Elixir_vitae,
-                (int)Items.PlantIngredients1.Red_berries,
-                (int)Items.PlantIngredients1.Pine_branch,
-                (int)Items.CreatureIngredients3.Unicorn_horn);
+                (int)Items.SolventIngredients.Elixir_vitae,
+                (int)Items.FruitPlantIngredients.Red_berries,
+                (int)Items.MiscPlantIngredients.Pine_branch,
+                (int)Items.CreatureIngredients.Unicorn_horn);
 
             // Assign recipes
             healing.TextureRecord = 15;

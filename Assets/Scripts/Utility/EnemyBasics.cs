@@ -4434,7 +4434,7 @@ namespace DaggerfallWorkshop.Utility
                 return equipTableProps;
             else if (equipTableProps[3] == 0) // Index 6 = Helm, 7 = Right Pauld, 8 = Left Pauld, 9 = Chest, 10 = Gloves, 11 = Legs, 12 = Boots.
             {
-                for (int i = 7; i < equipTableProps.Length; i++)
+                for (int i = 6; i < equipTableProps.Length; i++)
                 {
                     equipTableProps[i] = RollArmorTypeUsedBasedOnClass(enemy);
                 }

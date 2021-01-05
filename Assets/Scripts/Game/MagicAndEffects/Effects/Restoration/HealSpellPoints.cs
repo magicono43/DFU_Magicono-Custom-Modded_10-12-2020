@@ -40,10 +40,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("restorePower"),
                 75,
                 restorePowerSettings,
-                (int)Items.MiscellaneousIngredients1.Nectar,
+                (int)Items.SolventIngredients.Nectar,
                 (int)Items.MetalIngredients.Silver,
-                (int)Items.CreatureIngredients1.Werewolfs_blood,
-                (int)Items.CreatureIngredients1.Saints_hair);
+                (int)Items.CreatureIngredients.Werewolfs_blood,
+                (int)Items.CreatureIngredients.Saints_hair);
 
             // Assign recipe
             restorePower.TextureRecord = 12;

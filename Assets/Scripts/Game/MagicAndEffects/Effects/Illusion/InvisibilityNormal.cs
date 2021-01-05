@@ -48,9 +48,9 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 TextManager.Instance.GetLocalizedText("invisibility"),
                 250,
                 DefaultEffectSettings(),
-                (int)Items.MiscellaneousIngredients1.Rain_water,
-                (int)Items.MiscellaneousIngredients1.Nectar,
-                (int)Items.CreatureIngredients1.Ectoplasm,
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.CreatureIngredients.Ectoplasm,
                 (int)Items.Gems.Diamond);
 
             invisibility.TextureRecord = 33;
