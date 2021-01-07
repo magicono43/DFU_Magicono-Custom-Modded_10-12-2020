@@ -4489,7 +4489,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                 buildingQualityLootMods = new float[] { 1, 0.05f*bQ+1, 1, 1, 0.05f*bQ+1, 0.05f*bQ+1, 0.03f*bQ+1, 0.03f*bQ+1, 0.03f*bQ+1, 0.02f*bQ+1 };
             }
 
-            if (playerLuck > 0)
+            if (playerLuck != 0)
             {
                 int pL = playerLuck;
                 if (pL < 50)
@@ -4563,7 +4563,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
             else
             {
-                WeaponMaterialTypes plateMaterial = FormulaHelper.RandomMaterial(enemyLevel, buildingQuality, playerLuck);
+                WeaponMaterialTypes plateMaterial = RandomMaterial(enemyLevel, buildingQuality, playerLuck);
                 return (ArmorMaterialTypes)(0x0200 + plateMaterial);
             }
         }

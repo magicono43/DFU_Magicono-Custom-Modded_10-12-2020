@@ -648,7 +648,7 @@ namespace DaggerfallWorkshop
                             DaggerfallLootDataTables.clothingArchive,
                             0, loadID);
 
-                        if (!LootTables.GenerateLoot(loot, (int) GameManager.Instance.PlayerGPS.CurrentLocationType))
+                        if (!LootTables.GenerateBuildingLoot(loot, (int) GameManager.Instance.PlayerGPS.CurrentLocationType))
                             DaggerfallUnity.LogMessage(string.Format("DaggerfallInterior: Location type {0} is out of range or unknown.", GameManager.Instance.PlayerGPS.CurrentLocationType), true);
                     }
                 }

@@ -67,7 +67,41 @@ namespace DaggerfallWorkshop
         /// Generates items in the given item collection based on loot table key.
         /// Any existing items will be destroyed.
         /// </summary>
-        public static void GenerateItems(ItemCollection collection, int[] traits, EnemyEntity enemyEnt = null)
+        public static void GenerateEnemyItems(ItemCollection collection, int[] traits, EnemyEntity enemyEnt)
+        {
+            DaggerfallEntity enemy = enemyEnt as DaggerfallEntity;
+            int[] enemyPredefLootTableProperties;
+            int[] enemyExtraLootProperties;
+
+            enemyPredefLootTableProperties = EnemyBasics.EnemyPredefLootTableCalculator(enemy, traits);
+            enemyExtraLootProperties = EnemyBasics.EnemyExtraLootCalculator(enemy, traits, enemyPredefLootTableProperties);
+            EnemyBasics.TraitExtraLootModCalculator(traits, enemyPredefLootTableProperties, enemyExtraLootProperties, out enemyPredefLootTableProperties, out enemyExtraLootProperties);
+
+            DaggerfallUnityItem[] newitems = LootTables.GenerateEnemyLoot(enemy, traits, enemyPredefLootTableProperties, enemyExtraLootProperties);
+
+            FormulaHelper.ModifyFoundLootItems(ref newitems);
+
+            collection.Import(newitems);
+        }
+
+        /// <summary>
+        /// Generates items in the given item collection based on loot table key.
+        /// Any existing items will be destroyed.
+        /// </summary>
+        public static void GenerateDungeonItems(ItemCollection collection, int dungeonIndex)
+        {
+            DaggerfallUnityItem[] newitems = LootTables.GenerateDungeonLoot(dungeonIndex);
+
+            FormulaHelper.ModifyFoundLootItems(ref newitems);
+
+            collection.Import(newitems);
+        }
+
+        /// <summary>
+        /// Generates items in the given item collection based on loot table key.
+        /// Any existing items will be destroyed.
+        /// </summary>
+        public static void GenerateBuildingItems(ItemCollection collection, int[] traits, EnemyEntity enemyEnt = null)
         {
             DaggerfallEntity enemy = enemyEnt as DaggerfallEntity; // This may not work as i'm expecting, will have to see.
             int[] enemyPredefLootTableProperties;

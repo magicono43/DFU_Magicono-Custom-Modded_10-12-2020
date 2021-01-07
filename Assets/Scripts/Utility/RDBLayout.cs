@@ -1606,7 +1606,7 @@ namespace DaggerfallWorkshop.Utility
             // Get dungeon type index
             int dungeonIndex = (int)dungeonType;
 
-            if (!LootTables.GenerateLoot(loot, dungeonIndex))
+            if (!LootTables.GenerateDungeonLoot(loot, dungeonIndex))
                 DaggerfallUnity.LogMessage(string.Format("RDBLayout: Dungeon type {0} is out of range or unknown.", dungeonType), true);
 
             return loot;

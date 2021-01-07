@@ -691,7 +691,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// <param name="gender">Gender armor is created for.</param>
         /// <param name="race">Race armor is created for.</param>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomArmor(Genders gender, Races race, int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
+        public static DaggerfallUnityItem CreateRandomArmor(Genders gender, Races race, int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1, int armorType = -1)
         {
             // Create a random armor type, including any custom items registered as armor
             ItemHelper itemHelper = DaggerfallUnity.Instance.ItemHelper;
@@ -705,7 +705,7 @@ namespace DaggerfallWorkshop.Game.Items
             else
                 newItem = CreateItem(ItemGroups.Armor, customItemTemplates[groupIndex - enumArray.Length]);
 
-            ApplyArmorSettings(newItem, gender, race, FormulaHelper.RandomArmorMaterial(enemyLevel, buildingQuality, playerLuck));
+            ApplyArmorSettings(newItem, gender, race, FormulaHelper.RandomArmorMaterial(enemyLevel, buildingQuality, playerLuck, armorType));
 
             return newItem;
         }

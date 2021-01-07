@@ -14,6 +14,7 @@ using DaggerfallWorkshop.Game.Entity;
 using System.Collections.Generic;
 using DaggerfallWorkshop.Game.Utility;
 using DaggerfallWorkshop.Game.Formulas;
+using DaggerfallConnect;
 
 namespace DaggerfallWorkshop.Game.Items
 {
@@ -93,114 +94,131 @@ namespace DaggerfallWorkshop.Game.Items
             return DefaultLootTables[0];
         }
 
-        public static bool GenerateLoot(DaggerfallLoot loot, int locationIndex)
+        public static bool GenerateBuildingLoot(DaggerfallLoot loot, int locationIndex)
         {
-            string[] lootTableKeys = {
-            "K", // Crypt
-            "N", // Orc Stronghold
-            "N", // Human Stronghold
-            "N", // Prison
-            "K", // Desecrated Temple
-            "M", // Mine
-            "M", // Natural Cave
-            "Q", // Coven
-            "K", // Vampire Haunt
-            "U", // Laboratory
-            "D", // Harpy Nest
-            "N", // Ruined Castle
-            "L", // Spider Nest
-            "F", // Giant Stronghold
-            "S", // Dragon's Den
-            "N", // Barbarian Stronghold
-            "M", // Volcanic Caves
-            "L", // Scorpion Nest
-            "N", // Cemetery
-            };
-
             int[] traits = { -1, -1, -1 };
 
-            // Get loot table key
-            if (locationIndex < lootTableKeys.Length)
-            {
-                //DaggerfallLoot.GenerateItems(loot.Items, traits);
+            DaggerfallLoot.GenerateBuildingItems(loot.Items, traits);
 
-                // Randomly add map
-                char key = lootTableKeys[locationIndex][0];
-                int alphabetIndex = key - 64;
-
-                if (alphabetIndex >= 10 && alphabetIndex <= 15) // between keys J and O
-                {
-                    int[] mapChances = { 2, 1, 1, 2, 2, 15 };
-                    int mapChance = mapChances[alphabetIndex - 10];
-                    DaggerfallLoot.RandomlyAddMap(mapChance, loot.Items);
-                    DaggerfallLoot.RandomlyAddPotion(4, loot.Items);
-                    DaggerfallLoot.RandomlyAddPotionRecipe(2, loot.Items);
-                }
-                return true;
-            }
-            return false;
+            return true;
         }
 
-        /// <summary>
-        /// Generates an array of items based on loot chance matrix.
-        /// </summary>
-        /// <param name="matrix">Loot chance matrix.</param>
-        /// <param name="playerEntity">Player entity.</param>
-        /// <returns>DaggerfallUnityItem array.</returns>
-        public static DaggerfallUnityItem[] GenerateRandomLoot(LootChanceMatrix matrix, PlayerEntity playerEntity)
+        public static DaggerfallUnityItem[] GenerateDungeonLoot(int dungeonIndex)
         {
-            // Notes: The first part of the DF Chronicles explanation of how loot is generated does not match the released game.
-            // It says the chance for each item category is the matrix amount * the level of the NPC. Actual behavior in the
-            // released game is (matrix amount * PC level) for the first 4 item categories (temperate plants, warm plants,
-            // miscellaneous monster, warm monster), and just matrix amount for the categories after that.
-            // The second part of the DF Chronicles explanation (roll repeatedly for items from a category, each time at halved
-            // chance), matches the game.
-            // In classic, since a 0-99 roll is compared to whether it is less or greater than item chance,
-            // even a 0% chance category has a 1/100 chance to appear, and the chance values are effectively
-            // 1 higher than what the loot tables show.
-            float chance;
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+            int playerLuck = player.Stats.LiveLuck - 50;
+            float goldMod = (playerLuck * 0.02f) + 1f;
+            float chance = 1f;
+            int condModMin = 100;
+            int condModMax = 100;
             List<DaggerfallUnityItem> items = new List<DaggerfallUnityItem>();
 
             // Reseed random
             Random.InitState(items.GetHashCode());
 
-            // Random gold
-            int goldCount = Random.Range(matrix.MinGold, matrix.MaxGold + 1) * playerEntity.Level;
-            if (goldCount > 0)
+            switch (dungeonIndex)
             {
-                items.Add(ItemBuilder.CreateGoldPieces(goldCount));
-            }
-
-            // Random weapon
-            chance = matrix.WP;
-            while (Dice100.SuccessRoll((int)chance))
-            {
-                items.Add(ItemBuilder.CreateRandomWeapon(playerEntity.Level));
-                chance *= 0.5f;
-            }
-
-            // Random clothes
-            chance = matrix.CL;
-            while (Dice100.SuccessRoll((int)chance))
-            {
-                items.Add(ItemBuilder.CreateRandomClothing(playerEntity.Gender, playerEntity.Race));
-                chance *= 0.5f;
-            }
-
-            // Random books
-            chance = matrix.BK;
-            while (Dice100.SuccessRoll((int)chance))
-            {
-                items.Add(ItemBuilder.CreateRandomBook());
-                chance *= 0.5f;
-            }
-
-            // Random religious item
-            chance = matrix.RL;
-            while (Dice100.SuccessRoll((int)chance))
-            {
-                items.Add(ItemBuilder.CreateRandomReligiousItem());
-                chance *= 0.5f;
+                case (int)DFRegion.DungeonTypes.Crypt:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
+                    break;
+                case (int)DFRegion.DungeonTypes.OrcStronghold:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(35 * goldMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(75 * goldMod), 1, 100);
+                    AddArrows(1, 15, goldMod, items);
+                    AddWeapons(60, 0.25f, condModMin, condModMax, items);
+                    AddArmors(40, 0.4f, condModMin, condModMax, 100, items);
+                    break;
+                case (int)DFRegion.DungeonTypes.HumanStronghold:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(30, 45 + 1) * goldMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(40 * goldMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(80 * goldMod), 1, 100);
+                    AddArrows(1, 35, goldMod, items);
+                    AddWeapons(40, 0.5f, condModMin, condModMax, items);
+                    AddArmors(65, 0.30f, condModMin, condModMax, 60, items);
+                    break;
+                case (int)DFRegion.DungeonTypes.Prison:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * goldMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(15 * goldMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(55 * goldMod), 1, 100);
+                    chance = 50f;
+                    while (Dice100.SuccessRoll((int)chance))
+                    {
+                        DaggerfallUnityItem Weapon = ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Tanto, (int)Weapons.Tanto, (int)Weapons.Tanto, (int)Weapons.Tanto, (int)Weapons.Dagger, (int)Weapons.Dagger, (int)Weapons.Shortsword, (int)Weapons.Wakazashi), (WeaponMaterialTypes)PickOneOf((int)WeaponMaterialTypes.Iron, (int)WeaponMaterialTypes.Iron, (int)WeaponMaterialTypes.Iron, (int)WeaponMaterialTypes.Steel, 
+                          (int)WeaponMaterialTypes.Steel, (int)WeaponMaterialTypes.Silver));
+                        float condPercentMod = Random.Range(condModMin, condModMax + 1) / 100f;
+                        Weapon.currentCondition = (int)Mathf.Ceil(Weapon.maxCondition * condPercentMod);
+                        items.Add(Weapon);
+                        chance *= 0.6f;
+                    }
+                    AddArmors(20, 0.25f, condModMin, condModMax, 0, items);
+                    break;
+                case (int)DFRegion.DungeonTypes.DesecratedTemple:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
+                    AddPotions(60, 0.5f, items);
+                    AddBooks(80, 0.5f, items, 38);
+                    break;
+                case (int)DFRegion.DungeonTypes.Mine:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * goldMod)));
+                    break;
+                case (int)DFRegion.DungeonTypes.NaturalCave:
+                    break;
+                case (int)DFRegion.DungeonTypes.Coven:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * goldMod)));
+                    AddPotions(40, 0.6f, items);
+                    break;
+                case (int)DFRegion.DungeonTypes.VampireHaunt:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * goldMod)));
+                    break;
+                case (int)DFRegion.DungeonTypes.Laboratory:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
+                    AddPotions(70, 0.35f, items);
+                    break;
+                case (int)DFRegion.DungeonTypes.HarpyNest:
+                    break;
+                case (int)DFRegion.DungeonTypes.RuinedCastle:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(30, 45 + 1) * goldMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(15 * goldMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(50 * goldMod), 1, 100);
+                    AddArrows(1, 11, goldMod, items);
+                    AddWeapons(30, 0.35f, condModMin, condModMax, items);
+                    AddArmors(55, 0.35f, condModMin, condModMax, 50, items);
+                    break;
+                case (int)DFRegion.DungeonTypes.SpiderNest:
+                    break;
+                case (int)DFRegion.DungeonTypes.GiantStronghold:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * goldMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(15 * goldMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(55 * goldMod), 1, 100);
+                    AddWeapons(25, 0.4f, condModMin, condModMax, items);
+                    AddArmors(25, 0.3f, condModMin, condModMax, 40, items);
+                    break;
+                case (int)DFRegion.DungeonTypes.DragonsDen:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(45, 60 + 1) * goldMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(5 * goldMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(40 * goldMod), 1, 100);
+                    AddArrows(1, 6, goldMod, items);
+                    AddWeapons(20, 0.6f, condModMin, condModMax, items);
+                    AddArmors(40, 0.4f, condModMin, condModMax, 60, items);
+                    AddPotions(20, 0.4f, items);
+                    break;
+                case (int)DFRegion.DungeonTypes.BarbarianStronghold:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(30 * goldMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(60 * goldMod), 1, 100);
+                    AddArrows(1, 25, goldMod, items);
+                    AddWeapons(50, 0.4f, condModMin, condModMax, items);
+                    AddArmors(45, 0.3f, condModMin, condModMax, 15, items);
+                    break;
+                case (int)DFRegion.DungeonTypes.VolcanicCaves:
+                    break;
+                case (int)DFRegion.DungeonTypes.ScorpionNest:
+                    break;
+                case (int)DFRegion.DungeonTypes.Cemetery:
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
+                    break;
+                default:
+                    break;
             }
 
             return items.ToArray();
@@ -441,6 +459,86 @@ namespace DaggerfallWorkshop.Game.Items
             }*/
 
             return items.ToArray();
+        }
+
+        public static void AddArrows(int minArrows, int maxArrows, float luckMod, List<DaggerfallUnityItem> targetItems)
+        {
+            if (Dice100.SuccessRoll(50))
+            {
+                DaggerfallUnityItem arrowPile = ItemBuilder.CreateWeapon(Weapons.Arrow, WeaponMaterialTypes.Iron);
+                arrowPile.stackCount = (int)Mathf.Floor(Random.Range(minArrows, maxArrows + 1) * luckMod);
+                targetItems.Add(arrowPile);
+            }
+        }
+
+        public static void AddWeapons(float chance, float chanceMod, int condModMin, int condModMax, List<DaggerfallUnityItem> targetItems)
+        {
+            int playerLuck = GameManager.Instance.PlayerEntity.Stats.LiveLuck;
+
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                DaggerfallUnityItem Weapon = (ItemBuilder.CreateRandomWeapon(-1, -1, playerLuck));
+                float condPercentMod = Random.Range(condModMin, condModMax + 1) / 100f;
+                Weapon.currentCondition = (int)Mathf.Ceil(Weapon.maxCondition * condPercentMod);
+                targetItems.Add(Weapon);
+                chance *= chanceMod;
+            }
+        }
+
+        public static void AddArmors(float chance, float chanceMod, int condModMin, int condModMax, int metalChance, List<DaggerfallUnityItem> targetItems)
+        {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+            int playerLuck = player.Stats.LiveLuck;
+
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                if (Dice100.SuccessRoll(metalChance))
+                {
+                    DaggerfallUnityItem Armor = ItemBuilder.CreateRandomArmor(player.Gender, player.Race, -1, -1, playerLuck, 2);
+                    float condPercentMod = Random.Range(condModMin, condModMax + 1) / 100f;
+                    Armor.currentCondition = (int)Mathf.Ceil(Armor.maxCondition * condPercentMod);
+                    targetItems.Add(Armor);
+                    chance *= chanceMod;
+                }
+                else
+                {
+                    DaggerfallUnityItem Armor = ItemBuilder.CreateRandomArmor(player.Gender, player.Race, -1, -1, playerLuck, PickOneOf(0, 1));
+                    float condPercentMod = Random.Range(condModMin, condModMax + 1) / 100f;
+                    Armor.currentCondition = (int)Mathf.Ceil(Armor.maxCondition * condPercentMod);
+                    targetItems.Add(Armor);
+                    chance *= chanceMod;
+                }
+            }
+        }
+
+        public static void AddPotions(float chance, float chanceMod, List<DaggerfallUnityItem> targetItems)
+        {
+            int playerLuck = GameManager.Instance.PlayerEntity.Stats.LiveLuck;
+
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                targetItems.Add(ItemBuilder.CreateRandomPotion()); // The whole Potion Recipe ID thing is a bit too confusing for me at this moment, so I can't specify what potions should be allowed, will work for now though.
+                chance *= chanceMod;
+            }
+        }
+
+        public static void AddBooks(float chance, float chanceMod, List<DaggerfallUnityItem> targetItems, int bookSubject = -1)
+        {
+            int playerLuck = GameManager.Instance.PlayerEntity.Stats.LiveLuck;
+
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                if (bookSubject == -1)
+                {
+                    targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
+                    chance *= chanceMod;
+                }
+                else
+                {
+                    targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)bookSubject));
+                    chance *= chanceMod;
+                }
+            }
         }
 
         public static int PickOneOf(params int[] values) // Pango provided assistance in making this much cleaner way of doing the random value choice part, awesome.
@@ -1257,76 +1355,76 @@ namespace DaggerfallWorkshop.Game.Items
                     switch (AITarget.CareerIndex)
                     {
                         case (int)ClassCareers.Mage:
-                            equipTableProps[0] = 60;
-                            equipTableProps[1] = 20;
+                            equipTableProps[0] = 20;
+                            equipTableProps[1] = 60;
                             break;
                         case (int)ClassCareers.Spellsword:
-                            equipTableProps[0] = 70;
-                            equipTableProps[1] = 30;
+                            equipTableProps[0] = 30;
+                            equipTableProps[1] = 70;
                             break;
                         case (int)ClassCareers.Battlemage:
-                            equipTableProps[0] = 70;
-                            equipTableProps[1] = 30;
+                            equipTableProps[0] = 30;
+                            equipTableProps[1] = 70;
                             break;
                         case (int)ClassCareers.Sorcerer:
-                            equipTableProps[0] = 60;
-                            equipTableProps[1] = 20;
+                            equipTableProps[0] = 20;
+                            equipTableProps[1] = 60;
                             break;
                         case (int)ClassCareers.Healer:
-                            equipTableProps[0] = 65;
-                            equipTableProps[1] = 25;
+                            equipTableProps[0] = 25;
+                            equipTableProps[1] = 65;
                             break;
                         case (int)ClassCareers.Nightblade:
-                            equipTableProps[0] = 80;
-                            equipTableProps[1] = 40;
+                            equipTableProps[0] = 40;
+                            equipTableProps[1] = 80;
                             break;
                         case (int)ClassCareers.Bard:
-                            equipTableProps[0] = 70;
-                            equipTableProps[1] = 30;
+                            equipTableProps[0] = 30;
+                            equipTableProps[1] = 70;
                             break;
                         case (int)ClassCareers.Burglar:
-                            equipTableProps[0] = 60;
-                            equipTableProps[1] = 20;
+                            equipTableProps[0] = 20;
+                            equipTableProps[1] = 60;
                             break;
                         case (int)ClassCareers.Rogue:
-                            equipTableProps[0] = 60;
-                            equipTableProps[1] = 20;
+                            equipTableProps[0] = 20;
+                            equipTableProps[1] = 60;
                             break;
                         case (int)ClassCareers.Acrobat:
-                            equipTableProps[0] = 65;
-                            equipTableProps[1] = 25;
+                            equipTableProps[0] = 25;
+                            equipTableProps[1] = 65;
                             break;
                         case (int)ClassCareers.Thief:
-                            equipTableProps[0] = 60;
-                            equipTableProps[1] = 20;
+                            equipTableProps[0] = 20;
+                            equipTableProps[1] = 60;
                             break;
                         case (int)ClassCareers.Assassin:
-                            equipTableProps[0] = 80;
-                            equipTableProps[1] = 40;
+                            equipTableProps[0] = 40;
+                            equipTableProps[1] = 80;
                             break;
                         case (int)ClassCareers.Monk:
-                            equipTableProps[0] = 65;
-                            equipTableProps[1] = 25;
+                            equipTableProps[0] = 25;
+                            equipTableProps[1] = 65;
                             break;
                         case (int)ClassCareers.Archer:
-                            equipTableProps[0] = 75;
-                            equipTableProps[1] = 35;
+                            equipTableProps[0] = 35;
+                            equipTableProps[1] = 75;
                             break;
                         case (int)ClassCareers.Ranger:
-                            equipTableProps[0] = 70;
-                            equipTableProps[1] = 30;
+                            equipTableProps[0] = 30;
+                            equipTableProps[1] = 70;
                             break;
                         case (int)ClassCareers.Barbarian:
-                            equipTableProps[0] = 60;
-                            equipTableProps[1] = 20;
+                            equipTableProps[0] = 20;
+                            equipTableProps[1] = 60;
                             break;
                         case (int)ClassCareers.Warrior:
-                            equipTableProps[0] = 80;
-                            equipTableProps[1] = 40;
+                            equipTableProps[0] = 40;
+                            equipTableProps[1] = 80;
                             break;
                         case (int)ClassCareers.Knight:
-                            equipTableProps[0] = 85;
-                            equipTableProps[1] = 45;
+                            equipTableProps[0] = 45;
+                            equipTableProps[1] = 85;
                             break;
                         default:
                             return equipTableProps;
@@ -1337,66 +1435,66 @@ namespace DaggerfallWorkshop.Game.Items
                     switch (AITarget.CareerIndex)
                     {
                         case 7:
-                            equipTableProps[0] = 70;
-                            equipTableProps[1] = 30;
+                            equipTableProps[0] = 30;
+                            equipTableProps[1] = 70;
                             break;
                         case 8:
-                            equipTableProps[0] = 55;
-                            equipTableProps[1] = 15;
+                            equipTableProps[0] = 15;
+                            equipTableProps[1] = 55;
                             break;
                         case 12:
-                            equipTableProps[0] = 75;
-                            equipTableProps[1] = 35;
+                            equipTableProps[0] = 35;
+                            equipTableProps[1] = 75;
                             break;
                         case 15:
-                            equipTableProps[0] = 45;
-                            equipTableProps[1] = 5;
+                            equipTableProps[0] = 5;
+                            equipTableProps[1] = 45;
                             break;
                         case 17:
-                            equipTableProps[0] = 45;
-                            equipTableProps[1] = 5;
+                            equipTableProps[0] = 5;
+                            equipTableProps[1] = 45;
                             break;
                         case 21:
-                            equipTableProps[0] = 60;
-                            equipTableProps[1] = 20;
+                            equipTableProps[0] = 20;
+                            equipTableProps[1] = 60;
                             break;
                         case 23:
-                            equipTableProps[0] = 50;
-                            equipTableProps[1] = 10;
+                            equipTableProps[0] = 10;
+                            equipTableProps[1] = 50;
                             break;
                         case 24:
-                            equipTableProps[0] = 80;
-                            equipTableProps[1] = 40;
+                            equipTableProps[0] = 40;
+                            equipTableProps[1] = 80;
                             break;
                         case 25:
-                            equipTableProps[0] = 55;
-                            equipTableProps[1] = 15;
+                            equipTableProps[0] = 15;
+                            equipTableProps[1] = 55;
                             break;
                         case 26:
-                            equipTableProps[0] = 55;
-                            equipTableProps[1] = 15;
+                            equipTableProps[0] = 15;
+                            equipTableProps[1] = 55;
                             break;
                         case 27:
-                            equipTableProps[0] = 55;
-                            equipTableProps[1] = 15;
+                            equipTableProps[0] = 15;
+                            equipTableProps[1] = 55;
                             break;
                         case 29:
-                            equipTableProps[0] = 65;
-                            equipTableProps[1] = 25;
+                            equipTableProps[0] = 25;
+                            equipTableProps[1] = 65;
                             break;
                         case 31:
-                            equipTableProps[0] = 75;
-                            equipTableProps[1] = 35;
+                            equipTableProps[0] = 35;
+                            equipTableProps[1] = 75;
                             break;
                         case 28:
                         case 30:
-                            equipTableProps[0] = 65;
-                            equipTableProps[1] = 25;
+                            equipTableProps[0] = 25;
+                            equipTableProps[1] = 65;
                             break;
                         case 32:
                         case 33:
-                            equipTableProps[0] = 60;
-                            equipTableProps[1] = 20;
+                            equipTableProps[0] = 20;
+                            equipTableProps[1] = 60;
                             break;
                         default:
                             return equipTableProps;
