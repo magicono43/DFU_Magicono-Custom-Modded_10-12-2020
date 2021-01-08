@@ -107,7 +107,7 @@ namespace DaggerfallWorkshop.Game.Items
         {
             PlayerEntity player = GameManager.Instance.PlayerEntity;
             int playerLuck = player.Stats.LiveLuck - 50;
-            float goldMod = (playerLuck * 0.02f) + 1f;
+            float basicLuckMod = (playerLuck * 0.02f) + 1f;
             float chance = 1f;
             int condModMin = 100;
             int condModMax = 100;
@@ -119,28 +119,43 @@ namespace DaggerfallWorkshop.Game.Items
             switch (dungeonIndex)
             {
                 case (int)DFRegion.DungeonTypes.Crypt:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(10 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(35 * basicLuckMod), 1, 100);
+                    AddGems(35, 0.6f, 30, basicLuckMod, items);
+                    AddMagicItems(10, 0.5f, condModMin, condModMax, items);
+                    AddMaps(10, 0.2f, items);
+                    AddClothing(15, 0.6f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.OrcStronghold:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
-                    condModMin = Mathf.Clamp((int)Mathf.Floor(35 * goldMod), 1, 100);
-                    condModMax = Mathf.Clamp((int)Mathf.Floor(75 * goldMod), 1, 100);
-                    AddArrows(1, 15, goldMod, items);
-                    AddWeapons(60, 0.25f, condModMin, condModMax, items);
-                    AddArmors(40, 0.4f, condModMin, condModMax, 100, items);
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(35 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(75 * basicLuckMod), 1, 100);
+                    AddArrows(1, 15, basicLuckMod, items);
+                    AddWeapons(60, 0.7f, condModMin, condModMax, items);
+                    AddArmors(40, 0.6f, condModMin, condModMax, 100, items);
+                    AddIngots(70, 0.6f, items);
+                    AddGems(5, 0.5f, 10, basicLuckMod, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.HumanStronghold:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(30, 45 + 1) * goldMod)));
-                    condModMin = Mathf.Clamp((int)Mathf.Floor(40 * goldMod), 1, 100);
-                    condModMax = Mathf.Clamp((int)Mathf.Floor(80 * goldMod), 1, 100);
-                    AddArrows(1, 35, goldMod, items);
-                    AddWeapons(40, 0.5f, condModMin, condModMax, items);
-                    AddArmors(65, 0.30f, condModMin, condModMax, 60, items);
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(30, 45 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(40 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(80 * basicLuckMod), 1, 100);
+                    AddArrows(1, 35, basicLuckMod, items);
+                    AddWeapons(40, 0.6f, condModMin, condModMax, items);
+                    AddArmors(65, 0.55f, condModMin, condModMax, 60, items);
+                    AddIngots(45, 0.4f, items);
+                    AddGems(10, 0.5f, 15, basicLuckMod, items);
+                    AddMaps(2, 0.5f, items);
+                    AddClothing(25, 0.4f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.Prison:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * goldMod)));
-                    condModMin = Mathf.Clamp((int)Mathf.Floor(15 * goldMod), 1, 100);
-                    condModMax = Mathf.Clamp((int)Mathf.Floor(55 * goldMod), 1, 100);
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(15 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(55 * basicLuckMod), 1, 100);
                     chance = 50f;
                     while (Dice100.SuccessRoll((int)chance))
                     {
@@ -151,71 +166,141 @@ namespace DaggerfallWorkshop.Game.Items
                         items.Add(Weapon);
                         chance *= 0.6f;
                     }
-                    AddArmors(20, 0.25f, condModMin, condModMax, 0, items);
+                    AddArmors(30, 0.6f, condModMin, condModMax, 0, items);
+                    AddBooks(10, 0.5f, items, 37);
+                    AddClothing(20, 0.4f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.DesecratedTemple:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(35 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(60 * basicLuckMod), 1, 100);
                     AddPotions(60, 0.5f, items);
                     AddBooks(80, 0.5f, items, 38);
+                    AddGems(10, 0.5f, 20, basicLuckMod, items);
+                    AddMagicItems(5, 0.3f, condModMin, condModMax, items);
+                    AddPotionRecipes(5, 0.1f, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.Mine:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * goldMod)));
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
+                    AddIngots(50, 0.5f, items);
+                    AddGems(45, 0.6f, 15, basicLuckMod, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.NaturalCave:
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(5 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(30 * basicLuckMod), 1, 100);
+                    AddClothing(5, 0.8f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.Coven:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * goldMod)));
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(25 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(40 * basicLuckMod), 1, 100);
                     AddPotions(40, 0.6f, items);
+                    AddBooks(25, 0.6f, items, 30);
+                    AddMagicItems(15, 0.6f, condModMin, condModMax, items);
+                    AddMaps(5, 0.1f, items);
+                    AddPotionRecipes(10, 0.5f, items);
+                    AddClothing(10, 0.5f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.VampireHaunt:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * goldMod)));
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(15 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(40 * basicLuckMod), 1, 100);
+                    AddMaps(10, 0.5f, items);
+                    AddClothing(20, 0.7f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.Laboratory:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
-                    AddPotions(70, 0.35f, items);
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(30 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(55 * basicLuckMod), 1, 100);
+                    AddPotions(70, 0.55f, items);
+                    AddBooks(90, 0.35f, items, 33);
+                    AddMagicItems(20, 0.2f, condModMin, condModMax, items);
+                    AddPotionRecipes(15, 0.6f, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.HarpyNest:
                     break;
                 case (int)DFRegion.DungeonTypes.RuinedCastle:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(30, 45 + 1) * goldMod)));
-                    condModMin = Mathf.Clamp((int)Mathf.Floor(15 * goldMod), 1, 100);
-                    condModMax = Mathf.Clamp((int)Mathf.Floor(50 * goldMod), 1, 100);
-                    AddArrows(1, 11, goldMod, items);
-                    AddWeapons(30, 0.35f, condModMin, condModMax, items);
-                    AddArmors(55, 0.35f, condModMin, condModMax, 50, items);
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(30, 45 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(15 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(50 * basicLuckMod), 1, 100);
+                    AddArrows(1, 11, basicLuckMod, items);
+                    AddWeapons(30, 0.4f, condModMin, condModMax, items);
+                    AddArmors(55, 0.5f, condModMin, condModMax, 50, items);
+                    AddBooks(15, 0.5f, items, 28);
+                    AddBooks(35, 0.4f, items, 31);
+                    AddIngots(35, 0.4f, items);
+                    AddGems(15, 0.5f, 20, basicLuckMod, items);
+                    AddMaps(3, 0.2f, items);
+                    AddClothing(10, 0.5f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.SpiderNest:
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(5 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(30 * basicLuckMod), 1, 100);
+                    AddClothing(15, 0.7f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.GiantStronghold:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * goldMod)));
-                    condModMin = Mathf.Clamp((int)Mathf.Floor(15 * goldMod), 1, 100);
-                    condModMax = Mathf.Clamp((int)Mathf.Floor(55 * goldMod), 1, 100);
-                    AddWeapons(25, 0.4f, condModMin, condModMax, items);
-                    AddArmors(25, 0.3f, condModMin, condModMax, 40, items);
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(15 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(55 * basicLuckMod), 1, 100);
+                    AddWeapons(25, 0.5f, condModMin, condModMax, items);
+                    AddArmors(25, 0.35f, condModMin, condModMax, 40, items);
+                    AddGems(10, 0.5f, 5, basicLuckMod, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.DragonsDen:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(45, 60 + 1) * goldMod)));
-                    condModMin = Mathf.Clamp((int)Mathf.Floor(5 * goldMod), 1, 100);
-                    condModMax = Mathf.Clamp((int)Mathf.Floor(40 * goldMod), 1, 100);
-                    AddArrows(1, 6, goldMod, items);
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(45, 60 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(5 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(40 * basicLuckMod), 1, 100);
+                    AddArrows(1, 6, basicLuckMod, items);
                     AddWeapons(20, 0.6f, condModMin, condModMax, items);
-                    AddArmors(40, 0.4f, condModMin, condModMax, 60, items);
-                    AddPotions(20, 0.4f, items);
+                    AddArmors(40, 0.5f, condModMin, condModMax, 60, items);
+                    AddPotions(20, 0.3f, items);
+                    AddIngots(20, 0.5f, items);
+                    AddGems(30, 0.3f, 65, basicLuckMod, items);
+                    AddMagicItems(2, 0.5f, condModMin, condModMax, items);
+                    AddMaps(5, 0.3f, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.BarbarianStronghold:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
-                    condModMin = Mathf.Clamp((int)Mathf.Floor(30 * goldMod), 1, 100);
-                    condModMax = Mathf.Clamp((int)Mathf.Floor(60 * goldMod), 1, 100);
-                    AddArrows(1, 25, goldMod, items);
-                    AddWeapons(50, 0.4f, condModMin, condModMax, items);
-                    AddArmors(45, 0.3f, condModMin, condModMax, 15, items);
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(30 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(60 * basicLuckMod), 1, 100);
+                    AddArrows(1, 25, basicLuckMod, items);
+                    AddWeapons(50, 0.6f, condModMin, condModMax, items);
+                    AddArmors(45, 0.35f, condModMin, condModMax, 15, items);
+                    AddIngots(40, 0.35f, items);
+                    AddGems(15, 0.5f, 15, basicLuckMod, items);
+                    AddMaps(8, 0.5f, items);
+                    AddClothing(5, 0.6f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.VolcanicCaves:
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.ScorpionNest:
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(5 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(30 * basicLuckMod), 1, 100);
+                    AddClothing(15, 0.7f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.Cemetery:
-                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * goldMod)));
+                    items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
+                    condModMin = Mathf.Clamp((int)Mathf.Floor(10 * basicLuckMod), 1, 100);
+                    condModMax = Mathf.Clamp((int)Mathf.Floor(25 * basicLuckMod), 1, 100);
+                    AddGems(20, 0.6f, 20, basicLuckMod, items);
+                    AddMagicItems(5, 0.3f, condModMin, condModMax, items);
+                    AddMaps(6, 0.5f, items);
+                    AddClothing(20, 0.5f, condModMin, condModMax, items);
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 default:
                     break;
@@ -538,6 +623,168 @@ namespace DaggerfallWorkshop.Game.Items
                     targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)bookSubject));
                     chance *= chanceMod;
                 }
+            }
+        }
+
+        public static void AddIngots(float chance, float chanceMod, List<DaggerfallUnityItem> targetItems)
+        {
+            int playerLuck = GameManager.Instance.PlayerEntity.Stats.LiveLuck;
+
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                targetItems.Add(ItemBuilder.CreateRandomIngot(-1, -1, playerLuck));
+                chance *= chanceMod;
+            }
+        }
+
+        public static void AddGems(float chance, float chanceMod, int rareGemChance, float luckMod, List<DaggerfallUnityItem> targetItems)
+        {
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                if (Dice100.SuccessRoll(rareGemChance))
+                {
+                    targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, PickOneOf((int)Gems.Ruby, (int)Gems.Sapphire, (int)Gems.Emerald, (int)Gems.Diamond)));
+                    chance *= chanceMod;
+                }
+                else
+                {
+                    targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, PickOneOf((int)Gems.Ruby, (int)Gems.Sapphire, (int)Gems.Emerald, (int)Gems.Diamond)));
+                    chance *= chanceMod;
+                }
+            }
+        }
+
+        public static void AddMagicItems(float chance, float chanceMod, int condModMin, int condModMax, List<DaggerfallUnityItem> targetItems)
+        {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+            int playerLuck = player.Stats.LiveLuck;
+
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                DaggerfallUnityItem magicItem = ItemBuilder.CreateRandomMagicItem(player.Gender, player.Race, -1, -1, playerLuck);
+                float condPercentMod = Random.Range(condModMin, condModMax + 1) / 100f;
+                magicItem.currentCondition = (int)Mathf.Ceil(magicItem.maxCondition * condPercentMod);
+                targetItems.Add(magicItem);
+                chance *= chanceMod;
+            }
+        }
+
+        public static void AddMaps(float chance, float chanceMod, List<DaggerfallUnityItem> targetItems)
+        {
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                targetItems.Add(new DaggerfallUnityItem(ItemGroups.MiscItems, 8));
+                chance *= chanceMod;
+            }
+        }
+
+        public static void AddPotionRecipes(float chance, float chanceMod, List<DaggerfallUnityItem> targetItems)
+        {
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                DaggerfallLoot.RandomlyAddPotionRecipe(100, targetItems);
+                chance *= chanceMod;
+            }
+        }
+
+        public static void AddClothing(float chance, float chanceMod, int condModMin, int condModMax, List<DaggerfallUnityItem> targetItems)
+        {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                if (Dice100.SuccessRoll(50))
+                {
+                    DaggerfallUnityItem Cloths = ItemBuilder.CreateRandomClothing(Genders.Male, player.Race);
+                    float condPercentMod = Random.Range(condModMin, condModMax + 1) / 100f;
+                    Cloths.currentCondition = (int)Mathf.Ceil(Cloths.maxCondition * condPercentMod);
+                    targetItems.Add(Cloths);
+                    chance *= chanceMod;
+                }
+                else
+                {
+                    DaggerfallUnityItem Cloths = ItemBuilder.CreateRandomClothing(Genders.Female, player.Race);
+                    float condPercentMod = Random.Range(condModMin, condModMax + 1) / 100f;
+                    Cloths.currentCondition = (int)Mathf.Ceil(Cloths.maxCondition * condPercentMod);
+                    targetItems.Add(Cloths);
+                    chance *= chanceMod;
+                }
+            }
+        }
+
+        public static void AddIngredGroupRandomItems(ItemGroups itemGroup, float chance, float chanceMod, List<DaggerfallUnityItem> targetItems)
+        {
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MetalIngredients));
+                chance *= chanceMod;
+            }
+        }
+
+        public static void AddMiscDungeonSpecificItems(int dungeonIndex, float luckMod, int condModMin, int condModMax, List<DaggerfallUnityItem> targetItems)
+        {
+            switch (dungeonIndex)
+            {
+                case (int)DFRegion.DungeonTypes.Crypt:
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 50, 0.6f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
+                    break;
+                case (int)DFRegion.DungeonTypes.OrcStronghold:
+                    break;
+                case (int)DFRegion.DungeonTypes.HumanStronghold:
+                    break;
+                case (int)DFRegion.DungeonTypes.Prison:
+                    break;
+                case (int)DFRegion.DungeonTypes.DesecratedTemple:
+                    break;
+                case (int)DFRegion.DungeonTypes.Mine:
+                    AddIngredGroupRandomItems(ItemGroups.MetalIngredients, 90, 0.4f, targetItems);
+                    break;
+                case (int)DFRegion.DungeonTypes.NaturalCave:
+                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 60, 0.6f, targetItems, (int)AnimalPartIngredients.Small_tooth, (int)AnimalPartIngredients.Big_tooth, (int)AnimalPartIngredients.Snake_venom, (int)AnimalPartIngredients.Small_scorpion_stinger);
+                    break;
+                case (int)DFRegion.DungeonTypes.Coven:
+                    AddIngredGroupRandomItems(ItemGroups.CreatureIngredients, 40, 0.6f, targetItems);
+                    break;
+                case (int)DFRegion.DungeonTypes.VampireHaunt:
+                    break;
+                case (int)DFRegion.DungeonTypes.Laboratory:
+                    break;
+                case (int)DFRegion.DungeonTypes.HarpyNest:
+                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 90, 0.7f, targetItems, (int)CreatureIngredients.Harpy_Feather);
+                    break;
+                case (int)DFRegion.DungeonTypes.RuinedCastle:
+                    break;
+                case (int)DFRegion.DungeonTypes.SpiderNest:
+                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 70, 0.5f, targetItems, (int)AnimalPartIngredients.Spider_venom);
+                    break;
+                case (int)DFRegion.DungeonTypes.GiantStronghold:
+                    break;
+                case (int)DFRegion.DungeonTypes.DragonsDen:
+                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 30, 0.5f, targetItems, (int)CreatureIngredients.Dragons_scales, (int)CreatureIngredients.Fairy_dragon_scales);
+                    break;
+                case (int)DFRegion.DungeonTypes.BarbarianStronghold:
+                    break;
+                case (int)DFRegion.DungeonTypes.VolcanicCaves:
+                    AddIngredGroupRandomItems(ItemGroups.MetalIngredients, 70, 0.6f, targetItems);
+                    break;
+                case (int)DFRegion.DungeonTypes.ScorpionNest:
+                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 70, 0.5f, targetItems, (int)AnimalPartIngredients.Small_scorpion_stinger, (int)AnimalPartIngredients.Giant_scorpion_stinger);
+                    break;
+                case (int)DFRegion.DungeonTypes.Cemetery:
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 35, 0.6f, targetItems, (int)Jewellery.Bracer, (int)Jewellery.Cloth_amulet, (int)Jewellery.Mark);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public static void AddSpecificRandomItems(ItemGroups itemGroup, float chance, float chanceMod, List<DaggerfallUnityItem> targetItems, params int[] itemIndices) // params is extremely handy for my purposes.
+        {
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                int itemIndex = itemIndices[Random.Range(0, itemIndices.Length)];
+                targetItems.Add(ItemBuilder.CreateItem(itemGroup, itemIndex));
+                chance *= chanceMod;
             }
         }
 

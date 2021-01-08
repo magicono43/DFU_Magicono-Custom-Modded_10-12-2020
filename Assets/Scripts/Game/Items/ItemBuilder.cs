@@ -416,7 +416,6 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a random book from any of the subject groups.
         /// Passing a non-book subject group will return null.
         /// </summary>
-        /// <param name="ingredientGroup">Ingredient group.</param>
         /// <returns>DaggerfallUnityItem</returns>
         public static DaggerfallUnityItem CreateRandomBookOfSpecificSubject(ItemGroups bookSubject)
         {
@@ -457,7 +456,6 @@ namespace DaggerfallWorkshop.Game.Items
         /// <returns>DaggerfallUnityItem</returns>
         public static DaggerfallUnityItem CreateRandomBookOfRandomSubject()
         {
-            // Randomise ingredient group
             ItemGroups itemGroup;
             int group = UnityEngine.Random.Range(0, 12); // Keeping this range to 12 for now, until I actually add books to the "Informational and no_topic" subjects, otherwise will just give a null. 
             Array enumArray;
