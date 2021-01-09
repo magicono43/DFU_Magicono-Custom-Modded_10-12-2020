@@ -1484,12 +1484,12 @@ namespace DaggerfallWorkshop.Game.Items
 
             for (int i = 6; i < 13; i++) // Might have to redo the values of this loop if it's not working correctly later?
             {
-                equipmentItems[i - 4] = DefineEquippedOnBody(i - 4, enemyEntity, traits, enemyEquipTableProperties, player);
+                equipmentItems[i - 3] = DefineEquippedOnBody(i - 3, enemyEntity, traits, enemyEquipTableProperties, player);
 
-                if (equipmentItems[i - 4] != null)
+                if (equipmentItems[i - 3] != null)
                 {
                     condPercentMod = UnityEngine.Random.Range(enemyEquipTableProperties[13], enemyEquipTableProperties[14] + 1) / 100f;
-                    equipmentItems[i - 4].currentCondition = (int)Mathf.Ceil(equipmentItems[i - 4].maxCondition * condPercentMod);
+                    equipmentItems[i - 3].currentCondition = (int)Mathf.Ceil(equipmentItems[i - 3].maxCondition * condPercentMod);
                 }
             }
 
@@ -1628,7 +1628,7 @@ namespace DaggerfallWorkshop.Game.Items
             int enemyLevel = enemy.Level;
             Genders playerGender = player.Gender;
             Races race = player.Race;
-            index += 4;
+            index += 3;
 
             /*// City watch never have items above iron or steel
             if (enemy.EntityType == EntityTypes.EnemyClass && enemy.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch) // Might Use this somehow later, more refined.

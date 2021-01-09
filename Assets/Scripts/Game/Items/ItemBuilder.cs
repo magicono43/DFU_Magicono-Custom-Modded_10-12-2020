@@ -172,7 +172,7 @@ namespace DaggerfallWorkshop.Game.Items
             if (minCond > -1 && maxCond > -1)
             {
                 float condPercentMod = UnityEngine.Random.Range(minCond, maxCond + 1) / 100f;
-                newItem.currentCondition = (int)Mathf.Ceil(newItem.maxCondition * condPercentMod);
+                newItem.currentCondition = (int)Mathf.Floor(newItem.maxCondition * condPercentMod);
             }
 
             return newItem;
@@ -204,7 +204,7 @@ namespace DaggerfallWorkshop.Game.Items
             if (minCond > -1 && maxCond > -1)
             {
                 float condPercentMod = UnityEngine.Random.Range(minCond, maxCond + 1) / 100f;
-                newItem.currentCondition = (int)Mathf.Ceil(newItem.maxCondition * condPercentMod);
+                newItem.currentCondition = (int)Mathf.Floor(newItem.maxCondition * condPercentMod);
             }
 
             return newItem;
@@ -419,8 +419,9 @@ namespace DaggerfallWorkshop.Game.Items
         /// <returns>DaggerfallUnityItem</returns>
         public static DaggerfallUnityItem CreateRandomBookOfSpecificSubject(ItemGroups bookSubject)
         {
-            int groupIndex;
             Array enumArray;
+            int groupIndex;
+            int bookID;
             switch (bookSubject)
             {
                 case ItemGroups.Biography_Books:
@@ -439,13 +440,14 @@ namespace DaggerfallWorkshop.Game.Items
                 case ItemGroups.No_Topic_Books:
                     enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(bookSubject);
                     groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
+                    bookID = (int)enumArray.GetValue(groupIndex);
                     break;
                 default:
                     return null;
             }
 
             // Create item
-            DaggerfallUnityItem book = CreateBook(groupIndex);
+            DaggerfallUnityItem book = CreateBook(bookID);
 
             return book;
         }
@@ -457,8 +459,10 @@ namespace DaggerfallWorkshop.Game.Items
         public static DaggerfallUnityItem CreateRandomBookOfRandomSubject()
         {
             ItemGroups itemGroup;
-            int group = UnityEngine.Random.Range(0, 12); // Keeping this range to 12 for now, until I actually add books to the "Informational and no_topic" subjects, otherwise will just give a null. 
             Array enumArray;
+            int groupIndex;
+            int bookID;
+            int group = UnityEngine.Random.Range(0, 12); // Keeping this range to 12 for now, until I actually add books to the "Informational and no_topic" subjects, otherwise will just give a null. 
             switch (group)
             {
                 case 0:
@@ -509,10 +513,11 @@ namespace DaggerfallWorkshop.Game.Items
 
             // Randomise book within group
             enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(itemGroup);
-            int groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
+            groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
+            bookID = (int)enumArray.GetValue(groupIndex);
 
             // Create item
-            DaggerfallUnityItem book = CreateBook(groupIndex);
+            DaggerfallUnityItem book = CreateBook(bookID);
 
             return book;
         }
@@ -1095,6 +1100,9 @@ namespace DaggerfallWorkshop.Game.Items
         /// <returns></returns>
         public static DaggerfallUnityItem CreateGoldPieces(int amount)
         {
+            if (amount <= 0) // Will see if this causes issues, it might, could not as well not sure. 
+                return null;
+
             DaggerfallUnityItem newItem = CreateItem(ItemGroups.Currency, (int)Currency.Gold_pieces);
             newItem.stackCount = amount;
             newItem.value = 1;

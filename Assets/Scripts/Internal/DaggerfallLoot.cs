@@ -90,7 +90,7 @@ namespace DaggerfallWorkshop
         /// </summary>
         public static void GenerateDungeonItems(ItemCollection collection, int dungeonIndex)
         {
-            DaggerfallUnityItem[] newitems = LootTables.GenerateDungeonLoot(dungeonIndex);
+            DaggerfallUnityItem[] newitems = LootTables.GenerateDungeonLootItems(dungeonIndex);
 
             FormulaHelper.ModifyFoundLootItems(ref newitems);
 

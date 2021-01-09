@@ -103,7 +103,14 @@ namespace DaggerfallWorkshop.Game.Items
             return true;
         }
 
-        public static DaggerfallUnityItem[] GenerateDungeonLoot(int dungeonIndex)
+        public static bool GenerateDungeonLoot(DaggerfallLoot loot, int locationIndex)
+        {
+            DaggerfallLoot.GenerateDungeonItems(loot.Items, locationIndex);
+
+            return true;
+        }
+
+        public static DaggerfallUnityItem[] GenerateDungeonLootItems(int dungeonIndex)
         {
             PlayerEntity player = GameManager.Instance.PlayerEntity;
             int playerLuck = player.Stats.LiveLuck - 50;
@@ -123,9 +130,9 @@ namespace DaggerfallWorkshop.Game.Items
                     condModMin = Mathf.Clamp((int)Mathf.Floor(10 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(35 * basicLuckMod), 1, 100);
                     AddGems(35, 0.6f, 30, basicLuckMod, items);
-                    AddMagicItems(10, 0.5f, condModMin, condModMax, items);
-                    AddMaps(10, 0.2f, items);
-                    AddClothing(15, 0.6f, condModMin, condModMax, items);
+                    AddMagicItems(5, 0.5f, condModMin, condModMax, items);
+                    AddMaps(5, 0.4f, items);
+                    AddClothing(20, 0.6f, condModMin, condModMax, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.OrcStronghold:
@@ -133,9 +140,9 @@ namespace DaggerfallWorkshop.Game.Items
                     condModMin = Mathf.Clamp((int)Mathf.Floor(35 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(75 * basicLuckMod), 1, 100);
                     AddArrows(1, 15, basicLuckMod, items);
-                    AddWeapons(60, 0.7f, condModMin, condModMax, items);
-                    AddArmors(40, 0.6f, condModMin, condModMax, 100, items);
-                    AddIngots(70, 0.6f, items);
+                    AddWeapons(50, 0.7f, condModMin, condModMax, items);
+                    AddArmors(30, 0.6f, condModMin, condModMax, 100, items);
+                    AddIngots(60, 0.6f, items);
                     AddGems(5, 0.5f, 10, basicLuckMod, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
@@ -144,9 +151,9 @@ namespace DaggerfallWorkshop.Game.Items
                     condModMin = Mathf.Clamp((int)Mathf.Floor(40 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(80 * basicLuckMod), 1, 100);
                     AddArrows(1, 35, basicLuckMod, items);
-                    AddWeapons(40, 0.6f, condModMin, condModMax, items);
-                    AddArmors(65, 0.55f, condModMin, condModMax, 60, items);
-                    AddIngots(45, 0.4f, items);
+                    AddWeapons(30, 0.6f, condModMin, condModMax, items);
+                    AddArmors(55, 0.55f, condModMin, condModMax, 60, items);
+                    AddIngots(35, 0.4f, items);
                     AddGems(10, 0.5f, 15, basicLuckMod, items);
                     AddMaps(2, 0.5f, items);
                     AddClothing(25, 0.4f, condModMin, condModMax, items);
@@ -156,7 +163,7 @@ namespace DaggerfallWorkshop.Game.Items
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
                     condModMin = Mathf.Clamp((int)Mathf.Floor(15 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(55 * basicLuckMod), 1, 100);
-                    chance = 50f;
+                    chance = 40f;
                     while (Dice100.SuccessRoll((int)chance))
                     {
                         DaggerfallUnityItem Weapon = ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Tanto, (int)Weapons.Tanto, (int)Weapons.Tanto, (int)Weapons.Tanto, (int)Weapons.Dagger, (int)Weapons.Dagger, (int)Weapons.Shortsword, (int)Weapons.Wakazashi), (WeaponMaterialTypes)PickOneOf((int)WeaponMaterialTypes.Iron, (int)WeaponMaterialTypes.Iron, (int)WeaponMaterialTypes.Iron, (int)WeaponMaterialTypes.Steel, 
@@ -166,8 +173,8 @@ namespace DaggerfallWorkshop.Game.Items
                         items.Add(Weapon);
                         chance *= 0.6f;
                     }
-                    AddArmors(30, 0.6f, condModMin, condModMax, 0, items);
-                    AddBooks(10, 0.5f, items, 37);
+                    AddArmors(20, 0.6f, condModMin, condModMax, 0, items);
+                    AddBooks(10, 0.4f, items, 37);
                     AddClothing(20, 0.4f, condModMin, condModMax, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
@@ -175,34 +182,34 @@ namespace DaggerfallWorkshop.Game.Items
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
                     condModMin = Mathf.Clamp((int)Mathf.Floor(35 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(60 * basicLuckMod), 1, 100);
-                    AddPotions(60, 0.5f, items);
-                    AddBooks(80, 0.5f, items, 38);
+                    AddPotions(30, 0.5f, items);
+                    AddBooks(50, 0.5f, items, 38);
                     AddGems(10, 0.5f, 20, basicLuckMod, items);
-                    AddMagicItems(5, 0.3f, condModMin, condModMax, items);
+                    AddMagicItems(3, 0.3f, condModMin, condModMax, items);
                     AddPotionRecipes(5, 0.1f, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.Mine:
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
-                    AddIngots(50, 0.5f, items);
-                    AddGems(45, 0.6f, 15, basicLuckMod, items);
+                    AddIngots(40, 0.5f, items);
+                    AddGems(35, 0.6f, 15, basicLuckMod, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.NaturalCave:
                     condModMin = Mathf.Clamp((int)Mathf.Floor(5 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(30 * basicLuckMod), 1, 100);
-                    AddClothing(5, 0.8f, condModMin, condModMax, items);
+                    AddClothing(8, 0.8f, condModMin, condModMax, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.Coven:
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
                     condModMin = Mathf.Clamp((int)Mathf.Floor(25 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(40 * basicLuckMod), 1, 100);
-                    AddPotions(40, 0.6f, items);
-                    AddBooks(25, 0.6f, items, 30);
-                    AddMagicItems(15, 0.6f, condModMin, condModMax, items);
-                    AddMaps(5, 0.1f, items);
-                    AddPotionRecipes(10, 0.5f, items);
+                    AddPotions(25, 0.6f, items);
+                    AddBooks(20, 0.6f, items, 30);
+                    AddMagicItems(6, 0.6f, condModMin, condModMax, items);
+                    AddMaps(3, 0.1f, items);
+                    AddPotionRecipes(8, 0.5f, items);
                     AddClothing(10, 0.5f, condModMin, condModMax, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
@@ -210,7 +217,7 @@ namespace DaggerfallWorkshop.Game.Items
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
                     condModMin = Mathf.Clamp((int)Mathf.Floor(15 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(40 * basicLuckMod), 1, 100);
-                    AddMaps(10, 0.5f, items);
+                    AddMaps(6, 0.5f, items);
                     AddClothing(20, 0.7f, condModMin, condModMax, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
@@ -218,24 +225,25 @@ namespace DaggerfallWorkshop.Game.Items
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
                     condModMin = Mathf.Clamp((int)Mathf.Floor(30 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(55 * basicLuckMod), 1, 100);
-                    AddPotions(70, 0.55f, items);
-                    AddBooks(90, 0.35f, items, 33);
-                    AddMagicItems(20, 0.2f, condModMin, condModMax, items);
-                    AddPotionRecipes(15, 0.6f, items);
+                    AddPotions(35, 0.5f, items);
+                    AddBooks(50, 0.4f, items, 33);
+                    AddMagicItems(8, 0.2f, condModMin, condModMax, items);
+                    AddPotionRecipes(10, 0.6f, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.HarpyNest:
+                    AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.RuinedCastle:
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(30, 45 + 1) * basicLuckMod)));
                     condModMin = Mathf.Clamp((int)Mathf.Floor(15 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(50 * basicLuckMod), 1, 100);
                     AddArrows(1, 11, basicLuckMod, items);
-                    AddWeapons(30, 0.4f, condModMin, condModMax, items);
-                    AddArmors(55, 0.5f, condModMin, condModMax, 50, items);
-                    AddBooks(15, 0.5f, items, 28);
-                    AddBooks(35, 0.4f, items, 31);
-                    AddIngots(35, 0.4f, items);
+                    AddWeapons(25, 0.4f, condModMin, condModMax, items);
+                    AddArmors(45, 0.5f, condModMin, condModMax, 50, items);
+                    AddBooks(10, 0.5f, items, 28);
+                    AddBooks(15, 0.4f, items, 31);
+                    AddIngots(25, 0.4f, items);
                     AddGems(15, 0.5f, 20, basicLuckMod, items);
                     AddMaps(3, 0.2f, items);
                     AddClothing(10, 0.5f, condModMin, condModMax, items);
@@ -251,8 +259,8 @@ namespace DaggerfallWorkshop.Game.Items
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
                     condModMin = Mathf.Clamp((int)Mathf.Floor(15 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(55 * basicLuckMod), 1, 100);
-                    AddWeapons(25, 0.5f, condModMin, condModMax, items);
-                    AddArmors(25, 0.35f, condModMin, condModMax, 40, items);
+                    AddWeapons(20, 0.5f, condModMin, condModMax, items);
+                    AddArmors(20, 0.35f, condModMin, condModMax, 40, items);
                     AddGems(10, 0.5f, 5, basicLuckMod, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
@@ -261,13 +269,13 @@ namespace DaggerfallWorkshop.Game.Items
                     condModMin = Mathf.Clamp((int)Mathf.Floor(5 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(40 * basicLuckMod), 1, 100);
                     AddArrows(1, 6, basicLuckMod, items);
-                    AddWeapons(20, 0.6f, condModMin, condModMax, items);
-                    AddArmors(40, 0.5f, condModMin, condModMax, 60, items);
-                    AddPotions(20, 0.3f, items);
-                    AddIngots(20, 0.5f, items);
-                    AddGems(30, 0.3f, 65, basicLuckMod, items);
+                    AddWeapons(15, 0.6f, condModMin, condModMax, items);
+                    AddArmors(30, 0.5f, condModMin, condModMax, 60, items);
+                    AddPotions(15, 0.3f, items);
+                    AddIngots(15, 0.5f, items);
+                    AddGems(15, 0.3f, 55, basicLuckMod, items);
                     AddMagicItems(2, 0.5f, condModMin, condModMax, items);
-                    AddMaps(5, 0.3f, items);
+                    AddMaps(3, 0.3f, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.BarbarianStronghold:
@@ -275,11 +283,11 @@ namespace DaggerfallWorkshop.Game.Items
                     condModMin = Mathf.Clamp((int)Mathf.Floor(30 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(60 * basicLuckMod), 1, 100);
                     AddArrows(1, 25, basicLuckMod, items);
-                    AddWeapons(50, 0.6f, condModMin, condModMax, items);
-                    AddArmors(45, 0.35f, condModMin, condModMax, 15, items);
-                    AddIngots(40, 0.35f, items);
-                    AddGems(15, 0.5f, 15, basicLuckMod, items);
-                    AddMaps(8, 0.5f, items);
+                    AddWeapons(40, 0.6f, condModMin, condModMax, items);
+                    AddArmors(30, 0.35f, condModMin, condModMax, 15, items);
+                    AddIngots(25, 0.35f, items);
+                    AddGems(10, 0.5f, 15, basicLuckMod, items);
+                    AddMaps(3, 0.5f, items);
                     AddClothing(5, 0.6f, condModMin, condModMax, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
@@ -296,10 +304,10 @@ namespace DaggerfallWorkshop.Game.Items
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
                     condModMin = Mathf.Clamp((int)Mathf.Floor(10 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(25 * basicLuckMod), 1, 100);
-                    AddGems(20, 0.6f, 20, basicLuckMod, items);
-                    AddMagicItems(5, 0.3f, condModMin, condModMax, items);
-                    AddMaps(6, 0.5f, items);
-                    AddClothing(20, 0.5f, condModMin, condModMax, items);
+                    AddGems(25, 0.6f, 20, basicLuckMod, items);
+                    AddMagicItems(2, 0.3f, condModMin, condModMax, items);
+                    AddMaps(5, 0.5f, items);
+                    AddClothing(25, 0.5f, condModMin, condModMax, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 default:
@@ -338,7 +346,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Random Potions
             if (extraLootProps[1] > 0)
             {
-                for (int i = 1; i < extraLootProps[1]; i++)
+                for (int i = 0; i < extraLootProps[1]; i++)
                 {
                     items.Add(ItemBuilder.CreateRandomPotion()); // The whole Potion Recipe ID thing is a bit too confusing for me at this moment, so I can't specify what potions should be allowed, will work for now though. 
                 }
@@ -361,7 +369,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Random Gems
             if (extraLootProps[2] > 0)
             {
-                for (int i = 1; i < extraLootProps[2]; i++)
+                for (int i = 0; i < extraLootProps[2]; i++)
                 {
                     items.Add(ItemBuilder.CreateRandomGem());
                 }
@@ -370,7 +378,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Random magic items
             if (extraLootProps[3] > 0)
             {
-                for (int i = 1; i < extraLootProps[3]; i++)
+                for (int i = 0; i < extraLootProps[3]; i++)
                 {
                     DaggerfallUnityItem magicItem = ItemBuilder.CreateRandomMagicItem(player.Gender, player.Race, level);
 
@@ -393,7 +401,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Light sources
             if (extraLootProps[5] > 0)
             {
-                for (int i = 1; i < extraLootProps[5]; i++)
+                for (int i = 0; i < extraLootProps[5]; i++)
                 {
                     if (i == 1 && Dice100.SuccessRoll(15))
                     {
@@ -410,7 +418,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Random religious items
             if (extraLootProps[6] > 0)
             {
-                for (int i = 1; i < extraLootProps[6]; i++)
+                for (int i = 0; i < extraLootProps[6]; i++)
                 {
                     items.Add(ItemBuilder.CreateRandomReligiousItem());
                 }
@@ -433,7 +441,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Drugs
             if (extraLootProps[9] > 0)
             {
-                for (int i = 1; i < extraLootProps[9]; i++)
+                for (int i = 0; i < extraLootProps[9]; i++)
                 {
                     items.Add(ItemBuilder.CreateRandomDrug());
                 }
@@ -442,7 +450,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Extra weapon
             if (extraLootProps[10] > 0)
             {
-                for (int i = 1; i < extraLootProps[10]; i++)
+                for (int i = 0; i < extraLootProps[10]; i++)
                 {
                     if (i == 1 && AITarget.EntityType == EntityTypes.EnemyClass && AITarget.CareerIndex == (int)ClassCareers.Nightblade)
                     {
@@ -471,7 +479,7 @@ namespace DaggerfallWorkshop.Game.Items
             // Maps
             if (extraLootProps[11] > 0)
             {
-                for (int i = 1; i < extraLootProps[11]; i++)
+                for (int i = 0; i < extraLootProps[11]; i++)
                 {
                     items.Add(new DaggerfallUnityItem(ItemGroups.MiscItems, 8));
                 }
@@ -496,43 +504,43 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 if (predefLootProps[1] > 0)
                 {
-                    for (int i = 1; i < predefLootProps[1]; i++)
+                    for (int i = 0; i < predefLootProps[1]; i++)
                         items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MiscPlantIngredients));
                 }
 
                 if (predefLootProps[2] > 0)
                 {
-                    for (int i = 1; i < predefLootProps[2]; i++)
+                    for (int i = 0; i < predefLootProps[2]; i++)
                         items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
                 }
 
                 if (predefLootProps[3] > 0)
                 {
-                    for (int i = 1; i < predefLootProps[3]; i++)
+                    for (int i = 0; i < predefLootProps[3]; i++)
                         items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FruitPlantIngredients));
                 }
 
                 if (predefLootProps[4] > 0)
                 {
-                    for (int i = 1; i < predefLootProps[4]; i++)
+                    for (int i = 0; i < predefLootProps[4]; i++)
                         items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.AnimalPartIngredients));
                 }
 
                 if (predefLootProps[5] > 0)
                 {
-                    for (int i = 1; i < predefLootProps[5]; i++)
+                    for (int i = 0; i < predefLootProps[5]; i++)
                         items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.CreatureIngredients));
                 }
 
                 if (predefLootProps[6] > 0)
                 {
-                    for (int i = 1; i < predefLootProps[6]; i++)
+                    for (int i = 0; i < predefLootProps[6]; i++)
                         items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.SolventIngredients));
                 }
 
                 if (predefLootProps[7] > 0)
                 {
-                    for (int i = 1; i < predefLootProps[7]; i++)
+                    for (int i = 0; i < predefLootProps[7]; i++)
                         items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MetalIngredients));
                 }
             }
@@ -716,7 +724,7 @@ namespace DaggerfallWorkshop.Game.Items
         {
             while (Dice100.SuccessRoll((int)chance))
             {
-                targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MetalIngredients));
+                targetItems.Add(ItemBuilder.CreateRandomIngredient(itemGroup));
                 chance *= chanceMod;
             }
         }
@@ -726,52 +734,74 @@ namespace DaggerfallWorkshop.Game.Items
             switch (dungeonIndex)
             {
                 case (int)DFRegion.DungeonTypes.Crypt:
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 50, 0.6f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 30, 0.6f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
+                    AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 20, 0.4f, targetItems);
                     break;
                 case (int)DFRegion.DungeonTypes.OrcStronghold:
                     break;
                 case (int)DFRegion.DungeonTypes.HumanStronghold:
+                    AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 10, 0.5f, targetItems);
                     break;
                 case (int)DFRegion.DungeonTypes.Prison:
+                    AddSpecificRandomItems(ItemGroups.ReligiousItems, 25, 0.5f, targetItems, (int)ReligiousItems.Common_symbol, (int)ReligiousItems.Prayer_beads, (int)ReligiousItems.Bell);
                     break;
                 case (int)DFRegion.DungeonTypes.DesecratedTemple:
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 15, 0.5f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
+                    AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 45, 0.6f, targetItems);
                     break;
                 case (int)DFRegion.DungeonTypes.Mine:
-                    AddIngredGroupRandomItems(ItemGroups.MetalIngredients, 90, 0.4f, targetItems);
+                    AddIngredGroupRandomItems(ItemGroups.MetalIngredients, 65, 0.4f, targetItems);
                     break;
                 case (int)DFRegion.DungeonTypes.NaturalCave:
-                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 60, 0.6f, targetItems, (int)AnimalPartIngredients.Small_tooth, (int)AnimalPartIngredients.Big_tooth, (int)AnimalPartIngredients.Snake_venom, (int)AnimalPartIngredients.Small_scorpion_stinger);
+                    AddIngredGroupRandomItems(ItemGroups.MiscPlantIngredients, 45, 0.6f, targetItems);
+                    AddIngredGroupRandomItems(ItemGroups.FruitPlantIngredients, 25, 0.6f, targetItems);
+                    AddSpecificRandomItems(ItemGroups.SolventIngredients, 25, 0.5f, targetItems, (int)SolventIngredients.Rain_water);
+                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 25, 0.5f, targetItems, (int)AnimalPartIngredients.Small_tooth, (int)AnimalPartIngredients.Big_tooth, (int)AnimalPartIngredients.Snake_venom, (int)AnimalPartIngredients.Small_scorpion_stinger);
                     break;
                 case (int)DFRegion.DungeonTypes.Coven:
-                    AddIngredGroupRandomItems(ItemGroups.CreatureIngredients, 40, 0.6f, targetItems);
+                    AddIngredGroupRandomItems(ItemGroups.CreatureIngredients, 20, 0.5f, targetItems);
+                    AddIngredGroupRandomItems(ItemGroups.FruitPlantIngredients, 40, 0.4f, targetItems);
+                    AddIngredGroupRandomItems(ItemGroups.MiscPlantIngredients, 50, 0.4f, targetItems);
+                    AddIngredGroupRandomItems(ItemGroups.FlowerPlantIngredients, 30, 0.5f, targetItems);
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 20, 0.3f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc, (int)Jewellery.Mark, (int)Jewellery.Cloth_amulet);
                     break;
                 case (int)DFRegion.DungeonTypes.VampireHaunt:
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 15, 0.5f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
                     break;
                 case (int)DFRegion.DungeonTypes.Laboratory:
+                    AddIngredGroupRandomItems(ItemGroups.MetalIngredients, 20, 0.5f, targetItems);
+                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 25, 0.5f, targetItems, (int)CreatureIngredients.Basilisk_eye, (int)CreatureIngredients.Ectoplasm, (int)CreatureIngredients.Mummy_wrappings, (int)CreatureIngredients.Troll_blood, (int)CreatureIngredients.Wraith_essence, (int)CreatureIngredients.Orcs_blood, (int)CreatureIngredients.Nymph_hair, (int)CreatureIngredients.Gorgon_snake);
+                    AddSpecificRandomItems(ItemGroups.SolventIngredients, 35, 0.6f, targetItems, (int)SolventIngredients.Rain_water, (int)SolventIngredients.Pure_water, (int)SolventIngredients.Nectar);
+                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 20, 0.6f, targetItems, (int)AnimalPartIngredients.Snake_venom, (int)AnimalPartIngredients.Spider_venom);
                     break;
                 case (int)DFRegion.DungeonTypes.HarpyNest:
-                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 90, 0.7f, targetItems, (int)CreatureIngredients.Harpy_Feather);
+                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 75, 0.6f, targetItems, (int)CreatureIngredients.Harpy_Feather);
                     break;
                 case (int)DFRegion.DungeonTypes.RuinedCastle:
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 20, 0.7f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
+                    AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 15, 0.4f, targetItems);
                     break;
                 case (int)DFRegion.DungeonTypes.SpiderNest:
-                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 70, 0.5f, targetItems, (int)AnimalPartIngredients.Spider_venom);
+                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 45, 0.5f, targetItems, (int)AnimalPartIngredients.Spider_venom);
                     break;
                 case (int)DFRegion.DungeonTypes.GiantStronghold:
                     break;
                 case (int)DFRegion.DungeonTypes.DragonsDen:
-                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 30, 0.5f, targetItems, (int)CreatureIngredients.Dragons_scales, (int)CreatureIngredients.Fairy_dragon_scales);
+                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 25, 0.5f, targetItems, (int)CreatureIngredients.Dragons_scales, (int)CreatureIngredients.Fairy_dragon_scales);
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 15, 0.6f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
                     break;
                 case (int)DFRegion.DungeonTypes.BarbarianStronghold:
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 25, 0.5f, targetItems, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc, (int)Jewellery.Bracer, (int)Jewellery.Cloth_amulet);
                     break;
                 case (int)DFRegion.DungeonTypes.VolcanicCaves:
-                    AddIngredGroupRandomItems(ItemGroups.MetalIngredients, 70, 0.6f, targetItems);
+                    AddIngredGroupRandomItems(ItemGroups.MetalIngredients, 45, 0.6f, targetItems);
                     break;
                 case (int)DFRegion.DungeonTypes.ScorpionNest:
-                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 70, 0.5f, targetItems, (int)AnimalPartIngredients.Small_scorpion_stinger, (int)AnimalPartIngredients.Giant_scorpion_stinger);
+                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 50, 0.5f, targetItems, (int)AnimalPartIngredients.Small_scorpion_stinger, (int)AnimalPartIngredients.Giant_scorpion_stinger);
                     break;
                 case (int)DFRegion.DungeonTypes.Cemetery:
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 35, 0.6f, targetItems, (int)Jewellery.Bracer, (int)Jewellery.Cloth_amulet, (int)Jewellery.Mark);
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 25, 0.6f, targetItems, (int)Jewellery.Bracer, (int)Jewellery.Cloth_amulet, (int)Jewellery.Mark);
+                    AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 10, 0.6f, targetItems);
                     break;
                 default:
                     break;
@@ -804,35 +834,35 @@ namespace DaggerfallWorkshop.Game.Items
                 if (traits[0] == (int)MobilePersonalityQuirks.Curious || traits[1] == (int)MobilePersonalityQuirks.Curious)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Addict || traits[1] == (int)MobilePersonalityQuirks.Addict)
                 {
                     int randRange = Random.Range(2, 6 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Hoarder || traits[1] == (int)MobilePersonalityQuirks.Hoarder)
                 {
                     int randRange = Random.Range(6, 18 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Vain || traits[1] == (int)MobilePersonalityQuirks.Vain)
                 {
                     int randRange = Random.Range(2, 7 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Untrusting || traits[1] == (int)MobilePersonalityQuirks.Untrusting)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished.
                     // This won't work the same as the others, since it in theory will be placing existing items into a seperate lock-box inventory type of item, will need a lot of work on this one eventually.
                 }
@@ -840,21 +870,21 @@ namespace DaggerfallWorkshop.Game.Items
                 if (traits[0] == (int)MobilePersonalityQuirks.Sadistic || traits[1] == (int)MobilePersonalityQuirks.Sadistic)
                 {
                     int randRange = Random.Range(1, 4 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Romantic || traits[1] == (int)MobilePersonalityQuirks.Romantic)
                 {
                     int randRange = Random.Range(2, 4 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Alcoholic || traits[1] == (int)MobilePersonalityQuirks.Alcoholic)
                 {
                     int randRange = Random.Range(2, 6 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
             }
@@ -864,98 +894,98 @@ namespace DaggerfallWorkshop.Game.Items
                 if (traits[2] == (int)MobilePersonalityInterests.God_Fearing)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Occultist)
                 {
                     int randRange = Random.Range(2, 4 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Childish)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Artistic)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Collector)
                 {
                     int randRange = Random.Range(4, 11 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Survivalist)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Hunter)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Fetishist)
                 {
                     int randRange = Random.Range(2, 4 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Brewer)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Cartographer)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Fisher)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Diver)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Writer)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Handy)
                 {
                     int randRange = Random.Range(1, 3 + 1);
-                    for (int i = 1; i < randRange; i++)
+                    for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
             }
@@ -977,23 +1007,32 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     case 0:
                     case 3:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
-                        ingredients.stackCount = predefLootProps[4];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[4] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
+                            ingredients.stackCount = predefLootProps[4];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 4:
                     case 5:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
-                        ingredients.stackCount = predefLootProps[4];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[4] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
+                            ingredients.stackCount = predefLootProps[4];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 6:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom);
-                        ingredients.stackCount = predefLootProps[4];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[4] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom);
+                            ingredients.stackCount = predefLootProps[4];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 11:
-                        for (int i = 1; i < predefLootProps[4]; i++)
+                        for (int i = 0; i < predefLootProps[4]; i++)
                         {
                             if (Dice100.SuccessRoll(95))
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
@@ -1002,16 +1041,19 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 20:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Giant_scorpion_stinger);
-                        ingredients.stackCount = predefLootProps[4];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[4] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Giant_scorpion_stinger);
+                            ingredients.stackCount = predefLootProps[4];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 2:
-                        for (int i = 1; i < predefLootProps[1]; i++)
+                        for (int i = 0; i < predefLootProps[1]; i++)
                             targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MiscPlantIngredients));
-                        for (int i = 1; i < predefLootProps[2]; i++)
+                        for (int i = 0; i < predefLootProps[2]; i++)
                             targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
-                        for (int i = 1; i < predefLootProps[3]; i++)
+                        for (int i = 0; i < predefLootProps[3]; i++)
                         {
                             if (Dice100.SuccessRoll(90))
                                 targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FruitPlantIngredients));
@@ -1020,35 +1062,53 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 10:
-                        for (int i = 1; i < predefLootProps[2]; i++)
+                        for (int i = 0; i < predefLootProps[2]; i++)
                             targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 13:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Harpy_Feather);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Harpy_Feather);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 16:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Giant_blood);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Giant_blood);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 22:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.MiscPlantIngredients, (int)MiscPlantIngredients.Root_tendrils);
-                        ingredients.stackCount = predefLootProps[1];
-                        targetItems.Add(ingredients);
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Lodestone);
-                        ingredients.stackCount = predefLootProps[7];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[1] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.MiscPlantIngredients, (int)MiscPlantIngredients.Root_tendrils);
+                            ingredients.stackCount = predefLootProps[1];
+                            targetItems.Add(ingredients);
+                        }
+                        if (predefLootProps[7] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Lodestone);
+                            ingredients.stackCount = predefLootProps[7];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 34:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
-                        ingredients.stackCount = predefLootProps[4];
-                        targetItems.Add(ingredients);
-                        for (int i = 1; i < predefLootProps[5]; i++)
+                        if (predefLootProps[4] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
+                            ingredients.stackCount = predefLootProps[4];
+                            targetItems.Add(ingredients);
+                        }
+                        for (int i = 0; i < predefLootProps[5]; i++)
                         {
                             if (Dice100.SuccessRoll(40))
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dragons_scales));
@@ -1057,10 +1117,13 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 40:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
-                        ingredients.stackCount = predefLootProps[4];
-                        targetItems.Add(ingredients);
-                        for (int i = 1; i < predefLootProps[5]; i++)
+                        if (predefLootProps[4] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
+                            ingredients.stackCount = predefLootProps[4];
+                            targetItems.Add(ingredients);
+                        }
+                        for (int i = 0; i < predefLootProps[5]; i++)
                         {
                             if (Dice100.SuccessRoll(80))
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dragons_scales));
@@ -1069,12 +1132,15 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 41:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl);
-                        ingredients.stackCount = predefLootProps[4];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[4] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl);
+                            ingredients.stackCount = predefLootProps[4];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 42:
-                        for (int i = 1; i < predefLootProps[5]; i++)
+                        for (int i = 0; i < predefLootProps[5]; i++)
                         {
                             if (Dice100.SuccessRoll(35))
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair));
@@ -1082,48 +1148,102 @@ namespace DaggerfallWorkshop.Game.Items
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Gorgon_snake));
                         }
                         return true;
+                    case 7:
+                    case 12:
+                    case 24:
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Orcs_blood);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
+                        return true;
+                    case 21:
+                        for (int i = 0; i < predefLootProps[1]; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MiscPlantIngredients));
+                        for (int i = 0; i < predefLootProps[2]; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
+                        for (int i = 0; i < predefLootProps[3]; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FruitPlantIngredients));
+                        for (int i = 0; i < predefLootProps[4]; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.AnimalPartIngredients));
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Orcs_blood);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
+                        for (int i = 0; i < predefLootProps[6]; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.SolventIngredients));
+                        for (int i = 0; i < predefLootProps[7]; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MetalIngredients));
+                        return true;
                     case 9:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Werewolfs_blood);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Werewolfs_blood);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 14:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Wereboar_tusk);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Wereboar_tusk);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 35:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur);
-                        ingredients.stackCount = predefLootProps[7];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[7] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur);
+                            ingredients.stackCount = predefLootProps[7];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 36:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Iron);
-                        ingredients.stackCount = predefLootProps[7];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[7] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Iron);
+                            ingredients.stackCount = predefLootProps[7];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 37:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor);
-                        ingredients.stackCount = predefLootProps[6];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[6] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor);
+                            ingredients.stackCount = predefLootProps[6];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 38:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water);
-                        ingredients.stackCount = predefLootProps[6];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[6] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water);
+                            ingredients.stackCount = predefLootProps[6];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 18:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Ectoplasm);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Ectoplasm);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 19:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Mummy_wrappings);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Mummy_wrappings);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 23:
-                        for (int i = 1; i < predefLootProps[5]; i++)
+                        for (int i = 0; i < predefLootProps[5]; i++)
                         {
                             if (Dice100.SuccessRoll(70))
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Ectoplasm));
@@ -1133,57 +1253,93 @@ namespace DaggerfallWorkshop.Game.Items
                         return true;
                     case 28:
                     case 30:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
-                        ingredients.stackCount = predefLootProps[4];
-                        targetItems.Add(ingredients);
-                        for (int i = 1; i < predefLootProps[5]; i++)
+                        if (predefLootProps[4] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
+                            ingredients.stackCount = predefLootProps[4];
+                            targetItems.Add(ingredients);
+                        }
+                        for (int i = 0; i < predefLootProps[5]; i++)
                             targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.CreatureIngredients));
                         return true;
                     case 32:
                     case 33:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Lich_dust);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Lich_dust);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 25:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water);
-                        ingredients.stackCount = predefLootProps[6];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
+                        if (predefLootProps[6] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water);
+                            ingredients.stackCount = predefLootProps[6];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 26:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur);
-                        ingredients.stackCount = predefLootProps[7];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
+                        if (predefLootProps[7] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur);
+                            ingredients.stackCount = predefLootProps[7];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 27:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
-                        ingredients.stackCount = predefLootProps[4];
-                        targetItems.Add(ingredients);
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[4] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
+                            ingredients.stackCount = predefLootProps[4];
+                            targetItems.Add(ingredients);
+                        }
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 29:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Elixir_vitae);
-                        ingredients.stackCount = predefLootProps[6];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
+                        if (predefLootProps[6] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Elixir_vitae);
+                            ingredients.stackCount = predefLootProps[6];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 31:
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
-                        ingredients.stackCount = predefLootProps[5];
-                        targetItems.Add(ingredients);
-                        ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor);
-                        ingredients.stackCount = predefLootProps[6];
-                        targetItems.Add(ingredients);
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
+                        if (predefLootProps[6] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor);
+                            ingredients.stackCount = predefLootProps[6];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     default:
                         return false;
@@ -1198,48 +1354,48 @@ namespace DaggerfallWorkshop.Game.Items
                 switch (AITarget.CareerIndex)
                 {
                     case (int)ClassCareers.Mage:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 33, 33, 33, 33, 33, 33, 28, 30, 30, 30, 31, 31, 32, 34, 36, 36, 39)));
                         return;
                     case (int)ClassCareers.Spellsword:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 33, 33, 33, 28, 28, 30, 30, 30, 30, 30, 31, 31, 32, 34, 36, 36, 39)));
                         return;
                     case (int)ClassCareers.Battlemage:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 33, 28, 28, 28, 30, 30, 30, 30, 30, 30, 31, 31, 32, 34, 36, 36, 39)));
                         return;
                     case (int)ClassCareers.Sorcerer:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 28, 28, 30, 30, 30, 30, 30, 30, 30, 31, 31, 31, 32, 34, 36, 36, 39)));
                         return;
                     case (int)ClassCareers.Healer:
                     case (int)ClassCareers.Monk:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(38, 38, 38, 38, 38, 38, 38, 38, 33, 28, 30, 30, 31, 31, 31, 32, 34, 36, 39, 39)));
                         return;
                     case (int)ClassCareers.Nightblade:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 29, 30, 30, 30, 30, 30, 30, 31, 31, 33, 33, 34, 35, 36, 36, 37, 38, 38, 39)));
                         return;
                     case (int)ClassCareers.Bard:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 29, 30, 30, 30, 31, 31, 31, 32, 32, 34, 35, 36, 36, 36, 36, 38, 38, 39)));
                         return;
                     case (int)ClassCareers.Assassin:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 29, 29, 29, 30, 30, 31, 31, 31, 31, 33, 33, 34, 35, 36, 37, 37, 38, 39)));
                         return;
                     case (int)ClassCareers.Ranger:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 29, 30, 30, 31, 31, 31, 32, 33, 33, 33, 33, 34, 35, 36, 38, 39, 39, 39)));
                         return;
                     case (int)ClassCareers.Knight:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 28, 30, 30, 30, 31, 31, 31, 36, 36, 36, 36, 37, 37, 38, 38, 38, 38, 39)));
                         return;
                     default:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
                         return;
                 }
@@ -1249,16 +1405,16 @@ namespace DaggerfallWorkshop.Game.Items
                 switch (AITarget.CareerIndex)
                 {
                     case 21:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 30, 30, 30, 30, 31, 31, 33, 33, 36, 38, 38, 38, 38, 38, 38, 38, 38, 38, 39)));
                         return;
                     case 32:
                     case 33:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 30, 30, 31, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 34, 35, 35, 36, 38, 39)));
                         return;
                     default:
-                        for (int i = 1; i < bookAmount; i++)
+                        for (int i = 0; i < bookAmount; i++)
                             targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
                         return;
                 }
