@@ -658,10 +658,10 @@ namespace DaggerfallWorkshop.Game.Items
             return (TemplateIndex == templateIndex);
         }
 
-        // Horses, carts and arrows are not counted against encumbrance.
+        // Horses and carts are not counted against encumbrance.
         public float EffectiveUnitWeightInKg()
         {
-            if (ItemGroup == ItemGroups.Transportation || TemplateIndex == (int)Weapons.Arrow)
+            if (ItemGroup == ItemGroups.Transportation)
                 return 0f;
             return weightInKg;
         }

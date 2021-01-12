@@ -78,7 +78,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (TryGetOverride("MaxEncumbrance", out del))
                 return del(strength);
 
-            return (int)Mathf.Floor((float)strength * 1.5f);
+            return (int)Mathf.Floor(strength * 1f);
         }
 
         public static int SpellPoints(int intelligence, float multiplier)

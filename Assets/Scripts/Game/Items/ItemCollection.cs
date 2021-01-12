@@ -88,7 +88,7 @@ namespace DaggerfallWorkshop.Game.Items
         }
 
         /// <summary>
-        /// Gets the combined weight of all the items in this collection. (ignoring arrows like classic)
+        /// Gets the combined weight of all the items in this collection.
         /// </summary>
         /// <returns>Weight in kg</returns>
         public float GetWeight()

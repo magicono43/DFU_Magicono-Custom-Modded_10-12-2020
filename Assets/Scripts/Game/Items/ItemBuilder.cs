@@ -971,16 +971,9 @@ namespace DaggerfallWorkshop.Game.Items
 
         static float CalculateWeightForMaterial(DaggerfallUnityItem item, WeaponMaterialTypes material)
         {
-            if (item.TemplateIndex == 810) // Might change this for all weights, not just ingots, but will see.
-            {
-                float ingotQuarterKgs = (item.weightInKg * 4);
-                float ingotMatQuarterKgs = (ingotQuarterKgs * weightMultipliersByMaterial[(int)material]) / 4;
-                return ingotMatQuarterKgs / 4;
-            }
-
-            int quarterKgs = (int)(item.weightInKg * 4);
-            float matQuarterKgs = (float)(quarterKgs * weightMultipliersByMaterial[(int)material]) / 4;
-            return Mathf.Round(matQuarterKgs) / 4;
+            float quarterKgs = item.weightInKg * 4f;
+            float matQuarterKgs = quarterKgs * weightMultipliersByMaterial[(int)material] / 4f;
+            return matQuarterKgs / 4;
         }
 
         /// <summary>

@@ -94,7 +94,7 @@ namespace DaggerfallWorkshop.Game.Items
             return DefaultLootTables[0];
         }
 
-        public static bool GenerateBuildingLoot(DaggerfallLoot loot, int locationIndex)
+        public static bool GenerateBuildingLoot(DaggerfallLoot loot, int locationIndex) // This is for the "cloth piles" that spawn in places like the Dark Brotherhood and Thieves Guild. Private Property is different. 
         {
             int[] traits = { -1, -1, -1 };
 
