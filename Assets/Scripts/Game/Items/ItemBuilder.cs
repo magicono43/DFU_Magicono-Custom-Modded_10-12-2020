@@ -264,13 +264,13 @@ namespace DaggerfallWorkshop.Game.Items
                     (int)WomensClothing.Long_shirt_closed_belt, (int)WomensClothing.Long_shirt_unchangeable, (int)WomensClothing.Open_tunic, (int)WomensClothing.Vest), race, -1, minCond, maxCond);
             }
 
-            SetRace(newItem, race);
+            //SetRace(newItem, race);
 
             // Random dye colour
-            newItem.dyeColor = RandomClothingDye();
+            //newItem.dyeColor = RandomClothingDye();
 
             // Random variant
-            SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
+            //SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
 
             return newItem;
         }
@@ -293,13 +293,13 @@ namespace DaggerfallWorkshop.Game.Items
                     (int)WomensClothing.Tights), race, -1, minCond, maxCond);
             }
 
-            SetRace(newItem, race);
+            //SetRace(newItem, race);
 
             // Random dye colour
-            newItem.dyeColor = RandomClothingDye();
+            //newItem.dyeColor = RandomClothingDye();
 
             // Random variant
-            SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
+            //SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
 
             return newItem;
         }
@@ -320,13 +320,13 @@ namespace DaggerfallWorkshop.Game.Items
                 newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals, (int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), race, -1, minCond, maxCond);
             }
 
-            SetRace(newItem, race);
+            //SetRace(newItem, race);
 
             // Random dye colour
-            newItem.dyeColor = RandomClothingDye();
+            //newItem.dyeColor = RandomClothingDye();
 
             // Random variant
-            SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
+            //SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
 
             return newItem;
         }
@@ -340,13 +340,13 @@ namespace DaggerfallWorkshop.Game.Items
 
             newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Brassier, (int)WomensClothing.Brassier, (int)WomensClothing.Brassier,(int)WomensClothing.Formal_brassier), race, -1, minCond, maxCond);
 
-            SetRace(newItem, race);
+            //SetRace(newItem, race);
 
             // Random dye colour
-            newItem.dyeColor = RandomClothingDye();
+            //newItem.dyeColor = RandomClothingDye();
 
             // Random variant
-            SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
+            //SetVariant(newItem, UnityEngine.Random.Range(0, newItem.TotalVariants));
 
             return newItem;
         }

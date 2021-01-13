@@ -142,6 +142,17 @@ namespace DaggerfallWorkshop.Game.Items
             public override string Weight()
             {   // %kg
                 float weight = parent.weightInKg * parent.stackCount;
+
+                /*if (weight % 1 == 0)
+                    return String.Format("{0:F0}", weight);
+                else if (weight % 1 >= 0.0001f && weight % 1 <= 0.009f)
+                    return String.Format("{0:F4}", weight);
+                else if (weight % 1 >= 0.001f && weight % 1 <= 0.09f) // Won't include for now due to possible performance issues, but I don't think this was the problem, might be quest items or something. 
+                    return String.Format("{0:F3}", weight);
+                else if (weight % 1 >= 0.01f && weight % 1 <= 0.9f)
+                    return String.Format("{0:F2}", weight);
+                else
+                    return String.Format("{0:F1}", weight);*/
                 return String.Format(weight % 1 == 0 ? "{0:F0}" : "{0:F2}", weight);
             }
 

@@ -371,7 +371,10 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 for (int i = 0; i < extraLootProps[2]; i++)
                 {
-                    items.Add(ItemBuilder.CreateRandomGem());
+                    if (Dice100.SuccessRoll(20))
+                        items.Add(ItemBuilder.CreateItem(ItemGroups.Gems, PickOneOf((int)Gems.Ruby, (int)Gems.Sapphire, (int)Gems.Emerald, (int)Gems.Diamond)));
+                    else
+                        items.Add(ItemBuilder.CreateItem(ItemGroups.Gems, PickOneOf((int)Gems.Jade, (int)Gems.Turquoise, (int)Gems.Malachite, (int)Gems.Amber)));
                 }
             }
 
@@ -656,7 +659,7 @@ namespace DaggerfallWorkshop.Game.Items
                 }
                 else
                 {
-                    targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, PickOneOf((int)Gems.Ruby, (int)Gems.Sapphire, (int)Gems.Emerald, (int)Gems.Diamond)));
+                    targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, PickOneOf((int)Gems.Jade, (int)Gems.Turquoise, (int)Gems.Malachite, (int)Gems.Amber)));
                     chance *= chanceMod;
                 }
             }
