@@ -43,19 +43,38 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            // Magnitude 1-1 + 14-14 per 1 levels
-            EffectSettings orcStrengthSettings = SetEffectMagnitude(DefaultEffectSettings(), 1, 1, 14, 14, 1);
+            // Duration 25 + 0 per 1 levels, Magnitude 20-20 + 0-0 per 1 levels
+            EffectSettings orcStrengthSettings = SetEffectDuration(DefaultEffectSettings(), 25, 0, 1);
+            orcStrengthSettings = SetEffectMagnitude(orcStrengthSettings, 20, 20, 0, 0, 1);
             PotionRecipe orcStrength = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("orcStrength"),
-                50,
+                "Orc Strength",
+                30,
                 orcStrengthSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.MiscPlantIngredients.Root_tendrils,
+                (int)Items.AnimalPartIngredients.Big_tooth,
                 (int)Items.CreatureIngredients.Orcs_blood,
+                (int)Items.MetalIngredients.Iron);
+
+            // Duration 30 + 0 per 1 levels, Magnitude 45-45 + 0-0 per 1 levels
+            EffectSettings giantStrengthSettings = SetEffectDuration(DefaultEffectSettings(), 30, 0, 1);
+            giantStrengthSettings = SetEffectMagnitude(giantStrengthSettings, 45, 45, 0, 0, 1);
+            PotionRecipe giantStrength = new PotionRecipe(
+                "Giant Strength",
+                75,
+                giantStrengthSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.MiscPlantIngredients.Root_tendrils,
+                (int)Items.AnimalPartIngredients.Big_tooth,
+                (int)Items.CreatureIngredients.Giant_blood,
+                (int)Items.CreatureIngredients.Giant_blood,
                 (int)Items.MetalIngredients.Iron,
-                (int)Items.SolventIngredients.Pure_water);
+                (int)Items.MetalIngredients.Lodestone);
 
             // Assign recipe
             orcStrength.TextureRecord = 13;
-            AssignPotionRecipes(orcStrength);
+            giantStrength.TextureRecord = 6;
+            AssignPotionRecipes(orcStrength, giantStrength);
         }
     }
 }

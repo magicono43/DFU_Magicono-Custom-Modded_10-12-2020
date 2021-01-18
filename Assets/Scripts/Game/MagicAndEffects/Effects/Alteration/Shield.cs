@@ -35,7 +35,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportMagnitude = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_All;
             properties.AllowedElements = EntityEffectBroker.ElementFlags_MagicOnly;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Alteration;
             properties.DurationCosts = MakeEffectCosts(28, 8);
             properties.MagnitudeCosts = MakeEffectCosts(80, 60);
@@ -44,6 +44,72 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string GroupName => TextManager.Instance.GetLocalizedText("shield");
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1590);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1290);
+
+        public override void SetPotionProperties()
+        {
+            // Duration 240 + 0 per 1 levels, Magnitude 45-45 + 0-0 per 1 levels
+            EffectSettings minorShieldingSettings = SetEffectDuration(DefaultEffectSettings(), 240, 0, 1);
+            minorShieldingSettings = SetEffectMagnitude(minorShieldingSettings, 45, 45, 0, 0, 1);
+            PotionRecipe minorShielding = new PotionRecipe(
+                "Minor Shielding",
+                35,
+                minorShieldingSettings,
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.FruitPlantIngredients.Red_berries,
+                (int)Items.FruitPlantIngredients.Green_berries,
+                (int)Items.MiscPlantIngredients.Ginkgo_leaves,
+                (int)Items.MetalIngredients.Iron,
+                (int)Items.Gems.Amber);
+
+            // Duration 240 + 0 per 1 levels, Magnitude 110-110 + 0-0 per 1 levels
+            EffectSettings lesserShieldingSettings = SetEffectDuration(DefaultEffectSettings(), 240, 0, 1);
+            lesserShieldingSettings = SetEffectMagnitude(lesserShieldingSettings, 110, 110, 0, 0, 1);
+            PotionRecipe lesserShielding = new PotionRecipe(
+                "Lesser Shielding",
+                105,
+                lesserShieldingSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.MiscPlantIngredients.Root_tendrils,
+                (int)Items.AnimalPartIngredients.Ivory,
+                (int)Items.CreatureIngredients.Wereboar_tusk,
+                (int)Items.MetalIngredients.Iron,
+                (int)Items.Gems.Malachite);
+
+            // Duration 240 + 0 per 1 levels, Magnitude 265-265 + 0-0 per 1 levels
+            EffectSettings shieldingSettings = SetEffectDuration(DefaultEffectSettings(), 240, 0, 1);
+            shieldingSettings = SetEffectMagnitude(shieldingSettings, 265, 265, 0, 0, 1);
+            PotionRecipe shielding = new PotionRecipe(
+                "Shielding",
+                340,
+                shieldingSettings,
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.FlowerPlantIngredients.Clover,
+                (int)Items.CreatureIngredients.Basilisk_eye,
+                (int)Items.CreatureIngredients.Fairy_dragon_scales,
+                (int)Items.MetalIngredients.Iron,
+                (int)Items.Gems.Jade);
+
+            // Duration 240 + 0 per 1 levels, Magnitude 590-590 + 0-0 per 1 levels
+            EffectSettings stendarrShieldSettings = SetEffectDuration(DefaultEffectSettings(), 240, 0, 1);
+            stendarrShieldSettings = SetEffectMagnitude(stendarrShieldSettings, 590, 590, 0, 0, 1);
+            PotionRecipe stendarrShield = new PotionRecipe(
+                "Stendarr's Shield",
+                890,
+                stendarrShieldSettings,
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.FlowerPlantIngredients.White_rose,
+                (int)Items.CreatureIngredients.Basilisk_eye,
+                (int)Items.CreatureIngredients.Saints_hair,
+                (int)Items.CreatureIngredients.Dragons_scales,
+                (int)Items.MetalIngredients.Platinum,
+                (int)Items.Gems.Emerald);
+
+            // Assign recipe
+            lesserShielding.TextureRecord = 12;
+            shielding.TextureRecord = 13;
+            stendarrShield.TextureRecord = 1;
+            AssignPotionRecipes(minorShielding, lesserShielding, shielding, stendarrShield);
+        }
 
         protected override bool IsLikeKind(IncumbentEffect other)
         {

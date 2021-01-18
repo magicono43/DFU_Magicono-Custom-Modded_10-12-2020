@@ -44,17 +44,20 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            PotionRecipe shadowForm = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("shadowForm"),
-                200,
-                DefaultEffectSettings(),
-                (int)Items.SolventIngredients.Rain_water,
-                (int)Items.SolventIngredients.Nectar,
-                (int)Items.Gems.Malachite,
-                (int)Items.FlowerPlantIngredients.Black_rose);
+            // Duration 20 + 0 per 1 levels
+            EffectSettings lesserShadowFormSettings = SetEffectDuration(DefaultEffectSettings(), 20, 0, 1);
+            PotionRecipe lesserShadowForm = new PotionRecipe(
+                "Lesser Shadow Form",
+                28,
+                lesserShadowFormSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FruitPlantIngredients.Fig,
+                (int)Items.FlowerPlantIngredients.Black_rose,
+                (int)Items.FlowerPlantIngredients.Black_poppy,
+                (int)Items.MiscPlantIngredients.Root_bulb,
+                (int)Items.MetalIngredients.Lead);
 
-            shadowForm.TextureRecord = 33;
-            AssignPotionRecipes(shadowForm);
+            AssignPotionRecipes(lesserShadowForm);
         }
 
         protected override bool IsLikeKind(IncumbentEffect other)

@@ -40,16 +40,19 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            PotionRecipe waterBreathing = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("waterBreathing"),
-                100,
-                DefaultEffectSettings(),
+            // Duration 20 + 0 per 1 levels
+            EffectSettings gillsSettings = SetEffectDuration(DefaultEffectSettings(), 20, 0, 1);
+            PotionRecipe gills = new PotionRecipe(
+                "Gills",
+                27,
+                gillsSettings,
                 (int)Items.SolventIngredients.Rain_water,
-                (int)Items.SolventIngredients.Elixir_vitae,
-                (int)Items.AnimalPartIngredients.Ivory);
+                (int)Items.MiscPlantIngredients.Palm,
+                (int)Items.AnimalPartIngredients.Pearl,
+                (int)Items.AnimalPartIngredients.Small_tooth);
 
-            waterBreathing.TextureRecord = 32;
-            AssignPotionRecipes(waterBreathing);
+            gills.TextureRecord = 32;
+            AssignPotionRecipes(gills);
         }
 
         public override void ConstantEffect()

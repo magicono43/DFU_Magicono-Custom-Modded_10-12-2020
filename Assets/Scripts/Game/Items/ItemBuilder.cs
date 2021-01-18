@@ -399,6 +399,32 @@ namespace DaggerfallWorkshop.Game.Items
         /// <returns>DaggerfallUnityItem.</returns>
         public static DaggerfallUnityItem CreateRandomBook()
         {
+            /*for (int i = 0; i < 120; i++) // This is simply here for a quick easy testing loop to see the books and their prices in the Unity Debug window. 
+            {
+                try
+                {
+                    var bookFound = new BookFile();
+
+                    int id = i;
+                    string title = GameManager.Instance.ItemHelper.GetBookFileName(id);
+                    if (!BookReplacement.TryImportBook(title, bookFound) &&
+                        !bookFound.OpenBook(DaggerfallUnity.Instance.Arena2Path, title))
+                        return null;
+
+                    DaggerfallUnityItem printThis = new DaggerfallUnityItem(ItemGroups.Books, 0)
+                    {
+                        message = id,
+                        value = bookFound.Price
+                    };
+
+                    Debug.LogFormat("Book ID: {0}, Book Title: {1}, Page Count: {2}, Value: {3}", id, bookFound.Title, bookFound.PageCount, bookFound.Price);
+                }
+                catch
+                {
+                    Debug.LogFormat("Book ID: {0} does not exist.", i);
+                }
+            }*/
+
             Array enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ItemGroups.Books);
             DaggerfallUnityItem book = new DaggerfallUnityItem(ItemGroups.Books, Array.IndexOf(enumArray, Books.Book0));
             book.message = DaggerfallUnity.Instance.ItemHelper.GetRandomBookID();
@@ -1073,6 +1099,14 @@ namespace DaggerfallWorkshop.Game.Items
         {
             List<int> recipeKeys = GameManager.Instance.EntityEffectBroker.GetPotionRecipeKeys();
             int recipeIdx = UnityEngine.Random.Range(0, recipeKeys.Count);
+
+            /*for (int i = 0; i < recipeKeys.Count; i++)  // This is simply here for a quick easy testing loop to see the potions and their prices in the Unity Debug window. 
+            {
+                DaggerfallUnityItem printThis = CreatePotion(recipeKeys[i]);
+
+                Debug.LogFormat("Potion Recipe ID: {0}, ||| Potion Name: {1}, ||| Potion Weight: {2}, ||| Potion Value: {3}", recipeKeys[i], printThis.LongName, printThis.weightInKg, printThis.value);
+            }*/
+
             return CreatePotion(recipeKeys[recipeIdx]);
         }
 

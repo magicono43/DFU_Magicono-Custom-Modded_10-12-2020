@@ -29,7 +29,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportDuration = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_All;
             properties.AllowedElements = ElementTypes.Magic;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Alteration;
             properties.DurationCosts = MakeEffectCosts(20, 8);
         }
@@ -38,6 +38,24 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string GroupName => TextManager.Instance.GetLocalizedText("jumping");
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1577);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1277);
+
+        public override void SetPotionProperties()
+        {
+            // Duration 15 + 0 per 1 levels
+            EffectSettings springShoesSettings = SetEffectDuration(DefaultEffectSettings(), 15, 0, 1);
+            PotionRecipe springShoes = new PotionRecipe(
+                "Spring Shoes",
+                19,
+                springShoesSettings,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.FlowerPlantIngredients.Yellow_rose,
+                (int)Items.MiscPlantIngredients.Pine_branch,
+                (int)Items.MiscPlantIngredients.Bamboo,
+                (int)Items.MetalIngredients.Tin);
+
+            springShoes.TextureRecord = 14;
+            AssignPotionRecipes(springShoes);
+        }
 
         public override void ConstantEffect()
         {

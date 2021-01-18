@@ -3581,10 +3581,14 @@ namespace DaggerfallWorkshop.Game.Formulas
             int percentDamageOrDuration = 100;
             int roll = Dice100.Roll();
 
+            // Handle halving spell magnitude based on magical resistance effects
+            if (target.HasResistanceFlag(elementType))
+                percentDamageOrDuration = percentDamageOrDuration / 2;
+
             if (hasMagnitude && spellSchool == DFCareer.MagicSkills.Destruction)
             {
                 // Equipment modifier here for addition/reduction of magnitude modifier if a spell package does hit, so basically a multiplier determining how much more or less than 100% a spell with magnitude will do.
-                percentDamageOrDuration += -3 * equipSaveThrowMod;
+                percentDamageOrDuration = Mathf.Clamp(percentDamageOrDuration + (-3 * equipSaveThrowMod), 0, 1000);
                 percentDamageOrDuration = (int)Mathf.Round(percentDamageOrDuration * DaggerfallEntity.EntityElementalTypeResistanceCalculator(elementType, target, singlePartHit));
             }
 
@@ -3592,7 +3596,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             {
                 // Percent damage/duration is prorated at within 20 of failed roll, as described in DF Chronicles
                 if (savingThrow - 20 <= roll)
-                    percentDamageOrDuration -= 5 * (savingThrow - roll);
+                    percentDamageOrDuration = Mathf.Clamp(percentDamageOrDuration - (5 * (savingThrow - roll)), 0, 1000);
                 else
                     percentDamageOrDuration = 0;
             }

@@ -44,17 +44,21 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            PotionRecipe invisibility = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("invisibility"),
-                250,
-                DefaultEffectSettings(),
-                (int)Items.SolventIngredients.Rain_water,
-                (int)Items.SolventIngredients.Nectar,
+            // Duration 15 + 0 per 1 levels
+            EffectSettings lesserInvisibilitySettings = SetEffectDuration(DefaultEffectSettings(), 15, 0, 1);
+            PotionRecipe lesserInvisibility = new PotionRecipe(
+                "Lesser Invisibility",
+                100,
+                lesserInvisibilitySettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FlowerPlantIngredients.White_rose,
+                (int)Items.FlowerPlantIngredients.White_poppy,
+                (int)Items.AnimalPartIngredients.Ivory,
                 (int)Items.CreatureIngredients.Ectoplasm,
-                (int)Items.Gems.Diamond);
+                (int)Items.MetalIngredients.Platinum);
 
-            invisibility.TextureRecord = 33;
-            AssignPotionRecipes(invisibility);
+            lesserInvisibility.TextureRecord = 32;
+            AssignPotionRecipes(lesserInvisibility);
         }
 
         protected override bool IsLikeKind(IncumbentEffect other)

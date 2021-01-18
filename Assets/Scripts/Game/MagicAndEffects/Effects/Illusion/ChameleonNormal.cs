@@ -44,18 +44,21 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            PotionRecipe chameleonForm = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("chameleonForm"),
-                200,
-                DefaultEffectSettings(),
+            // Duration 20 + 0 per 1 levels
+            EffectSettings lesserChameleonFormSettings = SetEffectDuration(DefaultEffectSettings(), 20, 0, 1);
+            PotionRecipe lesserChameleonForm = new PotionRecipe(
+                "Lesser Chameleon Form",
+                18,
+                lesserChameleonFormSettings,
                 (int)Items.SolventIngredients.Rain_water,
-                (int)Items.SolventIngredients.Nectar,
-                (int)Items.MiscPlantIngredients.Green_leaves,
+                (int)Items.FruitPlantIngredients.Green_berries,
+                (int)Items.FlowerPlantIngredients.Red_Flowers,
                 (int)Items.FlowerPlantIngredients.Yellow_Flowers,
-                (int)Items.FruitPlantIngredients.Red_berries);
+                (int)Items.MiscPlantIngredients.Green_leaves,
+                (int)Items.MiscPlantIngredients.Twigs);
 
-            chameleonForm.TextureRecord = 33;
-            AssignPotionRecipes(chameleonForm);
+            lesserChameleonForm.TextureRecord = 14;
+            AssignPotionRecipes(lesserChameleonForm);
         }
 
         protected override bool IsLikeKind(IncumbentEffect other)

@@ -147,10 +147,17 @@ namespace DaggerfallWorkshop
         {
             if (Dice100.SuccessRoll(chance))
             {
-                int recipeIdx = Random.Range(0, PotionRecipe.classicRecipeKeys.Length);
-                int recipeKey = PotionRecipe.classicRecipeKeys[recipeIdx];
-                DaggerfallUnityItem potionRecipe = new DaggerfallUnityItem(ItemGroups.MiscItems, 4) { PotionRecipeKey = recipeKey };
+                List<int> recipeKeys = GameManager.Instance.EntityEffectBroker.GetPotionRecipeKeys();
+                int recipeIdx = UnityEngine.Random.Range(0, recipeKeys.Count);
+                DaggerfallUnityItem potionRecipe = new DaggerfallUnityItem(ItemGroups.MiscItems, 4) { PotionRecipeKey = recipeKeys[recipeIdx] };
                 collection.AddItem(potionRecipe);
+
+                /*for (int i = 0; i < recipeKeys.Count; i++)  // This is simply here for a quick easy testing loop to see the potions and their prices in the Unity Debug window. 
+                {
+                    DaggerfallUnityItem printThis = new DaggerfallUnityItem(ItemGroups.MiscItems, 4) { PotionRecipeKey = recipeKeys[i] };
+
+                    Debug.LogFormat("Potion Recipe ID: {0}, ||| Potion Name: {1}, ||| Potion Weight: {2}, ||| Potion Value: {3}", recipeKeys[i], printThis.LongName, printThis.weightInKg, printThis.value);
+                }*/
             }
         }
 
@@ -161,9 +168,9 @@ namespace DaggerfallWorkshop
         {
             if (Dice100.SuccessRoll(chance))
             {
-                int recipeIdx = Random.Range(0, PotionRecipe.classicRecipeKeys.Length);
-                int recipeKey = PotionRecipe.classicRecipeKeys[recipeIdx];
-                DaggerfallUnityItem potionRecipe = new DaggerfallUnityItem(ItemGroups.MiscItems, 4) { PotionRecipeKey = recipeKey };
+                List<int> recipeKeys = GameManager.Instance.EntityEffectBroker.GetPotionRecipeKeys();
+                int recipeIdx = UnityEngine.Random.Range(0, recipeKeys.Count);
+                DaggerfallUnityItem potionRecipe = new DaggerfallUnityItem(ItemGroups.MiscItems, 4) { PotionRecipeKey = recipeKeys[recipeIdx] };
                 targetItems.Add(potionRecipe);
             }
         }

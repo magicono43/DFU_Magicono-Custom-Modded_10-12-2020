@@ -41,18 +41,58 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            // Magnitude 5-5 + 4-4 per 1 levels
-            EffectSettings staminaSettings = SetEffectMagnitude(DefaultEffectSettings(), 5, 5, 4, 4, 1);
-            PotionRecipe stamina = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("stamina"),
-                25,
-                staminaSettings,
+            // Magnitude 15-15 + 0-0 per 1 levels
+            EffectSettings minorEnergySettings = SetEffectMagnitude(DefaultEffectSettings(), 15, 15, 0, 0, 1);
+            PotionRecipe minorEnergy = new PotionRecipe(
+                "Minor Energy",
+                7,
+                minorEnergySettings,
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.FruitPlantIngredients.Yellow_berries,
+                (int)Items.MiscPlantIngredients.Green_leaves);
+
+            // Magnitude 40-40 + 0-0 per 1 levels
+            EffectSettings lesserEnergySettings = SetEffectMagnitude(DefaultEffectSettings(), 40, 40, 0, 0, 1);
+            PotionRecipe lesserEnergy = new PotionRecipe(
+                "Lesser Energy",
+                20,
+                lesserEnergySettings,
                 (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FruitPlantIngredients.Fig,
                 (int)Items.MiscPlantIngredients.Aloe,
                 (int)Items.MiscPlantIngredients.Ginkgo_leaves);
 
+            // Magnitude 90-90 + 0-0 per 1 levels
+            EffectSettings energySettings = SetEffectMagnitude(DefaultEffectSettings(), 90, 90, 0, 0, 1);
+            PotionRecipe energy = new PotionRecipe(
+                "Energy",
+                80,
+                energySettings,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.FruitPlantIngredients.Cactus,
+                (int)Items.MiscPlantIngredients.Pine_branch,
+                (int)Items.CreatureIngredients.Nymph_hair,
+                (int)Items.CreatureIngredients.Werewolfs_blood);
+
+            // Magnitude 200-200 + 0-0 per 1 levels
+            EffectSettings pureEnergySettings = SetEffectMagnitude(DefaultEffectSettings(), 200, 200, 0, 0, 1);
+            PotionRecipe pureEnergy = new PotionRecipe(
+                "Pure Energy",
+                220,
+                energySettings,
+                (int)Items.SolventIngredients.Elixir_vitae,
+                (int)Items.FruitPlantIngredients.Yellow_berries,
+                (int)Items.AnimalPartIngredients.Small_scorpion_stinger,
+                (int)Items.CreatureIngredients.Nymph_hair,
+                (int)Items.CreatureIngredients.Ghouls_tongue,
+                (int)Items.MetalIngredients.Copper,
+                (int)Items.Gems.Malachite);
+
             // Assign recipe
-            AssignPotionRecipes(stamina);
+            lesserEnergy.TextureRecord = 1;
+            energy.TextureRecord = 6;
+            pureEnergy.TextureRecord = 5;
+            AssignPotionRecipes(minorEnergy, lesserEnergy, energy, pureEnergy);
         }
 
         public override void MagicRound()

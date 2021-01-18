@@ -29,7 +29,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportDuration = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_Self;
             properties.AllowedElements = EntityEffectBroker.ElementFlags_MagicOnly;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Illusion;
             properties.DurationCosts = MakeEffectCosts(8, 40);
         }
@@ -37,6 +37,23 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string GroupName => TextManager.Instance.GetLocalizedText("light");
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1563);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1263);
+
+        public override void SetPotionProperties()
+        {
+            // Duration 180 + 0 per 1 levels
+            EffectSettings lightSpriteSettings = SetEffectDuration(DefaultEffectSettings(), 180, 0, 1);
+            PotionRecipe lightSprite = new PotionRecipe(
+                "Light Sprite",
+                15,
+                lightSpriteSettings,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.FlowerPlantIngredients.Golden_poppy,
+                (int)Items.MiscPlantIngredients.Twigs,
+                (int)Items.MetalIngredients.Sulphur);
+
+            lightSprite.TextureRecord = 34;
+            AssignPotionRecipes(lightSprite);
+        }
 
         public override void Start(EntityEffectManager manager, DaggerfallEntityBehaviour caster = null)
         {

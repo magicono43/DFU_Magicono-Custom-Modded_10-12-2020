@@ -29,7 +29,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportDuration = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_All;
             properties.AllowedElements = ElementTypes.Magic;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Alteration;
             properties.DurationCosts = MakeEffectCosts(20, 20);
         }
@@ -37,6 +37,24 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string GroupName => TextManager.Instance.GetLocalizedText("climbing");
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1578);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1278);
+
+        public override void SetPotionProperties()
+        {
+            // Duration 15 + 0 per 1 levels
+            EffectSettings monkeyGripSettings = SetEffectDuration(DefaultEffectSettings(), 15, 0, 1);
+            PotionRecipe monkeyGrip = new PotionRecipe(
+                "Monkey's Grip",
+                26,
+                monkeyGripSettings,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.FruitPlantIngredients.Cactus,
+                (int)Items.FruitPlantIngredients.Yellow_berries,
+                (int)Items.MiscPlantIngredients.Root_tendrils,
+                (int)Items.MiscPlantIngredients.Pine_branch,
+                (int)Items.MetalIngredients.Lodestone);
+
+            AssignPotionRecipes(monkeyGrip);
+        }
 
         public override void ConstantEffect()
         {

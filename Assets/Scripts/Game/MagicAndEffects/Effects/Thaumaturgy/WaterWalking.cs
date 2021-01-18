@@ -40,17 +40,20 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            PotionRecipe waterWalking = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("waterWalking"),
-                50,
-                DefaultEffectSettings(),
+            // Duration 15 + 0 per 1 levels
+            EffectSettings waterStrideSettings = SetEffectDuration(DefaultEffectSettings(), 15, 0, 1);
+            PotionRecipe waterStride = new PotionRecipe(
+                "Water Stride",
+                40,
+                waterStrideSettings,
+                (int)Items.SolventIngredients.Rain_water,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.MiscPlantIngredients.Palm,
-                (int)Items.FlowerPlantIngredients.Yellow_rose,
-                (int)Items.MetalIngredients.Sulphur);
+                (int)Items.AnimalPartIngredients.Pearl,
+                (int)Items.MetalIngredients.Silver);
 
-            waterWalking.TextureRecord = 32;
-            AssignPotionRecipes(waterWalking);
+            waterStride.TextureRecord = 35;
+            AssignPotionRecipes(waterStride);
         }
 
         public override void ConstantEffect()

@@ -42,15 +42,19 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            PotionRecipe slowFalling = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("slowFalling"),
-                100,
-                DefaultEffectSettings(),
-                (int)Items.SolventIngredients.Pure_water,
-                (int)Items.FlowerPlantIngredients.White_poppy,
-                (int)Items.FlowerPlantIngredients.Black_poppy);
+            // Duration 10 + 0 per 1 levels
+            EffectSettings safeLandingSettings = SetEffectDuration(DefaultEffectSettings(), 10, 0, 1);
+            PotionRecipe safeLanding = new PotionRecipe(
+                "Safe Landing",
+                16,
+                safeLandingSettings,
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.MiscPlantIngredients.Green_leaves,
+                (int)Items.MiscPlantIngredients.Palm,
+                (int)Items.CreatureIngredients.Harpy_Feather);
 
-            AssignPotionRecipes(slowFalling);
+            safeLanding.TextureRecord = 35;
+            AssignPotionRecipes(safeLanding);
         }
 
         public override void ConstantEffect()

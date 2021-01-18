@@ -41,32 +41,63 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            // First recipe variant: Magnitude 5-5 + 9-9 per 1 levels
-            EffectSettings healingSettings = SetEffectMagnitude(DefaultEffectSettings(), 5, 5, 9, 9, 1);
-            PotionRecipe healing = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("healing"),
-                50,
-                healingSettings,
-                (int)Items.SolventIngredients.Elixir_vitae,
+            // Magnitude 20-20 + 0-0 per 1 levels
+            EffectSettings minorMendingSettings = SetEffectMagnitude(DefaultEffectSettings(), 20, 20, 0, 0, 1);
+            PotionRecipe minorMending = new PotionRecipe(
+                "Minor Mending",
+                14,
+                minorMendingSettings,
+                (int)Items.SolventIngredients.Rain_water,
                 (int)Items.FruitPlantIngredients.Red_berries,
-                (int)Items.MetalIngredients.Mercury,
-                (int)Items.CreatureIngredients.Troll_blood);
+                (int)Items.FlowerPlantIngredients.Red_Flowers,
+                (int)Items.FlowerPlantIngredients.Red_rose,
+                (int)Items.MiscPlantIngredients.Root_tendrils);
 
-            // Second recipe variant: Magnitude 5-5 + 19-19 per 1 levels
-            EffectSettings healTrueSettings = SetEffectMagnitude(DefaultEffectSettings(), 5, 5, 19, 19, 1);
-            PotionRecipe healTrue = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("healTrue"),
-                100,
-                healTrueSettings,
-                (int)Items.SolventIngredients.Elixir_vitae,
+            // Magnitude 45-45 + 0-0 per 1 levels
+            EffectSettings lesserMendingSettings = SetEffectMagnitude(DefaultEffectSettings(), 45, 45, 0, 0, 1);
+            PotionRecipe lesserMending = new PotionRecipe(
+                "Lesser Mending",
+                40,
+                lesserMendingSettings,
+                (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FruitPlantIngredients.Red_berries,
+                (int)Items.MiscPlantIngredients.Root_bulb,
+                (int)Items.MiscPlantIngredients.Palm,
                 (int)Items.MiscPlantIngredients.Pine_branch,
-                (int)Items.CreatureIngredients.Unicorn_horn);
+                (int)Items.MetalIngredients.Mercury);
+
+            // Magnitude 100-100 + 0-0 per 1 levels
+            EffectSettings mendingSettings = SetEffectMagnitude(DefaultEffectSettings(), 100, 100, 0, 0, 1);
+            PotionRecipe mending = new PotionRecipe(
+                "Mending",
+                160,
+                lesserMendingSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FruitPlantIngredients.Red_berries,
+                (int)Items.FlowerPlantIngredients.White_rose,
+                (int)Items.AnimalPartIngredients.Ivory,
+                (int)Items.CreatureIngredients.Troll_blood,
+                (int)Items.CreatureIngredients.Saints_hair);
+
+            // Magnitude 230-230 + 0-0 per 1 levels
+            EffectSettings trueMendingSettings = SetEffectMagnitude(DefaultEffectSettings(), 230, 230, 0, 0, 1);
+            PotionRecipe trueMending = new PotionRecipe(
+                "True Mending",
+                440,
+                lesserMendingSettings,
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.CreatureIngredients.Daedra_heart,
+                (int)Items.CreatureIngredients.Mummy_wrappings,
+                (int)Items.CreatureIngredients.Troll_blood,
+                (int)Items.MetalIngredients.Mercury,
+                (int)Items.Gems.Amber);
 
             // Assign recipes
-            healing.TextureRecord = 15;
-            healTrue.TextureRecord = 16;
-            AssignPotionRecipes(healing, healTrue);
+            minorMending.TextureRecord = 15;
+            lesserMending.TextureRecord = 16;
+            mending.TextureRecord = 6;
+            trueMending.TextureRecord = 7;
+            AssignPotionRecipes(minorMending, lesserMending, mending, trueMending);
         }
 
         public override void MagicRound()

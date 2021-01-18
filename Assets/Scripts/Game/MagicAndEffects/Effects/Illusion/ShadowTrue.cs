@@ -29,7 +29,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportDuration = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_All;
             properties.AllowedElements = EntityEffectBroker.ElementFlags_MagicOnly;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Illusion;
             properties.DurationCosts = MakeEffectCosts(40, 120);
             concealmentFlag = MagicalConcealmentFlags.ShadeTrue;
@@ -41,6 +41,25 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string DisplayName => string.Format("{0} ({1})", GroupName, SubGroupName);
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1574);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1274);
+
+        public override void SetPotionProperties()
+        {
+            // Duration 20 + 0 per 1 levels
+            EffectSettings trueShadowFormSettings = SetEffectDuration(DefaultEffectSettings(), 20, 0, 1);
+            PotionRecipe trueShadowForm = new PotionRecipe(
+                "True Shadow Form",
+                82,
+                trueShadowFormSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FlowerPlantIngredients.Black_rose,
+                (int)Items.FlowerPlantIngredients.Black_poppy,
+                (int)Items.CreatureIngredients.Ectoplasm,
+                (int)Items.CreatureIngredients.Harpy_Feather,
+                (int)Items.MetalIngredients.Lead);
+
+            trueShadowForm.TextureRecord = 35;
+            AssignPotionRecipes(trueShadowForm);
+        }
 
         protected override bool IsLikeKind(IncumbentEffect other)
         {

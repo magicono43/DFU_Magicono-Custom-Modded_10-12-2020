@@ -29,7 +29,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportDuration = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_All;
             properties.AllowedElements = EntityEffectBroker.ElementFlags_MagicOnly;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Illusion;
             properties.DurationCosts = MakeEffectCosts(40, 120);
             concealmentFlag = MagicalConcealmentFlags.BlendingTrue;
@@ -41,6 +41,26 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string DisplayName => string.Format("{0} ({1})", GroupName, SubGroupName);
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1572);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1272);
+
+        public override void SetPotionProperties()
+        {
+            // Duration 20 + 0 per 1 levels
+            EffectSettings trueChameleonFormSettings = SetEffectDuration(DefaultEffectSettings(), 20, 0, 1);
+            PotionRecipe trueChameleonForm = new PotionRecipe(
+                "True Chameleon Form",
+                56,
+                trueChameleonFormSettings,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.FruitPlantIngredients.Red_berries,
+                (int)Items.MiscPlantIngredients.Pine_branch,
+                (int)Items.MiscPlantIngredients.Twigs,
+                (int)Items.CreatureIngredients.Nymph_hair,
+                (int)Items.MetalIngredients.Brass,
+                (int)Items.MetalIngredients.Mercury);
+
+            trueChameleonForm.TextureRecord = 33;
+            AssignPotionRecipes(trueChameleonForm);
+        }
 
         protected override bool IsLikeKind(IncumbentEffect other)
         {
