@@ -46,6 +46,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe springShoes = new PotionRecipe(
                 "Spring Shoes",
                 19,
+                0,
                 springShoesSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FlowerPlantIngredients.Yellow_rose,

@@ -790,7 +790,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         /// <summary>
         /// Clears all bundles of BundleTypes.Spell.
         /// </summary>
-        public void ClearSpellBundles()
+        public void ClearSpellBundles() // I'm not sure if I should change this to allow potion effects to be dispelled as well, will decide later if a good idea or not. 
         {
             foreach (LiveEffectBundle bundle in instancedBundles)
             {
@@ -887,6 +887,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
             EntityEffectBroker effectBroker = GameManager.Instance.EntityEffectBroker;
             PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(item.PotionRecipeKey);
             IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+            int iconIndex = potionRecipe.IconIndex;
 
             // Get any secondary effects and generate the effect entry array. (a single settings struct is shared between the effects)
             EffectEntry[] potionEffects;
@@ -911,7 +912,12 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
                 Version = EntityEffectBroker.CurrentSpellVersion,
                 BundleType = BundleTypes.Potion,
                 TargetType = TargetTypes.CasterOnly,
-                Effects = potionEffects,
+                Icon = new SpellIcon()
+                {
+                    key = "vmblast-test",
+                    index = iconIndex,
+                },
+            Effects = potionEffects,
             };
             // Assign effect bundle.
             EntityEffectBundle bundle = new EntityEffectBundle(bundleSettings, entityBehaviour);

@@ -47,6 +47,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe safeLanding = new PotionRecipe(
                 "Safe Landing",
                 16,
+                0,
                 safeLandingSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.MiscPlantIngredients.Green_leaves,

@@ -49,6 +49,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe lesserShadowForm = new PotionRecipe(
                 "Lesser Shadow Form",
                 28,
+                0,
                 lesserShadowFormSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FruitPlantIngredients.Fig,

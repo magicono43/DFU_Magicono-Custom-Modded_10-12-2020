@@ -49,6 +49,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe lesserInvisibility = new PotionRecipe(
                 "Lesser Invisibility",
                 100,
+                0,
                 lesserInvisibilitySettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FlowerPlantIngredients.White_rose,

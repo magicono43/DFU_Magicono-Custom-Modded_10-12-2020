@@ -40,15 +40,37 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            PotionRecipe levitation = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("levitation"),
-                125,
-                DefaultEffectSettings(),
-                (int)Items.SolventIngredients.Pure_water,
-                (int)Items.SolventIngredients.Nectar,
-                (int)Items.CreatureIngredients.Ectoplasm);
+            // Duration 5 + 0 per 1 levels
+            EffectSettings momentaryFlightSettings = SetEffectDuration(DefaultEffectSettings(), 5, 0, 1);
+            PotionRecipe momentaryFlight = new PotionRecipe(
+                "Momentary Flight",
+                90,
+                0,
+                momentaryFlightSettings,
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.MiscPlantIngredients.Green_leaves,
+                (int)Items.MiscPlantIngredients.Palm,
+                (int)Items.CreatureIngredients.Harpy_Feather,
+                (int)Items.CreatureIngredients.Ectoplasm,
+                (int)Items.CreatureIngredients.Nymph_hair);
 
-            AssignPotionRecipes(levitation);
+            // Duration 25 + 0 per 1 levels
+            EffectSettings extendedFlightSettings = SetEffectDuration(DefaultEffectSettings(), 25, 0, 1);
+            PotionRecipe extendedFlight = new PotionRecipe(
+                "Extended Flight",
+                280,
+                0,
+                extendedFlightSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.MiscPlantIngredients.Palm,
+                (int)Items.CreatureIngredients.Harpy_Feather,
+                (int)Items.CreatureIngredients.Ectoplasm,
+                (int)Items.CreatureIngredients.Fairy_dragon_scales,
+                (int)Items.CreatureIngredients.Saints_hair);
+
+            momentaryFlight.TextureRecord = 35;
+            extendedFlight.TextureRecord = 1;
+            AssignPotionRecipes(momentaryFlight, extendedFlight);
         }
 
         public override void ConstantEffect()

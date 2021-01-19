@@ -45,6 +45,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe waterStride = new PotionRecipe(
                 "Water Stride",
                 40,
+                0,
                 waterStrideSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.SolventIngredients.Pure_water,

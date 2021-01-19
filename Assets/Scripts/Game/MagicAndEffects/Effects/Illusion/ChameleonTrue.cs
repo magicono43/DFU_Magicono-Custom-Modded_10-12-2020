@@ -49,6 +49,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe trueChameleonForm = new PotionRecipe(
                 "True Chameleon Form",
                 56,
+                0,
                 trueChameleonFormSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FruitPlantIngredients.Red_berries,

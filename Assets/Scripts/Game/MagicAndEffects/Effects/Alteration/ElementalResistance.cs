@@ -24,7 +24,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         const int totalVariants = 5;
         //const int savingThrowModifier = 75;
-        readonly string[] subGroupTextKeys = { "Fire", "Frost", "Poison", "Shock", "Magicka" };
+        public static readonly string[] subGroupTextKeys = { "Fire", "Frost", "Poison", "Shock", "Magicka" };
         readonly VariantProperties[] variantProperties = new VariantProperties[totalVariants];
 
         #endregion
@@ -95,54 +95,169 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            EffectSettings resistSettings = SetEffectChance(DefaultEffectSettings(), 100, 1, 1);
+            // Duration 48 + 0 per 1 levels, Chance 1-1 + 0-0 per 1 levels
+            EffectSettings protectionSettings = SetEffectDuration(DefaultEffectSettings(), 48, 0, 1);
+            protectionSettings = SetEffectChance(protectionSettings, 1, 0, 1);
 
-            PotionRecipe resistFire = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("resistFire"),
-                75,
-                resistSettings,
-                (int)Items.SolventIngredients.Ichor,
-                (int)Items.Gems.Amber,
+            // Duration 20 + 0 per 1 levels, Chance 100-100 + 0-0 per 1 levels
+            EffectSettings immunitySettings = SetEffectDuration(DefaultEffectSettings(), 20, 0, 1);
+            immunitySettings = SetEffectChance(immunitySettings, 100, 0, 1);
+
+            // Protection
+            PotionRecipe fireProtection = new PotionRecipe(
+                "Fire Protection",
+                34,
+                0,
+                protectionSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FruitPlantIngredients.Red_berries,
                 (int)Items.FlowerPlantIngredients.Red_Flowers,
-                (int)Items.CreatureIngredients.Fairy_dragon_scales,
-                (int)Items.FruitPlantIngredients.Cactus);
+                (int)Items.MetalIngredients.Sulphur,
+                (int)Items.Gems.Amber);
 
-            PotionRecipe resistFrost = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("resistFrost"),
-                75,
-                resistSettings,
-                (int)Items.SolventIngredients.Ichor,
-                (int)Items.Gems.Turquoise,
+            PotionRecipe frostProtection = new PotionRecipe(
+                "Frost Protection",
+                43,
+                0,
+                protectionSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FruitPlantIngredients.Fig,
                 (int)Items.MiscPlantIngredients.Pine_branch,
-                (int)Items.FlowerPlantIngredients.White_rose);
+                (int)Items.Gems.Turquoise);
 
-            PotionRecipe resistShock = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("resistShock"),
-                75,
-                resistSettings,
-                (int)Items.SolventIngredients.Ichor,
+            PotionRecipe shockProtection = new PotionRecipe(
+                "Shock Protection",
+                39,
+                0,
+                protectionSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FruitPlantIngredients.Yellow_berries,
+                (int)Items.FlowerPlantIngredients.Yellow_Flowers,
                 (int)Items.MetalIngredients.Lodestone,
-                (int)Items.FruitPlantIngredients.Red_berries);
+                (int)Items.Gems.Malachite);
 
-            EffectSettings poisonResistSettings = SetEffectChance(DefaultEffectSettings(), 5, 19, 1);
-            PotionRecipe resistPoison = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("resistPoison"),
-                125,
-                poisonResistSettings,
+            PotionRecipe poisonProtection = new PotionRecipe(
+                "Poison Protection",
+                36,
+                4,
+                protectionSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FruitPlantIngredients.Green_berries,
+                (int)Items.AnimalPartIngredients.Snake_venom,
+                (int)Items.AnimalPartIngredients.Spider_venom,
+                (int)Items.AnimalPartIngredients.Small_scorpion_stinger);
+
+            PotionRecipe magickaProtection = new PotionRecipe(
+                "Magicka Protection",
+                40,
+                0,
+                protectionSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FruitPlantIngredients.Cactus,
+                (int)Items.FlowerPlantIngredients.Clover,
+                (int)Items.MiscPlantIngredients.Ginkgo_leaves,
+                (int)Items.AnimalPartIngredients.Ivory,
+                (int)Items.CreatureIngredients.Harpy_Feather);
+
+            PotionRecipe elementalProtection = new PotionRecipe(
+                "Elemental Protection",
+                245,
+                0,
+                protectionSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.CreatureIngredients.Giant_blood,
+                (int)Items.CreatureIngredients.Saints_hair,
+                (int)Items.MetalIngredients.Gold,
+                (int)Items.Gems.Jade,
+                (int)Items.Gems.Turquoise,
+                (int)Items.Gems.Malachite,
+                (int)Items.Gems.Amber);
+            elementalProtection.AddSecondaryEffect(variantProperties[(int)DFCareer.Elements.Fire].effectProperties.Key);
+            elementalProtection.AddSecondaryEffect(variantProperties[(int)DFCareer.Elements.Frost].effectProperties.Key);
+            elementalProtection.AddSecondaryEffect(variantProperties[(int)DFCareer.Elements.DiseaseOrPoison].effectProperties.Key);
+            elementalProtection.AddSecondaryEffect(variantProperties[(int)DFCareer.Elements.Shock].effectProperties.Key);
+
+
+            // Immunity
+            PotionRecipe fireImmunity = new PotionRecipe(
+                "Fire Immunity",
+                350,
+                0,
+                immunitySettings,
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.FruitPlantIngredients.Red_berries,
+                (int)Items.CreatureIngredients.Dragons_scales,
+                (int)Items.MetalIngredients.Sulphur,
+                (int)Items.Gems.Ruby);
+
+            PotionRecipe frostImmunity = new PotionRecipe(
+                "Frost Immunity",
+                265,
+                0,
+                immunitySettings,
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.MiscPlantIngredients.Pine_branch,
+                (int)Items.CreatureIngredients.Mummy_wrappings,
+                (int)Items.CreatureIngredients.Werewolfs_blood,
+                (int)Items.MetalIngredients.Silver,
+                (int)Items.Gems.Sapphire);
+
+            PotionRecipe shockImmunity = new PotionRecipe(
+                "Shock Immunity",
+                340,
+                0,
+                immunitySettings,
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.FruitPlantIngredients.Yellow_berries,
+                (int)Items.MiscPlantIngredients.Root_bulb,
+                (int)Items.CreatureIngredients.Wraith_essence,
+                (int)Items.MetalIngredients.Lodestone,
+                (int)Items.Gems.Diamond);
+
+            PotionRecipe poisonImmunity = new PotionRecipe(
+                "Poison Immunity",
+                335,
+                0,
+                immunitySettings,
                 (int)Items.SolventIngredients.Ichor,
                 (int)Items.AnimalPartIngredients.Snake_venom,
-                (int)Items.FlowerPlantIngredients.Golden_poppy);
+                (int)Items.AnimalPartIngredients.Spider_venom,
+                (int)Items.AnimalPartIngredients.Giant_scorpion_stinger,
+                (int)Items.CreatureIngredients.Gorgon_snake,
+                (int)Items.CreatureIngredients.Troll_blood,
+                (int)Items.Gems.Emerald);
+
+            PotionRecipe magickaImmunity = new PotionRecipe(
+                "Magicka Immunity",
+                460,
+                0,
+                immunitySettings,
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.FruitPlantIngredients.Cactus,
+                (int)Items.CreatureIngredients.Fairy_dragon_scales,
+                (int)Items.CreatureIngredients.Basilisk_eye,
+                (int)Items.CreatureIngredients.Harpy_Feather,
+                (int)Items.MetalIngredients.Platinum,
+                (int)Items.Gems.Diamond);
 
             // Assign potion recipes
-            resistFire.TextureRecord = 34;
-            resistFrost.TextureRecord = 34;
-            resistShock.TextureRecord = 34;
-            resistPoison.TextureRecord = 14;
+            fireProtection.TextureRecord = 15;
+            frostProtection.TextureRecord = 11;
+            shockProtection.TextureRecord = 12;
+            poisonProtection.TextureRecord = 14;
+            magickaProtection.TextureRecord = 13;
+            elementalProtection.TextureRecord = 2;
+            fireImmunity.TextureRecord = 34;
+            frostImmunity.TextureRecord = 32;
+            shockImmunity.TextureRecord = 33;
+            poisonImmunity.TextureRecord = 35;
+            magickaImmunity.TextureRecord = 6;
 
-            variantProperties[(int)DFCareer.Elements.Fire].potionProperties.Recipes = new PotionRecipe[] { resistFire };
-            variantProperties[(int)DFCareer.Elements.Frost].potionProperties.Recipes = new PotionRecipe[] { resistFrost };
-            variantProperties[(int)DFCareer.Elements.Shock].potionProperties.Recipes = new PotionRecipe[] { resistShock };
-            variantProperties[(int)DFCareer.Elements.DiseaseOrPoison].potionProperties.Recipes = new PotionRecipe[] { resistPoison };
+            variantProperties[(int)DFCareer.Elements.Fire].potionProperties.Recipes = new PotionRecipe[] { fireProtection, fireImmunity };
+            variantProperties[(int)DFCareer.Elements.Frost].potionProperties.Recipes = new PotionRecipe[] { frostProtection, frostImmunity };
+            variantProperties[(int)DFCareer.Elements.Shock].potionProperties.Recipes = new PotionRecipe[] { shockProtection, shockImmunity };
+            variantProperties[(int)DFCareer.Elements.DiseaseOrPoison].potionProperties.Recipes = new PotionRecipe[] { poisonProtection, poisonImmunity };
+            variantProperties[(int)DFCareer.Elements.Magic].potionProperties.Recipes = new PotionRecipe[] { magickaProtection, magickaImmunity, elementalProtection };
         }
 
         protected override bool IsLikeKind(IncumbentEffect other)

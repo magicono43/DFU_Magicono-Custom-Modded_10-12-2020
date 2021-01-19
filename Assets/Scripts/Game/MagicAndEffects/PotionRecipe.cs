@@ -50,6 +50,11 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         public int Price { get; set; }
 
         /// <summary>
+        /// The Icon Index used of this potion recipe's spell effect.
+        /// </summary>
+        public int IconIndex { get; set; }
+
+        /// <summary>
         /// The texture record from archive 205 to use for this potion, default = 11.
         /// </summary>
         public int TextureRecord
@@ -96,10 +101,11 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         /// <param name="price">Value of potion in gp.</param>
         /// <param name="settings">Settings for this potion recipe.</param>
         /// <param name="ingredients">Ingredient array.</param>
-        public PotionRecipe(string displayName, int price, EffectSettings settings, params Ingredient[] ingredients)
+        public PotionRecipe(string displayName, int price, int iconIndex, EffectSettings settings, params Ingredient[] ingredients)
         {
             DisplayName = displayName;
             Price = price;
+            IconIndex = iconIndex;
             this.Settings = settings;
             Array.Sort(ingredients);
             this.ingredients = ingredients;
@@ -127,10 +133,11 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         /// <param name="price">Value of potion in gp.</param>
         /// <param name="settings">Settings for this potion recipe.</param>
         /// <param name="ids">Array of item template IDs.</param>
-        public PotionRecipe(string displayName, int price, EffectSettings settings, params int[] ids)
+        public PotionRecipe(string displayName, int price, int iconIndex, EffectSettings settings, params int[] ids)
         {
             DisplayName = displayName;
             Price = price;
+            IconIndex = iconIndex;
             this.Settings = settings;
             Array.Sort(ids);
             if (ids != null && ids.Length > 0)

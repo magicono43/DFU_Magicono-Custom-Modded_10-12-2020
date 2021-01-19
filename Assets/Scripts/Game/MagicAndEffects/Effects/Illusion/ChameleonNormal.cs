@@ -49,6 +49,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe lesserChameleonForm = new PotionRecipe(
                 "Lesser Chameleon Form",
                 18,
+                0,
                 lesserChameleonFormSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.FruitPlantIngredients.Green_berries,

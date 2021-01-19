@@ -45,6 +45,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe cureDisease = new PotionRecipe(
                 TextManager.Instance.GetLocalizedText("cureDisease"),
                 100,
+                0,
                 cureSettings,
                 (int)Items.SolventIngredients.Elixir_vitae,
                 (int)Items.FruitPlantIngredients.Fig,
@@ -55,6 +56,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe purification = new PotionRecipe(
                 TextManager.Instance.GetLocalizedText("purification"),
                 500,
+                0,
                 purificationSettings,
                 (int)Items.SolventIngredients.Elixir_vitae,
                 (int)Items.SolventIngredients.Nectar,

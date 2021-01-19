@@ -46,6 +46,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe minorEnergy = new PotionRecipe(
                 "Minor Energy",
                 7,
+                0,
                 minorEnergySettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.FruitPlantIngredients.Yellow_berries,
@@ -56,6 +57,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe lesserEnergy = new PotionRecipe(
                 "Lesser Energy",
                 20,
+                0,
                 lesserEnergySettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FruitPlantIngredients.Fig,
@@ -67,6 +69,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe energy = new PotionRecipe(
                 "Energy",
                 80,
+                0,
                 energySettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FruitPlantIngredients.Cactus,
@@ -79,6 +82,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe pureEnergy = new PotionRecipe(
                 "Pure Energy",
                 220,
+                0,
                 energySettings,
                 (int)Items.SolventIngredients.Elixir_vitae,
                 (int)Items.FruitPlantIngredients.Yellow_berries,

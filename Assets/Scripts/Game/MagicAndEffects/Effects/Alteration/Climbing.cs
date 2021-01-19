@@ -45,6 +45,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe monkeyGrip = new PotionRecipe(
                 "Monkey's Grip",
                 26,
+                0,
                 monkeyGripSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FruitPlantIngredients.Cactus,

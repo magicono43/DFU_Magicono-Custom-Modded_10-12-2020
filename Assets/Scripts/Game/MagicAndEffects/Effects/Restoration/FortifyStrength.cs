@@ -49,6 +49,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe orcStrength = new PotionRecipe(
                 "Orc Strength",
                 30,
+                0,
                 orcStrengthSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.MiscPlantIngredients.Root_tendrils,
@@ -62,6 +63,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe giantStrength = new PotionRecipe(
                 "Giant Strength",
                 75,
+                0,
                 giantStrengthSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.MiscPlantIngredients.Root_tendrils,

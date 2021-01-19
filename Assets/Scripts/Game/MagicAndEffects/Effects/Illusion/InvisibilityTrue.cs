@@ -49,6 +49,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe trueInvisibility = new PotionRecipe(
                 "True Invisibility",
                 425,
+                0,
                 trueInvisibilitySettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FlowerPlantIngredients.White_rose,

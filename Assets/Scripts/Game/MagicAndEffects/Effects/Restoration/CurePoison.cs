@@ -45,6 +45,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe curePoison = new PotionRecipe(
                 TextManager.Instance.GetLocalizedText("curePoison"),
                 200,
+                0,
                 cureSettings,
                 (int)Items.SolventIngredients.Ichor,
                 (int)Items.AnimalPartIngredients.Giant_scorpion_stinger,

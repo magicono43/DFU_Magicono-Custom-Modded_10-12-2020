@@ -46,6 +46,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe minorMending = new PotionRecipe(
                 "Minor Mending",
                 14,
+                0,
                 minorMendingSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.FruitPlantIngredients.Red_berries,
@@ -58,6 +59,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe lesserMending = new PotionRecipe(
                 "Lesser Mending",
                 40,
+                0,
                 lesserMendingSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FruitPlantIngredients.Red_berries,
@@ -71,6 +73,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe mending = new PotionRecipe(
                 "Mending",
                 160,
+                0,
                 lesserMendingSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FruitPlantIngredients.Red_berries,
@@ -84,6 +87,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe trueMending = new PotionRecipe(
                 "True Mending",
                 440,
+                0,
                 lesserMendingSettings,
                 (int)Items.SolventIngredients.Ichor,
                 (int)Items.CreatureIngredients.Daedra_heart,

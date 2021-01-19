@@ -45,6 +45,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe gills = new PotionRecipe(
                 "Gills",
                 27,
+                0,
                 gillsSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.MiscPlantIngredients.Palm,

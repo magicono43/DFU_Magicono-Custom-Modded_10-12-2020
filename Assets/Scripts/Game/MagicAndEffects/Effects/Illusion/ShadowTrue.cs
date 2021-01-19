@@ -49,6 +49,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe trueShadowForm = new PotionRecipe(
                 "True Shadow Form",
                 82,
+                0,
                 trueShadowFormSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FlowerPlantIngredients.Black_rose,

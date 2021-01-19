@@ -39,6 +39,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe minorRestorePower = new PotionRecipe(
                 "Minor Restore Power",
                 20,
+                0,
                 minorRestorePowerSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.FruitPlantIngredients.Green_berries,
@@ -52,6 +53,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe lesserRestorePower = new PotionRecipe(
                 "Lesser Restore Power",
                 70,
+                0,
                 lesserRestorePowerSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FruitPlantIngredients.Green_berries,
@@ -65,6 +67,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe restorePower = new PotionRecipe(
                 "Restore Power",
                 280,
+                0,
                 restorePowerSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FruitPlantIngredients.Green_berries,
@@ -78,6 +81,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe greaterRestorePower = new PotionRecipe(
                 "Greater Restore Power",
                 775,
+                0,
                 greaterRestorePowerSettings,
                 (int)Items.SolventIngredients.Elixir_vitae,
                 (int)Items.CreatureIngredients.Wraith_essence,

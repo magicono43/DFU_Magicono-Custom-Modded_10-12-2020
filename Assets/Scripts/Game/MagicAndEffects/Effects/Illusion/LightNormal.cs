@@ -45,6 +45,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe lightSprite = new PotionRecipe(
                 "Light Sprite",
                 15,
+                0,
                 lightSpriteSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FlowerPlantIngredients.Golden_poppy,

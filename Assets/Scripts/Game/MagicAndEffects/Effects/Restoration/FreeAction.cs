@@ -44,6 +44,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe freeAction = new PotionRecipe(
                 TextManager.Instance.GetLocalizedText("freeAction"),
                 125,
+                0,
                 cureSettings,
                 (int)Items.SolventIngredients.Ichor,
                 (int)Items.AnimalPartIngredients.Spider_venom,

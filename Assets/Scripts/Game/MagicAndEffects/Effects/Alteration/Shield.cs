@@ -53,6 +53,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe minorShielding = new PotionRecipe(
                 "Minor Shielding",
                 35,
+                0,
                 minorShieldingSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.FruitPlantIngredients.Red_berries,
@@ -67,6 +68,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe lesserShielding = new PotionRecipe(
                 "Lesser Shielding",
                 105,
+                0,
                 lesserShieldingSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.MiscPlantIngredients.Root_tendrils,
@@ -81,6 +83,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe shielding = new PotionRecipe(
                 "Shielding",
                 340,
+                0,
                 shieldingSettings,
                 (int)Items.SolventIngredients.Ichor,
                 (int)Items.FlowerPlantIngredients.Clover,
@@ -95,6 +98,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             PotionRecipe stendarrShield = new PotionRecipe(
                 "Stendarr's Shield",
                 890,
+                0,
                 stendarrShieldSettings,
                 (int)Items.SolventIngredients.Ichor,
                 (int)Items.FlowerPlantIngredients.White_rose,
