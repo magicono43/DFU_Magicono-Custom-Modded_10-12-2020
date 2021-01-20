@@ -41,18 +41,21 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            EffectSettings cureSettings = SetEffectChance(DefaultEffectSettings(), 5, 19, 1);
+            // Chance 100-100 + 0-0 per 1 levels
+            EffectSettings curePoisonSettings = SetEffectChance(DefaultEffectSettings(), 100, 0, 1);
             PotionRecipe curePoison = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("curePoison"),
-                200,
+                "Cure Poison",
+                34,
                 0,
-                cureSettings,
-                (int)Items.SolventIngredients.Ichor,
-                (int)Items.AnimalPartIngredients.Giant_scorpion_stinger,
-                (int)Items.AnimalPartIngredients.Small_tooth,
-                (int)Items.AnimalPartIngredients.Pearl);
+                curePoisonSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FruitPlantIngredients.Green_berries,
+                (int)Items.AnimalPartIngredients.Snake_venom,
+                (int)Items.AnimalPartIngredients.Spider_venom,
+                (int)Items.AnimalPartIngredients.Small_scorpion_stinger,
+                (int)Items.AnimalPartIngredients.Small_tooth);
 
-            curePoison.TextureRecord = 35;
+            curePoison.TextureRecord = 14;
             AssignPotionRecipes(curePoison);
         }
 

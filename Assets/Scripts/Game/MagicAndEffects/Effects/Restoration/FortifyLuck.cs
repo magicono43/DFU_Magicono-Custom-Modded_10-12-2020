@@ -29,7 +29,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportMagnitude = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_All;
             properties.AllowedElements = EntityEffectBroker.ElementFlags_MagicOnly;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Restoration;
             properties.DurationCosts = MakeEffectCosts(28, 100);
             properties.MagnitudeCosts = MakeEffectCosts(40, 120);
@@ -40,5 +40,45 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string SubGroupName => TextManager.Instance.GetLocalizedText("luck");
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1539);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1239);
+
+        public override void SetPotionProperties()
+        {
+            // Duration 25 + 0 per 1 levels, Magnitude 20-20 + 0-0 per 1 levels
+            EffectSettings dumbLuckSettings = SetEffectDuration(DefaultEffectSettings(), 25, 0, 1);
+            dumbLuckSettings = SetEffectMagnitude(dumbLuckSettings, 20, 20, 0, 0, 1);
+            PotionRecipe dumbLuck = new PotionRecipe(
+                "Dumb Luck",
+                57,
+                0,
+                dumbLuckSettings,
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.FlowerPlantIngredients.Clover,
+                (int)Items.FlowerPlantIngredients.Golden_poppy,
+                (int)Items.AnimalPartIngredients.Ivory,
+                (int)Items.CreatureIngredients.Nymph_hair,
+                (int)Items.MetalIngredients.Gold);
+
+            // Duration 30 + 0 per 1 levels, Magnitude 45-45 + 0-0 per 1 levels
+            EffectSettings zenitharFortuneSettings = SetEffectDuration(DefaultEffectSettings(), 30, 0, 1);
+            zenitharFortuneSettings = SetEffectMagnitude(zenitharFortuneSettings, 45, 45, 0, 0, 1);
+            PotionRecipe zenitharFortune = new PotionRecipe(
+                "Zenithar's Fortune",
+                145,
+                0,
+                zenitharFortuneSettings,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.FlowerPlantIngredients.Clover,
+                (int)Items.CreatureIngredients.Werewolfs_blood,
+                (int)Items.CreatureIngredients.Giant_blood,
+                (int)Items.MetalIngredients.Silver,
+                (int)Items.MetalIngredients.Gold,
+                (int)Items.MetalIngredients.Platinum,
+                (int)Items.Gems.Jade);
+
+            // Assign recipe
+            dumbLuck.TextureRecord = 34;
+            zenitharFortune.TextureRecord = 1;
+            AssignPotionRecipes(dumbLuck, zenitharFortune);
+        }
     }
 }

@@ -360,7 +360,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             // Add chance from Comprehend Languages effect if present
             ComprehendLanguages languagesEffect = (ComprehendLanguages)GameManager.Instance.PlayerEffectManager.FindIncumbentEffect<ComprehendLanguages>();
             if (languagesEffect != null)
-                chance += languagesEffect.ChanceValue();
+                chance += languagesEffect.ChanceValue(); // Possibly remove skill tally if comprehend language effect is active, since it was not your skill, but magic that did the work, maybe. 
 
             int roll = UnityEngine.Random.Range(0, 200);
             bool success = (roll < chance);

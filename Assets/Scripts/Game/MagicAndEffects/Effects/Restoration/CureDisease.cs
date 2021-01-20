@@ -41,36 +41,52 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            EffectSettings cureSettings = SetEffectChance(DefaultEffectSettings(), 1, 10, 1);
+            // Chance 100-100 + 0-0 per 1 levels
+            EffectSettings cureDiseaseSettings = SetEffectChance(DefaultEffectSettings(), 100, 0, 1);
             PotionRecipe cureDisease = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("cureDisease"),
-                100,
+                "Cure Disease",
+                32,
                 0,
-                cureSettings,
-                (int)Items.SolventIngredients.Elixir_vitae,
-                (int)Items.FruitPlantIngredients.Fig,
-                (int)Items.AnimalPartIngredients.Big_tooth);
+                cureDiseaseSettings,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.FruitPlantIngredients.Red_berries,
+                (int)Items.FlowerPlantIngredients.Yellow_Flowers,
+                (int)Items.FlowerPlantIngredients.White_rose,
+                (int)Items.AnimalPartIngredients.Big_tooth,
+                (int)Items.AnimalPartIngredients.Small_tooth,
+                (int)Items.MetalIngredients.Copper);
 
-            EffectSettings purificationSettings = SetEffectChance(DefaultEffectSettings(), 1, 10, 1);
-            purificationSettings = SetEffectMagnitude(purificationSettings, 5, 5, 19, 19, 1);
+            // Chance 100-100 + 0-0 per 1 levels, Magnitude 100-100 + 0-0 per 1 levels
+            EffectSettings purificationSettings = SetEffectChance(DefaultEffectSettings(), 100, 0, 1);
+            purificationSettings = SetEffectMagnitude(purificationSettings, 100, 100, 0, 0, 1);
             PotionRecipe purification = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("purification"),
-                500,
+                "Purification",
+                1850,
                 0,
                 purificationSettings,
                 (int)Items.SolventIngredients.Elixir_vitae,
-                (int)Items.SolventIngredients.Nectar,
-                (int)Items.SolventIngredients.Rain_water,
-                (int)Items.FruitPlantIngredients.Fig,
-                (int)Items.AnimalPartIngredients.Big_tooth,
-                (int)Items.CreatureIngredients.Ectoplasm,
-                (int)Items.Gems.Diamond,
-                (int)Items.CreatureIngredients.Mummy_wrappings);
+                (int)Items.SolventIngredients.Ichor,
+                (int)Items.AnimalPartIngredients.Giant_scorpion_stinger,
+                (int)Items.CreatureIngredients.Unicorn_horn,
+                (int)Items.CreatureIngredients.Saints_hair,
+                (int)Items.CreatureIngredients.Troll_blood,
+                (int)Items.CreatureIngredients.Mummy_wrappings,
+                (int)Items.Gems.Diamond);
+            purification.AddSecondaryEffect(CurePoison.EffectKey);
+            purification.AddSecondaryEffect(CureParalyzation.EffectKey);
+            purification.AddSecondaryEffect(DispelMagic.EffectKey);
             purification.AddSecondaryEffect(HealHealth.EffectKey);
-            purification.AddSecondaryEffect(InvisibilityNormal.EffectKey);
+            purification.AddSecondaryEffect(HealStrength.EffectKey);
+            purification.AddSecondaryEffect(HealIntelligence.EffectKey);
+            purification.AddSecondaryEffect(HealWillpower.EffectKey);
+            purification.AddSecondaryEffect(HealAgility.EffectKey);
+            purification.AddSecondaryEffect(HealEndurance.EffectKey);
+            purification.AddSecondaryEffect(HealPersonality.EffectKey);
+            purification.AddSecondaryEffect(HealSpeed.EffectKey);
+            purification.AddSecondaryEffect(HealLuck.EffectKey);
 
             cureDisease.TextureRecord = 35;
-            purification.TextureRecord = 35;
+            purification.TextureRecord = 32;
             AssignPotionRecipes(cureDisease, purification);
         }
 

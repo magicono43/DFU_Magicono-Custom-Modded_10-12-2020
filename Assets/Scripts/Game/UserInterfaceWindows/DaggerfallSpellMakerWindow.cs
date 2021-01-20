@@ -732,18 +732,18 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         private void BuyButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
             const int notEnoughGold = 1702;
-            const int noSpellBook = 1703;
+            //const int noSpellBook = 1703;
             const int youMustChooseAName = 1704;
             const int spellHasBeenInscribed = 1705;
 
             DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
 
-            // Presence of spellbook is also checked earlier
+            /*// Presence of spellbook is also checked earlier
             if (!GameManager.Instance.PlayerEntity.Items.Contains(Items.ItemGroups.MiscItems, (int)Items.MiscItems.Spellbook))
             {
                 DaggerfallUI.MessageBox(noSpellBook);
                 return;
-            }
+            }*/
 
             // Spell must have at least one effect - adding custom message
             List<EffectEntry> effects = GetEffectEntries();

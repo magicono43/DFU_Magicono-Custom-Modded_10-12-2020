@@ -40,18 +40,23 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
         public override void SetPotionProperties()
         {
-            EffectSettings cureSettings = SetEffectChance(DefaultEffectSettings(), 5, 19, 1);
+            // Duration 20 + 0 per 1 levels
+            EffectSettings freeActionSettings = SetEffectDuration(DefaultEffectSettings(), 20, 0, 1);
             PotionRecipe freeAction = new PotionRecipe(
-                TextManager.Instance.GetLocalizedText("freeAction"),
-                125,
+                "Free Action",
+                165,
                 0,
-                cureSettings,
+                freeActionSettings,
                 (int)Items.SolventIngredients.Ichor,
+                (int)Items.MiscPlantIngredients.Bamboo,
                 (int)Items.AnimalPartIngredients.Spider_venom,
-                (int)Items.MiscPlantIngredients.Twigs,
-                (int)Items.MiscPlantIngredients.Bamboo);
+                (int)Items.CreatureIngredients.Gorgon_snake,
+                (int)Items.CreatureIngredients.Nymph_hair,
+                (int)Items.MetalIngredients.Copper,
+                (int)Items.MetalIngredients.Mercury,
+                (int)Items.Gems.Malachite);
 
-            freeAction.TextureRecord = 14;
+            freeAction.TextureRecord = 1;
             AssignPotionRecipes(freeAction);
         }
 

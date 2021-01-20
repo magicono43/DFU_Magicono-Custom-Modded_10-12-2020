@@ -28,7 +28,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportChance = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_All;
             properties.AllowedElements = EntityEffectBroker.ElementFlags_MagicOnly;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Restoration;
             properties.ChanceCosts = MakeEffectCosts(20, 140);
         }
@@ -37,6 +37,25 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string SubGroupName => TextManager.Instance.GetLocalizedText("paralyzation");
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1511);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1211);
+
+        public override void SetPotionProperties()
+        {
+            // Chance 100-100 + 0-0 per 1 levels
+            EffectSettings cureParalysisSettings = SetEffectChance(DefaultEffectSettings(), 100, 0, 1);
+            PotionRecipe cureParalysis = new PotionRecipe(
+                "Cure Paralysis",
+                28,
+                0,
+                cureParalysisSettings,
+                (int)Items.SolventIngredients.Rain_water,
+                (int)Items.FruitPlantIngredients.Yellow_berries,
+                (int)Items.AnimalPartIngredients.Spider_venom,
+                (int)Items.AnimalPartIngredients.Giant_scorpion_stinger,
+                (int)Items.AnimalPartIngredients.Small_tooth);
+
+            cureParalysis.TextureRecord = 14;
+            AssignPotionRecipes(cureParalysis);
+        }
 
         public override void MagicRound()
         {

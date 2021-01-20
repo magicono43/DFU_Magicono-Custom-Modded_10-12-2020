@@ -28,7 +28,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportChance = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_Self;
             properties.AllowedElements = EntityEffectBroker.ElementFlags_MagicOnly;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Mysticism;
             properties.ChanceCosts = MakeEffectCosts(120, 180);
         }
@@ -37,6 +37,28 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string SubGroupName => TextManager.Instance.GetLocalizedText("magic");
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1516);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1216);
+
+        public override void SetPotionProperties()
+        {
+            // Chance 100-100 + 0-0 per 1 levels
+            EffectSettings cleanseMagicSettings = SetEffectChance(DefaultEffectSettings(), 100, 0, 1);
+            PotionRecipe cleanseMagic = new PotionRecipe(
+                "Cleanse Magic",
+                200,
+                0,
+                cleanseMagicSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FlowerPlantIngredients.White_poppy,
+                (int)Items.FlowerPlantIngredients.Clover,
+                (int)Items.MiscPlantIngredients.Aloe,
+                (int)Items.AnimalPartIngredients.Pearl,
+                (int)Items.AnimalPartIngredients.Ivory,
+                (int)Items.CreatureIngredients.Fairy_dragon_scales,
+                (int)Items.MetalIngredients.Silver);
+
+            cleanseMagic.TextureRecord = 32;
+            AssignPotionRecipes(cleanseMagic);
+        }
 
         public override void MagicRound()
         {

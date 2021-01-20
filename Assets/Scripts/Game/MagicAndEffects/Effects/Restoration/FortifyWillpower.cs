@@ -29,7 +29,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportMagnitude = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_All;
             properties.AllowedElements = EntityEffectBroker.ElementFlags_MagicOnly;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Restoration;
             properties.DurationCosts = MakeEffectCosts(28, 100);
             properties.MagnitudeCosts = MakeEffectCosts(40, 120);
@@ -40,5 +40,46 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string SubGroupName => TextManager.Instance.GetLocalizedText("willpower");
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1534);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1234);
+
+        public override void SetPotionProperties()
+        {
+            // Duration 25 + 0 per 1 levels, Magnitude 20-20 + 0-0 per 1 levels
+            EffectSettings ironWillSettings = SetEffectDuration(DefaultEffectSettings(), 25, 0, 1);
+            ironWillSettings = SetEffectMagnitude(ironWillSettings, 20, 20, 0, 0, 1);
+            PotionRecipe ironWill = new PotionRecipe(
+                "Iron Will",
+                35,
+                0,
+                ironWillSettings,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.FlowerPlantIngredients.Red_Flowers,
+                (int)Items.MiscPlantIngredients.Root_bulb,
+                (int)Items.MiscPlantIngredients.Twigs,
+                (int)Items.AnimalPartIngredients.Big_tooth,
+                (int)Items.CreatureIngredients.Orcs_blood,
+                (int)Items.MetalIngredients.Iron);
+
+            // Duration 30 + 0 per 1 levels, Magnitude 45-45 + 0-0 per 1 levels
+            EffectSettings unwaveringDeterminationSettings = SetEffectDuration(DefaultEffectSettings(), 30, 0, 1);
+            unwaveringDeterminationSettings = SetEffectMagnitude(unwaveringDeterminationSettings, 45, 45, 0, 0, 1);
+            PotionRecipe unwaveringDetermination = new PotionRecipe(
+                "Unwavering Determination",
+                115,
+                0,
+                unwaveringDeterminationSettings,
+                (int)Items.SolventIngredients.Nectar,
+                (int)Items.MiscPlantIngredients.Root_bulb,
+                (int)Items.CreatureIngredients.Orcs_blood,
+                (int)Items.CreatureIngredients.Giant_blood,
+                (int)Items.CreatureIngredients.Wereboar_tusk,
+                (int)Items.MetalIngredients.Iron,
+                (int)Items.MetalIngredients.Brass,
+                (int)Items.Gems.Jade);
+
+            // Assign recipe
+            ironWill.TextureRecord = 1;
+            unwaveringDetermination.TextureRecord = 3;
+            AssignPotionRecipes(ironWill, unwaveringDetermination);
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             properties.SupportMagnitude = true;
             properties.AllowedTargets = EntityEffectBroker.TargetFlags_All;
             properties.AllowedElements = EntityEffectBroker.ElementFlags_MagicOnly;
-            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+            properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker;
             properties.MagicSkill = DFCareer.MagicSkills.Restoration;
             properties.DurationCosts = MakeEffectCosts(28, 100);
             properties.MagnitudeCosts = MakeEffectCosts(40, 120);
@@ -40,5 +40,42 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override string SubGroupName => TextManager.Instance.GetLocalizedText("agility");
         public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1535);
         public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1235);
+
+        public override void SetPotionProperties()
+        {
+            // Duration 25 + 0 per 1 levels, Magnitude 20-20 + 0-0 per 1 levels
+            EffectSettings acrobatAgilitySettings = SetEffectDuration(DefaultEffectSettings(), 25, 0, 1);
+            acrobatAgilitySettings = SetEffectMagnitude(acrobatAgilitySettings, 20, 20, 0, 0, 1);
+            PotionRecipe acrobatAgility = new PotionRecipe(
+                "Acrobat's Agility",
+                25,
+                0,
+                acrobatAgilitySettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FlowerPlantIngredients.Yellow_rose,
+                (int)Items.FlowerPlantIngredients.Golden_poppy,
+                (int)Items.MiscPlantIngredients.Bamboo,
+                (int)Items.CreatureIngredients.Harpy_Feather);
+
+            // Duration 30 + 0 per 1 levels, Magnitude 45-45 + 0-0 per 1 levels
+            EffectSettings kynarethGraceSettings = SetEffectDuration(DefaultEffectSettings(), 30, 0, 1);
+            kynarethGraceSettings = SetEffectMagnitude(kynarethGraceSettings, 45, 45, 0, 0, 1);
+            PotionRecipe kynarethGrace = new PotionRecipe(
+                "Kynareth's Grace",
+                90,
+                0,
+                kynarethGraceSettings,
+                (int)Items.SolventIngredients.Pure_water,
+                (int)Items.FlowerPlantIngredients.Yellow_rose,
+                (int)Items.MiscPlantIngredients.Bamboo,
+                (int)Items.CreatureIngredients.Harpy_Feather,
+                (int)Items.CreatureIngredients.Harpy_Feather,
+                (int)Items.CreatureIngredients.Ectoplasm);
+
+            // Assign recipe
+            acrobatAgility.TextureRecord = 1;
+            kynarethGrace.TextureRecord = 33;
+            AssignPotionRecipes(acrobatAgility, kynarethGrace);
+        }
     }
 }
