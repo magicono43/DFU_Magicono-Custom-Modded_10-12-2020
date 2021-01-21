@@ -1627,6 +1627,14 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                     messageBox.AddNextMessageBox(messageBoxRecipe);
                     messageBox.Show();
                 }
+                else if (item.IsPotion)
+                {   // Setup the next message box with the potion recipe effects.
+                    DaggerfallMessageBox messageBoxPotEffects = new DaggerfallMessageBox(uiManager, messageBox);
+                    messageBoxPotEffects.SetTextTokens(CustomTextTokenHolder.PotionSpellEffectsTextTokens(item));
+                    messageBoxPotEffects.ClickAnywhereToClose = true;
+                    messageBox.AddNextMessageBox(messageBoxPotEffects);
+                    messageBox.Show();
+                }
                 else if (item.legacyMagic != null)
                 {   // Setup the next message box with the magic effect info.
                     DaggerfallMessageBox messageBoxMagic = new DaggerfallMessageBox(uiManager, messageBox);

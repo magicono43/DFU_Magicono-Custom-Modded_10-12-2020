@@ -25,7 +25,7 @@ namespace DaggerfallWorkshop.Game.UserInterface
         #region Fields
 
         const float blinkInterval = 0.25f;
-        const int maxIconPool = 24;
+        const int maxIconPool = 48;
 
         class IconsPositioning
         {

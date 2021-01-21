@@ -11,6 +11,7 @@
 using DaggerfallWorkshop;
 using DaggerfallConnect.Arena2;
 using DaggerfallWorkshop.Game;
+using System.Collections.Generic;
 
 public class CustomTextTokenHolder
 {
@@ -117,5 +118,70 @@ public class CustomTextTokenHolder
                     TextFile.Formatting.JustifyCenter,
                     "Text Token Not Found");
         }
+    }
+
+    public static TextFile.Token[] PotionSpellEffectsTextTokens(DaggerfallWorkshop.Game.Items.DaggerfallUnityItem item)
+    {
+        TextFile.Token[] tokens = null;
+        string effectDuration = "";
+        string effectMagnitude = "";
+        string effectChance = "";
+
+        DaggerfallWorkshop.Game.MagicAndEffects.EntityEffectBroker effectBroker = GameManager.Instance.EntityEffectBroker;
+        DaggerfallWorkshop.Game.MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(item.PotionRecipeKey);
+        DaggerfallWorkshop.Game.MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+
+        DaggerfallWorkshop.Game.MagicAndEffects.EffectEntry[] potionEffects;
+        List<string> secondaryEffects = potionRecipe.SecondaryEffects;
+        if (secondaryEffects != null)
+        {
+            potionEffects = new DaggerfallWorkshop.Game.MagicAndEffects.EffectEntry[secondaryEffects.Count + 1];
+            potionEffects[0] = new DaggerfallWorkshop.Game.MagicAndEffects.EffectEntry(potionEffect.Key, potionRecipe.Settings);
+            for (int i = 0; i < secondaryEffects.Count; i++)
+            {
+                DaggerfallWorkshop.Game.MagicAndEffects.IEntityEffect effect = effectBroker.GetEffectTemplate(secondaryEffects[i]);
+                potionEffects[i + 1] = new DaggerfallWorkshop.Game.MagicAndEffects.EffectEntry(effect.Key, potionRecipe.Settings);
+            }
+        }
+        else
+        {
+            potionEffects = new DaggerfallWorkshop.Game.MagicAndEffects.EffectEntry[] { new DaggerfallWorkshop.Game.MagicAndEffects.EffectEntry(potionEffect.Key, potionRecipe.Settings) };
+        }
+
+
+        for (int i = 0; i < potionEffects.Length; ++i)
+        {
+            if (potionEffects[i].Settings.DurationBase <= 1)
+                effectDuration = "Instant";
+            else
+                effectDuration = potionEffects[i].Settings.DurationBase.ToString() + " Rounds";
+
+            if (potionEffects[i].Settings.MagnitudeBaseMax <= 1 && !potionEffects[i].Key.Contains("Regenerate"))
+                effectMagnitude = "N/A";
+            else
+                effectMagnitude = potionEffects[i].Settings.MagnitudeBaseMax.ToString();
+
+            if (potionEffects[i].Settings.ChanceBase <= 1)
+                effectChance = "N/A";
+            else
+                effectChance = potionEffects[i].Settings.ChanceBase.ToString() + "%";
+
+            string effectName = potionEffects[i].Key.Replace("-", " ");
+            effectName = effectName.Replace("Elemental", "");
+            effectName = effectName.Replace("SpellResistance", "Spell Resistance");
+            effectName = effectName.Replace("Resistance ", "Resist ");
+            effectName = effectName.Replace("WaterBreathing", "Water Breathing");
+            effectName = effectName.Replace("SpellPoints", "Spell-Points");
+            effectName = effectName.Replace("FreeAction", "Free Action");
+            effectName = effectName.Replace("SpellReflection", "Spell Reflection");
+            effectName = effectName.Replace("SpellAbsorption", "Spell Absorption");
+            effectName = effectName.Replace("WaterWalking", "Water Walking");
+            effectName = effectName.Replace("ComprehendLanguages", "Comprehend Languages");
+            effectName = effectName + ": " + " Dur = " + effectDuration + "," + "  Mag = " + effectMagnitude + "," + "  Chan = " + effectChance;
+            TextFile.Token[] effectTitle = DaggerfallUnity.Instance.TextProvider.CreateTokens(TextFile.Formatting.JustifyCenter, effectName);
+            tokens = TextFile.AppendTokens(tokens, effectTitle, false);
+        }
+
+        return tokens;
     }
 }

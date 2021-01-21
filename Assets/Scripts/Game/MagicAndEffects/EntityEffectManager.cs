@@ -917,7 +917,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
                     key = "vmblast-test",
                     index = iconIndex,
                 },
-            Effects = potionEffects,
+                Effects = potionEffects,
             };
             // Assign effect bundle.
             EntityEffectBundle bundle = new EntityEffectBundle(bundleSettings, entityBehaviour);
