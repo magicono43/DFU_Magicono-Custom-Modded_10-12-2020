@@ -4473,7 +4473,7 @@ namespace DaggerfallWorkshop.Game.Formulas
             return 0;
         }
 
-        public static WeaponMaterialTypes RandomMaterial(int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
+        /*public static WeaponMaterialTypes RandomMaterial(int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
         {
             float[] regionMods = PlayerGPS.RegionMaterialSupplyCreator();
             float[] enemyLevelLootMods = new float[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
@@ -4498,11 +4498,13 @@ namespace DaggerfallWorkshop.Game.Formulas
                 int pL = playerLuck;
                 if (pL < 50)
                 {
-                    pL = Mathf.Clamp((int)Mathf.Round(pL / 5) -10, -10, -1) * -1;
+                    pL -= 50;
+                    pL = Mathf.Clamp((int)Mathf.Round(pL / 5), -10, -1) * -1;
                     playerLuckLootMods = new float[] { 0.05f*pL+1, -0.02f*pL+1, 0.05f*pL+1, 0.05f*pL+1, -0.02f*pL+1, -0.02f*pL+1, -0.04f*pL+1, -0.04f*pL+1, -0.04f*pL+1, -0.06f*pL+1 };
                 }
                 else if (pL > 50)
                 {
+                    pL -= 50;
                     pL = Mathf.Clamp((int)Mathf.Round(pL / 5), 1, 10);
                     playerLuckLootMods = new float[] { -0.02f*pL+1, 0.03f*pL+1, -0.02f*pL+1, -0.02f*pL+1, 0.03f*pL+1, 0.03f*pL+1, 0.02f*pL+1, 0.02f*pL+1, 0.02f*pL+1, 0.01f*pL+1 };
                 }
@@ -4510,7 +4512,8 @@ namespace DaggerfallWorkshop.Game.Formulas
 
             for (int i = 0; i < ItemBuilder.materialsByRarity.Length; i++)
             {
-                int randomModifier = UnityEngine.Random.Range(0, (int)Mathf.Ceil(512 / (ItemBuilder.materialsByRarity[i] * 0.25f) * regionMods[i] * enemyLevelLootMods[i] * buildingQualityLootMods[i] * playerLuckLootMods[i]));
+                int randomModifier = UnityEngine.Random.Range(0, (int)Mathf.Ceil(ItemBuilder.materialsByRarity[i] * regionMods[i] * enemyLevelLootMods[i] * buildingQualityLootMods[i] * playerLuckLootMods[i]));
+                randomModifier = Mathf.Clamp(randomModifier, 1, 100);
                 matRolls[i] = randomModifier;
             }
 
@@ -4543,6 +4546,64 @@ namespace DaggerfallWorkshop.Game.Formulas
             }
 
             return (WeaponMaterialTypes)index;
+        }*/
+
+        public static WeaponMaterialTypes RandomMaterial(int enemyLevel = -1, int buildingQuality = -1, int playerLuck = -1)
+        {
+            float[] regionMods = PlayerGPS.RegionMaterialSupplyCreator();
+            float[] enemyLevelLootMods = new float[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            float[] buildingQualityLootMods = new float[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            float[] playerLuckLootMods = new float[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            int[] matRolls = new int[] { };
+            List<int> matRollsList = new List<int>();
+
+            if (enemyLevel > 1)
+            {
+                int eLev = enemyLevel;
+                enemyLevelLootMods = new float[] { 1, 0.03f * eLev + 1, 1, 1, 0.03f * eLev + 1, 0.03f * eLev + 1, 0.02f * eLev + 1, 0.02f * eLev + 1, 0.02f * eLev + 1, 0.01f * eLev + 1 };
+            }
+
+            if (buildingQuality > 1)
+            {
+                int bQ = buildingQuality;
+                buildingQualityLootMods = new float[] { 1, 0.05f * bQ + 1, 1, 1, 0.05f * bQ + 1, 0.05f * bQ + 1, 0.03f * bQ + 1, 0.03f * bQ + 1, 0.03f * bQ + 1, 0.02f * bQ + 1 };
+            }
+
+            if (playerLuck != 0)
+            {
+                int pL = playerLuck;
+                if (pL < 50)
+                {
+                    pL -= 50;
+                    pL = Mathf.Clamp((int)Mathf.Round(pL / 5), -10, -1) * -1;
+                    playerLuckLootMods = new float[] { 0.05f * pL + 1, -0.02f * pL + 1, 0.05f * pL + 1, 0.05f * pL + 1, -0.02f * pL + 1, -0.02f * pL + 1, -0.04f * pL + 1, -0.04f * pL + 1, -0.04f * pL + 1, -0.06f * pL + 1 };
+                }
+                else if (pL > 50)
+                {
+                    pL -= 50;
+                    pL = Mathf.Clamp((int)Mathf.Round(pL / 5), 1, 10);
+                    playerLuckLootMods = new float[] { -0.02f * pL + 1, 0.03f * pL + 1, -0.02f * pL + 1, -0.02f * pL + 1, 0.03f * pL + 1, 0.03f * pL + 1, 0.02f * pL + 1, 0.02f * pL + 1, 0.02f * pL + 1, 0.01f * pL + 1 };
+                }
+            }
+
+            for (int i = 0; i < ItemBuilder.materialsByRarity.Length; i++)
+            {
+                int arraystart = matRollsList.Count;
+                int fillElements = (int)Mathf.Ceil(ItemBuilder.materialsByRarity[i] * regionMods[i] * enemyLevelLootMods[i] * buildingQualityLootMods[i] * playerLuckLootMods[i]);
+                matRolls = FillArray(matRollsList, arraystart, fillElements, i);
+            }
+
+            return (WeaponMaterialTypes)PickOneOf(matRolls);
+        }
+
+        public static T[] FillArray<T>(List<T> list, int start, int count, T value)
+        {
+            for (var i = start; i < start + count; i++)
+            {
+                list.Add(value);
+            }
+
+            return list.ToArray();
         }
 
         /// <summary>
@@ -4554,7 +4615,7 @@ namespace DaggerfallWorkshop.Game.Formulas
         {
             if (armorType == -1)
             {
-                armorType = EnemyBasics.PickOneOf(0, 1, 2, 2); // I'll likely want to do a more complicated system for this, but for now it's simple and will work for this purpose. 
+                armorType = PickOneOf(0, 1, 2); // I'll likely want to do a more complicated system for this, but for now it's simple and will work for this purpose. 
             }
 
             if (armorType == 0)
@@ -4570,6 +4631,26 @@ namespace DaggerfallWorkshop.Game.Formulas
                 WeaponMaterialTypes plateMaterial = RandomMaterial(enemyLevel, buildingQuality, playerLuck);
                 return (ArmorMaterialTypes)(0x0200 + plateMaterial);
             }
+        }
+
+        public static int PickOneOf(params int[] values) // Pango provided assistance in making this much cleaner way of doing the random value choice part, awesome.
+        {
+            return values[UnityEngine.Random.Range(0, values.Length)];
+        }
+
+        public static int PickOneOfCompact(params int[] values)
+        {
+            List<int> rollNums = new List<int>();
+
+            for (int i = 0; i < values.Length; i += 2) // Even parameter index = value put in random list, Odd parameter index = number of times even param is put into list.
+            {
+                for (int h = 0; h < values[i + 1]; h++)
+                    rollNums.Add(values[i]);
+            }
+
+            int[] rollThese = rollNums.ToArray();
+
+            return rollThese[UnityEngine.Random.Range(0, rollThese.Length)];
         }
 
         #endregion

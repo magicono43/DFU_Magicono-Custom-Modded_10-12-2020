@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using DaggerfallConnect;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Entity;
+using DaggerfallWorkshop.Game.Formulas;
 using DaggerfallWorkshop.Game.Items;
 using UnityEngine;
 
@@ -4512,22 +4513,22 @@ namespace DaggerfallWorkshop.Utility
                         return 0;
                     case (int)ClassCareers.Spellsword:
                     case (int)ClassCareers.Assassin:
-                        return PickOneOf(0, 1);
+                        return FormulaHelper.PickOneOf(0, 1);
                     case (int)ClassCareers.Battlemage:
-                        return PickOneOf(1, 2, 2);
+                        return FormulaHelper.PickOneOf(1, 2, 2);
                     case (int)ClassCareers.Sorcerer:
                     case (int)ClassCareers.Healer:
-                        return PickOneOf(0, 0, 1);
+                        return FormulaHelper.PickOneOf(0, 0, 1);
                     case (int)ClassCareers.Bard:
-                        return PickOneOf(0, 1, 1, 2);
+                        return FormulaHelper.PickOneOf(0, 1, 1, 2);
                     case (int)ClassCareers.Rogue:
-                        return PickOneOf(0, 0, 0, 1, 1, 2);
+                        return FormulaHelper.PickOneOf(0, 0, 0, 1, 1, 2);
                     case (int)ClassCareers.Archer:
                     case (int)ClassCareers.Ranger:
-                        return PickOneOf(0, 0, 1, 2);
+                        return FormulaHelper.PickOneOf(0, 0, 1, 2);
                     case (int)ClassCareers.Warrior:
                     case (int)ClassCareers.Knight:
-                        return PickOneOf(0, 1, 1, 2, 2, 2);
+                        return FormulaHelper.PickOneOf(0, 1, 1, 2, 2, 2);
                     default:
                         return -1;
                 }
@@ -4537,26 +4538,26 @@ namespace DaggerfallWorkshop.Utility
                 switch (AITarget.CareerIndex)
                 {
                     case 7:
-                        return PickOneOf(0, 1, 2, 2);
+                        return FormulaHelper.PickOneOf(0, 1, 2, 2);
                     case 8:
-                        return PickOneOf(0, 0, 1, 2);
+                        return FormulaHelper.PickOneOf(0, 0, 1, 2);
                     case 12:
-                        return PickOneOf(0, 1, 2, 2, 2);
+                        return FormulaHelper.PickOneOf(0, 1, 2, 2, 2);
                     case 15:
                     case 17:
-                        return PickOneOf(0, 0, 0, 1, 2);
+                        return FormulaHelper.PickOneOf(0, 0, 0, 1, 2);
                     case 21:
                         return 0;
                     case 24:
-                        return PickOneOf(0, 1, 2, 2, 2, 2);
+                        return FormulaHelper.PickOneOf(0, 1, 2, 2, 2, 2);
                     case 25:
                     case 26:
                     case 27:
                     case 31:
-                        return PickOneOf(1, 2, 2, 2);
+                        return FormulaHelper.PickOneOf(1, 2, 2, 2);
                     case 28:
                     case 30:
-                        return PickOneOf(0, 0, 1);
+                        return FormulaHelper.PickOneOf(0, 0, 1);
                     default:
                         return -1;
                 }
@@ -4610,8 +4611,8 @@ namespace DaggerfallWorkshop.Utility
             {
                 if (equipTableProps[4] == 0)
                 {
-                    equipTableProps[4] = PickOneOf(0, 0, 1);
-                    equipTableProps[5] = PickOneOf((int)Poisons.Nux_Vomica, (int)Poisons.Nux_Vomica, (int)Poisons.Moonseed, (int)Poisons.Moonseed, (int)Poisons.Pyrrhic_Acid);
+                    equipTableProps[4] = FormulaHelper.PickOneOf(0, 0, 1);
+                    equipTableProps[5] = FormulaHelper.PickOneOf((int)Poisons.Nux_Vomica, (int)Poisons.Nux_Vomica, (int)Poisons.Moonseed, (int)Poisons.Moonseed, (int)Poisons.Pyrrhic_Acid);
                 }
             }
 
@@ -4791,7 +4792,7 @@ namespace DaggerfallWorkshop.Utility
 
                 if (traits[2] == (int)MobilePersonalityInterests.Cartographer)
                 {
-                    finalExtraLootProps[11] = PickOneOf(2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4);
+                    finalExtraLootProps[11] = FormulaHelper.PickOneOfCompact(2, 8, 3, 4, 4, 1);
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Fisher)
@@ -4807,7 +4808,7 @@ namespace DaggerfallWorkshop.Utility
 
                 if (traits[2] == (int)MobilePersonalityInterests.Magic_Collector)
                 {
-                    finalExtraLootProps[3] = PickOneOf(1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3);
+                    finalExtraLootProps[3] = FormulaHelper.PickOneOfCompact(1, 8, 2, 3, 3, 1);
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Writer)
@@ -4840,108 +4841,108 @@ namespace DaggerfallWorkshop.Utility
                     {
                         case (int)ClassCareers.Mage:
                             equipTableProps[0] = (int)Weapons.Staff;
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, (int)Armor.Buckler);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 3, (int)Weapons.Dagger, 1, (int)Weapons.Tanto, 1, (int)Weapons.Shortsword, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 4, (int)Armor.Buckler, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 7, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 20;
                             equipTableProps[14] = 60;
                             break;
                         case (int)ClassCareers.Spellsword:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Battle_Axe, (int)Weapons.Broadsword, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Mace);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Short_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Battle_Axe, (int)Weapons.Broadsword, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Mace);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 3, (int)Weapons.Dagger, 1, (int)Weapons.Wakazashi, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Short_Bow, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 5, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 30;
                             equipTableProps[14] = 70;
                             break;
                         case (int)ClassCareers.Battlemage:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Broadsword, (int)Weapons.Saber, (int)Weapons.Longsword, (int)Weapons.Katana, (int)Weapons.Claymore, (int)Weapons.Dai_Katana);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Staff, (int)Weapons.Warhammer, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Broadsword, (int)Weapons.Saber, (int)Weapons.Longsword, (int)Weapons.Katana, (int)Weapons.Claymore, (int)Weapons.Dai_Katana);
+                            equipTableProps[1] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Staff, (int)Weapons.Warhammer, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 3, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 30;
                             equipTableProps[14] = 70;
                             break;
                         case (int)ClassCareers.Sorcerer:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Mace, (int)Weapons.Flail, (int)Weapons.Warhammer);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Tanto, (int)Weapons.Mace);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Wakazashi, (int)Weapons.Shortsword, (int)Weapons.Mace, (int)Weapons.Flail, (int)Weapons.Warhammer);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 5, (int)Weapons.Dagger, 1, (int)Weapons.Wakazashi, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Tanto, 1, (int)Weapons.Mace, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 5, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 20;
                             equipTableProps[14] = 60;
                             break;
                         case (int)ClassCareers.Healer:
                             equipTableProps[0] = (int)Weapons.Staff;
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 5, (int)Weapons.Dagger, 1, (int)Weapons.Tanto, 1, (int)Weapons.Shortsword, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 3, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 4, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 25;
                             equipTableProps[14] = 65;
                             break;
                         case (int)ClassCareers.Nightblade:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, (int)Armor.Buckler);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[1] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 3, (int)Armor.Buckler, 1);
                             equipTableProps[3] = 0;
-                            equipTableProps[4] = PickOneOf(0, 1, 1);
+                            equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2);
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 40;
                             equipTableProps[14] = 80;
                             break;
                         case (int)ClassCareers.Bard:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Short_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 3, (int)Weapons.Dagger, 1, (int)Weapons.Tanto, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Wakazashi, 1, (int)Weapons.Short_Bow, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 4, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 3, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 30;
                             equipTableProps[14] = 70;
                             break;
                         case (int)ClassCareers.Burglar:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 3, (int)Weapons.Dagger, 1, (int)Weapons.Tanto, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Wakazashi, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 3, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 20;
                             equipTableProps[14] = 60;
                             break;
                         case (int)ClassCareers.Rogue:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer);
-                            equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
-                            equipTableProps[4] = PickOneOf(0, 0, 0, 0, 1);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 4, (int)Weapons.Broadsword, 1, (int)Weapons.Claymore, 1, (int)Weapons.Dai_Katana, 1, (int)Weapons.Katana, 1, (int)Weapons.Longsword, 1, (int)Weapons.Saber, 1, (int)Weapons.Flail, 1, (int)Weapons.Mace, 1, (int)Weapons.Warhammer, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 2, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
+                            equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 4, 1, 1);
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 20;
                             equipTableProps[14] = 60;
                             break;
                         case (int)ClassCareers.Acrobat:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 4, (int)Weapons.Dagger, 1, (int)Weapons.Tanto, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Wakazashi, 1, (int)Weapons.Short_Bow, 1, (int)Weapons.Long_Bow, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 7, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 25;
                             equipTableProps[14] = 65;
                             break;
                         case (int)ClassCareers.Thief:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, (int)Armor.Buckler);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 3, (int)Weapons.Dagger, 1, (int)Weapons.Tanto, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Wakazashi, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 4, (int)Armor.Buckler, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 4, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 20;
                             equipTableProps[14] = 60;
                             break;
                         case (int)ClassCareers.Assassin:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer);
+                            equipTableProps[1] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps[4] = 1;
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
@@ -4950,55 +4951,55 @@ namespace DaggerfallWorkshop.Utility
                             break;
                         case (int)ClassCareers.Monk:
                             equipTableProps[0] = (int)Weapons.Staff;
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 4, (int)Weapons.Dagger, 1, (int)Weapons.Tanto, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Wakazashi, 1, (int)Weapons.Battle_Axe, 1, (int)Weapons.War_Axe, 1, (int)Weapons.Flail, 1, (int)Weapons.Mace, 1, (int)Weapons.Warhammer, 1, (int)Weapons.Short_Bow, 1, (int)Weapons.Long_Bow, 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 25;
                             equipTableProps[14] = 65;
                             break;
                         case (int)ClassCareers.Archer:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
-                            equipTableProps[4] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
+                            equipTableProps[1] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 3, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
+                            equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 9, 1, 1);
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 35;
                             equipTableProps[14] = 75;
                             break;
                         case (int)ClassCareers.Ranger:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Broadsword, (int)Weapons.Battle_Axe, (int)Weapons.Mace, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
-                            equipTableProps[4] = PickOneOf(0, 0, 0, 0, 1);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
+                            equipTableProps[1] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Broadsword, (int)Weapons.Battle_Axe, (int)Weapons.Mace, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 4, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 4, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
+                            equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 4, 1, 1);
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 30;
                             equipTableProps[14] = 70;
                             break;
                         case (int)ClassCareers.Barbarian:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
+                            equipTableProps[1] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 5, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1, (int)Armor.Tower_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 6, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 20;
                             equipTableProps[14] = 60;
                             break;
                         case (int)ClassCareers.Warrior:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Dagger, (int)Weapons.Tanto);
-                            equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[1] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Dagger, (int)Weapons.Tanto);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 2, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1, (int)Armor.Tower_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 40;
                             equipTableProps[14] = 80;
                             break;
                         case (int)ClassCareers.Knight:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Dagger, (int)Weapons.Tanto);
-                            equipTableProps[2] = PickOneOf(-1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[1] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Dagger, (int)Weapons.Tanto);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 2, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1, (int)Armor.Tower_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 45;
                             equipTableProps[14] = 85;
@@ -5012,103 +5013,103 @@ namespace DaggerfallWorkshop.Utility
                     switch (AITarget.CareerIndex)
                     {
                         case 7:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 15, (int)Weapons.Broadsword, 1, (int)Weapons.Claymore, 1, (int)Weapons.Dai_Katana, 1, (int)Weapons.Katana, 1, (int)Weapons.Longsword, 1, (int)Weapons.Saber, 1, (int)Weapons.Flail, 1, (int)Weapons.Mace, 1, (int)Weapons.Warhammer, 1, (int)Weapons.Battle_Axe, 1, (int)Weapons.War_Axe, 1, (int)Weapons.Short_Bow, 1, (int)Weapons.Long_Bow, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Wakazashi, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 6, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1, (int)Armor.Tower_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 30;
                             equipTableProps[14] = 70;
                             break;
                         case 8:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, 4, 6, 7);
-                            equipTableProps[4] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 15, (int)Weapons.Broadsword, 1, (int)Weapons.Claymore, 1, (int)Weapons.Dai_Katana, 1, (int)Weapons.Katana, 1, (int)Weapons.Longsword, 1, (int)Weapons.Saber, 1, (int)Weapons.Flail, 1, (int)Weapons.Mace, 1, (int)Weapons.Warhammer, 1, (int)Weapons.Battle_Axe, 1, (int)Weapons.War_Axe, 1, (int)Weapons.Short_Bow, 1, (int)Weapons.Long_Bow, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 6, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 5, 4, 1, 6, 1, 7, 1);
+                            equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 9, 1, 1);
                             equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 15;
                             equipTableProps[14] = 55;
                             break;
                         case 12:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 12, (int)Weapons.Broadsword, 1, (int)Weapons.Claymore, 1, (int)Weapons.Dai_Katana, 1, (int)Weapons.Katana, 1, (int)Weapons.Longsword, 1, (int)Weapons.Saber, 1, (int)Weapons.Flail, 1, (int)Weapons.Mace, 1, (int)Weapons.Warhammer, 1, (int)Weapons.Battle_Axe, 1, (int)Weapons.War_Axe, 1, (int)Weapons.Short_Bow, 1, (int)Weapons.Long_Bow, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Wakazashi, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 5, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1, (int)Armor.Tower_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 35;
                             equipTableProps[14] = 75;
                             break;
                         case 15:
                             equipTableProps[0] = (int)Weapons.Battle_Axe;
-                            equipTableProps[2] = PickOneOf((int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, -1, 1, 2, 3, 4, 5, 6, 7, 8);
+                            equipTableProps[2] = FormulaHelper.PickOneOf((int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 6, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 5;
                             equipTableProps[14] = 45;
                             break;
                         case 17:
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, -1, 1, 2, 3, 4, 5, 6, 7, 8);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 6, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 5;
                             equipTableProps[14] = 45;
                             break;
                         case 21:
                             equipTableProps[0] = (int)Weapons.Staff;
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, (int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield);
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 5, (int)Weapons.Dagger, 1, (int)Weapons.Tanto, 1, (int)Weapons.Shortsword, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 6, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 8, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 20;
                             equipTableProps[14] = 60;
                             break;
                         case 23:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Longsword, (int)Weapons.Saber);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Longsword, (int)Weapons.Saber);
                             equipTableProps[13] = 10;
                             equipTableProps[14] = 50;
                             break;
                         case 24:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[1] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, -1, -1, (int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber, (int)Weapons.Flail, (int)Weapons.Mace, (int)Weapons.Warhammer, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Shortsword, (int)Weapons.Wakazashi);
+                            equipTableProps[1] = FormulaHelper.PickOneOfCompact(-1, 9, (int)Weapons.Broadsword, 1, (int)Weapons.Claymore, 1, (int)Weapons.Dai_Katana, 1, (int)Weapons.Katana, 1, (int)Weapons.Longsword, 1, (int)Weapons.Saber, 1, (int)Weapons.Flail, 1, (int)Weapons.Mace, 1, (int)Weapons.Warhammer, 1, (int)Weapons.Battle_Axe, 1, (int)Weapons.War_Axe, 1, (int)Weapons.Short_Bow, 1, (int)Weapons.Long_Bow, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Wakazashi, 1);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 5, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1, (int)Armor.Tower_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 40;
                             equipTableProps[14] = 80;
                             break;
                         case 25:
                             equipTableProps[0] = (int)Weapons.Warhammer;
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 15;
                             equipTableProps[14] = 55;
                             break;
                         case 26:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Claymore, (int)Weapons.Dai_Katana);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Claymore, (int)Weapons.Dai_Katana);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 15;
                             equipTableProps[14] = 55;
                             break;
                         case 27:
                             equipTableProps[0] = (int)Weapons.War_Axe;
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 15;
                             equipTableProps[14] = 55;
                             break;
                         case 31:
-                            equipTableProps[0] = PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
-                            equipTableProps[2] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, (int)Armor.Buckler, (int)Armor.Round_Shield, (int)Armor.Kite_Shield, (int)Armor.Tower_Shield);
-                            equipTableProps[3] = PickOneOf(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[0] = FormulaHelper.PickOneOf((int)Weapons.Broadsword, (int)Weapons.Claymore, (int)Weapons.Dai_Katana, (int)Weapons.Katana, (int)Weapons.Longsword, (int)Weapons.Saber);
+                            equipTableProps[2] = FormulaHelper.PickOneOfCompact(-1, 7, (int)Armor.Buckler, 1, (int)Armor.Round_Shield, 1, (int)Armor.Kite_Shield, 1, (int)Armor.Tower_Shield, 1);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 35;
                             equipTableProps[14] = 75;
                             break;
                         case 28:
                         case 30:
-                            equipTableProps[3] = PickOneOf(-1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8);
+                            equipTableProps[3] = FormulaHelper.PickOneOfCompact(-1, 8, 0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 25;
                             equipTableProps[14] = 65;
@@ -5149,146 +5150,146 @@ namespace DaggerfallWorkshop.Utility
                 {
                     case (int)ClassCareers.Mage:
                         equipTableProps[0] = UnityEngine.Random.Range(4 * level, 12 * (int)Mathf.Ceil(level / 2) + 1); // I'll definitely have to alter these gold values later, but for now will work.
-                        equipTableProps[1] = PickOneOf(0, 0, 1, 1, 2);
-                        equipTableProps[2] = PickOneOf(0, 0, 1, 1, 2);
-                        equipTableProps[3] = PickOneOf(0, 0, 1);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2);
-                        equipTableProps[6] = PickOneOf(0, 0, 0, 1);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 0, 1);
-                        equipTableProps[8] = PickOneOf(1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 4);
+                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 7, 1, 3, 2, 1);
+                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 4, 2, 6, 3, 2, 4, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Spellsword:
                         equipTableProps[0] = UnityEngine.Random.Range(6 * level, 14 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = PickOneOf(0, 0, 1, 1, 2);
-                        equipTableProps[2] = PickOneOf(0, 0, 1);
-                        equipTableProps[3] = PickOneOf(0, 0, 0, 1, 1, 2);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 0, 1, 1, 1, 2);
-                        equipTableProps[6] = PickOneOf(0, 0, 0, 1);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 0, 1);
-                        equipTableProps[8] = PickOneOf(1, 1, 1, 1, 1, 1, 2, 2, 2, 3);
+                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 3, 1, 2, 2, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 5, 1, 3, 2, 1);
+                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 6, 2, 3, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Battlemage:
                         equipTableProps[0] = UnityEngine.Random.Range(8 * level, 16 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = PickOneOf(0, 0, 0, 1);
-                        equipTableProps[2] = PickOneOf(0, 0, 0, 1);
-                        equipTableProps[3] = PickOneOf(0, 0, 0, 1);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2);
-                        equipTableProps[6] = PickOneOf(0, 0, 0, 0, 0, 1);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        equipTableProps[8] = PickOneOf(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3);
+                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 6, 1, 3, 2, 2);
+                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 11, 2, 5, 3, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Sorcerer:
                         equipTableProps[0] = UnityEngine.Random.Range(2 * level, 10 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = PickOneOf(0, 0, 1);
-                        equipTableProps[2] = PickOneOf(0, 0, 1, 1, 2);
-                        equipTableProps[3] = PickOneOf(0, 0, 1, 1, 2);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        equipTableProps[6] = PickOneOf(0, 0, 0, 0, 1, 1, 1, 2);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2);
-                        equipTableProps[8] = PickOneOf(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3);
+                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 4, 1, 3, 2, 1);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 6, 1, 4, 2, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 10, 2, 3, 3, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Healer:
                         equipTableProps[0] = UnityEngine.Random.Range(2 * level, 10 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = PickOneOf(0, 0, 1, 1, 2);
-                        equipTableProps[2] = PickOneOf(1, 1, 1, 2);
-                        equipTableProps[3] = PickOneOf(1, 1, 1, 1, 2, 2, 3);
-                        equipTableProps[4] = PickOneOf(0, 0, 1);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 0, 0, 1, 1, 1, 2);
-                        equipTableProps[6] = PickOneOf(0, 0, 0, 1, 1, 2);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 0, 1);
-                        equipTableProps[8] = PickOneOf(1, 1, 1, 1, 1, 2);
+                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(1, 4, 2, 2, 3, 1);
+                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 6, 1, 3, 2, 1);
+                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 3, 1, 2, 2, 1);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 5, 2, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Nightblade:
                         equipTableProps[0] = UnityEngine.Random.Range(10 * level, 18 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = PickOneOf(0, 0, 1);
-                        equipTableProps[2] = PickOneOf(2, 2, 2, 2, 2, 3, 3, 4);
-                        equipTableProps[3] = PickOneOf(1, 1, 1, 1, 1, 2);
-                        equipTableProps[4] = PickOneOf(1, 1, 1, 1, 1, 2, 2, 2, 3);
-                        equipTableProps[5] = PickOneOf(1, 1, 1, 1, 2);
-                        equipTableProps[6] = PickOneOf(1, 1, 1, 1, 1, 2, 2, 3);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 1, 1, 1, 1, 2);
-                        equipTableProps[8] = PickOneOf(0, 0, 0, 0, 0, 1);
+                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(2, 5, 3, 2, 4, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(1, 5, 2, 1);
+                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(1, 5, 2, 3, 3, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(1, 4, 2, 1);
+                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(1, 5, 2, 2, 3, 1);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 4, 1, 4, 2, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Bard:
                         equipTableProps[0] = UnityEngine.Random.Range(7 * level, 15 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 0, 0, 1, 1, 1, 2);
-                        equipTableProps[8] = PickOneOf(0, 0, 0, 1, 1);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 6, 1, 3, 2, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 3, 1, 2);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Burglar:
                         equipTableProps[0] = UnityEngine.Random.Range(12 * level, 21 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[7] = PickOneOf(1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 4);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(1, 6, 2, 4, 3, 1, 4, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Rogue:
                         equipTableProps[0] = UnityEngine.Random.Range(8 * level, 18 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[7] = PickOneOf(0, 0, 1, 1, 1, 1, 1, 2, 2);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 2, 1, 5, 2, 2);
                         equipTableProps[9] = 1;
                         break;
                     case (int)ClassCareers.Acrobat:
                         equipTableProps[0] = UnityEngine.Random.Range(4 * level, 12 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[2] = PickOneOf(0, 0, 0, 1, 1, 1, 1, 2, 2);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 3, 1, 4, 2, 2);
                         equipTableProps[9] = 1;
                         break;
                     case (int)ClassCareers.Thief:
                         equipTableProps[0] = UnityEngine.Random.Range(14 * level, 23 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[7] = PickOneOf(1, 1, 1, 1, 1, 1, 2, 2, 2, 3);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(1, 6, 2, 3, 3, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Assassin:
                         equipTableProps[0] = UnityEngine.Random.Range(9 * level, 19 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = PickOneOf(0, 0, 1);
-                        equipTableProps[2] = PickOneOf(1, 1, 1, 1, 2);
-                        equipTableProps[3] = PickOneOf(1, 1, 1, 1, 2);
-                        equipTableProps[4] = PickOneOf(1, 1, 1, 1, 1, 1, 1, 2);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        equipTableProps[6] = PickOneOf(1, 1, 1, 1, 1, 1, 1, 2, 2);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2);
-                        equipTableProps[8] = PickOneOf(0, 0, 0, 0, 0, 1);
+                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(1, 4, 2, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(1, 4, 2, 1);
+                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(1, 7, 2, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(1, 7, 2, 2);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 7, 1, 4, 2, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Monk:
                         equipTableProps[0] = UnityEngine.Random.Range(2 * level, 8 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[8] = PickOneOf(0, 0, 0, 1, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 3, 1, 2);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Archer:
                         equipTableProps[0] = UnityEngine.Random.Range(6 * level, 14 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[2] = PickOneOf(0, 0, 1);
-                        equipTableProps[3] = PickOneOf(0, 0, 1);
-                        equipTableProps[4] = PickOneOf(0, 0, 0, 0, 1, 1, 1, 2);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 1);
-                        equipTableProps[6] = PickOneOf(0, 0, 0, 0, 0, 0, 1, 1, 1, 2);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
+                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 4, 1, 3, 2, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
+                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 6, 1, 3, 2, 1);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 10, 1, 3, 2, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Ranger:
                         equipTableProps[0] = UnityEngine.Random.Range(3 * level, 10 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = PickOneOf(1, 1, 1, 1, 1, 2, 2, 2, 3);
-                        equipTableProps[2] = PickOneOf(1, 1, 1, 1, 1, 2, 2, 2, 3);
-                        equipTableProps[3] = PickOneOf(2, 2, 2, 2, 2, 2, 3, 3, 4);
-                        equipTableProps[4] = PickOneOf(2, 2, 2, 2, 2, 2, 3, 3, 4);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2);
-                        equipTableProps[6] = PickOneOf(0, 0, 0, 0, 0, 1);
-                        equipTableProps[8] = PickOneOf(0, 0, 0, 0, 0, 1);
+                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(1, 5, 2, 3, 3, 1);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(1, 5, 2, 3, 3, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(2, 6, 3, 2, 4, 1);
+                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(2, 6, 3, 2, 4, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 7, 1, 4, 2, 1);
+                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
@@ -5304,8 +5305,8 @@ namespace DaggerfallWorkshop.Utility
                         break;
                     case (int)ClassCareers.Knight:
                         equipTableProps[0] = UnityEngine.Random.Range(7 * level, 15 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        equipTableProps[8] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
@@ -5334,10 +5335,10 @@ namespace DaggerfallWorkshop.Utility
                         break;
                     case 1:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 6 + 1);
-                        equipTableProps[1] = PickOneOf(0, 0, 0, 1);
-                        equipTableProps[2] = PickOneOf(0, 0, 0, 1);
-                        equipTableProps[3] = PickOneOf(0, 0, 0, 1);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2);
+                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 9, 1, 3, 2, 1);
                         break;
                     case 2:
                         equipTableProps[1] = UnityEngine.Random.Range(2, 8 + 1);
@@ -5349,7 +5350,7 @@ namespace DaggerfallWorkshop.Utility
                         break;
                     case 10:
                         equipTableProps[2] = UnityEngine.Random.Range(2, 6 + 1);
-                        equipTableProps[5] = PickOneOf(1, 1, 1, 1, 1, 2, 2, 2, 3);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(1, 5, 2, 3, 3, 1);
                         break;
                     case 13:
                         equipTableProps[5] = UnityEngine.Random.Range(3, 10 + 1);
@@ -5388,13 +5389,13 @@ namespace DaggerfallWorkshop.Utility
                         break;
                     case 21:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 20 + 1);
-                        equipTableProps[1] = PickOneOf(0, 0, 0, 0, 1, 1, 2);
-                        equipTableProps[2] = PickOneOf(1, 1, 1, 1, 2);
-                        equipTableProps[3] = PickOneOf(1, 1, 1, 1, 1, 2, 2, 3);
-                        equipTableProps[4] = PickOneOf(0, 0, 0, 0, 1);
+                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 4, 1, 2, 2, 1);
+                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(1, 4, 2, 1);
+                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(1, 5, 2, 2, 3, 1);
+                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 4, 1, 1);
                         equipTableProps[5] = UnityEngine.Random.Range(1, 2 + 1);
-                        equipTableProps[6] = PickOneOf(0, 0, 0, 0, 0, 1, 1, 2);
-                        equipTableProps[7] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 1);
+                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 5, 1, 2, 2, 1);
+                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
@@ -5408,7 +5409,7 @@ namespace DaggerfallWorkshop.Utility
                         equipTableProps[5] = UnityEngine.Random.Range(2, 5 + 1);
                         break;
                     case 14:
-                        equipTableProps[5] = PickOneOf(0, 1, 1, 2);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 1);
                         break;
                     case 35:
                         equipTableProps[7] = UnityEngine.Random.Range(2, 9 + 1);
@@ -5440,27 +5441,27 @@ namespace DaggerfallWorkshop.Utility
                     case 28:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 28 + 1);
                         equipTableProps[4] = UnityEngine.Random.Range(0, 3 + 1);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 0, 1);
-                        equipTableProps[8] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         equipTableProps[9] = 1;
                         break;
                     case 30:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 68 + 1);
                         equipTableProps[4] = UnityEngine.Random.Range(0, 3 + 1);
-                        equipTableProps[5] = PickOneOf(0, 0, 0, 0, 1, 1, 1, 2);
-                        equipTableProps[8] = PickOneOf(1, 1, 1, 1, 1, 1, 2);
+                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 4, 1, 3, 2, 1);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 6, 2, 1);
                         equipTableProps[9] = 1;
                         break;
                     case 32:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 34 + 1);
                         equipTableProps[5] = UnityEngine.Random.Range(2, 5 + 1);
-                        equipTableProps[8] = PickOneOf(2, 2, 2, 2, 2, 2, 2, 2, 3);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(2, 8, 3, 1);
                         equipTableProps[9] = 1;
                         break;
                     case 33:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 59 + 1);
                         equipTableProps[5] = UnityEngine.Random.Range(3, 6 + 1);
-                        equipTableProps[8] = PickOneOf(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4);
+                        equipTableProps[8] = FormulaHelper.PickOneOfCompact(2, 11, 3, 4, 4, 1);
                         equipTableProps[9] = 1;
                         break;
                     case 25:
@@ -5510,135 +5511,135 @@ namespace DaggerfallWorkshop.Utility
                 switch (AITarget.CareerIndex)
                 {
                     case (int)ClassCareers.Mage:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
+                        extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 12, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Spellsword:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
+                        extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 18, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Battlemage:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
+                        extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 18, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Sorcerer:
-                        extraLootProps[1] = PickOneOf(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3);
-                        extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(1, 10, 2, 3, 3, 1);
+                        extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 18, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Healer:
-                        extraLootProps[1] = PickOneOf(1, 1, 1, 1, 1, 1, 1, 2, 2, 2);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(1, 10, 2, 3);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(1, 3 + 1);
                         extraLootProps[7] = UnityEngine.Random.Range(4, 7 + 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Nightblade:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[10] = 1;
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Bard:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(2, 2, 2, 2, 2, 2, 3);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[9] = PickOneOf(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(2, 7, 3, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[9] = FormulaHelper.PickOneOfCompact(0, 4, 1, 7, 2, 2);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Burglar:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[2] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[2] = FormulaHelper.PickOneOfCompact(0, 9, 1, 6, 2, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Rogue:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Acrobat:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Thief:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[2] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[2] = FormulaHelper.PickOneOfCompact(0, 9, 1, 2);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Assassin:
                         extraLootProps[0] = UnityEngine.Random.Range(5, 16 + 1);
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[9] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[9] = FormulaHelper.PickOneOfCompact(0, 7, 1, 5, 2, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Monk:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(0, 0, 1, 1, 1, 1, 1);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(0, 2, 1, 5);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(0, 2 + 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Archer:
                         extraLootProps[0] = UnityEngine.Random.Range(16, 35 + 1);
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[8] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Ranger:
                         extraLootProps[0] = UnityEngine.Random.Range(9, 26 + 1);
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(2, 2, 2, 2, 2, 2, 3);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[8] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(2, 7, 3, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Barbarian:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[7] = UnityEngine.Random.Range(0, 5 + 1);
-                        extraLootProps[8] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 10, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Warrior:
                         extraLootProps[0] = UnityEngine.Random.Range(5, 20 + 1);
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[8] = PickOneOf(0, 0, 0, 0, 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 4, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case (int)ClassCareers.Knight:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(1, 1, 1, 2);
-                        extraLootProps[5] = PickOneOf(1, 1, 1, 2);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(0, 1 + 1);
-                        extraLootProps[8] = PickOneOf(0, 0, 0, 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     default:
                         break;
@@ -5649,38 +5650,38 @@ namespace DaggerfallWorkshop.Utility
                 switch (AITarget.CareerIndex)
                 {
                     case 7:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(0, 1);
-                        extraLootProps[5] = PickOneOf(0, 1);
-                        extraLootProps[8] = PickOneOf(0, 0, 0, 0, 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOf(0, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
+                        extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 4, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case 12:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 0, 0, 1);
-                        extraLootProps[4] = PickOneOf(0, 1);
-                        extraLootProps[5] = PickOneOf(0, 1);
-                        extraLootProps[8] = PickOneOf(0, 0, 0, 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOf(0, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
+                        extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case 21:
-                        extraLootProps[1] = PickOneOf(0, 0, 1);
-                        extraLootProps[4] = PickOneOf(0, 1);
-                        extraLootProps[5] = PickOneOf(0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOf(0, 0, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOf(0, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(1, 3 + 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case 24:
-                        extraLootProps[1] = PickOneOf(0, 0, 0, 1);
-                        extraLootProps[2] = PickOneOf(0, 0, 1, 1, 1, 1, 1, 1, 2);
-                        extraLootProps[4] = PickOneOf(0, 1, 2);
-                        extraLootProps[5] = PickOneOf(0, 1);
-                        extraLootProps[8] = PickOneOf(0, 0, 1);
-                        extraLootProps[11] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        extraLootProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 6, 2, 1);
+                        extraLootProps[4] = FormulaHelper.PickOneOf(0, 1, 2);
+                        extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
+                        extraLootProps[8] = FormulaHelper.PickOneOf(0, 0, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
                         break;
                     case 29:
                     case 31:
-                        extraLootProps[2] = PickOneOf(0, 0, 1, 1, 1, 1, 2, 2, 2, 3);
-                        extraLootProps[3] = PickOneOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                        extraLootProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 4, 2, 3, 3, 1);
+                        extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 15, 1, 1);
                         break;
                     default:
                         break;
@@ -5930,11 +5931,6 @@ namespace DaggerfallWorkshop.Utility
         #endregion
 
         #region Helpers
-
-        public static int PickOneOf(params int[] values) // Pango provided assistance in making this much cleaner way of doing the random value choice part, awesome.
-        {
-            return values[UnityEngine.Random.Range(0, values.Length)];
-        }
 
         public static int CorpseTexture(int archive, int record)
         {

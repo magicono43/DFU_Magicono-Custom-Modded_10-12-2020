@@ -50,6 +50,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Lesser Invisibility",
                 100,
                 0,
+                15,
                 lesserInvisibilitySettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FlowerPlantIngredients.White_rose,

@@ -50,6 +50,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "True Chameleon Form",
                 56,
                 0,
+                25,
                 trueChameleonFormSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FruitPlantIngredients.Red_berries,

@@ -46,6 +46,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Light Sprite",
                 15,
                 0,
+                40,
                 lightSpriteSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FlowerPlantIngredients.Golden_poppy,

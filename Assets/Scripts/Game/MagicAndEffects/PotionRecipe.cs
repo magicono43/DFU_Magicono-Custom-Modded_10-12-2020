@@ -55,6 +55,11 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         public int IconIndex { get; set; }
 
         /// <summary>
+        /// How Rare The Potion And Variants Are From One Another. Used In Loot Formula, Scale Of 1-40, 40 Being The Most Common, And 1 Being The Most Rare.
+        /// </summary>
+        public int Rarity { get; set; }
+
+        /// <summary>
         /// The texture record from archive 205 to use for this potion, default = 11.
         /// </summary>
         public int TextureRecord
@@ -131,13 +136,16 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         /// </summary>
         /// <param name="displayName">Potion name to use for this recipe.</param>
         /// <param name="price">Value of potion in gp.</param>
+        /// <param name="iconIndex">Index of icon used for spell effect.</param>
+        /// <param name="rarity">General rarity of potion compared to other variants.</param>
         /// <param name="settings">Settings for this potion recipe.</param>
         /// <param name="ids">Array of item template IDs.</param>
-        public PotionRecipe(string displayName, int price, int iconIndex, EffectSettings settings, params int[] ids)
+        public PotionRecipe(string displayName, int price, int iconIndex, int rarity, EffectSettings settings, params int[] ids)
         {
             DisplayName = displayName;
             Price = price;
             IconIndex = iconIndex;
+            Rarity = rarity;
             this.Settings = settings;
             Array.Sort(ids);
             if (ids != null && ids.Length > 0)

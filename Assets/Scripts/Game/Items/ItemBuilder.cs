@@ -39,8 +39,10 @@ namespace DaggerfallWorkshop.Game.Items
         // This array is used to pick random material values.
         // The array is traversed, subtracting each value from a sum until the sum is less than the next value.
         // Steel through Daedric, or Iron if sum is less than the first value.
-        public static readonly short[] materialsByRarity = { 4, 6, 8, 10, 20, 14, 32, 24, 16, 52 };
-        //public static readonly byte[] materialsByModifier = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; // Has something to do with drop-chance and rarity, it's weird.
+        //                                  Iron, Steel, Silver, Elven, Dwarven, Mithril, Adamantium, Ebony, Orcish, Daedric.
+        public static readonly short[] materialsByRarity = { 70, 45, 30, 25, 8, 15, 3, 5, 10, 2 };
+        //public static readonly short[] materialsByRarity = { 20, 18, 16, 14, 8, 12, 4, 6, 10, 2 };
+        //public static readonly short[] materialsByRarity = { 4, 6, 8, 10, 20, 14, 32, 24, 16, 52 };
 
         // Weight multipliers by material type. Iron through Daedric. Weight is baseWeight * value / 4.
         //static readonly short[] weightMultipliersByMaterial = { 4, 5, 4, 4, 3, 4, 4, 2, 4, 5 };
@@ -251,14 +253,14 @@ namespace DaggerfallWorkshop.Game.Items
 
             if (gender == Genders.Male)
             {
-                newItem = CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Kimono, (int)MensClothing.Short_shirt_with_belt, (int)MensClothing.Short_shirt, (int)MensClothing.Dwynnen_surcoat,
+                newItem = CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Kimono, (int)MensClothing.Short_shirt_with_belt, (int)MensClothing.Short_shirt, (int)MensClothing.Dwynnen_surcoat,
                     (int)MensClothing.Short_tunic, (int)MensClothing.Formal_tunic, (int)MensClothing.Toga, (int)MensClothing.Reversible_tunic, (int)MensClothing.Long_shirt, (int)MensClothing.Long_shirt_with_belt,
                     (int)MensClothing.Short_shirt_closed_top, (int)MensClothing.Short_shirt_closed_top2, (int)MensClothing.Long_shirt_closed_top, (int)MensClothing.Long_shirt_closed_top2, (int)MensClothing.Open_Tunic,
                     (int)MensClothing.Anticlere_Surcoat, (int)MensClothing.Short_shirt_unchangeable, (int)MensClothing.Long_shirt_unchangeable, (int)MensClothing.Vest, (int)MensClothing.Eodoric), race, -1, minCond, maxCond);
             }
             else
             {
-                newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Peasant_blouse, (int)WomensClothing.Eodoric, (int)WomensClothing.Formal_eodoric, (int)WomensClothing.Casual_dress,
+                newItem = CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOf((int)WomensClothing.Peasant_blouse, (int)WomensClothing.Eodoric, (int)WomensClothing.Formal_eodoric, (int)WomensClothing.Casual_dress,
                     (int)WomensClothing.Strapless_dress, (int)WomensClothing.Short_shirt, (int)WomensClothing.Short_shirt_belt, (int)WomensClothing.Long_shirt, (int)WomensClothing.Long_shirt_belt,
                     (int)WomensClothing.Short_shirt_closed, (int)WomensClothing.Short_shirt_closed_belt, (int)WomensClothing.Short_shirt_unchangeable, (int)WomensClothing.Long_shirt_closed,
                     (int)WomensClothing.Long_shirt_closed_belt, (int)WomensClothing.Long_shirt_unchangeable, (int)WomensClothing.Open_tunic, (int)WomensClothing.Vest), race, -1, minCond, maxCond);
@@ -284,12 +286,12 @@ namespace DaggerfallWorkshop.Game.Items
 
             if (gender == Genders.Male)
             {
-                newItem = CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_pants, (int)MensClothing.Breeches, (int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt,
+                newItem = CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Casual_pants, (int)MensClothing.Breeches, (int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt,
                     (int)MensClothing.Loincloth, (int)MensClothing.Wrap), race, -1, minCond, maxCond);
             }
             else
             {
-                newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Casual_pants, (int)WomensClothing.Loincloth, (int)WomensClothing.Wrap, (int)WomensClothing.Long_skirt,
+                newItem = CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOf((int)WomensClothing.Casual_pants, (int)WomensClothing.Loincloth, (int)WomensClothing.Wrap, (int)WomensClothing.Long_skirt,
                     (int)WomensClothing.Tights), race, -1, minCond, maxCond);
             }
 
@@ -313,11 +315,11 @@ namespace DaggerfallWorkshop.Game.Items
 
             if (gender == Genders.Male)
             {
-                newItem = CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals, (int)MensClothing.Boots, (int)MensClothing.Tall_Boots), race, -1, minCond, maxCond);
+                newItem = CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals, (int)MensClothing.Boots, (int)MensClothing.Tall_Boots), race, -1, minCond, maxCond);
             }
             else
             {
-                newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals, (int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), race, -1, minCond, maxCond);
+                newItem = CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals, (int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), race, -1, minCond, maxCond);
             }
 
             //SetRace(newItem, race);
@@ -338,7 +340,7 @@ namespace DaggerfallWorkshop.Game.Items
         {
             DaggerfallUnityItem newItem;
 
-            newItem = CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Brassier, (int)WomensClothing.Brassier, (int)WomensClothing.Brassier,(int)WomensClothing.Formal_brassier), race, -1, minCond, maxCond);
+            newItem = CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOfCompact((int)WomensClothing.Brassier, 5, (int)WomensClothing.Formal_brassier, 1), race, -1, minCond, maxCond);
 
             //SetRace(newItem, race);
 
@@ -1100,11 +1102,15 @@ namespace DaggerfallWorkshop.Game.Items
             List<int> recipeKeys = GameManager.Instance.EntityEffectBroker.GetPotionRecipeKeys();
             int recipeIdx = UnityEngine.Random.Range(0, recipeKeys.Count);
 
+
             /*for (int i = 0; i < recipeKeys.Count; i++)  // This is simply here for a quick easy testing loop to see the potions and their prices in the Unity Debug window. 
             {
                 DaggerfallUnityItem printThis = CreatePotion(recipeKeys[i]);
+                MagicAndEffects.EntityEffectBroker effectBroker = GameManager.Instance.EntityEffectBroker;
+                MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(printThis.PotionRecipeKey);
+                MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
 
-                Debug.LogFormat("Potion Recipe ID: {0}, ||| Potion Name: {1}, ||| Potion Weight: {2}, ||| Potion Value: {3}", recipeKeys[i], printThis.LongName, printThis.weightInKg, printThis.value);
+                Debug.LogFormat("Potion Recipe ID: {0}, ||| Potion Name: {1}, ||| Potion Weight: {2}, ||| Potion Value: {3} ||| Potion Rarity: {4} ||| Potion Effect Group Name: {5}", recipeKeys[i], printThis.LongName, printThis.weightInKg, printThis.value, potionRecipe.Rarity, potionEffect.GroupName);
             }*/
 
             return CreatePotion(recipeKeys[recipeIdx]);
@@ -1118,6 +1124,182 @@ namespace DaggerfallWorkshop.Game.Items
         {
             int recipeIdx = UnityEngine.Random.Range(0, MagicAndEffects.PotionRecipe.classicRecipeKeys.Length);
             return CreatePotion(MagicAndEffects.PotionRecipe.classicRecipeKeys[recipeIdx]);
+        }
+
+        /// <summary>
+        /// Creates a random potion from an array of filtered recipe types and set rarity.
+        /// </summary>
+        public static DaggerfallUnityItem CreateRandomSpecificPotion(byte[,] allowedPots, int enemyLevel = -1, int playerLuck = -1)
+        {
+            int[] potTypeRolls = new int[] { };
+            List<int> potTypeRollsList = new List<int>();
+
+            for (int i = 0; i < allowedPots.Length/2; i++) // Divide by 2, because the "Length" property counts ALL elements in a multidimensional array, not just one row or the columns, so divide by the number of rows basically. 
+            {
+                int arraystart = potTypeRollsList.Count;
+                int fillElements = allowedPots[i, 1];
+
+                if (allowedPots[i, 0] == 1)
+                    potTypeRolls = FormulaHelper.FillArray(potTypeRollsList, arraystart, fillElements, i);
+            }
+
+            List<DaggerfallUnityItem> filteredPotList = GetPotTypeRecipeKeyList(FormulaHelper.PickOneOf(potTypeRolls));
+
+            int chosenPotionRecipeKey = ChoosePotionFromFilteredList(filteredPotList, enemyLevel, playerLuck);
+
+            return CreatePotion(chosenPotionRecipeKey);
+        }
+
+        public static List<DaggerfallUnityItem> GetPotTypeRecipeKeyList(int potionType) // Possibly condense/simplify the "CreatePotion" method used to only the bare minimum for what I need in this case, to save processing, maybe. 
+        {
+            List<int> allRecipeKeys = GameManager.Instance.EntityEffectBroker.GetPotionRecipeKeys();
+            List<DaggerfallUnityItem> filteredPotions = new List<DaggerfallUnityItem>();
+
+            MagicAndEffects.EntityEffectBroker effectBroker = GameManager.Instance.EntityEffectBroker;
+
+            switch (potionType)
+            {
+                case 0:
+                    for (int i = 0; i < allRecipeKeys.Count; i++)
+                    {
+                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
+                        MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                        if (potionEffect.Key == "Heal-Health" || potionEffect.Key == "Regenerate")
+                            filteredPotions.Add(potChecked);
+                    }
+                    break;
+                case 1:
+                    for (int i = 0; i < allRecipeKeys.Count; i++)
+                    {
+                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
+                        MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                        if (potionEffect.Key == "Heal-Fatigue")
+                            filteredPotions.Add(potChecked);
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < allRecipeKeys.Count; i++)
+                    {
+                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
+                        MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                        if (potionEffect.Key == "Heal-SpellPoints")
+                            filteredPotions.Add(potChecked);
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < allRecipeKeys.Count; i++)
+                    {
+                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
+                        MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                        if (allRecipeKeys[i] != -1357071761 && (potionEffect.GroupName == "Cure" || potionEffect.Key == "Dispel-Magic")) // Excluding "Purification" potion, Recipe ID will change if recipe/hashcode changes, just keep note. 
+                            filteredPotions.Add(potChecked);
+                    }
+                    break;
+                case 4:
+                    for (int i = 0; i < allRecipeKeys.Count; i++)
+                    {
+                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
+                        MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                        if (potionEffect.GroupName == "Fortify Attribute")
+                            filteredPotions.Add(potChecked);
+                    }
+                    break;
+                case 5:
+                    for (int i = 0; i < allRecipeKeys.Count; i++)
+                    {
+                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
+                        MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                        if (potionEffect.GroupName == "Elemental Resistance" || potionEffect.GroupName == "Shield" || potionEffect.GroupName == "Spell Resistance" || potionEffect.GroupName == "Spell Reflection" || potionEffect.GroupName == "Spell Absorption")
+                            filteredPotions.Add(potChecked);
+                    }
+                    break;
+                case 6:
+                    for (int i = 0; i < allRecipeKeys.Count; i++)
+                    {
+                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
+                        MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                        if (potionEffect.GroupName == "Invisibility" || potionEffect.GroupName == "Shadow" || potionEffect.GroupName == "Chameleon" || potionEffect.GroupName == "Comprehend Languages" || potionEffect.GroupName == "Levitate" || potionEffect.GroupName == "Water Walking" || potionEffect.GroupName == "Water Breathing" || potionEffect.GroupName == "Slowfall" || potionEffect.GroupName == "Free Action" || potionEffect.GroupName == "Light" || potionEffect.GroupName == "Jumping" || potionEffect.GroupName == "Climbing")
+                            filteredPotions.Add(potChecked);
+                    }
+                    break;
+                default:
+                    return filteredPotions;
+            }
+            return filteredPotions;
+        }
+
+        public static int ChoosePotionFromFilteredList(List<DaggerfallUnityItem> potList, int enemyLevel = -1, int playerLuck = -1)
+        {
+            int[] potRolls = new int[] { };
+            List<int> potRollsList = new List<int>();
+            MagicAndEffects.EntityEffectBroker effectBroker = GameManager.Instance.EntityEffectBroker;
+
+            for (int i = 0; i < potList.Count; i++)
+            {
+                MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potList[i].PotionRecipeKey);
+                int arraystart = potRollsList.Count;
+                int fillElements = 0;
+                if (enemyLevel != -1)
+                {
+                    if (potionRecipe.Rarity >= 30)
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 1.5f)), 1, 200);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 2.5f)), 1, 200);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (60f / enemyLevel)), 1, 200);
+                    }
+                    else if (potionRecipe.Rarity >= 15)
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + enemyLevel), 1, 200);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 200);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 200);
+                    }
+                    else
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 200);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (5f / enemyLevel)), 1, 200);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 200);
+                    }
+                }
+                else
+                {
+                    float luckMod = (playerLuck - 50) / 5f;
+
+                    if (potionRecipe.Rarity >= 30)
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (luckMod * 2)), 1, 200);
+                    }
+                    else if (potionRecipe.Rarity >= 15)
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + luckMod), 1, 200);
+                    }
+                    else
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (luckMod / 2)), 1, 200);
+                    }
+                }
+
+                potRolls = FormulaHelper.FillArray(potRollsList, arraystart, fillElements, i);
+            }
+
+            int chosenPotIndex = FormulaHelper.PickOneOf(potRolls);
+
+            return potList[chosenPotIndex].PotionRecipeKey;
         }
 
         /// <summary>
@@ -1187,11 +1369,6 @@ namespace DaggerfallWorkshop.Game.Items
         #endregion
 
         #region Static Utility Methods
-
-        public static int PickOneOf(params int[] values) // Pango provided assistance in making this much cleaner way of doing the random value choice part, awesome.
-        {
-            return values[UnityEngine.Random.Range(0, values.Length)];
-        }
 
         public static void SetRace(DaggerfallUnityItem item, Races race)
         {

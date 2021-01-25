@@ -232,7 +232,8 @@ namespace DaggerfallWorkshop.Game.Entity
 
                 // Enemy class is levelled to player and uses similar health rules
                 // City guards are 3 to 6 levels above the player
-                level = GameManager.Instance.PlayerEntity.Level; // Definitely going to want to mess with this a lot eventually, this is apparently what makes the human enemies equal to the player level, will alter that. 
+                //level = GameManager.Instance.PlayerEntity.Level; // Definitely going to want to mess with this a lot eventually, this is apparently what makes the human enemies equal to the player level, will alter that.
+                level = UnityEngine.Random.Range(1, 31);
                 if (careerIndex == (int)MobileTypes.Knight_CityWatch)
                     level += UnityEngine.Random.Range(3, 7);
 
@@ -309,17 +310,6 @@ namespace DaggerfallWorkshop.Game.Entity
                 if (spellListLevel > 6)
                     spellListLevel = 6;
                 SetEnemySpells(EnemyClassSpells[spellListLevel]);
-            }
-
-            // Chance of adding map
-            DaggerfallLoot.RandomlyAddMap(mobileEnemy.MapChance, items);
-
-            if (!string.IsNullOrEmpty(mobileEnemy.LootTableKey))
-            {
-                // Chance of adding potion
-                DaggerfallLoot.RandomlyAddPotion(3, items);
-                // Chance of adding potion recipe
-                DaggerfallLoot.RandomlyAddPotionRecipe(2, items);
             }
 
             FillVitalSigns(); // Could use this to set enemies health and other vitals at a lower level when they first spawn, to simulate them being already wounded or something. 

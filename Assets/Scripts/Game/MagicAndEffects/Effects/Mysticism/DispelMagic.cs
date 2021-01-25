@@ -46,6 +46,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Cleanse Magic",
                 200,
                 0,
+                10,
                 cleanseMagicSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FlowerPlantIngredients.White_poppy,

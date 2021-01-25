@@ -46,6 +46,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Gills",
                 27,
                 0,
+                30,
                 gillsSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.MiscPlantIngredients.Palm,

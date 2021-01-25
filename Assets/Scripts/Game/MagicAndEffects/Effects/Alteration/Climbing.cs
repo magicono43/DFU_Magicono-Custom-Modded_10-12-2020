@@ -46,6 +46,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Monkey's Grip",
                 26,
                 0,
+                40,
                 monkeyGripSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FruitPlantIngredients.Cactus,

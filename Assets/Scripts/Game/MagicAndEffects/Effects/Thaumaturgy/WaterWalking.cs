@@ -46,6 +46,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Water Stride",
                 40,
                 0,
+                25,
                 waterStrideSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.SolventIngredients.Pure_water,

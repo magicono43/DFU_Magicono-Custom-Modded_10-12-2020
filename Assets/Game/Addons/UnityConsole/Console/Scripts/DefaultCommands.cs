@@ -425,8 +425,8 @@ namespace Wenzil.Console
         {
             public static readonly string name = "cm";
             public static readonly string error = "Failed to create mobile";
-            public static readonly string usage = "cm [n] [team]";
-            public static readonly string description = "Creates a mobile of type [n] on [team]. Omit team argument for default team.";
+            public static readonly string usage = "cm [n] [team] [level]";
+            public static readonly string description = "Creates a mobile of type [n] on [team] of [level]. Omit team argument for default team, and level for default mobile level.";
 
             public static string Execute(params string[] args)
             {
@@ -452,6 +452,13 @@ namespace Wenzil.Console
                             return "Invalid team.";
                     }
 
+                    int level = 1;
+                    if (args.Length > 2)
+                    {
+                        if (!int.TryParse(args[2], out level))
+                            return "Invalid level.";
+                    }
+
                     GameObject[] mobile = GameObjectHelper.CreateFoeGameObjects(player.transform.position + player.transform.forward * 2, (MobileTypes)id, 1);
 
                     DaggerfallEntityBehaviour behaviour = mobile[0].GetComponent<DaggerfallEntityBehaviour>();
@@ -463,10 +470,17 @@ namespace Wenzil.Console
                     else
                         team = (int)entity.Team;
 
+                    if (args.Length > 2)
+                    {
+                        entity.Level = level;
+                    }
+                    else
+                        level = entity.Level;
+
                     mobile[0].transform.LookAt(mobile[0].transform.position + (mobile[0].transform.position - player.transform.position));
                     mobile[0].SetActive(true);
 
-                    return string.Format("Created {0} on team {1}", (MobileTypes)id, (MobileTeams)team);
+                    return string.Format("Created {0} on team {1} of level {2}", (MobileTypes)id, (MobileTeams)team, level);
                 }
                 else
                     return error;

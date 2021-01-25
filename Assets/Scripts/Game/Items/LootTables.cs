@@ -166,8 +166,7 @@ namespace DaggerfallWorkshop.Game.Items
                     chance = 40f;
                     while (Dice100.SuccessRoll((int)chance))
                     {
-                        DaggerfallUnityItem Weapon = ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Tanto, (int)Weapons.Tanto, (int)Weapons.Tanto, (int)Weapons.Tanto, (int)Weapons.Dagger, (int)Weapons.Dagger, (int)Weapons.Shortsword, (int)Weapons.Wakazashi), (WeaponMaterialTypes)PickOneOf((int)WeaponMaterialTypes.Iron, (int)WeaponMaterialTypes.Iron, (int)WeaponMaterialTypes.Iron, (int)WeaponMaterialTypes.Steel, 
-                          (int)WeaponMaterialTypes.Steel, (int)WeaponMaterialTypes.Silver));
+                        DaggerfallUnityItem Weapon = ItemBuilder.CreateWeapon((Weapons)FormulaHelper.PickOneOfCompact((int)Weapons.Tanto, 4, (int)Weapons.Dagger, 2, (int)Weapons.Shortsword, 1, (int)Weapons.Wakazashi, 1), (WeaponMaterialTypes)FormulaHelper.PickOneOfCompact((int)WeaponMaterialTypes.Iron, 3, (int)WeaponMaterialTypes.Steel, 2, (int)WeaponMaterialTypes.Silver, 1));
                         float condPercentMod = Random.Range(condModMin, condModMax + 1) / 100f;
                         Weapon.currentCondition = (int)Mathf.Ceil(Weapon.maxCondition * condPercentMod);
                         items.Add(Weapon);
@@ -346,9 +345,11 @@ namespace DaggerfallWorkshop.Game.Items
             // Random Potions
             if (extraLootProps[1] > 0)
             {
+                byte[,] allowedPotions = GetAllowedPotionTypes(AITarget);
+
                 for (int i = 0; i < extraLootProps[1]; i++)
                 {
-                    items.Add(ItemBuilder.CreateRandomPotion()); // The whole Potion Recipe ID thing is a bit too confusing for me at this moment, so I can't specify what potions should be allowed, will work for now though. 
+                    items.Add(ItemBuilder.CreateRandomSpecificPotion(allowedPotions, AITarget.Level));
                 }
             }
 
@@ -372,9 +373,9 @@ namespace DaggerfallWorkshop.Game.Items
                 for (int i = 0; i < extraLootProps[2]; i++)
                 {
                     if (Dice100.SuccessRoll(20))
-                        items.Add(ItemBuilder.CreateItem(ItemGroups.Gems, PickOneOf((int)Gems.Ruby, (int)Gems.Sapphire, (int)Gems.Emerald, (int)Gems.Diamond)));
+                        items.Add(ItemBuilder.CreateItem(ItemGroups.Gems, FormulaHelper.PickOneOfCompact((int)Gems.Ruby, 1, (int)Gems.Sapphire, 1, (int)Gems.Emerald, 1, (int)Gems.Diamond, 1)));
                     else
-                        items.Add(ItemBuilder.CreateItem(ItemGroups.Gems, PickOneOf((int)Gems.Jade, (int)Gems.Turquoise, (int)Gems.Malachite, (int)Gems.Amber)));
+                        items.Add(ItemBuilder.CreateItem(ItemGroups.Gems, FormulaHelper.PickOneOfCompact((int)Gems.Jade, 1, (int)Gems.Turquoise, 1, (int)Gems.Malachite, 1, (int)Gems.Amber, 1)));
                 }
             }
 
@@ -414,7 +415,7 @@ namespace DaggerfallWorkshop.Game.Items
                         items.Add(lampOil);
                         continue;
                     }
-                    items.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf((int)UselessItems2.Candle, (int)UselessItems2.Torch)));
+                    items.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact((int)UselessItems2.Candle, 1, (int)UselessItems2.Torch, 1)));
                 }
             }
 
@@ -457,7 +458,7 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     if (i == 1 && AITarget.EntityType == EntityTypes.EnemyClass && AITarget.CareerIndex == (int)ClassCareers.Nightblade)
                     {
-                        DaggerfallUnityItem extraWep = ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Longsword), WeaponMaterialTypes.Silver);
+                        DaggerfallUnityItem extraWep = ItemBuilder.CreateWeapon((Weapons)FormulaHelper.PickOneOfCompact((int)Weapons.Dagger, 1, (int)Weapons.Tanto, 1, (int)Weapons.Shortsword, 1, (int)Weapons.Longsword, 1), WeaponMaterialTypes.Silver);
                         condPercentMod = Random.Range(enemyLootCondMods[0], enemyLootCondMods[1] + 1) / 100f;
                         extraWep.currentCondition = (int)Mathf.Ceil(extraWep.maxCondition * condPercentMod);
                         continue;
@@ -465,7 +466,7 @@ namespace DaggerfallWorkshop.Game.Items
 
                     if (traits[2] == (int)MobilePersonalityInterests.Survivalist || traits[2] == (int)MobilePersonalityInterests.Hunter)
                     {
-                        DaggerfallUnityItem extraWep = ItemBuilder.CreateWeapon((Weapons)PickOneOf((int)Weapons.Short_Bow, (int)Weapons.Long_Bow), FormulaHelper.RandomMaterial(level));
+                        DaggerfallUnityItem extraWep = ItemBuilder.CreateWeapon((Weapons)FormulaHelper.PickOneOfCompact((int)Weapons.Short_Bow, 1, (int)Weapons.Long_Bow, 1), FormulaHelper.RandomMaterial(level));
                         condPercentMod = Random.Range(enemyLootCondMods[0], enemyLootCondMods[1] + 1) / 100f;
                         extraWep.currentCondition = (int)Mathf.Ceil(extraWep.maxCondition * condPercentMod);
                         continue;
@@ -598,7 +599,7 @@ namespace DaggerfallWorkshop.Game.Items
                 }
                 else
                 {
-                    DaggerfallUnityItem Armor = ItemBuilder.CreateRandomArmor(player.Gender, player.Race, -1, -1, playerLuck, PickOneOf(0, 1));
+                    DaggerfallUnityItem Armor = ItemBuilder.CreateRandomArmor(player.Gender, player.Race, -1, -1, playerLuck, FormulaHelper.PickOneOf(0, 1));
                     float condPercentMod = Random.Range(condModMin, condModMax + 1) / 100f;
                     Armor.currentCondition = (int)Mathf.Ceil(Armor.maxCondition * condPercentMod);
                     targetItems.Add(Armor);
@@ -609,11 +610,12 @@ namespace DaggerfallWorkshop.Game.Items
 
         public static void AddPotions(float chance, float chanceMod, List<DaggerfallUnityItem> targetItems)
         {
+            byte[,] allowedPotions = new byte[,] { { 1, 1 }, { 1, 1 }, { 1, 1 }, { 1, 1 }, { 1, 1 }, { 1, 1 }, { 1, 1 } };
             int playerLuck = GameManager.Instance.PlayerEntity.Stats.LiveLuck;
 
             while (Dice100.SuccessRoll((int)chance))
             {
-                targetItems.Add(ItemBuilder.CreateRandomPotion()); // The whole Potion Recipe ID thing is a bit too confusing for me at this moment, so I can't specify what potions should be allowed, will work for now though.
+                targetItems.Add(ItemBuilder.CreateRandomSpecificPotion(allowedPotions, -1, playerLuck));
                 chance *= chanceMod;
             }
         }
@@ -654,12 +656,12 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 if (Dice100.SuccessRoll(rareGemChance))
                 {
-                    targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, PickOneOf((int)Gems.Ruby, (int)Gems.Sapphire, (int)Gems.Emerald, (int)Gems.Diamond)));
+                    targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, FormulaHelper.PickOneOfCompact((int)Gems.Ruby, 1, (int)Gems.Sapphire, 1, (int)Gems.Emerald, 1, (int)Gems.Diamond, 1)));
                     chance *= chanceMod;
                 }
                 else
                 {
-                    targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, PickOneOf((int)Gems.Jade, (int)Gems.Turquoise, (int)Gems.Malachite, (int)Gems.Amber)));
+                    targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, FormulaHelper.PickOneOfCompact((int)Gems.Jade, 1, (int)Gems.Turquoise, 1, (int)Gems.Malachite, 1, (int)Gems.Amber, 1)));
                     chance *= chanceMod;
                 }
             }
@@ -821,11 +823,6 @@ namespace DaggerfallWorkshop.Game.Items
             }
         }
 
-        public static int PickOneOf(params int[] values) // Pango provided assistance in making this much cleaner way of doing the random value choice part, awesome.
-        {
-            return values[Random.Range(0, values.Length)];
-        }
-
         #region Private Methods
 
         static void PersonalityTraitFlavorItemsGenerator(EnemyEntity AITarget, int[] traits, List<DaggerfallUnityItem> targetItems)
@@ -838,35 +835,35 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Addict || traits[1] == (int)MobilePersonalityQuirks.Addict)
                 {
                     int randRange = Random.Range(2, 6 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Hoarder || traits[1] == (int)MobilePersonalityQuirks.Hoarder)
                 {
                     int randRange = Random.Range(6, 18 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Vain || traits[1] == (int)MobilePersonalityQuirks.Vain)
                 {
                     int randRange = Random.Range(2, 7 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Untrusting || traits[1] == (int)MobilePersonalityQuirks.Untrusting)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished.
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished.
                     // This won't work the same as the others, since it in theory will be placing existing items into a seperate lock-box inventory type of item, will need a lot of work on this one eventually.
                 }
 
@@ -874,21 +871,21 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     int randRange = Random.Range(1, 4 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Romantic || traits[1] == (int)MobilePersonalityQuirks.Romantic)
                 {
                     int randRange = Random.Range(2, 4 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Alcoholic || traits[1] == (int)MobilePersonalityQuirks.Alcoholic)
                 {
                     int randRange = Random.Range(2, 6 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
             }
 
@@ -898,98 +895,98 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Occultist)
                 {
                     int randRange = Random.Range(2, 4 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Childish)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Artistic)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Collector)
                 {
                     int randRange = Random.Range(4, 11 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Survivalist)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Hunter)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Fetishist)
                 {
                     int randRange = Random.Range(2, 4 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Brewer)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Cartographer)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Fisher)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Diver)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Writer)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Handy)
                 {
                     int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, PickOneOf(811, 812, 813, 814))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
                 }
             }
 
@@ -1358,44 +1355,44 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     case (int)ClassCareers.Mage:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 33, 33, 33, 33, 33, 33, 28, 30, 30, 30, 31, 31, 32, 34, 36, 36, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 9, 28, 1, 30, 3, 31, 2, 32, 1, 34, 1, 36, 2, 39, 1)));
                         return;
                     case (int)ClassCareers.Spellsword:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 33, 33, 33, 28, 28, 30, 30, 30, 30, 30, 31, 31, 32, 34, 36, 36, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 6, 28, 2, 30, 5, 31, 2, 32, 1, 34, 1, 36, 2, 39, 1)));
                         return;
                     case (int)ClassCareers.Battlemage:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 33, 28, 28, 28, 30, 30, 30, 30, 30, 30, 31, 31, 32, 34, 36, 36, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 4, 28, 3, 30, 6, 31, 2, 32, 1, 34, 1, 36, 2, 39, 1)));
                         return;
                     case (int)ClassCareers.Sorcerer:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(33, 33, 33, 28, 28, 30, 30, 30, 30, 30, 30, 30, 31, 31, 31, 32, 34, 36, 36, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 3, 28, 2, 30, 7, 31, 3, 32, 1, 34, 1, 36, 2, 39, 1)));
                         return;
                     case (int)ClassCareers.Healer:
                     case (int)ClassCareers.Monk:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(38, 38, 38, 38, 38, 38, 38, 38, 33, 28, 30, 30, 31, 31, 31, 32, 34, 36, 39, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(38, 8, 33, 1, 28, 1, 30, 2, 31, 3, 32, 1, 34, 1, 36, 1, 39, 2)));
                         return;
                     case (int)ClassCareers.Nightblade:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 29, 30, 30, 30, 30, 30, 30, 31, 31, 33, 33, 34, 35, 36, 36, 37, 38, 38, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 1, 29, 1, 30, 6, 31, 2, 33, 2, 34, 1, 35, 1, 36, 2, 37, 1, 38, 2, 39, 1)));
                         return;
                     case (int)ClassCareers.Bard:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 29, 30, 30, 30, 31, 31, 31, 32, 32, 34, 35, 36, 36, 36, 36, 38, 38, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 2, 29, 1, 30, 3, 31, 3, 32, 2, 34, 1, 35, 1, 36, 4, 38, 2, 39, 1)));
                         return;
                     case (int)ClassCareers.Assassin:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 29, 29, 29, 30, 30, 31, 31, 31, 31, 33, 33, 34, 35, 36, 37, 37, 38, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 2, 29, 3, 30, 2, 31, 4, 33, 2, 34, 1, 35, 1, 36, 1, 37, 2, 38, 1, 39, 1)));
                         return;
                     case (int)ClassCareers.Ranger:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 29, 30, 30, 31, 31, 31, 32, 33, 33, 33, 33, 34, 35, 36, 38, 39, 39, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 2, 29, 1, 30, 2, 31, 3, 32, 1, 33, 4, 34, 1, 35, 1, 36, 1, 38, 1, 39, 3)));
                         return;
                     case (int)ClassCareers.Knight:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 28, 28, 30, 30, 30, 31, 31, 31, 36, 36, 36, 36, 37, 37, 38, 38, 38, 38, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 3, 30, 3, 31, 3, 36, 4, 37, 2, 38, 4, 39, 1)));
                         return;
                     default:
                         for (int i = 0; i < bookAmount; i++)
@@ -1409,12 +1406,12 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     case 21:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 30, 30, 30, 30, 31, 31, 33, 33, 36, 38, 38, 38, 38, 38, 38, 38, 38, 38, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 1, 30, 4, 31, 2, 33, 2, 36, 1, 38, 9, 39, 1)));
                         return;
                     case 32:
                     case 33:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)PickOneOf(28, 30, 30, 31, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 34, 35, 35, 36, 38, 39)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 1, 30, 2, 31, 1, 33, 10, 34, 1, 35, 2, 36, 1, 38, 1, 39, 1)));
                         return;
                     default:
                         for (int i = 0; i < bookAmount; i++)
@@ -1489,7 +1486,7 @@ namespace DaggerfallWorkshop.Game.Items
                             if (Dice100.SuccessRoll(50))
                                 targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_cloak, (int)MensClothing.Casual_cloak, (int)MensClothing.Formal_cloak), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOfCompact((int)MensClothing.Casual_cloak, 2, (int)MensClothing.Formal_cloak, 1), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
@@ -1498,7 +1495,7 @@ namespace DaggerfallWorkshop.Game.Items
                             if (Dice100.SuccessRoll(50))
                                 targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Casual_cloak, (int)WomensClothing.Casual_cloak, (int)WomensClothing.Formal_cloak), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOfCompact((int)WomensClothing.Casual_cloak, 2, (int)WomensClothing.Formal_cloak, 1), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     case (int)ClassCareers.Nightblade:
@@ -1525,14 +1522,14 @@ namespace DaggerfallWorkshop.Game.Items
                         if (enemyGender == Genders.Male)
                         {
                             targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Khajiit_suit, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
                                 targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
                             targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Khajiit_suit, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
                                 targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
@@ -1542,9 +1539,9 @@ namespace DaggerfallWorkshop.Game.Items
                         {
                             targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Sash, (int)MensClothing.Toga, (int)MensClothing.Kimono, (int)MensClothing.Armbands, (int)MensClothing.Vest), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Sash, (int)MensClothing.Toga, (int)MensClothing.Kimono, (int)MensClothing.Armbands, (int)MensClothing.Vest), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Shoes, (int)MensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(25))
                                 targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
@@ -1553,7 +1550,7 @@ namespace DaggerfallWorkshop.Game.Items
                             targetItems.Add(ItemBuilder.CreateRandomPants(enemyGender, playerRace, condMods[0], condMods[1]));
                             targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace, condMods[0], condMods[1]));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOf((int)WomensClothing.Shoes, (int)WomensClothing.Sandals), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(25))
                                 targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
@@ -1562,9 +1559,9 @@ namespace DaggerfallWorkshop.Game.Items
                         if (enemyGender == Genders.Male)
                         {
                             targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
-                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Sash, (int)MensClothing.Armbands, (int)MensClothing.Fancy_Armbands, (int)MensClothing.Straps, (int)MensClothing.Challenger_Straps, (int)MensClothing.Champion_straps), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Sash, (int)MensClothing.Armbands, (int)MensClothing.Fancy_Armbands, (int)MensClothing.Straps, (int)MensClothing.Challenger_Straps, (int)MensClothing.Champion_straps), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
                                 targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
@@ -1572,7 +1569,7 @@ namespace DaggerfallWorkshop.Game.Items
                         {
                             targetItems.Add(ItemBuilder.CreateRandomBra(enemyGender, playerRace, condMods[0], condMods[1]));
                             targetItems.Add(ItemBuilder.CreateRandomShoes(enemyGender, playerRace, condMods[0], condMods[1]));
-                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Loincloth, (int)WomensClothing.Wrap, (int)WomensClothing.Long_skirt), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOf((int)WomensClothing.Loincloth, (int)WomensClothing.Wrap, (int)WomensClothing.Long_skirt), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
                                 targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
@@ -1603,17 +1600,17 @@ namespace DaggerfallWorkshop.Game.Items
                     case 12:
                     case 21:
                         targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace, condMods[0], condMods[1]));
-                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(50))
-                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Straps, (int)MensClothing.Challenger_Straps), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Straps, (int)MensClothing.Challenger_Straps), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(50))
                             targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         return;
                     case 24:
                         targetItems.Add(ItemBuilder.CreateRandomShoes(Genders.Male, playerRace, condMods[0], condMods[1]));
-                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Short_skirt, (int)MensClothing.Long_Skirt, (int)MensClothing.Loincloth, (int)MensClothing.Wrap), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(50))
-                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Challenger_Straps, (int)MensClothing.Champion_straps), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Challenger_Straps, (int)MensClothing.Champion_straps), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(50))
                             targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Formal_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         return;
@@ -1660,37 +1657,37 @@ namespace DaggerfallWorkshop.Game.Items
                         {
                             targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
                             targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Casual_cloak, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                             if (Dice100.SuccessRoll(50))
-                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                                targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOf((int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     case 27:
                         if (playerGender == Genders.Male)
                         {
                             targetItems.Add(ItemBuilder.CreateMensClothing(MensClothing.Loincloth, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         else
                         {
                             targetItems.Add(ItemBuilder.CreateWomensClothing(WomensClothing.Loincloth, playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
-                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOf((int)WomensClothing.Boots, (int)WomensClothing.Tall_boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         }
                         return;
                     case 29:
                         if (Dice100.SuccessRoll(50))
-                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)PickOneOf((int)WomensClothing.Eodoric, (int)WomensClothing.Formal_eodoric, (int)WomensClothing.Strapless_dress), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                            targetItems.Add(ItemBuilder.CreateWomensClothing((WomensClothing)FormulaHelper.PickOneOf((int)WomensClothing.Eodoric, (int)WomensClothing.Formal_eodoric, (int)WomensClothing.Strapless_dress), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(20))
                             targetItems.Add(ItemBuilder.CreateRandomBra(Genders.Female, playerRace, condMods[0], condMods[1]));
                         return;
                     case 31:
                         targetItems.Add(ItemBuilder.CreateRandomPants(Genders.Male, playerRace, condMods[0], condMods[1]));
-                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
-                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)PickOneOf((int)MensClothing.Casual_cloak, (int)MensClothing.Formal_cloak), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Boots, (int)MensClothing.Tall_Boots), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
+                        targetItems.Add(ItemBuilder.CreateMensClothing((MensClothing)FormulaHelper.PickOneOf((int)MensClothing.Casual_cloak, (int)MensClothing.Formal_cloak), playerRace, -1, condMods[0], condMods[1],  ItemBuilder.RandomClothingDye()));
                         if (Dice100.SuccessRoll(50))
                             targetItems.Add(ItemBuilder.CreateRandomShirt(Genders.Male, playerRace, condMods[0], condMods[1]));
                         return;
@@ -1743,6 +1740,68 @@ namespace DaggerfallWorkshop.Game.Items
                         return 40f;
                     default:
                         return 0f;
+                }
+            }
+        }
+
+        public static byte[,] GetAllowedPotionTypes(EnemyEntity AITarget)
+        {
+            // Index meanings: Row 1 = Potion Types: 0 = healHP, 1 = healStam, 2 = healMana, 3 = cure, 4 = fortify, 5 = utilDef, 6 = utilExplore.
+            // Row 2 = Potion Type Rarity: 0 = 1 - 20, 20 = least rare, 1 = most rare.
+            byte[,] allowedPotions = new byte[,] { { 1, 20 }, { 1, 20 }, { 1, 20 }, { 1, 20 }, { 1, 20 }, { 1, 20 }, { 1, 20 } };
+
+            if (AITarget.EntityType == EntityTypes.EnemyClass)
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case (int)ClassCareers.Mage:
+                        return new byte[,] { { 1, 15 }, { 1, 5 }, { 1, 20 }, { 0, 20 }, { 1, 2 }, { 1, 8 }, { 1, 5 } };
+                    case (int)ClassCareers.Spellsword:
+                    case (int)ClassCareers.Battlemage:
+                        return new byte[,] { { 1, 20 }, { 1, 15 }, { 1, 12 }, { 0, 20 }, { 1, 6 }, { 1, 6 }, { 1, 7 } };
+                    case (int)ClassCareers.Sorcerer:
+                        return new byte[,] { { 1, 10 }, { 1, 10 }, { 1, 20 }, { 0, 20 }, { 1, 4 }, { 1, 2 }, { 1, 5 } };
+                    case (int)ClassCareers.Healer:
+                        return new byte[,] { { 1, 20 }, { 1, 5 }, { 1, 10 }, { 1, 20 }, { 0, 20 }, { 1, 7 }, { 1, 2 } };
+                    case (int)ClassCareers.Nightblade:
+                        return new byte[,] { { 1, 15 }, { 1, 15 }, { 1, 10 }, { 1, 10 }, { 1, 5 }, { 1, 10 }, { 1, 7 } };
+                    case (int)ClassCareers.Bard:
+                        return new byte[,] { { 1, 10 }, { 1, 15 }, { 1, 5 }, { 0, 20 }, { 1, 20 }, { 1, 5 }, { 1, 14 } };
+                    case (int)ClassCareers.Burglar:
+                    case (int)ClassCareers.Acrobat:
+                    case (int)ClassCareers.Thief:
+                        return new byte[,] { { 1, 10 }, { 1, 20 }, { 0, 20 }, { 0, 20 }, { 1, 8 }, { 0, 20 }, { 1, 20 } };
+                    case (int)ClassCareers.Rogue:
+                        return new byte[,] { { 1, 20 }, { 1, 15 }, { 0, 20 }, { 0, 20 }, { 1, 6 }, { 0, 20 }, { 1, 10 } };
+                    case (int)ClassCareers.Assassin:
+                        return new byte[,] { { 1, 20 }, { 1, 10 }, { 0, 20 }, { 1, 8 }, { 1, 12 }, { 1, 12 }, { 1, 15 } };
+                    case (int)ClassCareers.Monk:
+                        return new byte[,] { { 1, 15 }, { 1, 10 }, { 0, 20 }, { 0, 20 }, { 0, 20 }, { 1, 8 }, { 1, 12 } };
+                    case (int)ClassCareers.Archer:
+                    case (int)ClassCareers.Ranger:
+                        return new byte[,] { { 1, 20 }, { 1, 20 }, { 0, 20 }, { 1, 6 }, { 1, 8 }, { 1, 9 }, { 1, 9 } };
+                    case (int)ClassCareers.Barbarian:
+                        return new byte[,] { { 1, 20 }, { 1, 20 }, { 0, 20 }, { 0, 20 }, { 1, 12 }, { 0, 20 }, { 0, 20 } };
+                    case (int)ClassCareers.Warrior:
+                    case (int)ClassCareers.Knight:
+                        return new byte[,] { { 1, 20 }, { 1, 20 }, { 0, 20 }, { 1, 5 }, { 1, 8 }, { 1, 10 }, { 1, 11 } };
+                    default:
+                        return allowedPotions;
+                }
+            }
+            else
+            {
+                switch (AITarget.CareerIndex)
+                {
+                    case 8:
+                    case 16:
+                    case 7:
+                    case 12:
+                    case 21:
+                    case 24:
+                    case 31:
+                    default:
+                        return allowedPotions;
                 }
             }
         }
