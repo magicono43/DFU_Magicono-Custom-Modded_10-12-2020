@@ -1380,8 +1380,14 @@ namespace DaggerfallWorkshop.Game
                 }
 
                 // If door didn't open, and we are trying to get to the target, bash
-                Bashing = DaggerfallUnity.Settings.EnhancedCombatAI && !senses.TargetInSight && moveInForAttack
+                Bashing = DaggerfallUnity.Settings.EnhancedCombatAI && mobile.Summary.Enemy.CanBashDownDoors && !senses.TargetInSight && moveInForAttack
                     && senses.LastKnownDoor != null && senses.DistanceToDoor <= attack.MeleeDistance && senses.LastKnownDoor.IsLocked;
+            }
+            else if (mobile.Summary.Enemy.CanBashDownDoors)
+            {
+                // If entity can't normally open doors, but is large enough and smart enough to bash the door down, they will attempt to, if pursing target
+                Bashing = DaggerfallUnity.Settings.EnhancedCombatAI && !senses.TargetInSight && moveInForAttack
+                    && senses.LastKnownDoor != null && senses.DistanceToDoor <= attack.MeleeDistance;
             }
         }
 
