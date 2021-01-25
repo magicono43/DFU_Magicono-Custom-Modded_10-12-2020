@@ -5515,28 +5515,28 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 12, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Spellsword:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
                         extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 18, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Battlemage:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
                         extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 18, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Sorcerer:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(1, 10, 2, 3, 3, 1);
                         extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 18, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Healer:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(1, 10, 2, 3);
@@ -5544,47 +5544,47 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(1, 3 + 1);
                         extraLootProps[7] = UnityEngine.Random.Range(4, 7 + 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Nightblade:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[10] = 1;
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Bard:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(2, 7, 3, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[9] = FormulaHelper.PickOneOfCompact(0, 4, 1, 7, 2, 2);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Burglar:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         extraLootProps[2] = FormulaHelper.PickOneOfCompact(0, 9, 1, 6, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Rogue:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Acrobat:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Thief:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         extraLootProps[2] = FormulaHelper.PickOneOfCompact(0, 9, 1, 2);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Assassin:
                         extraLootProps[0] = UnityEngine.Random.Range(5, 16 + 1);
@@ -5592,14 +5592,14 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[9] = FormulaHelper.PickOneOfCompact(0, 7, 1, 5, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Monk:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(0, 2, 1, 5);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(0, 2 + 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Archer:
                         extraLootProps[0] = UnityEngine.Random.Range(16, 35 + 1);
@@ -5607,7 +5607,7 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Ranger:
                         extraLootProps[0] = UnityEngine.Random.Range(9, 26 + 1);
@@ -5615,7 +5615,7 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(2, 7, 3, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Barbarian:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
@@ -5623,7 +5623,7 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[7] = UnityEngine.Random.Range(0, 5 + 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 10, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Warrior:
                         extraLootProps[0] = UnityEngine.Random.Range(5, 20 + 1);
@@ -5631,7 +5631,7 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 4, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case (int)ClassCareers.Knight:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
@@ -5639,7 +5639,7 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(0, 1 + 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     default:
                         break;
@@ -5654,21 +5654,21 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[4] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 4, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case 12:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case 21:
                         extraLootProps[1] = FormulaHelper.PickOneOf(0, 0, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(1, 3 + 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case 24:
                         extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
@@ -5676,7 +5676,7 @@ namespace DaggerfallWorkshop.Utility
                         extraLootProps[4] = FormulaHelper.PickOneOf(0, 1, 2);
                         extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOf(0, 0, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 25, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
                         break;
                     case 29:
                     case 31:
@@ -5762,22 +5762,141 @@ namespace DaggerfallWorkshop.Utility
         public static int[] EnemyPersonalityTraitGenerator(DaggerfallEntity enemy) // Array Index 0 and 1 are both Quirks, Index 2 is an Interest.
         {
             int[] traits = { -1, -1, -1 };
-            int[] quirks;
-            int[] interests;
-            bool validForTraits = false;
-            TraitOddsCreator(enemy, out validForTraits, out quirks, out interests);
+            EnemyEntity Enemy = enemy as EnemyEntity;
 
-            if (validForTraits)
+            if (Enemy.EntityType == EntityTypes.EnemyClass)
             {
-                traits[0] = quirks[UnityEngine.Random.Range(0, quirks.Length)];
-
-                traits[1] = quirks[UnityEngine.Random.Range(0, quirks.Length)];
-
-                if (IncompatiblePairs(traits[0], traits[1]))
-                    traits[1] = -1;
-
-                traits[2] = interests[UnityEngine.Random.Range(0, interests.Length)];
+                switch (Enemy.CareerIndex)
+                {
+                    case (int)ClassCareers.Mage:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 1, 2, 1, 3, 2, 4, 3, 5, 1, 6, 2, 7, 1, 8, 2, 9, 1, 10, 1, 11, 1, 12, 1, 13, 1, 14, 1, 16, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 1, 2, 1, 3, 2, 4, 3, 5, 1, 6, 2, 7, 1, 8, 2, 9, 1, 10, 1, 11, 1, 12, 1, 13, 1, 14, 1, 16, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 1, 1, 2, 1, 3, 1, 4, 1, 5, 2, 8, 1, 9, 1, 10, 1, 11, 2, 12, 2, 15, 2, 16, 2);
+                        break;
+                    case (int)ClassCareers.Spellsword:
+                    case (int)ClassCareers.Battlemage:
+                    case (int)ClassCareers.Sorcerer:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 1, 2, 2, 3, 1, 4, 2, 5, 1, 6, 2, 7, 1, 8, 1, 9, 1, 10, 1, 11, 1, 12, 1, 13, 1, 14, 1, 15, 1, 16, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 1, 2, 2, 3, 1, 4, 2, 5, 1, 6, 2, 7, 1, 8, 1, 9, 1, 10, 1, 11, 1, 12, 1, 13, 1, 14, 1, 15, 1, 16, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 1, 2, 2, 1, 3, 1, 4, 1, 5, 2, 6, 1, 8, 1, 9, 2, 10, 1, 11, 2, 12, 1, 14, 1, 15, 2, 16, 1, 17, 1);
+                        break;
+                    case (int)ClassCareers.Healer:
+                    case (int)ClassCareers.Monk:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 2, 1, 1, 2, 2, 3, 2, 4, 1, 6, 2, 7, 1, 12, 3, 15, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 2, 1, 1, 2, 2, 3, 2, 4, 1, 6, 2, 7, 1, 12, 3, 15, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 0, 3, 3, 1, 4, 2, 6, 1, 9, 2, 10, 2, 11, 2, 12, 1, 13, 1, 14, 1, 15, 1, 16, 2);
+                        break;
+                    case (int)ClassCareers.Nightblade:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 3, 1, 1, 2, 2, 4, 1, 5, 1, 7, 3, 8, 1, 9, 1, 10, 1, 11, 1, 12, 1, 13, 2, 14, 1, 15, 1, 16, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 3, 1, 1, 2, 2, 4, 1, 5, 1, 7, 3, 8, 1, 9, 1, 10, 1, 11, 1, 12, 1, 13, 2, 14, 1, 15, 1, 16, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 0, 1, 1, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 2, 9, 2, 10, 2, 11, 1, 12, 1, 13, 1, 14, 1, 15, 2, 16, 1, 17, 2);
+                        break;
+                    case (int)ClassCareers.Bard:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 2, 2, 1, 3, 1, 4, 1, 5, 2, 6, 1, 7, 1, 8, 1, 9, 2, 10, 1, 11, 2, 12, 1, 13, 1, 14, 1, 15, 2, 16, 1, 17, 3);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 2, 2, 1, 3, 1, 4, 1, 5, 2, 6, 1, 7, 1, 8, 1, 9, 2, 10, 1, 11, 2, 12, 1, 13, 1, 14, 1, 15, 2, 16, 1, 17, 3);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 0, 1, 1, 1, 2, 1, 3, 3, 4, 2, 5, 1, 8, 2, 9, 1, 10, 1, 11, 1, 13, 1, 14, 1, 15, 1, 16, 1);
+                        break;
+                    case (int)ClassCareers.Burglar:
+                    case (int)ClassCareers.Thief:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 2, 2, 1, 3, 1, 4, 1, 5, 1, 7, 2, 8, 1, 9, 2, 10, 3, 11, 1, 12, 1, 13, 2, 14, 1, 15, 2, 16, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 2, 2, 1, 3, 1, 4, 1, 5, 1, 7, 2, 8, 1, 9, 2, 10, 3, 11, 1, 12, 1, 13, 2, 14, 1, 15, 2, 16, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 2, 2, 3, 1, 4, 1, 5, 2, 6, 1, 7, 1, 8, 2, 9, 1, 10, 1, 13, 1, 14, 1, 15, 1, 17, 1);
+                        break;
+                    case (int)ClassCareers.Rogue:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 2, 2, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 9, 2, 10, 2, 11, 2, 12, 1, 13, 2, 14, 2, 15, 2, 16, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 2, 2, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 9, 2, 10, 2, 11, 2, 12, 1, 13, 2, 14, 2, 15, 2, 16, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 2, 1, 3, 1, 4, 1, 5, 2, 6, 1, 7, 1, 8, 2, 9, 2, 10, 1, 13, 1, 14, 1, 15, 1, 17, 1);
+                        break;
+                    case (int)ClassCareers.Acrobat:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 2, 4, 1, 5, 2, 6, 1, 7, 1, 8, 1, 9, 2, 10, 1, 11, 1, 12, 1, 13, 1, 14, 1, 15, 2, 16, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 2, 4, 1, 5, 2, 6, 1, 7, 1, 8, 1, 9, 2, 10, 1, 11, 1, 12, 1, 13, 1, 14, 1, 15, 2, 16, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 0, 1, 1, 1, 2, 3, 3, 1, 4, 2, 5, 1, 6, 1, 7, 1, 8, 2, 9, 1, 10, 1, 13, 1, 14, 2, 15, 1, 17, 1);
+                        break;
+                    case (int)ClassCareers.Assassin:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 3, 1, 1, 2, 1, 4, 1, 5, 1, 7, 2, 8, 1, 9, 1, 10, 2, 11, 1, 12, 1, 13, 1, 14, 3, 15, 1, 16, 2, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 3, 1, 1, 2, 1, 4, 1, 5, 1, 7, 2, 8, 1, 9, 1, 10, 2, 11, 1, 12, 1, 13, 1, 14, 3, 15, 1, 16, 2, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 1, 2, 3, 1, 4, 1, 5, 2, 6, 2, 7, 2, 8, 2, 9, 3, 14, 1, 15, 1, 16, 1, 17, 1);
+                        break;
+                    case (int)ClassCareers.Ranger:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 2, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 10, 1, 11, 1, 12, 1, 13, 1, 14, 1, 15, 2, 16, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 2, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 10, 1, 11, 1, 12, 1, 13, 1, 14, 1, 15, 2, 16, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 3, 7, 3, 8, 1, 9, 1, 10, 2, 12, 1, 13, 2, 14, 2, 17, 1);
+                        break;
+                    case (int)ClassCareers.Barbarian:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 3, 5, 2, 6, 1, 7, 1, 10, 2, 11, 2, 13, 2, 14, 1, 15, 1, 16, 1, 17, 3);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 1, 1, 3, 5, 2, 6, 1, 7, 1, 10, 2, 11, 2, 13, 2, 14, 1, 15, 1, 16, 1, 17, 3);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 1, 2, 2, 2, 3, 1, 4, 1, 5, 1, 6, 2, 7, 2, 8, 1, 13, 2, 14, 2, 17, 1);
+                        break;
+                    case (int)ClassCareers.Archer:
+                    case (int)ClassCareers.Warrior:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 2, 1, 1, 2, 2, 3, 1, 5, 1, 6, 1, 7, 1, 8, 1, 9, 1, 10, 2, 11, 2, 12, 1, 13, 1, 14, 1, 15, 1, 16, 1, 17, 2);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 2, 1, 1, 2, 2, 3, 1, 5, 1, 6, 1, 7, 1, 8, 1, 9, 1, 10, 2, 11, 2, 12, 1, 13, 1, 14, 1, 15, 1, 16, 1, 17, 2);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 2, 8, 1, 9, 1, 10, 1, 13, 2, 14, 1, 17, 3);
+                        break;
+                    case (int)ClassCareers.Knight:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 2, 1, 1, 2, 2, 3, 1, 6, 1, 8, 1, 9, 2, 10, 1, 11, 1, 12, 1, 13, 1, 15, 2, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 20, 0, 2, 1, 1, 2, 2, 3, 1, 6, 1, 8, 1, 9, 2, 10, 1, 11, 1, 12, 1, 13, 1, 15, 2, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 17, 0, 2, 2, 1, 3, 2, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 10, 1, 13, 1, 14, 1, 16, 2, 17, 2);
+                        break;
+                    default:
+                        break;
+                }
             }
+            else
+            {
+                switch (Enemy.CareerIndex)
+                {
+                    case 8:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 1, 1, 2, 2, 1, 5, 1, 6, 1, 8, 1, 9, 1, 10, 1, 11, 2, 13, 1, 14, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 1, 1, 2, 2, 1, 5, 1, 6, 1, 8, 1, 9, 1, 10, 1, 11, 2, 13, 1, 14, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 26, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 2, 10, 2, 13, 2, 17, 1);
+                        break;
+                    case 16:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 30, 1, 1, 2, 1, 5, 1, 6, 1, 7, 1, 8, 2, 9, 1, 10, 2, 11, 2, 14, 1, 16, 1, 17, 2);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 30, 1, 1, 2, 1, 5, 1, 6, 1, 7, 1, 8, 2, 9, 1, 10, 2, 11, 2, 14, 1, 16, 1, 17, 2);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 26, 2, 3, 5, 2, 6, 1, 7, 1, 10, 1, 13, 1, 14, 1);
+                        break;
+                    case 7:
+                    case 12:
+                    case 24:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 1, 1, 2, 5, 1, 6, 1, 7, 1, 8, 1, 9, 2, 10, 2, 11, 2, 13, 1, 14, 1, 17, 2);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 1, 1, 2, 5, 1, 6, 1, 7, 1, 8, 1, 9, 2, 10, 2, 11, 2, 13, 1, 14, 1, 17, 2);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 26, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 9, 1, 13, 1, 14, 1, 17, 3);
+                        break;
+                    case 21:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 2, 7, 1, 8, 1, 9, 1, 10, 1, 11, 1, 12, 1, 13, 1, 14, 1, 17, 2);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 2, 7, 1, 8, 1, 9, 1, 10, 1, 11, 1, 12, 1, 13, 1, 14, 1, 17, 2);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 26, 0, 2, 1, 2, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 8, 1, 9, 2, 10, 2, 11, 1, 13, 1, 15, 1, 17, 2);
+                        break;
+                    case 28:
+                    case 30:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 1, 1, 1, 2, 2, 3, 1, 4, 1, 7, 2, 8, 1, 9, 2, 10, 2, 11, 1, 12, 1, 13, 2, 14, 2, 15, 2, 16, 2);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 1, 1, 1, 2, 2, 3, 1, 4, 1, 7, 2, 8, 1, 9, 2, 10, 2, 11, 1, 12, 1, 13, 2, 14, 2, 15, 2, 16, 2);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 26, 1, 1, 3, 2, 4, 2, 5, 1, 6, 1, 7, 2, 8, 1, 9, 1, 11, 1, 12, 1, 14, 1, 15, 1, 16, 1, 17, 1);
+                        break;
+                    case 32:
+                    case 33:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 1, 1, 1, 2, 3, 3, 1, 4, 3, 7, 1, 8, 2, 9, 2, 10, 1, 13, 2, 14, 2);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 1, 1, 1, 2, 3, 3, 1, 4, 3, 7, 1, 8, 2, 9, 2, 10, 1, 13, 2, 14, 2);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 26, 4, 2, 5, 2, 9, 2, 10, 1, 11, 2, 12, 2, 14, 1, 15, 3, 16, 2);
+                        break;
+                    case 29:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 2, 1, 1, 2, 2, 3, 1, 4, 1, 5, 1, 7, 1, 8, 1, 9, 3, 10, 1, 13, 1, 14, 2, 15, 3, 16, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 2, 1, 1, 2, 2, 3, 1, 4, 1, 5, 1, 7, 1, 8, 1, 9, 3, 10, 1, 13, 1, 14, 2, 15, 3, 16, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 26, 1, 1, 3, 2, 4, 2, 5, 1, 7, 2, 8, 2, 9, 1, 10, 1, 15, 1);
+                        break;
+                    case 31:
+                        traits[0] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 2, 1, 1, 4, 1, 5, 1, 7, 1, 8, 1, 9, 2, 10, 2, 13, 2, 14, 2, 15, 1, 16, 1, 17, 1);
+                        traits[1] = FormulaHelper.PickOneOfCompact(-1, 30, 0, 2, 1, 1, 4, 1, 5, 1, 7, 1, 8, 1, 9, 2, 10, 2, 13, 2, 14, 2, 15, 1, 16, 1, 17, 1);
+                        traits[2] = FormulaHelper.PickOneOfCompact(-1, 26, 1, 3, 3, 1, 4, 1, 5, 2, 7, 1, 8, 1, 9, 1, 11, 1, 15, 1, 17, 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (IncompatiblePairs(traits[0], traits[1]))
+                traits[1] = -1;
 
             return traits;
         }
@@ -5797,135 +5916,6 @@ namespace DaggerfallWorkshop.Utility
                 return true;
 
             return false;
-        }
-
-        public static void TraitOddsCreator(DaggerfallEntity enemy, out bool validForTraits, out int[] quirks, out int[] interests)
-        {
-            quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
-            interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
-            validForTraits = false;
-
-            EnemyEntity Enemy = enemy as EnemyEntity;
-
-            if (Enemy.EntityType == EntityTypes.EnemyClass)
-            {
-                validForTraits = true;
-
-                switch (Enemy.CareerIndex)
-                {
-                    case (int)ClassCareers.Mage:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 3, 4, 4, 4, 5, 6, 6, 7, 8, 8, 9, 10, 11, 12, 13, 14, 16, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 1, 2, 3, 4, 5, 5, 8, 9, 10, 11, 11, 12, 12, 15, 15, 16, 16 };
-                        return;
-                    case (int)ClassCareers.Spellsword:
-                    case (int)ClassCareers.Battlemage:
-                    case (int)ClassCareers.Sorcerer:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 2, 3, 4, 4, 5, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 1, 1, 2, 3, 4, 5, 5, 6, 8, 9, 9, 10, 11, 11, 12, 14, 15, 15, 16, 17 };
-                        return;
-                    case (int)ClassCareers.Healer:
-                    case (int)ClassCareers.Monk:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 1, 2, 2, 3, 3, 4, 6, 6, 7, 12, 12, 12, 15, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 0, 0, 0, 3, 4, 4, 6, 9, 9, 10, 10, 11, 11, 12, 13, 14, 15, 16, 16 };
-                        return;
-                    case (int)ClassCareers.Nightblade:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 1, 2, 2, 4, 5, 7, 7, 7, 8, 9, 10, 11, 12, 13, 13, 14, 15, 16, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 0, 1, 3, 4, 5, 6, 7, 8, 8, 9, 9, 10, 10, 11, 12, 13, 14, 15, 15, 16, 17, 17 };
-                        return;
-                    case (int)ClassCareers.Bard:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 9, 10, 11, 11, 12, 13, 14, 15, 15, 16, 17, 17, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 3, 3, 4, 4, 5, 8, 8, 9, 10, 11, 13, 14, 15, 16 };
-                        return;
-                    case (int)ClassCareers.Burglar:
-                    case (int)ClassCareers.Thief:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 2, 3, 4, 5, 7, 7, 8, 9, 9, 10, 10, 10, 11, 12, 13, 13, 14, 15, 15, 16, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 2, 2, 3, 4, 5, 5, 5, 6, 7, 8, 8, 9, 10, 13, 14, 15, 17 };
-                        return;
-                    case (int)ClassCareers.Rogue:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 2, 4, 5, 6, 7, 8, 9, 9, 10, 10, 11, 11, 12, 13, 13, 14, 14, 15, 15, 16, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 2, 3, 4, 5, 5, 6, 7, 8, 8, 9, 9, 10, 13, 14, 15, 17 };
-                        return;
-                    case (int)ClassCareers.Acrobat:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 4, 5, 5, 6, 7, 8, 9, 9, 10, 11, 12, 13, 14, 15, 15, 16, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 0, 1, 2, 2, 2, 3, 4, 4, 5, 6, 7, 8, 8, 9, 10, 13, 14, 14, 15, 17 };
-                        return;
-                    case (int)ClassCareers.Assassin:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 1, 2, 4, 5, 7, 7, 8, 9, 10, 10, 11, 12, 13, 14, 14, 14, 15, 16, 16, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 1, 1, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 9, 14, 15, 16, 17 };
-                        return;
-                    case (int)ClassCareers.Ranger:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 15, 16, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 6, 6, 7, 7, 7, 8, 9, 10, 10, 12, 13, 13, 14, 14, 17 };
-                        return;
-                    case (int)ClassCareers.Barbarian:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 1, 5, 5, 6, 7, 10, 10, 11, 11, 13, 13, 14, 15, 16, 17, 17, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 1, 1, 2, 2, 3, 4, 5, 6, 6, 7, 7, 8, 13, 13, 14, 14, 17 };
-                        return;
-                    case (int)ClassCareers.Archer:
-                    case (int)ClassCareers.Warrior:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 1, 2, 2, 3, 5, 6, 7, 8, 9, 10, 10, 11, 11, 12, 13, 14, 15, 16, 17, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 7, 8, 9, 10, 13, 13, 14, 17, 17, 17 };
-                        return;
-                    case (int)ClassCareers.Knight:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 1, 2, 2, 3, 6, 8, 9, 9, 10, 11, 12, 13, 15, 15, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 0, 0, 2, 3, 3, 4, 5, 6, 7, 8, 10, 13, 14, 16, 17, 17 };
-                        return;
-                    default:
-                        return;
-                }
-            }
-            else
-            {
-                switch (Enemy.CareerIndex)
-                {
-                    case 8:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 2, 5, 6, 8, 9, 10, 11, 11, 13, 14, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 7, 10, 10, 13, 13, 17 };
-                        validForTraits = true;
-                        return;
-                    case 16:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 2, 5, 6, 7, 8, 8, 9, 10, 10, 11, 11, 14, 16, 17, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2, 2, 2, 5, 5, 6, 7, 10, 13, 14 };
-                        validForTraits = true;
-                        return;
-                    case 7:
-                    case 12:
-                    case 24:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 5, 6, 7, 8, 9, 9, 10, 10, 11, 11, 13, 14, 17, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14, 17, 17, 17 };
-                        validForTraits = true;
-                        return;
-                    case 21:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 1, 1, 2, 3, 4, 5, 6, 8, 9, 9, 10, 10, 11, 13, 15, 17, 17 };
-                        validForTraits = true;
-                        return;
-                    case 28:
-                    case 30:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 2, 3, 4, 7, 7, 8, 9, 9, 10, 10, 11, 12, 13, 13, 14, 14, 15, 15, 16, 16 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, -1, 1, 3, 3, 4, 4, 5, 6, 7, 7, 8, 9, 11, 12, 14, 15, 16, 17 };
-                        validForTraits = true;
-                        return;
-                    case 32:
-                    case 33:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 2, 2, 3, 4, 4, 4, 7, 8, 8, 9, 9, 10, 13, 13, 14, 14 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 4, 4, 5, 5, 9, 9, 10, 11, 11, 12, 12, 14, 15, 15, 15, 16, 16 };
-                        validForTraits = true;
-                        return;
-                    case 29:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 1, 2, 2, 3, 4, 5, 7, 8, 9, 9, 9, 10, 13, 14, 14, 15, 15, 15, 16, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, 1, 3, 3, 4, 4, 5, 7, 7, 8, 8, 8, 9, 10, 15 };
-                        validForTraits = true;
-                        return;
-                    case 31:
-                        quirks = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 1, 4, 5, 7, 8, 9, 9, 10, 10, 13, 13, 14, 14, 15, 16, 17 };
-                        interests = new int[] { -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, 1, 3, 4, 5, 5, 7, 8, 9, 11, 15, 17 };
-                        validForTraits = true;
-                        return;
-                    default:
-                        return;
-                }
-            }
         }
 
         #endregion
