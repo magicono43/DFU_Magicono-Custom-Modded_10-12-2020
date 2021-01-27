@@ -181,7 +181,7 @@ namespace DaggerfallWorkshop
             }
         }
 
-        public void AttemptBash(bool byPlayer)
+        public void AttemptBash(bool byPlayer, PlayerEntity player = null, EnemyEntity enemy = null)
         {
             // Play bash sound if flagged and ready
             if (PlaySounds && BashSound > 0 && audioSource)
@@ -199,8 +199,16 @@ namespace DaggerfallWorkshop
             // Cannot bash magically held doors
             else if (!IsMagicallyHeld)
             {
+                int chance = 0;
+
+                if (player != null)
+                    chance = Mathf.Clamp(15 + (int)Mathf.Ceil((player.Stats.LiveStrength - 50) / 2.5f) - CurrentLockValue, 1, 100);
+                else if (enemy != null)
+                    chance = Mathf.Clamp(15 + (int)Mathf.Ceil((enemy.Stats.LiveStrength - 50) / 2.5f) - CurrentLockValue, 1, 100);
+                else
+                    chance = 20 - CurrentLockValue;
+
                 // Roll for chance to open
-                int chance = 20 - CurrentLockValue;
                 if (Dice100.SuccessRoll(chance))
                 {
                     CurrentLockValue = 0;

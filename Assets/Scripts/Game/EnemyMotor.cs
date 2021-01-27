@@ -14,6 +14,7 @@ using DaggerfallWorkshop.Game.Entity;
 using DaggerfallWorkshop.Game.MagicAndEffects;
 using System.Collections.Generic;
 using DaggerfallWorkshop.Utility;
+using DaggerfallWorkshop.Game.Items;
 
 namespace DaggerfallWorkshop.Game
 {
@@ -95,6 +96,7 @@ namespace DaggerfallWorkshop.Game
         public Vector3 KnockbackDirection { get; set; } // Direction to travel while being knocked back
         public bool Bashing { get; private set; }   // Is this enemy bashing a door
         public int GiveUpTimer { get; set; }        // Timer for enemy giving up pursuit of target
+        public int PotionCheckTimer { get; set; }        // Timer for checking inventory of enemy for potions to use
         #endregion
 
         #region Unity Methods
@@ -367,6 +369,12 @@ namespace DaggerfallWorkshop.Game
             if (strafeTimer > 0)
                 strafeTimer -= Time.deltaTime;
 
+            if (mobile.Summary.Enemy.CanDrinkPotions && PotionCheckTimer <= 0)
+                PotionCheckTimer = Random.Range(100, 250 + 1);
+
+            if (mobile.Summary.Enemy.CanDrinkPotions && GameManager.ClassicUpdate && PotionCheckTimer > 0)
+                PotionCheckTimer--;
+
             // As long as the target is detected,
             // giveUpTimer is reset to full
             if (senses.DetectedTarget)
@@ -416,6 +424,10 @@ namespace DaggerfallWorkshop.Game
 
             // Do not change action if currently playing oneshot wants to stop actions
             if (isPlayingOneShot && mobile.OneShotPauseActionsWhilePlaying())
+                return;
+
+            // Drink Potions
+            if (DrinkPotion())
                 return;
 
             // Ranged attacks
@@ -514,6 +526,53 @@ namespace DaggerfallWorkshop.Game
                 float deltaHeight = (targetController.height - originalHeight) / 2;
                 destination.y -= deltaHeight;
             }
+        }
+
+        /// <summary>
+        /// Handles enemy using potions in their inventory if the situation calls for it.
+        /// </summary>
+        bool DrinkPotion()
+        {
+            if (!mobile.Summary.Enemy.CanDrinkPotions)
+                return false;
+
+            if (PotionCheckTimer == 0 && senses.DetectedTarget)
+            {
+                EntityEffectBroker effectBroker = GameManager.Instance.EntityEffectBroker;
+                List<DaggerfallUnityItem> potions = entity.Items.SearchItems(ItemGroups.UselessItems1, 83);
+
+                if (potions.Count > 0)
+                {
+                    List<DaggerfallUnityItem> potClone = potions;
+
+                    if (entity.CurrentHealthPercent * 100f <= 60)
+                    {
+                        for (int i = potClone.Count; i > 0; i--)
+                        {
+                            PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potions[i - 1].PotionRecipeKey);
+                            IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                            if (potionEffect.Key == "Heal-Health" || potionEffect.Key == "Regenerate")
+                            {
+                                this.entityEffectManager.EnemyDrinkPotion(potions[i - 1]);
+                                potions.Remove(potions[i - 1]);
+                            }
+                        }
+                        potClone = potions;
+                    }
+
+                    if (entity.CurrentMagicka / (float)entity.MaxMagicka <= 60)
+                    {
+                        foreach (DaggerfallUnityItem pot in potions)
+                        {
+
+                        }
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

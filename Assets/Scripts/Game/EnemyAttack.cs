@@ -197,7 +197,7 @@ namespace DaggerfallWorkshop.Game
                 // Handle bashing door
                 else if (motor.Bashing && senses.LastKnownDoor != null && senses.DistanceToDoor <= MeleeDistance && !senses.LastKnownDoor.IsOpen)
                 {
-                    senses.LastKnownDoor.AttemptBash(false);
+                    senses.LastKnownDoor.AttemptBash(false, null, entity);
                 }
                 else
                 {
