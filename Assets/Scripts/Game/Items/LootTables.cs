@@ -1794,12 +1794,16 @@ namespace DaggerfallWorkshop.Game.Items
                 switch (AITarget.CareerIndex)
                 {
                     case 8:
-                    case 16:
+                        return new byte[,] { { 1, 20 }, { 1, 20 }, { 0, 20 }, { 0, 20 }, { 0, 20 }, { 1, 5 }, { 0, 20 } };
                     case 7:
                     case 12:
-                    case 21:
                     case 24:
-                    case 31:
+                        return new byte[,] { { 1, 20 }, { 1, 20 }, { 0, 20 }, { 0, 20 }, { 0, 20 }, { 1, 5 }, { 0, 20 } };
+                    case 21:
+                        return new byte[,] { { 1, 15 }, { 1, 5 }, { 1, 20 }, { 1, 10 }, { 0, 20 }, { 1, 10 }, { 0, 20 } };
+                    case 28:
+                    case 30:
+                        return new byte[,] { { 1, 10 }, { 0, 20 }, { 1, 10 }, { 0, 20 }, { 1, 5 }, { 1, 10 }, { 1, 10 } };
                     default:
                         return allowedPotions;
                 }

@@ -1165,7 +1165,7 @@ namespace DaggerfallWorkshop.Game.Items
                         DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
-                        if (potionEffect.Key == "Heal-Health" || potionEffect.Key == "Regenerate")
+                        if (allRecipeKeys[i] != 422980775 && (potionEffect.Key == "Heal-Health" || potionEffect.Key == "Regenerate")) // Excluding "Miraculous Closing Wounds" potion, Recipe ID will change if recipe/hashcode changes, just keep note. 
                             filteredPotions.Add(potChecked);
                     }
                     break;
@@ -1185,7 +1185,7 @@ namespace DaggerfallWorkshop.Game.Items
                         DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
-                        if (potionEffect.Key == "Heal-SpellPoints")
+                        if (allRecipeKeys[i] != -1754277189 && (potionEffect.Key == "Heal-SpellPoints")) // Excluding "Greater Restore Power" potion, Recipe ID will change if recipe/hashcode changes, just keep note. 
                             filteredPotions.Add(potChecked);
                     }
                     break;
@@ -1215,7 +1215,7 @@ namespace DaggerfallWorkshop.Game.Items
                         DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
-                        if (potionEffect.GroupName == "Elemental Resistance" || potionEffect.GroupName == "Shield" || potionEffect.GroupName == "Spell Resistance" || potionEffect.GroupName == "Spell Reflection" || potionEffect.GroupName == "Spell Absorption")
+                        if ((allRecipeKeys[i] != 9062553 || allRecipeKeys[i] != -1944350794 || allRecipeKeys[i] != -1586429900) && (potionEffect.GroupName == "Elemental Resistance" || potionEffect.GroupName == "Shield" || potionEffect.GroupName == "Spell Resistance" || potionEffect.GroupName == "Spell Reflection" || potionEffect.GroupName == "Spell Absorption")) // Excluding "Peryite's Spell Immunity", "Stendarr's Shield", and "Perfect Mirror" potions. 
                             filteredPotions.Add(potChecked);
                     }
                     break;
@@ -1225,7 +1225,7 @@ namespace DaggerfallWorkshop.Game.Items
                         DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
-                        if (potionEffect.GroupName == "Invisibility" || potionEffect.GroupName == "Shadow" || potionEffect.GroupName == "Chameleon" || potionEffect.GroupName == "Comprehend Languages" || potionEffect.GroupName == "Levitate" || potionEffect.GroupName == "Water Walking" || potionEffect.GroupName == "Water Breathing" || potionEffect.GroupName == "Slowfall" || potionEffect.GroupName == "Free Action" || potionEffect.GroupName == "Light" || potionEffect.GroupName == "Jumping" || potionEffect.GroupName == "Climbing")
+                        if (allRecipeKeys[i] != -1073126825 && (potionEffect.GroupName == "Invisibility" || potionEffect.GroupName == "Shadow" || potionEffect.GroupName == "Chameleon" || potionEffect.GroupName == "Comprehend Languages" || potionEffect.GroupName == "Levitate" || potionEffect.GroupName == "Water Walking" || potionEffect.GroupName == "Water Breathing" || potionEffect.GroupName == "Slowfall" || potionEffect.GroupName == "Free Action" || potionEffect.GroupName == "Light" || potionEffect.GroupName == "Jumping" || potionEffect.GroupName == "Climbing")) // Excluding "Clavicus Vile's Deception" potion, Recipe ID will change if recipe/hashcode changes. 
                             filteredPotions.Add(potChecked);
                     }
                     break;
@@ -1251,29 +1251,29 @@ namespace DaggerfallWorkshop.Game.Items
                     if (potionRecipe.Rarity >= 30)
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 1.5f)), 1, 200);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 1.5f)), 1, 300);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 2.5f)), 1, 200);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 2.5f)), 1, 300);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (60f / enemyLevel)), 1, 200);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (120f / enemyLevel)), 1, 300);
                     }
                     else if (potionRecipe.Rarity >= 15)
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + enemyLevel), 1, 200);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + enemyLevel), 1, 300);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 200);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 300);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 200);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 300);
                     }
                     else
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 200);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 300);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (5f / enemyLevel)), 1, 200);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (5f / enemyLevel)), 1, 300);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 200);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 300);
                     }
                 }
                 else

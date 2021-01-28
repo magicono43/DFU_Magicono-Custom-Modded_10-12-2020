@@ -4923,7 +4923,7 @@ namespace DaggerfallWorkshop.Utility
 
                 if (traits[2] == (int)MobilePersonalityInterests.Cartographer)
                 {
-                    finalExtraLootProps[11] = FormulaHelper.PickOneOfCompact(2, 8, 3, 4, 4, 1);
+                    finalExtraLootProps[11] = FormulaHelper.PickOneOfCompact(1, 98, 2, 12, 3, 1);
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Fisher)
@@ -4939,7 +4939,7 @@ namespace DaggerfallWorkshop.Utility
 
                 if (traits[2] == (int)MobilePersonalityInterests.Magic_Collector)
                 {
-                    finalExtraLootProps[3] = FormulaHelper.PickOneOfCompact(1, 8, 2, 3, 3, 1);
+                    finalExtraLootProps[3] = FormulaHelper.PickOneOfCompact(1, 98, 2, 10, 3, 1);
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Writer)
@@ -5642,135 +5642,135 @@ namespace DaggerfallWorkshop.Utility
                 switch (AITarget.CareerIndex)
                 {
                     case (int)ClassCareers.Mage:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 4, 1, 3, 2, 1);
                         extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 12, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Spellsword:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 4, 1, 3, 2, 1);
                         extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 18, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Battlemage:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 4, 1, 3, 2, 1);
                         extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 18, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Sorcerer:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(1, 10, 2, 3, 3, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(1, 8, 2, 3, 3, 1);
                         extraLootProps[3] = FormulaHelper.PickOneOfCompact(0, 18, 1, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Healer:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(1, 10, 2, 3);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(1, 7, 2, 3);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(1, 3 + 1);
                         extraLootProps[7] = UnityEngine.Random.Range(4, 7 + 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Nightblade:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 3, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[10] = 1;
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Bard:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 4, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(2, 7, 3, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[9] = FormulaHelper.PickOneOfCompact(0, 4, 1, 7, 2, 2);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Burglar:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 4, 2, 1);
                         extraLootProps[2] = FormulaHelper.PickOneOfCompact(0, 9, 1, 6, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Rogue:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 4, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Acrobat:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 4, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Thief:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 4, 2, 1);
                         extraLootProps[2] = FormulaHelper.PickOneOfCompact(0, 9, 1, 2);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Assassin:
                         extraLootProps[0] = UnityEngine.Random.Range(5, 16 + 1);
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(1, 11, 2, 5, 3, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[9] = FormulaHelper.PickOneOfCompact(0, 7, 1, 5, 2, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Monk:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 4, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(0, 2, 1, 5);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(0, 2 + 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Archer:
                         extraLootProps[0] = UnityEngine.Random.Range(16, 35 + 1);
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 4, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Ranger:
                         extraLootProps[0] = UnityEngine.Random.Range(9, 26 + 1);
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 6, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(2, 7, 3, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Barbarian:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 14, 1, 6, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[7] = UnityEngine.Random.Range(0, 5 + 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 10, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Warrior:
                         extraLootProps[0] = UnityEngine.Random.Range(5, 20 + 1);
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 4, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 4, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case (int)ClassCareers.Knight:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 4, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(0, 1 + 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     default:
                         break;
@@ -5780,34 +5780,48 @@ namespace DaggerfallWorkshop.Utility
             {
                 switch (AITarget.CareerIndex)
                 {
+                    case 8:
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 12, 1, 5);
+                        extraLootProps[4] = FormulaHelper.PickOneOf(0, 1);
+                        extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
+                        break;
                     case 7:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 12, 1, 5);
                         extraLootProps[4] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 4, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case 12:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 10, 1, 6, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case 21:
-                        extraLootProps[1] = FormulaHelper.PickOneOf(0, 0, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(1, 8, 2, 3, 3, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[6] = UnityEngine.Random.Range(1, 3 + 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case 24:
-                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 4, 1, 8, 2, 1);
                         extraLootProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 6, 2, 1);
                         extraLootProps[4] = FormulaHelper.PickOneOf(0, 1, 2);
                         extraLootProps[5] = FormulaHelper.PickOneOf(0, 1);
                         extraLootProps[8] = FormulaHelper.PickOneOf(0, 0, 1);
-                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 40, 1, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
+                        break;
+                    case 28:
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 11, 1, 6);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
+                        break;
+                    case 30:
+                        extraLootProps[1] = FormulaHelper.PickOneOfCompact(0, 4, 1, 9, 2, 1);
+                        extraLootProps[11] = FormulaHelper.PickOneOfCompact(0, 98, 1, 1);
                         break;
                     case 29:
                     case 31:
