@@ -221,6 +221,36 @@ namespace DaggerfallWorkshop.Game
                 mobile.FreezeAnims = true;
                 canAct = false;
                 flyerFalls = true;
+
+                if (!mobile.Summary.Enemy.CanDrinkPotions)
+                {
+                    // Do Nothing
+                }
+                else if (PotionCheckTimer == 0 && senses.DetectedTarget)
+                {
+                    EntityEffectBroker effectBroker = GameManager.Instance.EntityEffectBroker;
+                    List<DaggerfallUnityItem> potions = entity.Items.SearchItems(ItemGroups.UselessItems1, 83);
+
+                    if (potions.Count > 0)
+                    {
+                        List<DaggerfallUnityItem> potClone = potions;
+
+                        for (int i = potClone.Count; i > 0; i--)
+                        {
+                            PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potions[i - 1].PotionRecipeKey);
+                            IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                            if (potionEffect.Key == "Cure-Paralyzation" || potionEffect.Key == "FreeAction" || potionEffect.Key == "Dispel - Magic")
+                            {
+                                this.entityEffectManager.EnemyDrinkPotion(potions[i - 1]);
+                                potions.Remove(potions[i - 1]);
+
+                                mobile.FreezeAnims = false;
+                                canAct = true;
+                                flyerFalls = false;
+                            }
+                        }
+                    }
+                }
             }
             mobile.FreezeAnims = false;
         }
@@ -560,16 +590,54 @@ namespace DaggerfallWorkshop.Game
                         potClone = potions;
                     }
 
-                    if (entity.CurrentMagicka / (float)entity.MaxMagicka <= 60)
+                    if (entity.CurrentMagicka / (float)entity.MaxMagicka * 100f <= 60)
                     {
-                        foreach (DaggerfallUnityItem pot in potions)
+                        for (int i = potClone.Count; i > 0; i--)
                         {
-
+                            PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potions[i - 1].PotionRecipeKey);
+                            IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                            if (potionEffect.Key == "Heal-SpellPoints")
+                            {
+                                this.entityEffectManager.EnemyDrinkPotion(potions[i - 1]);
+                                potions.Remove(potions[i - 1]);
+                            }
                         }
+                        potClone = potions;
+                    }
+
+                    if (!senses.TargetInSight)
+                    {
+                        for (int i = potClone.Count; i > 0; i--)
+                        {
+                            PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potions[i - 1].PotionRecipeKey);
+                            IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                            if (potionEffect.Key == "Chameleon-Normal" || potionEffect.Key == "Shadow-Normal" || potionEffect.Key == "Invisibility-Normal")
+                            {
+                                this.entityEffectManager.EnemyDrinkPotion(potions[i - 1]);
+                                potions.Remove(potions[i - 1]);
+                            }
+                        }
+                        potClone = potions;
+                    }
+                    else
+                    {
+                        for (int i = potClone.Count; i > 0; i--)
+                        {
+                            PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potions[i - 1].PotionRecipeKey);
+                            IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+                            if (potionEffect.GroupName == "Fortify Attribute" || potionEffect.GroupName == "Elemental Resistance" || potionEffect.GroupName == "Shield" || potionEffect.GroupName == "Spell Resistance" || potionEffect.GroupName == "Spell Reflection" || potionEffect.GroupName == "Spell Absorption" || potionEffect.Key == "Chameleon-True" || potionEffect.Key == "Shadow-True" || potionEffect.Key == "Invisibility-True" || potionEffect.GroupName == "Levitate")
+                            {
+                                this.entityEffectManager.EnemyDrinkPotion(potions[i - 1]);
+                                potions.Remove(potions[i - 1]);
+                            }
+                        }
+                        potClone = potions;
                     }
 
                     return true;
                 }
+                else
+                    PotionCheckTimer = 10000; // Will see if this works or causes problems, not sure. 
             }
 
             return false;
