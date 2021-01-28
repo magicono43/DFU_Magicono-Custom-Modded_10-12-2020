@@ -242,11 +242,14 @@ namespace DaggerfallWorkshop.Game
                             if (potionEffect.Key == "Cure-Paralyzation" || potionEffect.Key == "FreeAction" || potionEffect.Key == "Dispel - Magic")
                             {
                                 this.entityEffectManager.EnemyDrinkPotion(potions[i - 1]);
+                                entity.Items.RemoveOne(potions[i - 1]);
                                 potions.Remove(potions[i - 1]);
 
                                 mobile.FreezeAnims = false;
                                 canAct = true;
                                 flyerFalls = false;
+                                entityBehaviour.Entity.IsParalyzed = false;
+                                break;
                             }
                         }
                     }
@@ -400,7 +403,7 @@ namespace DaggerfallWorkshop.Game
                 strafeTimer -= Time.deltaTime;
 
             if (mobile.Summary.Enemy.CanDrinkPotions && PotionCheckTimer <= 0)
-                PotionCheckTimer = Random.Range(100, 250 + 1);
+                PotionCheckTimer = Random.Range(75, 200 + 1);
 
             if (mobile.Summary.Enemy.CanDrinkPotions && GameManager.ClassicUpdate && PotionCheckTimer > 0)
                 PotionCheckTimer--;
@@ -584,7 +587,9 @@ namespace DaggerfallWorkshop.Game
                             if (potionEffect.Key == "Heal-Health" || potionEffect.Key == "Regenerate")
                             {
                                 this.entityEffectManager.EnemyDrinkPotion(potions[i - 1]);
+                                entity.Items.RemoveOne(potions[i - 1]);
                                 potions.Remove(potions[i - 1]);
+                                break;
                             }
                         }
                         potClone = potions;
@@ -599,7 +604,9 @@ namespace DaggerfallWorkshop.Game
                             if (potionEffect.Key == "Heal-SpellPoints")
                             {
                                 this.entityEffectManager.EnemyDrinkPotion(potions[i - 1]);
+                                entity.Items.RemoveOne(potions[i - 1]);
                                 potions.Remove(potions[i - 1]);
+                                break;
                             }
                         }
                         potClone = potions;
@@ -614,7 +621,9 @@ namespace DaggerfallWorkshop.Game
                             if (potionEffect.Key == "Chameleon-Normal" || potionEffect.Key == "Shadow-Normal" || potionEffect.Key == "Invisibility-Normal")
                             {
                                 this.entityEffectManager.EnemyDrinkPotion(potions[i - 1]);
+                                entity.Items.RemoveOne(potions[i - 1]);
                                 potions.Remove(potions[i - 1]);
+                                break;
                             }
                         }
                         potClone = potions;
@@ -628,7 +637,9 @@ namespace DaggerfallWorkshop.Game
                             if (potionEffect.GroupName == "Fortify Attribute" || potionEffect.GroupName == "Elemental Resistance" || potionEffect.GroupName == "Shield" || potionEffect.GroupName == "Spell Resistance" || potionEffect.GroupName == "Spell Reflection" || potionEffect.GroupName == "Spell Absorption" || potionEffect.Key == "Chameleon-True" || potionEffect.Key == "Shadow-True" || potionEffect.Key == "Invisibility-True" || potionEffect.GroupName == "Levitate")
                             {
                                 this.entityEffectManager.EnemyDrinkPotion(potions[i - 1]);
+                                entity.Items.RemoveOne(potions[i - 1]);
                                 potions.Remove(potions[i - 1]);
+                                break;
                             }
                         }
                         potClone = potions;
@@ -637,7 +648,7 @@ namespace DaggerfallWorkshop.Game
                     return true;
                 }
                 else
-                    PotionCheckTimer = 10000; // Will see if this works or causes problems, not sure. 
+                    PotionCheckTimer = 100000; // Will see if this works or causes problems, not sure. 
             }
 
             return false;
