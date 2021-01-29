@@ -5728,16 +5728,16 @@
         "basePrice": 20,
         "enchantmentPoints": 0,
         "rarity": 1,
-        "variants": 2,
+        "variants": 37,
         "drawOrderOrEffect": 0,
         "isBluntWeapon": false,
         "isLiquid": false,
         "isOneHanded": false,
         "isIngredient": false,
-        "worldTextureArchive": 209,
-        "worldTextureRecord": 2,
-        "playerTextureArchive": 209,
-        "playerTextureRecord": 2
+        "worldTextureArchive": 900,
+        "worldTextureRecord": 0,
+        "playerTextureArchive": 900,
+        "playerTextureRecord": 0
     },
     {
         "index": 278,

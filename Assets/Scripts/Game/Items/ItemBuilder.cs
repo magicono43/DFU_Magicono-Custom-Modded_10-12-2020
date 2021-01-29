@@ -383,16 +383,24 @@ namespace DaggerfallWorkshop.Game.Items
         {
             var bookFile = new BookFile();
 
+            float[] bookProps = CustomBookPropertyHolder.GetBookProperties(id);
             string name = GameManager.Instance.ItemHelper.GetBookFileName(id);
             if (!BookReplacement.TryImportBook(name, bookFile) &&
                 !bookFile.OpenBook(DaggerfallUnity.Instance.Arena2Path, name))
                 return null;
 
-            return new DaggerfallUnityItem(ItemGroups.Books, 0)
+            DaggerfallUnityItem bookMade = new DaggerfallUnityItem(ItemGroups.Books, 0)
             {
                 message = id,
-                value = bookFile.Price
+                value = (int)bookProps[0],
+                rarity = (int)bookProps[1],
+                weightInKg = bookProps[2],
+                CurrentVariant = (int)bookProps[3]
             };
+
+            //bookMade.CurrentVariant = UnityEngine.Random.Range(0, bookMade.TotalVariants);
+
+            return bookMade;
         }
 
         /// <summary>
@@ -430,13 +438,18 @@ namespace DaggerfallWorkshop.Game.Items
             Array enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ItemGroups.Books);
             DaggerfallUnityItem book = new DaggerfallUnityItem(ItemGroups.Books, Array.IndexOf(enumArray, Books.Book0));
             book.message = DaggerfallUnity.Instance.ItemHelper.GetRandomBookID();
-            book.CurrentVariant = UnityEngine.Random.Range(0, book.TotalVariants);
+            //book.CurrentVariant = UnityEngine.Random.Range(0, book.TotalVariants);
             // Update item value for this book.
             BookFile bookFile = new BookFile();
+            float[] bookProps = CustomBookPropertyHolder.GetBookProperties(book.message);
             string name = GameManager.Instance.ItemHelper.GetBookFileName(book.message);
             if (!BookReplacement.TryImportBook(name, bookFile))
                 bookFile.OpenBook(DaggerfallUnity.Instance.Arena2Path, name);
-            book.value = bookFile.Price;
+            book.value = (int)bookProps[0];
+            book.rarity = (int)bookProps[1];
+            book.weightInKg = bookProps[2];
+            book.CurrentVariant = (int)bookProps[3];
+
             return book;
         }
 
@@ -1032,6 +1045,8 @@ namespace DaggerfallWorkshop.Game.Items
 
             // Create item
             DaggerfallUnityItem newItem = new DaggerfallUnityItem(ingredientGroup, groupIndex);
+
+            newItem.CurrentVariant = UnityEngine.Random.Range(0, newItem.TotalVariants);
 
             return newItem;
         }

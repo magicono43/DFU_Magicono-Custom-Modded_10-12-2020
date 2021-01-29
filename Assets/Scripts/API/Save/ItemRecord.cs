@@ -51,6 +51,7 @@ namespace DaggerfallConnect.Save
             public UInt32 value;
             public UInt16 unknown;
             public UInt16 flags;
+            public UInt16 rarity;
             public UInt16 currentCondition;
             public UInt16 maxCondition;
             public Byte unknown2;

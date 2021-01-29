@@ -40,6 +40,7 @@ namespace DaggerfallWorkshop.Game.Items
         public int value;
         public ushort unknown;
         public ushort flags;
+        public int rarity;
         public int currentCondition;
         public int maxCondition;
         public int density;
@@ -548,6 +549,7 @@ namespace DaggerfallWorkshop.Game.Items
             value = itemTemplate.basePrice;
             unknown = 0;
             flags = 0;
+            rarity = itemTemplate.rarity;
             currentCondition = itemTemplate.hitPoints;
             maxCondition = itemTemplate.hitPoints;
             density = itemTemplate.baseDensity;
@@ -605,6 +607,7 @@ namespace DaggerfallWorkshop.Game.Items
             value = magicItemTemplate.value;
             unknown = 0;
             flags = artifactMask | identifiedMask;      // Set as artifact & identified.
+            rarity = itemTemplate.rarity;
             currentCondition = magicItemTemplate.uses;
             maxCondition = magicItemTemplate.uses;
             density = itemTemplate.baseDensity;
@@ -769,6 +772,7 @@ namespace DaggerfallWorkshop.Game.Items
             data.drawOrder = drawOrder;
             data.value1 = value;
             data.value2 = (unknown & 0xffff) | (flags << 16);
+            data.rarity = rarity;
             data.hits1 = currentCondition;
             data.hits2 = maxCondition;
             data.hits3 = (unknown2 & 0xff) | (typeDependentData << 8);
@@ -1704,6 +1708,7 @@ namespace DaggerfallWorkshop.Game.Items
             value = (int)itemRecord.ParsedData.value;
             unknown = itemRecord.ParsedData.unknown;
             flags = itemRecord.ParsedData.flags;
+            rarity = itemRecord.ParsedData.rarity;
             currentCondition = itemRecord.ParsedData.currentCondition;
             maxCondition = itemRecord.ParsedData.maxCondition;
             unknown2 = itemRecord.ParsedData.unknown2;
@@ -1771,6 +1776,7 @@ namespace DaggerfallWorkshop.Game.Items
             // These are being saved in DF Unity saves as one int32 value but are two 16-bit values in classic
             unknown = (ushort)(data.value2 & 0xffff);
             flags = (ushort)(data.value2 >> 16);
+            rarity = data.rarity;
             currentCondition = data.hits1;
             maxCondition = data.hits2;
             // These are being saved in DF Unity saves as one int32 value but are two 8-bit values in classic

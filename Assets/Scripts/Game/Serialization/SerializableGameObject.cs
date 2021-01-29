@@ -269,6 +269,7 @@ namespace DaggerfallWorkshop.Game.Serialization
         public int drawOrder;
         public int value1;
         public int value2;
+        public int rarity;
         public int hits1;
         public int hits2;
         public int hits3;
