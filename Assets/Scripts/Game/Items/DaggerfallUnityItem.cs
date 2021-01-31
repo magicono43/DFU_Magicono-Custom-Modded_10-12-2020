@@ -357,6 +357,14 @@ namespace DaggerfallWorkshop.Game.Items
         }
 
         /// <summary>
+        /// Checks if this item is a book.
+        /// </summary>
+        public bool IsBook
+        {
+            get { return ItemGroup == ItemGroups.Books && TemplateIndex == 277; }
+        }
+
+        /// <summary>
         /// Gets/sets the soul trapped in a soul trap.
         /// </summary>
         public MobileTypes TrappedSoulType
@@ -459,6 +467,16 @@ namespace DaggerfallWorkshop.Game.Items
         public DaggerfallUnityItem()
         {
             uid = DaggerfallUnity.NextUID;
+        }
+
+        /// <summary>
+        /// Construct Dummy from item group and index.
+        /// Does not generate new UID, DO NOT USE FOR ITEMS THAT WILL EXIST IN-GAME!
+        /// </summary>
+        public DaggerfallUnityItem(ItemGroups itemGroup, int groupIndex, bool referenceItem) // Experiment to see if I can create items in code without increasing UID counter every time.
+        {
+            uid = 6500;
+            SetItem(itemGroup, groupIndex); // This constuctor overload will be used when creating "dummy" items for the purpose of using their data and not to actually "create" a new item and UID.
         }
 
         /// <summary>

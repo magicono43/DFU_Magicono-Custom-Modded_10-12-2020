@@ -752,6 +752,8 @@ namespace DaggerfallWorkshop.Game.Items
                     checkItem.ItemGroup == itemGroup && checkItem.GroupIndex == groupIndex &&
                     checkItem.PotionRecipeKey == item.PotionRecipeKey &&
                     checkItem.IsSummoned == item.IsSummoned &&
+                    checkItem.message == item.message &&
+                    checkItem.currentCondition == item.currentCondition && // So differently damaged condition books don't stack, when I apply condition variance to them at least. 
                     checkItem.nativeMaterialValue == item.nativeMaterialValue &&
                     checkItem.IsStackable())
                     return checkItem;

@@ -628,12 +628,12 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 if (bookSubject == -1)
                 {
-                    targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
+                    targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject(-1, playerLuck));
                     chance *= chanceMod;
                 }
                 else
                 {
-                    targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)bookSubject));
+                    targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)bookSubject, -1, playerLuck));
                     chance *= chanceMod;
                 }
             }
@@ -1349,54 +1349,56 @@ namespace DaggerfallWorkshop.Game.Items
 
         static void AddBooksBasedOnSubject(EnemyEntity AITarget, int bookAmount, List<DaggerfallUnityItem> targetItems)
         {
+            int level = AITarget.Level;
+
             if (AITarget.EntityType == EntityTypes.EnemyClass)
             {
                 switch (AITarget.CareerIndex)
                 {
                     case (int)ClassCareers.Mage:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 9, 28, 1, 30, 3, 31, 2, 32, 1, 34, 1, 36, 2, 39, 1)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 9, 28, 1, 30, 3, 31, 2, 32, 1, 34, 1, 36, 2, 39, 1), level));
                         return;
                     case (int)ClassCareers.Spellsword:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 6, 28, 2, 30, 5, 31, 2, 32, 1, 34, 1, 36, 2, 39, 1)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 6, 28, 2, 30, 5, 31, 2, 32, 1, 34, 1, 36, 2, 39, 1), level));
                         return;
                     case (int)ClassCareers.Battlemage:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 4, 28, 3, 30, 6, 31, 2, 32, 1, 34, 1, 36, 2, 39, 1)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 4, 28, 3, 30, 6, 31, 2, 32, 1, 34, 1, 36, 2, 39, 1), level));
                         return;
                     case (int)ClassCareers.Sorcerer:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 3, 28, 2, 30, 7, 31, 3, 32, 1, 34, 1, 36, 2, 39, 1)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(33, 3, 28, 2, 30, 7, 31, 3, 32, 1, 34, 1, 36, 2, 39, 1), level));
                         return;
                     case (int)ClassCareers.Healer:
                     case (int)ClassCareers.Monk:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(38, 8, 33, 1, 28, 1, 30, 2, 31, 3, 32, 1, 34, 1, 36, 1, 39, 2)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(38, 8, 33, 1, 28, 1, 30, 2, 31, 3, 32, 1, 34, 1, 36, 1, 39, 2), level));
                         return;
                     case (int)ClassCareers.Nightblade:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 1, 29, 1, 30, 6, 31, 2, 33, 2, 34, 1, 35, 1, 36, 2, 37, 1, 38, 2, 39, 1)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 1, 29, 1, 30, 6, 31, 2, 33, 2, 34, 1, 35, 1, 36, 2, 37, 1, 38, 2, 39, 1), level));
                         return;
                     case (int)ClassCareers.Bard:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 2, 29, 1, 30, 3, 31, 3, 32, 2, 34, 1, 35, 1, 36, 4, 38, 2, 39, 1)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 2, 29, 1, 30, 3, 31, 3, 32, 2, 34, 1, 35, 1, 36, 4, 38, 2, 39, 1), level));
                         return;
                     case (int)ClassCareers.Assassin:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 2, 29, 3, 30, 2, 31, 4, 33, 2, 34, 1, 35, 1, 36, 1, 37, 2, 38, 1, 39, 1)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 2, 29, 3, 30, 2, 31, 4, 33, 2, 34, 1, 35, 1, 36, 1, 37, 2, 38, 1, 39, 1), level));
                         return;
                     case (int)ClassCareers.Ranger:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 2, 29, 1, 30, 2, 31, 3, 32, 1, 33, 4, 34, 1, 35, 1, 36, 1, 38, 1, 39, 3)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 2, 29, 1, 30, 2, 31, 3, 32, 1, 33, 4, 34, 1, 35, 1, 36, 1, 38, 1, 39, 3), level));
                         return;
                     case (int)ClassCareers.Knight:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 3, 30, 3, 31, 3, 36, 4, 37, 2, 38, 4, 39, 1)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 3, 30, 3, 31, 3, 36, 4, 37, 2, 38, 4, 39, 1), level));
                         return;
                     default:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject(level));
                         return;
                 }
             }
@@ -1406,16 +1408,16 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     case 21:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 1, 30, 4, 31, 2, 33, 2, 36, 1, 38, 9, 39, 1)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 1, 30, 4, 31, 2, 33, 2, 36, 1, 38, 9, 39, 1), level));
                         return;
                     case 32:
                     case 33:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 1, 30, 2, 31, 1, 33, 10, 34, 1, 35, 2, 36, 1, 38, 1, 39, 1)));
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfSpecificSubject((ItemGroups)FormulaHelper.PickOneOfCompact(28, 1, 30, 2, 31, 1, 33, 10, 34, 1, 35, 2, 36, 1, 38, 1, 39, 1), level));
                         return;
                     default:
                         for (int i = 0; i < bookAmount; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject());
+                            targetItems.Add(ItemBuilder.CreateRandomBookOfRandomSubject(level));
                         return;
                 }
             }

@@ -403,6 +403,30 @@ namespace DaggerfallWorkshop.Game.Items
             return bookMade;
         }
 
+        public static DaggerfallUnityItem CreateDummyBook(int id)
+        {
+            var bookFile = new BookFile();
+
+            float[] bookProps = CustomBookPropertyHolder.GetBookProperties(id);
+            string name = GameManager.Instance.ItemHelper.GetBookFileName(id);
+            if (!BookReplacement.TryImportBook(name, bookFile) &&
+                !bookFile.OpenBook(DaggerfallUnity.Instance.Arena2Path, name))
+                return null;
+
+            DaggerfallUnityItem bookMade = new DaggerfallUnityItem(ItemGroups.Books, 0, true)
+            {
+                message = id,
+                value = (int)bookProps[0],
+                rarity = (int)bookProps[1],
+                weightInKg = bookProps[2],
+                CurrentVariant = (int)bookProps[3]
+            };
+
+            //bookMade.CurrentVariant = UnityEngine.Random.Range(0, bookMade.TotalVariants);
+
+            return bookMade;
+        }
+
         /// <summary>
         /// Creates a new random book
         /// </summary>
@@ -458,10 +482,10 @@ namespace DaggerfallWorkshop.Game.Items
         /// Passing a non-book subject group will return null.
         /// </summary>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomBookOfSpecificSubject(ItemGroups bookSubject)
+        public static DaggerfallUnityItem CreateRandomBookOfSpecificSubject(ItemGroups bookSubject, int enemyLevel = -1, int playerLuck = -1)
         {
+            List<DaggerfallUnityItem> booksList = new List<DaggerfallUnityItem>();
             Array enumArray;
-            int groupIndex;
             int bookID;
             switch (bookSubject)
             {
@@ -480,15 +504,21 @@ namespace DaggerfallWorkshop.Game.Items
                 case ItemGroups.Informational_Books:
                 case ItemGroups.No_Topic_Books:
                     enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(bookSubject);
-                    groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
-                    bookID = (int)enumArray.GetValue(groupIndex);
+                    for (int i = 0; i < enumArray.Length; i++)
+                    {
+                        bookID = (int)enumArray.GetValue(i);
+                        DaggerfallUnityItem bookChecked = CreateDummyBook(bookID);
+                        booksList.Add(bookChecked);
+                    }
                     break;
                 default:
                     return null;
             }
 
+            int chosenBookID = ChooseBookFromFilteredList(booksList, enemyLevel, playerLuck);
+
             // Create item
-            DaggerfallUnityItem book = CreateBook(bookID);
+            DaggerfallUnityItem book = CreateBook(chosenBookID);
 
             return book;
         }
@@ -497,11 +527,11 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a random book of a random subject group.
         /// </summary>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomBookOfRandomSubject()
+        public static DaggerfallUnityItem CreateRandomBookOfRandomSubject(int enemyLevel = -1, int playerLuck = -1)
         {
+            List<DaggerfallUnityItem> booksList = new List<DaggerfallUnityItem>();
             ItemGroups itemGroup;
             Array enumArray;
-            int groupIndex;
             int bookID;
             int group = UnityEngine.Random.Range(0, 12); // Keeping this range to 12 for now, until I actually add books to the "Informational and no_topic" subjects, otherwise will just give a null. 
             switch (group)
@@ -554,13 +584,85 @@ namespace DaggerfallWorkshop.Game.Items
 
             // Randomise book within group
             enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(itemGroup);
-            groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
-            bookID = (int)enumArray.GetValue(groupIndex);
+            for (int i = 0; i < enumArray.Length; i++)
+            {
+                bookID = (int)enumArray.GetValue(i);
+                DaggerfallUnityItem bookChecked = CreateDummyBook(bookID);
+                booksList.Add(bookChecked);
+            }
+
+            int chosenBookID = ChooseBookFromFilteredList(booksList, enemyLevel, playerLuck);
 
             // Create item
-            DaggerfallUnityItem book = CreateBook(bookID);
+            DaggerfallUnityItem book = CreateBook(chosenBookID);
 
             return book;
+        }
+
+        public static int ChooseBookFromFilteredList(List<DaggerfallUnityItem> bookList, int enemyLevel = -1, int playerLuck = -1)
+        {
+            int[] bookRolls = new int[] { };
+            List<int> bookRollsList = new List<int>();
+
+            for (int i = 0; i < bookList.Count; i++)
+            {
+                int bookRarity = (bookList[i].rarity - 21) * -1; // This is to "flip" the rarity values, so 20 will become 1 and 1 will become 20. 
+                int arraystart = bookRollsList.Count;
+                int fillElements = 0;
+                if (enemyLevel != -1)
+                {
+                    if (bookRarity >= 15)
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity - (enemyLevel / 1.5f)), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity - (enemyLevel / 2.5f)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity + (60f / enemyLevel)), 1, 400);
+                    }
+                    else if (bookRarity >= 8)
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity + enemyLevel), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity + (enemyLevel / 2f)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity - (5f / enemyLevel)), 1, 400);
+                    }
+                    else
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity + (enemyLevel / 2f)), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity - (5f / enemyLevel)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity - (5f / enemyLevel)), 1, 400);
+                    }
+                }
+                else
+                {
+                    float luckMod = (playerLuck - 50) / 5f;
+
+                    if (bookRarity >= 15)
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((bookRarity * 2.5f) - (luckMod * 2)), 1, 400);
+                    }
+                    else if (bookRarity >= 8)
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((bookRarity * 1.5f) + luckMod), 1, 400);
+                    }
+                    else
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity + (luckMod / 2)), 1, 400);
+                    }
+                }
+
+                bookRolls = FormulaHelper.FillArray(bookRollsList, arraystart, fillElements, i);
+            }
+
+            int chosenBookIndex = FormulaHelper.PickOneOf(bookRolls);
+
+            return bookList[chosenBookIndex].message;
         }
 
         /// <summary>
@@ -1109,6 +1211,16 @@ namespace DaggerfallWorkshop.Game.Items
         }
 
         /// <summary>
+        /// Creates a dummy potion to be used for data referencing.
+        /// </summary>
+        /// <param name="recipe">Recipe index for the potion</param>
+        /// <returns>Potion DaggerfallUnityItem</returns>
+        public static DaggerfallUnityItem CreateDummyPotion(int recipeKey, int stackSize = 1)
+        {
+            return new DaggerfallUnityItem(ItemGroups.UselessItems1, 1, true) { PotionRecipeKey = recipeKey, stackCount = stackSize };
+        }
+
+        /// <summary>
         /// Creates a random potion from all registered recipes.
         /// </summary>
         /// <returns>Potion DaggerfallUnityItem</returns>
@@ -1120,7 +1232,7 @@ namespace DaggerfallWorkshop.Game.Items
 
             /*for (int i = 0; i < recipeKeys.Count; i++)  // This is simply here for a quick easy testing loop to see the potions and their prices in the Unity Debug window. 
             {
-                DaggerfallUnityItem printThis = CreatePotion(recipeKeys[i]);
+                DaggerfallUnityItem printThis = CreateDummyPotion(recipeKeys[i]);
                 MagicAndEffects.EntityEffectBroker effectBroker = GameManager.Instance.EntityEffectBroker;
                 MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(printThis.PotionRecipeKey);
                 MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
@@ -1177,7 +1289,7 @@ namespace DaggerfallWorkshop.Game.Items
                 case 0:
                     for (int i = 0; i < allRecipeKeys.Count; i++)
                     {
-                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        DaggerfallUnityItem potChecked = CreateDummyPotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
                         if (allRecipeKeys[i] != 422980775 && (potionEffect.Key == "Heal-Health" || potionEffect.Key == "Regenerate")) // Excluding "Miraculous Closing Wounds" potion, Recipe ID will change if recipe/hashcode changes, just keep note. 
@@ -1187,7 +1299,7 @@ namespace DaggerfallWorkshop.Game.Items
                 case 1:
                     for (int i = 0; i < allRecipeKeys.Count; i++)
                     {
-                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        DaggerfallUnityItem potChecked = CreateDummyPotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
                         if (potionEffect.Key == "Heal-Fatigue")
@@ -1197,7 +1309,7 @@ namespace DaggerfallWorkshop.Game.Items
                 case 2:
                     for (int i = 0; i < allRecipeKeys.Count; i++)
                     {
-                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        DaggerfallUnityItem potChecked = CreateDummyPotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
                         if (allRecipeKeys[i] != -1754277189 && (potionEffect.Key == "Heal-SpellPoints")) // Excluding "Greater Restore Power" potion, Recipe ID will change if recipe/hashcode changes, just keep note. 
@@ -1207,7 +1319,7 @@ namespace DaggerfallWorkshop.Game.Items
                 case 3:
                     for (int i = 0; i < allRecipeKeys.Count; i++)
                     {
-                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        DaggerfallUnityItem potChecked = CreateDummyPotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
                         if (allRecipeKeys[i] != -1357071761 && (potionEffect.GroupName == "Cure" || potionEffect.Key == "Dispel-Magic")) // Excluding "Purification" potion, Recipe ID will change if recipe/hashcode changes, just keep note. 
@@ -1217,7 +1329,7 @@ namespace DaggerfallWorkshop.Game.Items
                 case 4:
                     for (int i = 0; i < allRecipeKeys.Count; i++)
                     {
-                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        DaggerfallUnityItem potChecked = CreateDummyPotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
                         if (potionEffect.GroupName == "Fortify Attribute")
@@ -1227,7 +1339,7 @@ namespace DaggerfallWorkshop.Game.Items
                 case 5:
                     for (int i = 0; i < allRecipeKeys.Count; i++)
                     {
-                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        DaggerfallUnityItem potChecked = CreateDummyPotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
                         if ((allRecipeKeys[i] != 9062553 || allRecipeKeys[i] != -1944350794 || allRecipeKeys[i] != -1586429900) && (potionEffect.GroupName == "Elemental Resistance" || potionEffect.GroupName == "Shield" || potionEffect.GroupName == "Spell Resistance" || potionEffect.GroupName == "Spell Reflection" || potionEffect.GroupName == "Spell Absorption")) // Excluding "Peryite's Spell Immunity", "Stendarr's Shield", and "Perfect Mirror" potions. 
@@ -1237,7 +1349,7 @@ namespace DaggerfallWorkshop.Game.Items
                 case 6:
                     for (int i = 0; i < allRecipeKeys.Count; i++)
                     {
-                        DaggerfallUnityItem potChecked = CreatePotion(allRecipeKeys[i]);
+                        DaggerfallUnityItem potChecked = CreateDummyPotion(allRecipeKeys[i]);
                         MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potChecked.PotionRecipeKey);
                         MagicAndEffects.IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
                         if (allRecipeKeys[i] != -1073126825 && (potionEffect.GroupName == "Invisibility" || potionEffect.GroupName == "Shadow" || potionEffect.GroupName == "Chameleon" || potionEffect.GroupName == "Comprehend Languages" || potionEffect.GroupName == "Levitate" || potionEffect.GroupName == "Water Walking" || potionEffect.GroupName == "Water Breathing" || potionEffect.GroupName == "Slowfall" || potionEffect.GroupName == "Free Action" || potionEffect.GroupName == "Light" || potionEffect.GroupName == "Jumping" || potionEffect.GroupName == "Climbing")) // Excluding "Clavicus Vile's Deception" potion, Recipe ID will change if recipe/hashcode changes. 
@@ -1297,15 +1409,15 @@ namespace DaggerfallWorkshop.Game.Items
 
                     if (potionRecipe.Rarity >= 30)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (luckMod * 2)), 1, 200);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (luckMod * 2)), 1, 300);
                     }
                     else if (potionRecipe.Rarity >= 15)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + luckMod), 1, 200);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + luckMod), 1, 300);
                     }
                     else
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (luckMod / 2)), 1, 200);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (luckMod / 2)), 1, 300);
                     }
                 }
 
