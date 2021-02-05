@@ -447,6 +447,13 @@ namespace DaggerfallWorkshop.Game.Items
         Turquoise = 5,
         Malachite = 6,
         Amber = 7,
+        Amethyst = 4000,
+        Apatite = 4001,
+        Aquamarine = 4002,
+        Garnet = 4003,
+        Spinel = 4004,
+        Topaz = 4005,
+        Zircon = 4006,
     }
 
     public enum MiscPlantIngredients
@@ -460,6 +467,24 @@ namespace DaggerfallWorkshop.Game.Items
         Bamboo = 28,
         Palm = 29,
         Aloe = 30,
+        Arrowroot = 4400,
+        Black_Trumpet = 4401,
+        Bog_Beacon = 4402,
+        Emetic_Russula = 4403,
+        Fly_Amanita = 4404,
+        Garlic = 4405,
+        Giant_Puffball = 4406,
+        Ginseng_Root = 4407,
+        Glowing_Mushroom = 4408,
+        Green_Elfcup = 4409,
+        Beech_Mushrooms = 4410,
+        Mint = 4411,
+        Onion = 4412,
+        Steel_Blue_Entoloma = 4413,
+        Stinkhorn = 4414,
+        Summer_Bolete = 4415,
+        Tinder_Polypore = 4416,
+        Tobacco = 4417,
     }
 
     public enum FlowerPlantIngredients
@@ -475,6 +500,13 @@ namespace DaggerfallWorkshop.Game.Items
         Black_poppy = 24,
         Golden_poppy = 25,
         White_poppy = 26,
+        Alkanet_Flower = 4300,
+        Columbine_Flower = 4301,
+        Fennel_Flower = 4302,
+        Flax_Flower = 4303,
+        Dragons_Flower = 4304,
+        Foxglove_Flower = 4305,
+        Wild_Bergamot = 4306,
     }
 
     public enum FruitPlantIngredients
@@ -484,6 +516,16 @@ namespace DaggerfallWorkshop.Game.Items
         Yellow_berries = 17,
         Fig = 31,
         Cactus = 32,
+        Banana = 4500,
+        Black_Berries = 4501,
+        Blue_Berries = 4502,
+        Grapes = 4504,
+        Kiwi = 4505,
+        Lemon = 4506,
+        Lime = 4507,
+        Orange = 4508,
+        Pear = 4509,
+        Pomegranate = 4510,
     }
 
     public enum AnimalPartIngredients
@@ -497,6 +539,9 @@ namespace DaggerfallWorkshop.Game.Items
         Small_tooth = 58,
         Ivory = 76,
         Pearl = 77,
+        Rat_Tail = 4100,
+        Slaughterfish_Scales = 4101,
+        Spider_Eye = 4102,
     }
 
     public enum CreatureIngredients
@@ -520,6 +565,13 @@ namespace DaggerfallWorkshop.Game.Items
         Daedra_heart = 53,
         Saints_hair = 54,
         Orcs_blood = 61,
+        Bone_Meal = 4200,
+        Dreugh_Wax = 4201,
+        Fire_Powder = 4202,
+        Gargoyle_Horn = 4203,
+        Imp_Heart = 4204,
+        Permafrost_Shavings = 4205,
+        Vampire_Dust = 4206,
     }
 
     public enum SolventIngredients

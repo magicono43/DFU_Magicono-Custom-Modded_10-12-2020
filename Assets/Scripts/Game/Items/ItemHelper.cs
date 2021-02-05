@@ -175,6 +175,13 @@ namespace DaggerfallWorkshop.Game.Items
 
             int templateIndex = Convert.ToInt32(values.GetValue(groupIndex));
 
+            if (templateIndex >= 4000)
+            {
+                for (int i = LastDFTemplate; i < itemTemplates.Count; i++)
+                    if (itemTemplates[i].index == templateIndex)
+                        return itemTemplates[i];
+            }
+
             return itemTemplates[templateIndex];
         }
 
