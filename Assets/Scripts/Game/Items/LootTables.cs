@@ -113,6 +113,7 @@ namespace DaggerfallWorkshop.Game.Items
         public static DaggerfallUnityItem[] GenerateDungeonLootItems(int dungeonIndex)
         {
             PlayerEntity player = GameManager.Instance.PlayerEntity;
+            int playerLuckRaw = player.Stats.LiveLuck;
             int playerLuck = player.Stats.LiveLuck - 50;
             float basicLuckMod = (playerLuck * 0.02f) + 1f;
             float chance = 1f;
@@ -129,7 +130,7 @@ namespace DaggerfallWorkshop.Game.Items
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
                     condModMin = Mathf.Clamp((int)Mathf.Floor(10 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(35 * basicLuckMod), 1, 100);
-                    AddGems(35, 0.6f, 30, basicLuckMod, items);
+                    AddGems(35, 0.6f, playerLuckRaw, items);
                     AddMagicItems(5, 0.5f, condModMin, condModMax, items);
                     AddMaps(5, 0.4f, items);
                     AddClothing(20, 0.6f, condModMin, condModMax, items);
@@ -143,7 +144,7 @@ namespace DaggerfallWorkshop.Game.Items
                     AddWeapons(50, 0.7f, condModMin, condModMax, items);
                     AddArmors(30, 0.6f, condModMin, condModMax, 100, items);
                     AddIngots(60, 0.6f, items);
-                    AddGems(5, 0.5f, 10, basicLuckMod, items);
+                    AddGems(5, 0.5f, playerLuckRaw, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.HumanStronghold:
@@ -154,7 +155,7 @@ namespace DaggerfallWorkshop.Game.Items
                     AddWeapons(30, 0.6f, condModMin, condModMax, items);
                     AddArmors(55, 0.55f, condModMin, condModMax, 60, items);
                     AddIngots(35, 0.4f, items);
-                    AddGems(10, 0.5f, 15, basicLuckMod, items);
+                    AddGems(10, 0.5f, playerLuckRaw, items);
                     AddMaps(2, 0.5f, items);
                     AddClothing(25, 0.4f, condModMin, condModMax, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
@@ -183,7 +184,7 @@ namespace DaggerfallWorkshop.Game.Items
                     condModMax = Mathf.Clamp((int)Mathf.Floor(60 * basicLuckMod), 1, 100);
                     AddPotions(30, 0.5f, items);
                     AddBooks(50, 0.5f, items, 38);
-                    AddGems(10, 0.5f, 20, basicLuckMod, items);
+                    AddGems(10, 0.5f, playerLuckRaw, items);
                     AddMagicItems(3, 0.3f, condModMin, condModMax, items);
                     AddPotionRecipes(5, 0.1f, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
@@ -191,7 +192,7 @@ namespace DaggerfallWorkshop.Game.Items
                 case (int)DFRegion.DungeonTypes.Mine:
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(0, 15 + 1) * basicLuckMod)));
                     AddIngots(40, 0.5f, items);
-                    AddGems(35, 0.6f, 15, basicLuckMod, items);
+                    AddGems(35, 0.6f, playerLuckRaw, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.NaturalCave:
@@ -243,7 +244,7 @@ namespace DaggerfallWorkshop.Game.Items
                     AddBooks(10, 0.5f, items, 28);
                     AddBooks(15, 0.4f, items, 31);
                     AddIngots(25, 0.4f, items);
-                    AddGems(15, 0.5f, 20, basicLuckMod, items);
+                    AddGems(15, 0.5f, playerLuckRaw, items);
                     AddMaps(3, 0.2f, items);
                     AddClothing(10, 0.5f, condModMin, condModMax, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
@@ -260,7 +261,7 @@ namespace DaggerfallWorkshop.Game.Items
                     condModMax = Mathf.Clamp((int)Mathf.Floor(55 * basicLuckMod), 1, 100);
                     AddWeapons(20, 0.5f, condModMin, condModMax, items);
                     AddArmors(20, 0.35f, condModMin, condModMax, 40, items);
-                    AddGems(10, 0.5f, 5, basicLuckMod, items);
+                    AddGems(10, 0.5f, playerLuckRaw, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
                     break;
                 case (int)DFRegion.DungeonTypes.DragonsDen:
@@ -272,7 +273,7 @@ namespace DaggerfallWorkshop.Game.Items
                     AddArmors(30, 0.5f, condModMin, condModMax, 60, items);
                     AddPotions(15, 0.3f, items);
                     AddIngots(15, 0.5f, items);
-                    AddGems(15, 0.3f, 55, basicLuckMod, items);
+                    AddGems(15, 0.3f, playerLuckRaw, items);
                     AddMagicItems(2, 0.5f, condModMin, condModMax, items);
                     AddMaps(3, 0.3f, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
@@ -285,7 +286,7 @@ namespace DaggerfallWorkshop.Game.Items
                     AddWeapons(40, 0.6f, condModMin, condModMax, items);
                     AddArmors(30, 0.35f, condModMin, condModMax, 15, items);
                     AddIngots(25, 0.35f, items);
-                    AddGems(10, 0.5f, 15, basicLuckMod, items);
+                    AddGems(10, 0.5f, playerLuckRaw, items);
                     AddMaps(3, 0.5f, items);
                     AddClothing(5, 0.6f, condModMin, condModMax, items);
                     AddMiscDungeonSpecificItems(dungeonIndex, basicLuckMod, condModMin, condModMax, items);
@@ -303,7 +304,7 @@ namespace DaggerfallWorkshop.Game.Items
                     items.Add(ItemBuilder.CreateGoldPieces((int)Mathf.Floor(Random.Range(15, 30 + 1) * basicLuckMod)));
                     condModMin = Mathf.Clamp((int)Mathf.Floor(10 * basicLuckMod), 1, 100);
                     condModMax = Mathf.Clamp((int)Mathf.Floor(25 * basicLuckMod), 1, 100);
-                    AddGems(25, 0.6f, 20, basicLuckMod, items);
+                    AddGems(25, 0.6f, playerLuckRaw, items);
                     AddMagicItems(2, 0.3f, condModMin, condModMax, items);
                     AddMaps(5, 0.5f, items);
                     AddClothing(25, 0.5f, condModMin, condModMax, items);
@@ -372,10 +373,7 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 for (int i = 0; i < extraLootProps[2]; i++)
                 {
-                    if (Dice100.SuccessRoll(20))
-                        items.Add(ItemBuilder.CreateItem(ItemGroups.Gems, FormulaHelper.PickOneOfCompact((int)Gems.Ruby, 1, (int)Gems.Sapphire, 1, (int)Gems.Emerald, 1, (int)Gems.Diamond, 1)));
-                    else
-                        items.Add(ItemBuilder.CreateItem(ItemGroups.Gems, FormulaHelper.PickOneOfCompact((int)Gems.Jade, 1, (int)Gems.Turquoise, 1, (int)Gems.Malachite, 1, (int)Gems.Amber, 1)));
+                    items.Add(ItemBuilder.CreateRandomGem(level));
                 }
             }
 
@@ -650,20 +648,12 @@ namespace DaggerfallWorkshop.Game.Items
             }
         }
 
-        public static void AddGems(float chance, float chanceMod, int rareGemChance, float luckMod, List<DaggerfallUnityItem> targetItems)
+        public static void AddGems(float chance, float chanceMod, int luckMod, List<DaggerfallUnityItem> targetItems)
         {
             while (Dice100.SuccessRoll((int)chance))
             {
-                if (Dice100.SuccessRoll(rareGemChance))
-                {
-                    targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, FormulaHelper.PickOneOfCompact((int)Gems.Ruby, 1, (int)Gems.Sapphire, 1, (int)Gems.Emerald, 1, (int)Gems.Diamond, 1)));
-                    chance *= chanceMod;
-                }
-                else
-                {
-                    targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, FormulaHelper.PickOneOfCompact((int)Gems.Jade, 1, (int)Gems.Turquoise, 1, (int)Gems.Malachite, 1, (int)Gems.Amber, 1)));
-                    chance *= chanceMod;
-                }
+                targetItems.Add(ItemBuilder.CreateRandomGem(luckMod));
+                chance *= chanceMod;
             }
         }
 

@@ -705,13 +705,90 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a new random gem.
         /// </summary>
         /// <returns>DaggerfallUnityItem.</returns>
-        public static DaggerfallUnityItem CreateRandomGem()
+        public static DaggerfallUnityItem CreateRandomGem(int enemyLevel = -1, int playerLuck = -1)
         {
-            Array enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ItemGroups.Gems);
-            int groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
-            DaggerfallUnityItem newItem = new DaggerfallUnityItem(ItemGroups.Gems, groupIndex);
+            List<DaggerfallUnityItem> gemList = new List<DaggerfallUnityItem>();
 
-            return newItem;
+            Array enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ItemGroups.Gems);
+            for (int i = 0; i < enumArray.Length; i++)
+            {
+                int gemID = (int)enumArray.GetValue(i);
+                DaggerfallUnityItem gemDummyChecked = new DaggerfallUnityItem(ItemGroups.Gems, gemID, true);
+                gemList.Add(gemDummyChecked);
+            }
+
+            int chosenGemID = ChooseGemFromFilteredList(gemList, enemyLevel, playerLuck);
+
+            // Create item
+            DaggerfallUnityItem gem = new DaggerfallUnityItem(ItemGroups.Gems, chosenGemID);
+
+            return gem;
+        }
+
+        public static int ChooseGemFromFilteredList(List<DaggerfallUnityItem> gemList, int enemyLevel = -1, int playerLuck = -1)
+        {
+            int[] gemRolls = new int[] { };
+            List<int> gemRollsList = new List<int>();
+
+            for (int i = 0; i < gemList.Count; i++)
+            {
+                int gemRarity = (gemList[i].rarity - 101) * -1; // This is to "flip" the rarity values, so 100 will become 1 and 1 will become 100. 
+                int arraystart = gemRollsList.Count;
+                int fillElements = 0;
+                if (enemyLevel != -1)
+                {
+                    if (gemRarity >= 60)
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (enemyLevel / 1.5f)), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (enemyLevel / 2.5f)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (60f / enemyLevel)), 1, 400);
+                    }
+                    else if (gemRarity >= 35)
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + enemyLevel), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (enemyLevel / 2f)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
+                    }
+                    else
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (enemyLevel / 2f)), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
+                    }
+                }
+                else
+                {
+                    float luckMod = (playerLuck - 50) / 5f;
+
+                    if (gemRarity >= 60)
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((gemRarity * 2.5f) - (luckMod * 2)), 1, 400);
+                    }
+                    else if (gemRarity >= 35)
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((gemRarity * 1.5f) + luckMod), 1, 400);
+                    }
+                    else
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (luckMod / 2)), 1, 400);
+                    }
+                }
+
+                gemRolls = FormulaHelper.FillArray(gemRollsList, arraystart, fillElements, i);
+            }
+
+            int chosenGemIndex = FormulaHelper.PickOneOf(gemRolls);
+
+            return gemList[chosenGemIndex].TemplateIndex;
         }
 
         /// <summary>
