@@ -507,43 +507,43 @@ namespace DaggerfallWorkshop.Game.Items
                 if (predefLootProps[1] > 0)
                 {
                     for (int i = 0; i < predefLootProps[1]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MiscPlantIngredients));
+                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, level));
                 }
 
                 if (predefLootProps[2] > 0)
                 {
                     for (int i = 0; i < predefLootProps[2]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
+                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, level));
                 }
 
                 if (predefLootProps[3] > 0)
                 {
                     for (int i = 0; i < predefLootProps[3]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FruitPlantIngredients));
+                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, level));
                 }
 
                 if (predefLootProps[4] > 0)
                 {
                     for (int i = 0; i < predefLootProps[4]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.AnimalPartIngredients));
+                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.AnimalPartIngredients, level));
                 }
 
                 if (predefLootProps[5] > 0)
                 {
                     for (int i = 0; i < predefLootProps[5]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.CreatureIngredients));
+                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.CreatureIngredients, level));
                 }
 
                 if (predefLootProps[6] > 0)
                 {
                     for (int i = 0; i < predefLootProps[6]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.SolventIngredients));
+                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.SolventIngredients, level));
                 }
 
                 if (predefLootProps[7] > 0)
                 {
                     for (int i = 0; i < predefLootProps[7]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MetalIngredients));
+                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, level));
                 }
             }
 
@@ -717,9 +717,12 @@ namespace DaggerfallWorkshop.Game.Items
 
         public static void AddIngredGroupRandomItems(ItemGroups itemGroup, float chance, float chanceMod, List<DaggerfallUnityItem> targetItems)
         {
+            PlayerEntity player = GameManager.Instance.PlayerEntity;
+            int playerLuckRaw = player.Stats.LiveLuck;
+
             while (Dice100.SuccessRoll((int)chance))
             {
-                targetItems.Add(ItemBuilder.CreateRandomIngredient(itemGroup));
+                targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(itemGroup, -1, playerLuckRaw));
                 chance *= chanceMod;
             }
         }
@@ -986,6 +989,7 @@ namespace DaggerfallWorkshop.Game.Items
         static bool TargetedIngredients(EnemyEntity AITarget, int[] predefLootProps, List<DaggerfallUnityItem> targetItems)
         {
             DaggerfallUnityItem ingredients = null;
+            int enemyLevel = AITarget.Level;
 
             if (AITarget.EntityType == EntityTypes.EnemyClass)
             {
@@ -996,6 +1000,15 @@ namespace DaggerfallWorkshop.Game.Items
                 switch (AITarget.CareerIndex)
                 {
                     case 0:
+                        if (Dice100.SuccessRoll(65))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Rat_Tail));
+                        if (predefLootProps[4] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
+                            ingredients.stackCount = predefLootProps[4];
+                            targetItems.Add(ingredients);
+                        }
+                        return true;
                     case 3:
                         if (predefLootProps[4] > 0)
                         {
@@ -1014,20 +1027,21 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 6:
-                        if (predefLootProps[4] > 0)
+                        for (int i = 0; i < predefLootProps[4]; i++)
                         {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom);
-                            ingredients.stackCount = predefLootProps[4];
-                            targetItems.Add(ingredients);
+                            if (Dice100.SuccessRoll(65))
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_Eye));
+                            else
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom));
                         }
                         return true;
                     case 11:
                         for (int i = 0; i < predefLootProps[4]; i++)
                         {
-                            if (Dice100.SuccessRoll(95))
+                            if (Dice100.SuccessRoll(65))
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
                             else
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl));
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Slaughterfish_Scales));
                         }
                         return true;
                     case 20:
@@ -1038,22 +1052,29 @@ namespace DaggerfallWorkshop.Game.Items
                             targetItems.Add(ingredients);
                         }
                         return true;
+                    case 1:
+                        if (predefLootProps[5] > 0)
+                        {
+                            if (Dice100.SuccessRoll(80))
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Imp_Heart));
+                        }
+                        return false;
                     case 2:
                         for (int i = 0; i < predefLootProps[1]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MiscPlantIngredients));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel));
                         for (int i = 0; i < predefLootProps[2]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
                         for (int i = 0; i < predefLootProps[3]; i++)
                         {
                             if (Dice100.SuccessRoll(90))
-                                targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FruitPlantIngredients));
+                                targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel));
                             else
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, (int)Gems.Amber));
                         }
                         return true;
                     case 10:
                         for (int i = 0; i < predefLootProps[2]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
                         if (predefLootProps[5] > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair);
@@ -1082,6 +1103,12 @@ namespace DaggerfallWorkshop.Game.Items
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.MiscPlantIngredients, (int)MiscPlantIngredients.Root_tendrils);
                             ingredients.stackCount = predefLootProps[1];
+                            targetItems.Add(ingredients);
+                        }
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Gargoyle_Horn);
+                            ingredients.stackCount = predefLootProps[5];
                             targetItems.Add(ingredients);
                         }
                         if (predefLootProps[7] > 0)
@@ -1122,9 +1149,11 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 41:
+                        if (Dice100.SuccessRoll(35))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl));
                         if (predefLootProps[4] > 0)
                         {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl);
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dreugh_Wax);
                             ingredients.stackCount = predefLootProps[4];
                             targetItems.Add(ingredients);
                         }
@@ -1150,13 +1179,13 @@ namespace DaggerfallWorkshop.Game.Items
                         return true;
                     case 21:
                         for (int i = 0; i < predefLootProps[1]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MiscPlantIngredients));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel));
                         for (int i = 0; i < predefLootProps[2]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FlowerPlantIngredients));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
                         for (int i = 0; i < predefLootProps[3]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.FruitPlantIngredients));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel));
                         for (int i = 0; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.AnimalPartIngredients));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.AnimalPartIngredients, enemyLevel));
                         if (predefLootProps[5] > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Orcs_blood);
@@ -1164,9 +1193,9 @@ namespace DaggerfallWorkshop.Game.Items
                             targetItems.Add(ingredients);
                         }
                         for (int i = 0; i < predefLootProps[6]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.SolventIngredients));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.SolventIngredients, enemyLevel));
                         for (int i = 0; i < predefLootProps[7]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.MetalIngredients));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, enemyLevel));
                         return true;
                     case 9:
                         if (predefLootProps[5] > 0)
@@ -1185,6 +1214,8 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 35:
+                        if (Dice100.SuccessRoll(20))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Fire_Powder));
                         if (predefLootProps[7] > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur);
@@ -1209,6 +1240,8 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 38:
+                        if (Dice100.SuccessRoll(15))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Permafrost_Shavings));
                         if (predefLootProps[6] > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water);
@@ -1243,6 +1276,8 @@ namespace DaggerfallWorkshop.Game.Items
                         return true;
                     case 28:
                     case 30:
+                        if (Dice100.SuccessRoll(100))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Vampire_Dust));
                         if (predefLootProps[4] > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
@@ -1250,10 +1285,24 @@ namespace DaggerfallWorkshop.Game.Items
                             targetItems.Add(ingredients);
                         }
                         for (int i = 0; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredient(ItemGroups.CreatureIngredients));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.CreatureIngredients, enemyLevel));
+                        return true;
+                    case 15:
+                        if (predefLootProps[5] > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Bone_Meal);
+                            ingredients.stackCount = predefLootProps[5];
+                            targetItems.Add(ingredients);
+                        }
                         return true;
                     case 32:
                     case 33:
+                        if (Dice100.SuccessRoll(100))
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Bone_Meal);
+                            ingredients.stackCount = UnityEngine.Random.Range(0, 2 + 1);
+                            targetItems.Add(ingredients);
+                        }
                         if (predefLootProps[5] > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Lich_dust);
@@ -1262,6 +1311,8 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 25:
+                        if (Dice100.SuccessRoll(100))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Permafrost_Shavings));
                         if (predefLootProps[5] > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
@@ -1276,6 +1327,8 @@ namespace DaggerfallWorkshop.Game.Items
                         }
                         return true;
                     case 26:
+                        if (Dice100.SuccessRoll(100))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Fire_Powder));
                         if (predefLootProps[5] > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
@@ -2029,7 +2082,7 @@ namespace DaggerfallWorkshop.Game.Items
         {
             while (Dice100.SuccessRoll((int)chance))
             {
-                targetItems.Add(ItemBuilder.CreateRandomIngredient(ingredientGroup));
+                targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ingredientGroup));
                 chance *= 0.5f;
             }
         }

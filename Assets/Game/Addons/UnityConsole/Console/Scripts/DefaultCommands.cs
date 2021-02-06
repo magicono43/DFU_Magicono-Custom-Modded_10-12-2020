@@ -1755,7 +1755,7 @@ namespace Wenzil.Console
                             newItem = ItemBuilder.CreateRandomClothing(playerEntity.Gender, playerEntity.Race);
                             break;
                         case "ingr":
-                            newItem = ItemBuilder.CreateRandomIngredient();
+                            newItem = ItemBuilder.CreateRandomIngredient(-1, playerLuck);
                             break;
                         case "gem":
                             newItem = ItemBuilder.CreateRandomGem(-1, playerLuck);

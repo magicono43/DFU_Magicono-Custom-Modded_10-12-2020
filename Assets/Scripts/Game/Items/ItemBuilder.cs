@@ -1202,10 +1202,11 @@ namespace DaggerfallWorkshop.Game.Items
         /// </summary>
         /// <param name="ingredientGroup">Ingredient group.</param>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomIngredient(ItemGroups ingredientGroup)
+        public static DaggerfallUnityItem CreateRandomIngredientOfGroup(ItemGroups ingredientGroup, int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
-            int groupIndex;
+            List<DaggerfallUnityItem> ingredientsList = new List<DaggerfallUnityItem>(); // Likely add a "params" as well as a bool to allow for certain ingredients to be selectively removed from the potential table of some enemies and such, control. 
             Array enumArray;
+            int ingredID;
             switch (ingredientGroup)
             {
                 case ItemGroups.MiscPlantIngredients:
@@ -1216,65 +1217,149 @@ namespace DaggerfallWorkshop.Game.Items
                 case ItemGroups.SolventIngredients:
                 case ItemGroups.MetalIngredients:
                     enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ingredientGroup);
-                    groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
+                    for (int i = 0; i < enumArray.Length; i++)
+                    {
+                        ingredID = (int)enumArray.GetValue(i);
+                        if (discrimItemIDs.Length > 0 && ingredID == discrimItemIDs[i]) // Simple parameter checks for given discrimItemID values and prevents matching IDs from being added to main filter list for later. 
+                            continue;
+                        DaggerfallUnityItem ingredDummyChecked = new DaggerfallUnityItem(ingredientGroup, ingredID, true);
+                        ingredientsList.Add(ingredDummyChecked);
+                    }
                     break;
                 default:
                     return null;
             }
 
+            int chosenIngredID = ChooseIngredientFromFilteredList(ingredientsList, enemyLevel, playerLuck); // Possibly combine all these "FilteredList" methods into one later on if I change all the rarity values to something all equivalent. 
+
             // Create item
-            DaggerfallUnityItem newItem = new DaggerfallUnityItem(ingredientGroup, groupIndex);
+            DaggerfallUnityItem ingredient = new DaggerfallUnityItem(ingredientGroup, chosenIngredID);
 
-            newItem.CurrentVariant = UnityEngine.Random.Range(0, newItem.TotalVariants);
-
-            return newItem;
+            return ingredient;
         }
 
         /// <summary>
         /// Creates a random ingredient from a random ingredient group.
         /// </summary>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomIngredient()
+        public static DaggerfallUnityItem CreateRandomIngredient(int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
             // Randomise ingredient group
-            ItemGroups itemGroup;
-            int group = UnityEngine.Random.Range(0, 7);
+            List<DaggerfallUnityItem> ingredientsList = new List<DaggerfallUnityItem>();
             Array enumArray;
-            switch (group)
+            int ingredID;
+            ItemGroups ingredientGroup;
+            int chosenGroup = UnityEngine.Random.Range(0, 7);
+            switch (chosenGroup)
             {
                 case 0:
-                    itemGroup = ItemGroups.MiscPlantIngredients;
+                    ingredientGroup = ItemGroups.MiscPlantIngredients;
                     break;
                 case 1:
-                    itemGroup = ItemGroups.FlowerPlantIngredients;
+                    ingredientGroup = ItemGroups.FlowerPlantIngredients;
                     break;
                 case 2:
-                    itemGroup = ItemGroups.FruitPlantIngredients;
+                    ingredientGroup = ItemGroups.FruitPlantIngredients;
                     break;
                 case 3:
-                    itemGroup = ItemGroups.AnimalPartIngredients;
+                    ingredientGroup = ItemGroups.AnimalPartIngredients;
                     break;
                 case 4:
-                    itemGroup = ItemGroups.CreatureIngredients;
+                    ingredientGroup = ItemGroups.CreatureIngredients;
                     break;
                 case 5:
-                    itemGroup = ItemGroups.SolventIngredients;
+                    ingredientGroup = ItemGroups.SolventIngredients;
                     break;
                 case 6:
-                    itemGroup = ItemGroups.MetalIngredients;
+                    ingredientGroup = ItemGroups.MetalIngredients;
                     break;
                 default:
                     return null;
             }
 
             // Randomise ingredient within group
-            enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(itemGroup);
-            int groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
+            enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ingredientGroup);
+            for (int i = 0; i < enumArray.Length; i++)
+            {
+                ingredID = (int)enumArray.GetValue(i);
+                if (discrimItemIDs.Length > 0 && ingredID == discrimItemIDs[i]) // Simple parameter checks for given discrimItemID values and prevents matching IDs from being added to main filter list for later. 
+                    continue;
+                DaggerfallUnityItem ingredDummyChecked = new DaggerfallUnityItem(ingredientGroup, ingredID, true);
+                ingredientsList.Add(ingredDummyChecked);
+            }
+
+            int chosenIngredID = ChooseIngredientFromFilteredList(ingredientsList, enemyLevel, playerLuck);
 
             // Create item
-            DaggerfallUnityItem newItem = new DaggerfallUnityItem(itemGroup, groupIndex);
+            DaggerfallUnityItem ingredient = new DaggerfallUnityItem(ingredientGroup, chosenIngredID);
 
-            return newItem;
+            return ingredient;
+        }
+
+        public static int ChooseIngredientFromFilteredList(List<DaggerfallUnityItem> ingredList, int enemyLevel = -1, int playerLuck = -1)
+        {
+            int[] ingredRolls = new int[] { };
+            List<int> ingredRollsList = new List<int>();
+
+            for (int i = 0; i < ingredList.Count; i++)
+            {
+                int gemRarity = (ingredList[i].rarity - 101) * -1; // This is to "flip" the rarity values, so 100 will become 1 and 1 will become 100. 
+                int arraystart = ingredRollsList.Count;
+                int fillElements = 0;
+                if (enemyLevel != -1)
+                {
+                    if (gemRarity >= 60)
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (enemyLevel / 1.5f)), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (enemyLevel / 2.5f)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (60f / enemyLevel)), 1, 400);
+                    }
+                    else if (gemRarity >= 35)
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + enemyLevel), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (enemyLevel / 2f)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
+                    }
+                    else
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (enemyLevel / 2f)), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
+                    }
+                }
+                else
+                {
+                    float luckMod = (playerLuck - 50) / 5f;
+
+                    if (gemRarity >= 60)
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((gemRarity * 2.5f) - (luckMod * 2)), 1, 400);
+                    }
+                    else if (gemRarity >= 35)
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((gemRarity * 1.5f) + luckMod), 1, 400);
+                    }
+                    else
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (luckMod / 2)), 1, 400);
+                    }
+                }
+
+                ingredRolls = FormulaHelper.FillArray(ingredRollsList, arraystart, fillElements, i);
+            }
+
+            int chosenIngredIndex = FormulaHelper.PickOneOf(ingredRolls);
+
+            return ingredList[chosenIngredIndex].TemplateIndex;
         }
 
         /// <summary>

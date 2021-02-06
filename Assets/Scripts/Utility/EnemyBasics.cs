@@ -5469,6 +5469,7 @@ namespace DaggerfallWorkshop.Utility
                         equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
                         equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
                         equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
+                        equipTableProps[5] = 1;
                         equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 9, 1, 3, 2, 1);
                         break;
                     case 2:
@@ -5492,6 +5493,7 @@ namespace DaggerfallWorkshop.Utility
                         break;
                     case 22:
                         equipTableProps[1] = UnityEngine.Random.Range(0, 3 + 1);
+                        equipTableProps[5] = UnityEngine.Random.Range(0, 2 + 1);
                         equipTableProps[7] = UnityEngine.Random.Range(2, 7 + 1);
                         break;
                     case 34:
@@ -5555,6 +5557,7 @@ namespace DaggerfallWorkshop.Utility
                         equipTableProps[6] = UnityEngine.Random.Range(2, 7 + 1);
                         break;
                     case 15:
+                        equipTableProps[5] = UnityEngine.Random.Range(0, 3 + 1);
                         equipTableProps[9] = 1;
                         break;
                     case 17:
