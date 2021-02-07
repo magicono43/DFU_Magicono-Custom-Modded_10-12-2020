@@ -4864,7 +4864,6 @@ namespace DaggerfallWorkshop.Utility
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Romantic || traits[1] == (int)MobilePersonalityQuirks.Romantic)
                 {
-                    finalEquipTableProps[2] = (finalEquipTableProps[2] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[2] * 1.5f) : finalEquipTableProps[2] = 1;
                     finalExtraLootProps[2] = (finalExtraLootProps[2] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[2] * 1.5f) : finalExtraLootProps[2] = 1;
                 }
 
@@ -4883,13 +4882,11 @@ namespace DaggerfallWorkshop.Utility
 
                 if (traits[2] == (int)MobilePersonalityInterests.Collector)
                 {
-                    finalEquipTableProps[7] = (finalEquipTableProps[7] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[7] * 1.5f) : finalEquipTableProps[7] = 1;
                     finalExtraLootProps[2] = (finalExtraLootProps[2] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[2] * 1.5f) : finalExtraLootProps[2] = 1;
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Survivalist)
                 {
-                    finalEquipTableProps[3] = (finalEquipTableProps[3] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[3] * 2f) : finalEquipTableProps[3] = 2;
                     finalExtraLootProps[0] = (finalExtraLootProps[0] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[0] * 2f) : finalExtraLootProps[0] = 6;
                     finalExtraLootProps[10] = (finalExtraLootProps[10] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[10] * 2f) : finalExtraLootProps[10] = 1;
                 }
@@ -4903,17 +4900,7 @@ namespace DaggerfallWorkshop.Utility
 
                 if (traits[2] == (int)MobilePersonalityInterests.Brewer)
                 {
-                    finalEquipTableProps[1] = (finalEquipTableProps[1] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[1] * 1.5f) : finalEquipTableProps[1] = 1;
-                    finalEquipTableProps[2] = (finalEquipTableProps[2] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[2] * 1.5f) : finalEquipTableProps[2] = 1;
-                    finalEquipTableProps[3] = (finalEquipTableProps[3] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[3] * 1.5f) : finalEquipTableProps[3] = 1;
-                    finalEquipTableProps[6] = (finalEquipTableProps[6] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[6] * 1.5f) : finalEquipTableProps[6] = 1;
                     finalExtraLootProps[1] = (finalExtraLootProps[1] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[1] * 1.5f) : finalExtraLootProps[1] = 2;
-                }
-
-                if (traits[2] == (int)MobilePersonalityInterests.Anthophile)
-                {
-                    finalEquipTableProps[1] = (finalEquipTableProps[1] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[1] * 3f) : finalEquipTableProps[1] = 2;
-                    finalEquipTableProps[2] = (finalEquipTableProps[2] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[2] * 3f) : finalEquipTableProps[2] = 2;
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Bookworm)
@@ -4928,13 +4915,7 @@ namespace DaggerfallWorkshop.Utility
 
                 if (traits[2] == (int)MobilePersonalityInterests.Fisher)
                 {
-                    finalEquipTableProps[4] = (finalEquipTableProps[4] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[4] * 2f) : finalEquipTableProps[4] = 2;
                     finalExtraLootProps[4] = (finalExtraLootProps[4] >= 1) ? (int)Mathf.Ceil(finalExtraLootProps[4] * 1.5f) : finalExtraLootProps[4] = 1;
-                }
-
-                if (traits[2] == (int)MobilePersonalityInterests.Diver)
-                {
-                    finalEquipTableProps[4] = (finalEquipTableProps[4] >= 1) ? (int)Mathf.Ceil(finalEquipTableProps[4] * 2.5f) : finalEquipTableProps[4] = 3;
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Magic_Collector)
@@ -5281,116 +5262,66 @@ namespace DaggerfallWorkshop.Utility
                 {
                     case (int)ClassCareers.Mage:
                         equipTableProps[0] = UnityEngine.Random.Range(4 * level, 12 * (int)Mathf.Ceil(level / 2) + 1); // I'll definitely have to alter these gold values later, but for now will work.
-                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 7, 1, 3, 2, 1);
-                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 4, 2, 6, 3, 2, 4, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Spellsword:
                         equipTableProps[0] = UnityEngine.Random.Range(6 * level, 14 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 3, 1, 2, 2, 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 5, 1, 3, 2, 1);
-                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 6, 2, 3, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Battlemage:
                         equipTableProps[0] = UnityEngine.Random.Range(8 * level, 16 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 6, 1, 3, 2, 2);
-                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 11, 2, 5, 3, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Sorcerer:
                         equipTableProps[0] = UnityEngine.Random.Range(2 * level, 10 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
-                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 4, 1, 3, 2, 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 6, 1, 4, 2, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 10, 2, 3, 3, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Healer:
                         equipTableProps[0] = UnityEngine.Random.Range(2 * level, 10 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 2, 2, 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(1, 3, 2, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(1, 4, 2, 2, 3, 1);
-                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 6, 1, 3, 2, 1);
-                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 3, 1, 2, 2, 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 5, 2, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Nightblade:
                         equipTableProps[0] = UnityEngine.Random.Range(10 * level, 18 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(2, 5, 3, 2, 4, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(1, 5, 2, 1);
-                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(1, 5, 2, 3, 3, 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(1, 4, 2, 1);
-                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(1, 5, 2, 2, 3, 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 4, 1, 4, 2, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Bard:
                         equipTableProps[0] = UnityEngine.Random.Range(7 * level, 15 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 6, 1, 3, 2, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 3, 1, 2);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Burglar:
                         equipTableProps[0] = UnityEngine.Random.Range(12 * level, 21 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(1, 6, 2, 4, 3, 1, 4, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Rogue:
                         equipTableProps[0] = UnityEngine.Random.Range(8 * level, 18 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 2, 1, 5, 2, 2);
                         equipTableProps[9] = 1;
                         break;
                     case (int)ClassCareers.Acrobat:
                         equipTableProps[0] = UnityEngine.Random.Range(4 * level, 12 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 3, 1, 4, 2, 2);
                         equipTableProps[9] = 1;
                         break;
                     case (int)ClassCareers.Thief:
                         equipTableProps[0] = UnityEngine.Random.Range(14 * level, 23 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(1, 6, 2, 3, 3, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Assassin:
                         equipTableProps[0] = UnityEngine.Random.Range(9 * level, 19 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(1, 4, 2, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(1, 4, 2, 1);
-                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(1, 7, 2, 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
-                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(1, 7, 2, 2);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 7, 1, 4, 2, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
@@ -5403,23 +5334,11 @@ namespace DaggerfallWorkshop.Utility
                         break;
                     case (int)ClassCareers.Archer:
                         equipTableProps[0] = UnityEngine.Random.Range(6 * level, 14 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 2, 1, 1);
-                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 4, 1, 3, 2, 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
-                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 6, 1, 3, 2, 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 10, 1, 3, 2, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case (int)ClassCareers.Ranger:
                         equipTableProps[0] = UnityEngine.Random.Range(3 * level, 10 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(1, 5, 2, 3, 3, 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(1, 5, 2, 3, 3, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(2, 6, 3, 2, 4, 1);
-                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(2, 6, 3, 2, 4, 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 7, 1, 4, 2, 1);
-                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
@@ -5436,7 +5355,6 @@ namespace DaggerfallWorkshop.Utility
                         break;
                     case (int)ClassCareers.Knight:
                         equipTableProps[0] = UnityEngine.Random.Range(7 * level, 15 * (int)Mathf.Ceil(level / 2) + 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
@@ -5449,177 +5367,64 @@ namespace DaggerfallWorkshop.Utility
             {
                 switch (AITarget.CareerIndex)
                 {
-                    case 0:
-                    case 3:
-                        equipTableProps[4] = UnityEngine.Random.Range(0, 7 + 1);
-                        break;
-                    case 4:
-                    case 5:
-                    case 11:
-                        equipTableProps[4] = UnityEngine.Random.Range(0, 12 + 1);
-                        break;
-                    case 6:
-                        equipTableProps[4] = UnityEngine.Random.Range(0, 4 + 1);
-                        break;
-                    case 20:
-                        equipTableProps[4] = 1;
-                        break;
                     case 1:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 6 + 1);
-                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 3, 1, 1);
-                        equipTableProps[5] = 1;
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 9, 1, 3, 2, 1);
-                        break;
-                    case 2:
-                        equipTableProps[1] = UnityEngine.Random.Range(2, 8 + 1);
-                        equipTableProps[2] = UnityEngine.Random.Range(1, 5 + 1);
-                        equipTableProps[3] = UnityEngine.Random.Range(1, 3 + 1);
                         break;
                     case 8:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 18 + 1);
                         break;
-                    case 10:
-                        equipTableProps[2] = UnityEngine.Random.Range(2, 6 + 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(1, 5, 2, 3, 3, 1);
-                        break;
-                    case 13:
-                        equipTableProps[5] = UnityEngine.Random.Range(3, 10 + 1);
-                        break;
                     case 16:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 31 + 1);
-                        equipTableProps[5] = UnityEngine.Random.Range(1, 5 + 1);
-                        break;
-                    case 22:
-                        equipTableProps[1] = UnityEngine.Random.Range(0, 3 + 1);
-                        equipTableProps[5] = UnityEngine.Random.Range(0, 2 + 1);
-                        equipTableProps[7] = UnityEngine.Random.Range(2, 7 + 1);
-                        break;
-                    case 34:
-                        equipTableProps[4] = UnityEngine.Random.Range(2, 6 + 1);
-                        equipTableProps[5] = UnityEngine.Random.Range(1, 3 + 1);
-                        break;
-                    case 40:
-                        equipTableProps[4] = UnityEngine.Random.Range(3, 8 + 1);
-                        equipTableProps[5] = UnityEngine.Random.Range(3, 10 + 1);
-                        break;
-                    case 41:
-                        equipTableProps[4] = UnityEngine.Random.Range(0, 4 + 1);
-                        break;
-                    case 42:
-                        equipTableProps[5] = UnityEngine.Random.Range(3, 7 + 1);
                         break;
                     case 7:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 14 + 1);
-                        equipTableProps[5] = UnityEngine.Random.Range(1, 2 + 1);
                         equipTableProps[9] = 1;
                         break;
                     case 12:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 27 + 1);
-                        equipTableProps[5] = UnityEngine.Random.Range(1, 2 + 1);
                         equipTableProps[9] = 1;
                         break;
                     case 21:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 20 + 1);
-                        equipTableProps[1] = FormulaHelper.PickOneOfCompact(0, 4, 1, 2, 2, 1);
-                        equipTableProps[2] = FormulaHelper.PickOneOfCompact(1, 4, 2, 1);
-                        equipTableProps[3] = FormulaHelper.PickOneOfCompact(1, 5, 2, 2, 3, 1);
-                        equipTableProps[4] = FormulaHelper.PickOneOfCompact(0, 4, 1, 1);
-                        equipTableProps[5] = UnityEngine.Random.Range(1, 2 + 1);
-                        equipTableProps[6] = FormulaHelper.PickOneOfCompact(0, 5, 1, 2, 2, 1);
-                        equipTableProps[7] = FormulaHelper.PickOneOfCompact(0, 7, 1, 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
                     case 24:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 57 + 1);
-                        equipTableProps[5] = UnityEngine.Random.Range(1, 2 + 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;
-                    case 9:
-                        equipTableProps[5] = UnityEngine.Random.Range(2, 5 + 1);
-                        break;
-                    case 14:
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 1);
-                        break;
-                    case 35:
-                        equipTableProps[7] = UnityEngine.Random.Range(2, 9 + 1);
-                        break;
-                    case 36:
-                        equipTableProps[7] = UnityEngine.Random.Range(2, 9 + 1);
-                        break;
-                    case 37:
-                        equipTableProps[6] = UnityEngine.Random.Range(1, 5 + 1);
-                        break;
-                    case 38:
-                        equipTableProps[6] = UnityEngine.Random.Range(2, 7 + 1);
-                        break;
                     case 15:
-                        equipTableProps[5] = UnityEngine.Random.Range(0, 3 + 1);
                         equipTableProps[9] = 1;
                         break;
                     case 17:
                         equipTableProps[9] = 1;
                         break;
-                    case 18:
-                        equipTableProps[5] = UnityEngine.Random.Range(1, 2 + 1);
-                        break;
-                    case 19:
-                        equipTableProps[5] = UnityEngine.Random.Range(1, 3 + 1);
-                        break;
-                    case 23:
-                        equipTableProps[5] = UnityEngine.Random.Range(2, 5 + 1);
-                        break;
                     case 28:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 28 + 1);
-                        equipTableProps[4] = UnityEngine.Random.Range(0, 3 + 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 5, 1, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(0, 6, 1, 1);
                         equipTableProps[9] = 1;
                         break;
                     case 30:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 68 + 1);
-                        equipTableProps[4] = UnityEngine.Random.Range(0, 3 + 1);
-                        equipTableProps[5] = FormulaHelper.PickOneOfCompact(0, 4, 1, 3, 2, 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(1, 6, 2, 1);
                         equipTableProps[9] = 1;
                         break;
                     case 32:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 34 + 1);
-                        equipTableProps[5] = UnityEngine.Random.Range(2, 5 + 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(2, 8, 3, 1);
                         equipTableProps[9] = 1;
                         break;
                     case 33:
                         equipTableProps[0] = UnityEngine.Random.Range(0, 59 + 1);
-                        equipTableProps[5] = UnityEngine.Random.Range(3, 6 + 1);
                         equipTableProps[8] = FormulaHelper.PickOneOfCompact(2, 11, 3, 4, 4, 1);
                         equipTableProps[9] = 1;
                         break;
-                    case 25:
-                        equipTableProps[5] = 1;
-                        equipTableProps[6] = UnityEngine.Random.Range(1, 5 + 1);
-                        break;
-                    case 26:
-                        equipTableProps[5] = 1;
-                        equipTableProps[7] = UnityEngine.Random.Range(1, 5 + 1);
-                        break;
                     case 27:
-                        equipTableProps[4] = UnityEngine.Random.Range(0, 7 + 1);
-                        equipTableProps[5] = 1;
                         equipTableProps[9] = 1;
                         break;
                     case 29:
-                        equipTableProps[5] = 1;
-                        equipTableProps[6] = UnityEngine.Random.Range(0, 3 + 1);
-                        equipTableProps[9] = 1;
-                        equipTableProps[10] = 1;
-                        break;
                     case 31:
-                        equipTableProps[5] = 1;
-                        equipTableProps[6] = UnityEngine.Random.Range(0, 4 + 1);
                         equipTableProps[9] = 1;
                         equipTableProps[10] = 1;
                         break;

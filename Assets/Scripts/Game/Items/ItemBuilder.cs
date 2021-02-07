@@ -1220,7 +1220,7 @@ namespace DaggerfallWorkshop.Game.Items
                     for (int i = 0; i < enumArray.Length; i++)
                     {
                         ingredID = (int)enumArray.GetValue(i);
-                        if (discrimItemIDs.Length > 0 && ingredID == discrimItemIDs[i]) // Simple parameter checks for given discrimItemID values and prevents matching IDs from being added to main filter list for later. 
+                        if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(ingredID)) // Simple parameter checks for given discrimItemID values and prevents matching IDs from being added to main filter list for later. 
                             continue;
                         DaggerfallUnityItem ingredDummyChecked = new DaggerfallUnityItem(ingredientGroup, ingredID, true);
                         ingredientsList.Add(ingredDummyChecked);
@@ -1282,7 +1282,7 @@ namespace DaggerfallWorkshop.Game.Items
             for (int i = 0; i < enumArray.Length; i++)
             {
                 ingredID = (int)enumArray.GetValue(i);
-                if (discrimItemIDs.Length > 0 && ingredID == discrimItemIDs[i]) // Simple parameter checks for given discrimItemID values and prevents matching IDs from being added to main filter list for later. 
+                if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(ingredID)) // Simple parameter checks for given discrimItemID values and prevents matching IDs from being added to main filter list for later. 
                     continue;
                 DaggerfallUnityItem ingredDummyChecked = new DaggerfallUnityItem(ingredientGroup, ingredID, true);
                 ingredientsList.Add(ingredDummyChecked);

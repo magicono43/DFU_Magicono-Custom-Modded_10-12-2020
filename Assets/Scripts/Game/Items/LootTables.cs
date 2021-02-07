@@ -500,52 +500,7 @@ namespace DaggerfallWorkshop.Game.Items
             }
 
             // Ingredients
-            bool customIngredCheck = TargetedIngredients(AITarget, predefLootProps, items);
-
-            if (!customIngredCheck)
-            {
-                if (predefLootProps[1] > 0)
-                {
-                    for (int i = 0; i < predefLootProps[1]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, level));
-                }
-
-                if (predefLootProps[2] > 0)
-                {
-                    for (int i = 0; i < predefLootProps[2]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, level));
-                }
-
-                if (predefLootProps[3] > 0)
-                {
-                    for (int i = 0; i < predefLootProps[3]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, level));
-                }
-
-                if (predefLootProps[4] > 0)
-                {
-                    for (int i = 0; i < predefLootProps[4]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.AnimalPartIngredients, level));
-                }
-
-                if (predefLootProps[5] > 0)
-                {
-                    for (int i = 0; i < predefLootProps[5]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.CreatureIngredients, level));
-                }
-
-                if (predefLootProps[6] > 0)
-                {
-                    for (int i = 0; i < predefLootProps[6]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.SolventIngredients, level));
-                }
-
-                if (predefLootProps[7] > 0)
-                {
-                    for (int i = 0; i < predefLootProps[7]; i++)
-                        items.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, level));
-                }
-            }
+            AddIngredientsBasedOnEnemy(AITarget, traits, items);
 
             // Extra flavor/junk items (mostly based on personality traits, if present)
             /*if (traits[0] > -1 || traits[1] > -1 || traits[2] > -1)
@@ -986,14 +941,102 @@ namespace DaggerfallWorkshop.Game.Items
             return;
         }
 
-        static bool TargetedIngredients(EnemyEntity AITarget, int[] predefLootProps, List<DaggerfallUnityItem> targetItems)
+        public static void AddIngredientsBasedOnEnemy(EnemyEntity AITarget, int[] traits, List<DaggerfallUnityItem> targetItems)
         {
             DaggerfallUnityItem ingredients = null;
             int enemyLevel = AITarget.Level;
+            int rolledStackSize = 0;
 
-            if (AITarget.EntityType == EntityTypes.EnemyClass)
+            if (AITarget.EntityType == EntityTypes.EnemyClass) // I'll likely want to do more work on these for the human enemies, just did it somewhat lazily to get it done here. 
             {
-                return false;
+                switch (AITarget.CareerIndex)
+                {
+                    case (int)ClassCareers.Mage:
+                    case (int)ClassCareers.Spellsword:
+                    case (int)ClassCareers.Battlemage:
+                    case (int)ClassCareers.Sorcerer:
+                    case (int)ClassCareers.Healer:
+                    case (int)ClassCareers.Nightblade:
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 10, 1, 4, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel, -1, (int)MiscPlantIngredients.Giant_Puffball, (int)MiscPlantIngredients.Glowing_Mushroom, (int)MiscPlantIngredients.Onion));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 10, 1, 5, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 12, 1, 5, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel, -1, (int)FruitPlantIngredients.Banana, (int)FruitPlantIngredients.Grapes, (int)FruitPlantIngredients.Kiwi, (int)FruitPlantIngredients.Lemon, (int)FruitPlantIngredients.Lime, (int)FruitPlantIngredients.Orange, (int)FruitPlantIngredients.Pear, (int)FruitPlantIngredients.Pomegranate));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 30, 1, 6);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.CreatureIngredients, enemyLevel));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 10, 1, 5, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.SolventIngredients, enemyLevel));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 20, 1, 4);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, enemyLevel));
+                        break;
+                    case (int)ClassCareers.Bard:
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 12, 1, 4);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 9, 1, 3);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, enemyLevel));
+                        break;
+                    case (int)ClassCareers.Burglar:
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(1, 12, 2, 7, 3, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, enemyLevel));
+                        break;
+                    case (int)ClassCareers.Rogue:
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 6, 1, 2);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, enemyLevel));
+                        break;
+                    case (int)ClassCareers.Acrobat:
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 12, 1, 4);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
+                        break;
+                    case (int)ClassCareers.Thief:
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(1, 18, 2, 7, 3, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, enemyLevel));
+                        break;
+                    case (int)ClassCareers.Assassin:
+                    case (int)ClassCareers.Archer:
+                    case (int)ClassCareers.Ranger:
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 8, 1, 4, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel, -1, (int)MiscPlantIngredients.Giant_Puffball, (int)MiscPlantIngredients.Glowing_Mushroom, (int)MiscPlantIngredients.Onion));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 12, 1, 5, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 18, 1, 5, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel, -1, (int)FruitPlantIngredients.Banana, (int)FruitPlantIngredients.Grapes, (int)FruitPlantIngredients.Kiwi, (int)FruitPlantIngredients.Lemon, (int)FruitPlantIngredients.Lime, (int)FruitPlantIngredients.Orange, (int)FruitPlantIngredients.Pear, (int)FruitPlantIngredients.Pomegranate));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 20, 1, 6);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.AnimalPartIngredients, enemyLevel));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 10, 1, 5, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.SolventIngredients, enemyLevel));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 22, 1, 4);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, enemyLevel));
+                        break;
+                    case (int)ClassCareers.Knight:
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 25, 1, 7);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.CreatureIngredients, enemyLevel, -1, (int)CreatureIngredients.Werewolfs_blood, (int)CreatureIngredients.Fairy_dragon_scales, (int)CreatureIngredients.Nymph_hair, (int)CreatureIngredients.Unicorn_horn, (int)CreatureIngredients.Troll_blood, (int)CreatureIngredients.Dragons_scales, (int)CreatureIngredients.Giant_blood, (int)CreatureIngredients.Harpy_Feather, (int)CreatureIngredients.Saints_hair, (int)CreatureIngredients.Orcs_blood, (int)CreatureIngredients.Bone_Meal, (int)CreatureIngredients.Dreugh_Wax, (int)CreatureIngredients.Fire_Powder, (int)CreatureIngredients.Permafrost_Shavings, (int)CreatureIngredients.Imp_Heart, (int)CreatureIngredients.Gargoyle_Horn));
+                        break;
+                    case (int)ClassCareers.Monk:
+                    case (int)ClassCareers.Barbarian:
+                    case (int)ClassCareers.Warrior:
+                    default:
+                        break;
+                }
             }
             else
             {
@@ -1002,390 +1045,512 @@ namespace DaggerfallWorkshop.Game.Items
                     case 0:
                         if (Dice100.SuccessRoll(65))
                             targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Rat_Tail));
-                        if (predefLootProps[4] > 0)
+                        rolledStackSize = Random.Range(0, 4 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
-                            ingredients.stackCount = predefLootProps[4];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 3:
-                        if (predefLootProps[4] > 0)
+                        rolledStackSize = Random.Range(0, 7 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
-                            ingredients.stackCount = predefLootProps[4];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 4:
                     case 5:
-                        if (predefLootProps[4] > 0)
+                        rolledStackSize = Random.Range(0, 9 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
-                            ingredients.stackCount = predefLootProps[4];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 6:
-                        for (int i = 0; i < predefLootProps[4]; i++)
+                        rolledStackSize = Random.Range(0, 3 + 1);
+                        if (rolledStackSize > 0)
                         {
-                            if (Dice100.SuccessRoll(65))
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_Eye));
-                            else
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom));
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_Eye);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
                         }
-                        return true;
+                        rolledStackSize = Random.Range(0, 3 + 1);
+                        if (rolledStackSize > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Spider_venom);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
+                        }
+                        break;
                     case 11:
-                        for (int i = 0; i < predefLootProps[4]; i++)
-                        {
-                            if (Dice100.SuccessRoll(65))
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth));
-                            else
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Slaughterfish_Scales));
-                        }
-                        return true;
-                    case 20:
-                        if (predefLootProps[4] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Giant_scorpion_stinger);
-                            ingredients.stackCount = predefLootProps[4];
-                            targetItems.Add(ingredients);
-                        }
-                        return true;
-                    case 1:
-                        if (predefLootProps[5] > 0)
-                        {
-                            if (Dice100.SuccessRoll(80))
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Imp_Heart));
-                        }
-                        return false;
-                    case 2:
-                        for (int i = 0; i < predefLootProps[1]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel));
-                        for (int i = 0; i < predefLootProps[2]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
-                        for (int i = 0; i < predefLootProps[3]; i++)
-                        {
-                            if (Dice100.SuccessRoll(90))
-                                targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel));
-                            else
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, (int)Gems.Amber));
-                        }
-                        return true;
-                    case 10:
-                        for (int i = 0; i < predefLootProps[2]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
-                        if (predefLootProps[5] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair);
-                            ingredients.stackCount = predefLootProps[5];
-                            targetItems.Add(ingredients);
-                        }
-                        return true;
-                    case 13:
-                        if (predefLootProps[5] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Harpy_Feather);
-                            ingredients.stackCount = predefLootProps[5];
-                            targetItems.Add(ingredients);
-                        }
-                        return true;
-                    case 16:
-                        if (predefLootProps[5] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Giant_blood);
-                            ingredients.stackCount = predefLootProps[5];
-                            targetItems.Add(ingredients);
-                        }
-                        return true;
-                    case 22:
-                        if (predefLootProps[1] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.MiscPlantIngredients, (int)MiscPlantIngredients.Root_tendrils);
-                            ingredients.stackCount = predefLootProps[1];
-                            targetItems.Add(ingredients);
-                        }
-                        if (predefLootProps[5] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Gargoyle_Horn);
-                            ingredients.stackCount = predefLootProps[5];
-                            targetItems.Add(ingredients);
-                        }
-                        if (predefLootProps[7] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Lodestone);
-                            ingredients.stackCount = predefLootProps[7];
-                            targetItems.Add(ingredients);
-                        }
-                        return true;
-                    case 34:
-                        if (predefLootProps[4] > 0)
+                        if (Dice100.SuccessRoll(10))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl));
+                        rolledStackSize = Random.Range(0, 6 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
-                            ingredients.stackCount = predefLootProps[4];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        for (int i = 0; i < predefLootProps[5]; i++)
+                        rolledStackSize = Random.Range(0, 3 + 1);
+                        if (rolledStackSize > 0)
                         {
-                            if (Dice100.SuccessRoll(40))
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dragons_scales));
-                            else
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Fairy_dragon_scales));
-                        }
-                        return true;
-                    case 40:
-                        if (predefLootProps[4] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
-                            ingredients.stackCount = predefLootProps[4];
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Slaughterfish_Scales);
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        for (int i = 0; i < predefLootProps[5]; i++)
+                        break;
+                    case 20:
+                        if (Dice100.SuccessRoll(100))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Giant_scorpion_stinger));
+                        break;
+                    case 1:
+                        if (Dice100.SuccessRoll(100))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Imp_Heart)); // Possibly give more loot, maybe. 
+                        break;
+                    case 2:
+                        rolledStackSize = Random.Range(1, 5 + 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel, -1, (int)MiscPlantIngredients.Bamboo, (int)MiscPlantIngredients.Palm, (int)MiscPlantIngredients.Aloe, (int)MiscPlantIngredients.Arrowroot, (int)MiscPlantIngredients.Black_Trumpet, (int)MiscPlantIngredients.Garlic, (int)MiscPlantIngredients.Giant_Puffball, (int)MiscPlantIngredients.Ginseng_Root, (int)MiscPlantIngredients.Beech_Mushrooms, (int)MiscPlantIngredients.Mint, (int)MiscPlantIngredients.Onion, (int)MiscPlantIngredients.Tobacco));
+                        rolledStackSize = Random.Range(1, 4 + 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel, -1, (int)FlowerPlantIngredients.Fennel_Flower, (int)FlowerPlantIngredients.Dragons_Flower, (int)FlowerPlantIngredients.Foxglove_Flower, (int)FlowerPlantIngredients.Wild_Bergamot));
+                        rolledStackSize = Random.Range(0, 2 + 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel, -1, (int)FruitPlantIngredients.Cactus, (int)FruitPlantIngredients.Banana, (int)FruitPlantIngredients.Grapes, (int)FruitPlantIngredients.Kiwi, (int)FruitPlantIngredients.Lemon, (int)FruitPlantIngredients.Lime, (int)FruitPlantIngredients.Orange, (int)FruitPlantIngredients.Pear, (int)FruitPlantIngredients.Pomegranate));
+                        if (Dice100.SuccessRoll(20))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Gems, (int)Gems.Amber));
+                        break;
+                    case 10:
+                        rolledStackSize = Random.Range(1, 4 + 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(1, 5, 2, 3, 3, 1);
+                        if (rolledStackSize > 0)
                         {
-                            if (Dice100.SuccessRoll(80))
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dragons_scales));
-                            else
-                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Fairy_dragon_scales));
-                        }
-                        return true;
-                    case 41:
-                        if (Dice100.SuccessRoll(35))
-                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl));
-                        if (predefLootProps[4] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dreugh_Wax);
-                            ingredients.stackCount = predefLootProps[4];
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair);
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
-                    case 42:
-                        for (int i = 0; i < predefLootProps[5]; i++)
+                        break;
+                    case 13:
+                        rolledStackSize = Random.Range(3, 9 + 1);
+                        if (rolledStackSize > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Harpy_Feather);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
+                        }
+                        break;
+                    case 16:
+                        rolledStackSize = Random.Range(1, 5 + 1);
+                        if (rolledStackSize > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Giant_blood);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
+                        }
+                        break;
+                    case 22:
+                        rolledStackSize = Random.Range(0, 3 + 1);
+                        if (rolledStackSize > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.MiscPlantIngredients, (int)MiscPlantIngredients.Root_tendrils);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
+                        }
+                        rolledStackSize = Random.Range(0, 2 + 1);
+                        if (rolledStackSize > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Gargoyle_Horn);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
+                        }
+                        rolledStackSize = Random.Range(2, 7 + 1);
+                        if (rolledStackSize > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Lodestone);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
+                        }
+                        break;
+                    case 34:
+                        rolledStackSize = Random.Range(2, 6 + 1);
+                        if (rolledStackSize > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
+                        }
+                        rolledStackSize = Random.Range(1, 3 + 1);
+                        for (int i = 0; i < rolledStackSize; i++)
                         {
                             if (Dice100.SuccessRoll(35))
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dragons_scales));
+                            else
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Fairy_dragon_scales));
+                        }
+                        break;
+                    case 40:
+                        rolledStackSize = Random.Range(3, 8 + 1);
+                        if (rolledStackSize > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
+                        }
+                        rolledStackSize = Random.Range(3, 10 + 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                        {
+                            if (Dice100.SuccessRoll(75))
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dragons_scales));
+                            else
+                                targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Fairy_dragon_scales));
+                        }
+                        break;
+                    case 41:
+                        if (Dice100.SuccessRoll(40))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl));
+                        rolledStackSize = Random.Range(1, 4 + 1);
+                        if (rolledStackSize > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Dreugh_Wax);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
+                        }
+                        break;
+                    case 42:
+                        if (Dice100.SuccessRoll(65))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl));
+                        rolledStackSize = Random.Range(2, 6 + 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                        {
+                            if (Dice100.SuccessRoll(40))
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Nymph_hair));
                             else
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Gorgon_snake));
                         }
-                        return true;
+                        break;
                     case 7:
                     case 12:
                     case 24:
-                        if (predefLootProps[5] > 0)
+                        rolledStackSize = Random.Range(1, 2 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Orcs_blood);
-                            ingredients.stackCount = predefLootProps[5];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 21:
-                        for (int i = 0; i < predefLootProps[1]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel));
-                        for (int i = 0; i < predefLootProps[2]; i++)
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 8, 1, 3, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel, -1, (int)MiscPlantIngredients.Giant_Puffball, (int)MiscPlantIngredients.Glowing_Mushroom, (int)MiscPlantIngredients.Onion));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 7, 1, 4, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
                             targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
-                        for (int i = 0; i < predefLootProps[3]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel));
-                        for (int i = 0; i < predefLootProps[4]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.AnimalPartIngredients, enemyLevel));
-                        if (predefLootProps[5] > 0)
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 5, 1, 4, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel, -1, (int)FruitPlantIngredients.Banana, (int)FruitPlantIngredients.Grapes, (int)FruitPlantIngredients.Kiwi, (int)FruitPlantIngredients.Lemon, (int)FruitPlantIngredients.Lime, (int)FruitPlantIngredients.Orange, (int)FruitPlantIngredients.Pear, (int)FruitPlantIngredients.Pomegranate));
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 10, 1, 3);
+                        for (int i = 0; i < rolledStackSize; i++)
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.AnimalPartIngredients, enemyLevel, -1, (int)AnimalPartIngredients.Giant_scorpion_stinger, (int)AnimalPartIngredients.Pearl));
+                        rolledStackSize = Random.Range(1, 2 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Orcs_blood);
-                            ingredients.stackCount = predefLootProps[5];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        for (int i = 0; i < predefLootProps[6]; i++)
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 7, 1, 4, 2, 1);
+                        for (int i = 0; i < rolledStackSize; i++)
                             targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.SolventIngredients, enemyLevel));
-                        for (int i = 0; i < predefLootProps[7]; i++)
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 13, 1, 3);
+                        for (int i = 0; i < rolledStackSize; i++)
                             targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, enemyLevel));
-                        return true;
+                        break;
                     case 9:
-                        if (predefLootProps[5] > 0)
+                        rolledStackSize = Random.Range(1, 4 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Werewolfs_blood);
-                            ingredients.stackCount = predefLootProps[5];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 14:
-                        if (predefLootProps[5] > 0)
+                        rolledStackSize = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Wereboar_tusk);
-                            ingredients.stackCount = predefLootProps[5];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 35:
                         if (Dice100.SuccessRoll(20))
                             targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Fire_Powder));
-                        if (predefLootProps[7] > 0)
+                        rolledStackSize = Random.Range(2, 8 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur);
-                            ingredients.stackCount = predefLootProps[7];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 36:
-                        if (predefLootProps[7] > 0)
+                        rolledStackSize = Random.Range(2, 8 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Iron);
-                            ingredients.stackCount = predefLootProps[7];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 37:
-                        if (predefLootProps[6] > 0)
+                        rolledStackSize = Random.Range(1, 2 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor);
-                            ingredients.stackCount = predefLootProps[6];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 38:
                         if (Dice100.SuccessRoll(15))
                             targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Permafrost_Shavings));
-                        if (predefLootProps[6] > 0)
+                        rolledStackSize = Random.Range(2, 6 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water);
-                            ingredients.stackCount = predefLootProps[6];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
+                    case 15:
+                        rolledStackSize = Random.Range(0, 3 + 1);
+                        if (rolledStackSize > 0)
+                        {
+                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Bone_Meal);
+                            ingredients.stackCount = rolledStackSize;
+                            targetItems.Add(ingredients);
+                        }
+                        break;
                     case 18:
-                        if (predefLootProps[5] > 0)
+                        rolledStackSize = Random.Range(1, 2 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Ectoplasm);
-                            ingredients.stackCount = predefLootProps[5];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 19:
-                        if (predefLootProps[5] > 0)
+                        rolledStackSize = Random.Range(1, 3 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Mummy_wrappings);
-                            ingredients.stackCount = predefLootProps[5];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 23:
-                        for (int i = 0; i < predefLootProps[5]; i++)
+                        rolledStackSize = Random.Range(1, 4 + 1);
+                        for (int i = 0; i < rolledStackSize; i++)
                         {
-                            if (Dice100.SuccessRoll(70))
+                            if (Dice100.SuccessRoll(65))
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Ectoplasm));
                             else
                                 targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Wraith_essence));
                         }
-                        return true;
+                        break;
                     case 28:
                     case 30:
                         if (Dice100.SuccessRoll(100))
                             targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Vampire_Dust));
-                        if (predefLootProps[4] > 0)
+                        rolledStackSize = Random.Range(0, 2 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Small_tooth);
-                            ingredients.stackCount = predefLootProps[4];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        for (int i = 0; i < predefLootProps[5]; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.CreatureIngredients, enemyLevel));
-                        return true;
-                    case 15:
-                        if (predefLootProps[5] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Bone_Meal);
-                            ingredients.stackCount = predefLootProps[5];
-                            targetItems.Add(ingredients);
-                        }
-                        return true;
+                        break;
                     case 32:
                     case 33:
-                        if (Dice100.SuccessRoll(100))
+                        rolledStackSize = Random.Range(0, 2 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Bone_Meal);
-                            ingredients.stackCount = UnityEngine.Random.Range(0, 2 + 1);
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        if (predefLootProps[5] > 0)
+                        rolledStackSize = Random.Range(1, 4 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Lich_dust);
-                            ingredients.stackCount = predefLootProps[5];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 25:
                         if (Dice100.SuccessRoll(100))
                             targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Permafrost_Shavings));
-                        if (predefLootProps[5] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
-                            ingredients.stackCount = predefLootProps[5];
-                            targetItems.Add(ingredients);
-                        }
-                        if (predefLootProps[6] > 0)
+                        if (Dice100.SuccessRoll(100))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        rolledStackSize = Random.Range(1, 3 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Pure_water);
-                            ingredients.stackCount = predefLootProps[6];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 26:
                         if (Dice100.SuccessRoll(100))
                             targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Fire_Powder));
-                        if (predefLootProps[5] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
-                            ingredients.stackCount = predefLootProps[5];
-                            targetItems.Add(ingredients);
-                        }
-                        if (predefLootProps[7] > 0)
+                        if (Dice100.SuccessRoll(100))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        rolledStackSize = Random.Range(1, 3 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.MetalIngredients, (int)MetalIngredients.Sulphur);
-                            ingredients.stackCount = predefLootProps[7];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 27:
-                        if (predefLootProps[4] > 0)
+                        rolledStackSize = Random.Range(0, 6 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Big_tooth);
-                            ingredients.stackCount = predefLootProps[4];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        if (predefLootProps[5] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
-                            ingredients.stackCount = predefLootProps[5];
-                            targetItems.Add(ingredients);
-                        }
-                        return true;
+                        if (Dice100.SuccessRoll(100))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        break;
                     case 29:
-                        if (predefLootProps[5] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
-                            ingredients.stackCount = predefLootProps[5];
-                            targetItems.Add(ingredients);
-                        }
-                        if (predefLootProps[6] > 0)
+                        if (Dice100.SuccessRoll(100))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        rolledStackSize = Random.Range(0, 2 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Elixir_vitae);
-                            ingredients.stackCount = predefLootProps[6];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     case 31:
-                        if (predefLootProps[5] > 0)
-                        {
-                            ingredients = ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart);
-                            ingredients.stackCount = predefLootProps[5];
-                            targetItems.Add(ingredients);
-                        }
-                        if (predefLootProps[6] > 0)
+                        if (Dice100.SuccessRoll(100))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.CreatureIngredients, (int)CreatureIngredients.Daedra_heart));
+                        rolledStackSize = Random.Range(0, 3 + 1);
+                        if (rolledStackSize > 0)
                         {
                             ingredients = ItemBuilder.CreateItem(ItemGroups.SolventIngredients, (int)SolventIngredients.Ichor);
-                            ingredients.stackCount = predefLootProps[6];
+                            ingredients.stackCount = rolledStackSize;
                             targetItems.Add(ingredients);
                         }
-                        return true;
+                        break;
                     default:
-                        return false;
+                        break;
+                }
+            }
+
+            // Extra ingredients based on personality traits, if present. 
+            if (traits[0] > -1 || traits[1] > -1 || traits[2] > -1)
+            {
+                AddExtraIngredBasedOnTraits(enemyLevel, traits, targetItems); // Items not yet implemented.
+            }
+        }
+
+        public static void AddExtraIngredBasedOnTraits(int enemyLevel, int[] traits, List<DaggerfallUnityItem> targetItems)
+        {
+            DaggerfallUnityItem ingredients = null;
+            int rolledStackSize = 0;
+
+            if (traits[0] > -1 || traits[1] > -1)
+            {
+                if (traits[0] == (int)MobilePersonalityQuirks.Romantic || traits[1] == (int)MobilePersonalityQuirks.Romantic)
+                {
+                    rolledStackSize = 1;
+                    for (int i = 0; i < rolledStackSize; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel, -1, (int)FlowerPlantIngredients.Clover, (int)FlowerPlantIngredients.Alkanet_Flower, (int)FlowerPlantIngredients.Fennel_Flower));
+                }
+            }
+
+            if (traits[2] > -1)
+            {
+                if (traits[2] == (int)MobilePersonalityInterests.Collector)
+                {
+                    rolledStackSize = FormulaHelper.PickOneOfCompact(1, 34, 2, 8, 3, 2);
+                    for (int i = 0; i < rolledStackSize; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MetalIngredients, enemyLevel));
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Survivalist)
+                {
+                    rolledStackSize = FormulaHelper.PickOneOfCompact(1, 34, 2, 8, 3, 2);
+                    for (int i = 0; i < rolledStackSize; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel, -1, (int)FruitPlantIngredients.Cactus));
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Hunter)
+                {
+                    rolledStackSize = FormulaHelper.PickOneOfCompact(1, 34, 2, 8, 3, 2);
+                    for (int i = 0; i < rolledStackSize; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.AnimalPartIngredients, enemyLevel, -1, (int)AnimalPartIngredients.Giant_scorpion_stinger, (int)AnimalPartIngredients.Pearl, (int)AnimalPartIngredients.Slaughterfish_Scales, (int)AnimalPartIngredients.Snake_venom, (int)AnimalPartIngredients.Spider_Eye, (int)AnimalPartIngredients.Spider_venom));
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Brewer)
+                {
+                    rolledStackSize = FormulaHelper.PickOneOfCompact(0, 1, 1, 2);
+                    for (int i = 0; i < rolledStackSize; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel));
+                    rolledStackSize = FormulaHelper.PickOneOfCompact(0, 1, 1, 1);
+                    for (int i = 0; i < rolledStackSize; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
+                    rolledStackSize = FormulaHelper.PickOneOfCompact(0, 1, 1, 1);
+                    for (int i = 0; i < rolledStackSize; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel));
+                    rolledStackSize = FormulaHelper.PickOneOfCompact(1, 12, 2, 1);
+                    for (int i = 0; i < rolledStackSize; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.SolventIngredients, enemyLevel, -1, (int)SolventIngredients.Ichor, (int)SolventIngredients.Elixir_vitae, (int)SolventIngredients.Holy_relic));
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Anthophile)
+                {
+                    rolledStackSize = FormulaHelper.PickOneOfCompact(1, 34, 2, 8, 3, 2);
+                    for (int i = 0; i < rolledStackSize; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel));
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Fisher)
+                {
+                    rolledStackSize = FormulaHelper.PickOneOfCompact(1, 34, 2, 8, 3, 2);
+                    if (rolledStackSize > 0)
+                    {
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Slaughterfish_Scales);
+                        ingredients.stackCount = rolledStackSize;
+                        targetItems.Add(ingredients);
+                    }
+                }
+
+                if (traits[2] == (int)MobilePersonalityInterests.Diver)
+                {
+                    rolledStackSize = FormulaHelper.PickOneOfCompact(1, 88, 2, 22, 3, 2);
+                    if (rolledStackSize > 0)
+                    {
+                        ingredients = ItemBuilder.CreateItem(ItemGroups.AnimalPartIngredients, (int)AnimalPartIngredients.Pearl);
+                        ingredients.stackCount = rolledStackSize;
+                        targetItems.Add(ingredients);
+                    }
                 }
             }
         }
