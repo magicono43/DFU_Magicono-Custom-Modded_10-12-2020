@@ -705,7 +705,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a new random gem.
         /// </summary>
         /// <returns>DaggerfallUnityItem.</returns>
-        public static DaggerfallUnityItem CreateRandomGem(int enemyLevel = -1, int playerLuck = -1)
+        public static DaggerfallUnityItem CreateRandomGem(int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
             List<DaggerfallUnityItem> gemList = new List<DaggerfallUnityItem>();
 
@@ -713,7 +713,9 @@ namespace DaggerfallWorkshop.Game.Items
             for (int i = 0; i < enumArray.Length; i++)
             {
                 int gemID = (int)enumArray.GetValue(i);
-                DaggerfallUnityItem gemDummyChecked = new DaggerfallUnityItem(ItemGroups.Gems, gemID, true);
+                DaggerfallUnityItem gemDummyChecked = new DaggerfallUnityItem(ItemGroups.Gems, i, true);
+                if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(gemDummyChecked.TemplateIndex))
+                    continue;
                 gemList.Add(gemDummyChecked);
             }
 
@@ -788,7 +790,7 @@ namespace DaggerfallWorkshop.Game.Items
 
             int chosenGemIndex = FormulaHelper.PickOneOf(gemRolls);
 
-            return gemList[chosenGemIndex].TemplateIndex;
+            return gemList[chosenGemIndex].GroupIndex;
         }
 
         /// <summary>
@@ -1220,9 +1222,9 @@ namespace DaggerfallWorkshop.Game.Items
                     for (int i = 0; i < enumArray.Length; i++)
                     {
                         ingredID = (int)enumArray.GetValue(i);
-                        if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(ingredID)) // Simple parameter checks for given discrimItemID values and prevents matching IDs from being added to main filter list for later. 
+                        DaggerfallUnityItem ingredDummyChecked = new DaggerfallUnityItem(ingredientGroup, i, true);
+                        if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(ingredDummyChecked.TemplateIndex)) // Simple parameter checks for given discrimItemID values and prevents matching IDs from being added to main filter list for later. 
                             continue;
-                        DaggerfallUnityItem ingredDummyChecked = new DaggerfallUnityItem(ingredientGroup, ingredID, true);
                         ingredientsList.Add(ingredDummyChecked);
                     }
                     break;
@@ -1282,9 +1284,9 @@ namespace DaggerfallWorkshop.Game.Items
             for (int i = 0; i < enumArray.Length; i++)
             {
                 ingredID = (int)enumArray.GetValue(i);
-                if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(ingredID)) // Simple parameter checks for given discrimItemID values and prevents matching IDs from being added to main filter list for later. 
+                DaggerfallUnityItem ingredDummyChecked = new DaggerfallUnityItem(ingredientGroup, i, true);
+                if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(ingredDummyChecked.TemplateIndex)) // Simple parameter checks for given discrimItemID values and prevents matching IDs from being added to main filter list for later. 
                     continue;
-                DaggerfallUnityItem ingredDummyChecked = new DaggerfallUnityItem(ingredientGroup, ingredID, true);
                 ingredientsList.Add(ingredDummyChecked);
             }
 
@@ -1303,54 +1305,54 @@ namespace DaggerfallWorkshop.Game.Items
 
             for (int i = 0; i < ingredList.Count; i++)
             {
-                int gemRarity = (ingredList[i].rarity - 101) * -1; // This is to "flip" the rarity values, so 100 will become 1 and 1 will become 100. 
+                int ingredRarity = (ingredList[i].rarity - 101) * -1; // This is to "flip" the rarity values, so 100 will become 1 and 1 will become 100. 
                 int arraystart = ingredRollsList.Count;
                 int fillElements = 0;
                 if (enemyLevel != -1)
                 {
-                    if (gemRarity >= 60)
+                    if (ingredRarity >= 60)
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (enemyLevel / 1.5f)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity - (enemyLevel / 1.5f)), 1, 400);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (enemyLevel / 2.5f)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity - (enemyLevel / 2.5f)), 1, 400);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (60f / enemyLevel)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity + (60f / enemyLevel)), 1, 400);
                     }
-                    else if (gemRarity >= 35)
+                    else if (ingredRarity >= 35)
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + enemyLevel), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity + enemyLevel), 1, 400);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (enemyLevel / 2f)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity + (enemyLevel / 2f)), 1, 400);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity - (5f / enemyLevel)), 1, 400);
                     }
                     else
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (enemyLevel / 2f)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity + (enemyLevel / 2f)), 1, 400);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity - (5f / enemyLevel)), 1, 400);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity - (5f / enemyLevel)), 1, 400);
                     }
                 }
                 else
                 {
                     float luckMod = (playerLuck - 50) / 5f;
 
-                    if (gemRarity >= 60)
+                    if (ingredRarity >= 60)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((gemRarity * 2.5f) - (luckMod * 2)), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((ingredRarity * 2.5f) - (luckMod * 2)), 1, 400);
                     }
-                    else if (gemRarity >= 35)
+                    else if (ingredRarity >= 35)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((gemRarity * 1.5f) + luckMod), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((ingredRarity * 1.5f) + luckMod), 1, 400);
                     }
                     else
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (luckMod / 2)), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity + (luckMod / 2)), 1, 400);
                     }
                 }
 
@@ -1359,7 +1361,7 @@ namespace DaggerfallWorkshop.Game.Items
 
             int chosenIngredIndex = FormulaHelper.PickOneOf(ingredRolls);
 
-            return ingredList[chosenIngredIndex].TemplateIndex;
+            return ingredList[chosenIngredIndex].GroupIndex;
         }
 
         /// <summary>

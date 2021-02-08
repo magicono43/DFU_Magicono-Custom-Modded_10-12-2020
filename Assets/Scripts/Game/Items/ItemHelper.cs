@@ -166,15 +166,12 @@ namespace DaggerfallWorkshop.Game.Items
                 return GetItemTemplate(groupIndex);
 
             Array values = GetEnumArray(itemGroup);
-            if (groupIndex < 0)
+            if (groupIndex < 0 || groupIndex >= values.Length)
             {
                 string message = string.Format("Item index out of range: Group={0} Index={1}", itemGroup.ToString(), groupIndex);
                 Debug.Log(message);
                 return new ItemTemplate();
             }
-
-            if (groupIndex >= values.Length)
-                return GetItemTemplate(groupIndex);
 
             int templateIndex = Convert.ToInt32(values.GetValue(groupIndex));
 
