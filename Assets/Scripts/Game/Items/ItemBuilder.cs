@@ -669,7 +669,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a new random religious item.
         /// </summary>
         /// <returns>DaggerfallUnityItem.</returns>
-        public static DaggerfallUnityItem CreateRandomReligiousItem()
+        public static DaggerfallUnityItem CreateRandomReligiousItem(int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
             Array enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ItemGroups.ReligiousItems);
             int groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
@@ -803,7 +803,23 @@ namespace DaggerfallWorkshop.Game.Items
             int groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
             DaggerfallUnityItem newItem = new DaggerfallUnityItem(ItemGroups.Jewellery, groupIndex);
 
+            if (newItem.TemplateIndex >= 4600 && newItem.TemplateIndex <= 4649)
+                ApplyWearableJewelrySettings(newItem, GameManager.Instance.PlayerEntity.Gender, GameManager.Instance.PlayerEntity.Race);
+
             return newItem;
+        }
+
+        /// <summary>Set gender, body morphology and material of armor</summary>
+        public static void ApplyWearableJewelrySettings(DaggerfallUnityItem jewelry, Genders gender, Races race, int variant = 0)
+        {
+            // Adjust for gender
+            if (gender == Genders.Female)
+                jewelry.CurrentVariant = 0;
+            else
+                jewelry.CurrentVariant = 4;
+
+            // Adjust for body morphology
+            SetVariantByRace(jewelry, race);
         }
 
         /// <summary>
@@ -1665,6 +1681,12 @@ namespace DaggerfallWorkshop.Game.Items
         {
             int offset = (int)GetBodyMorphology(race);
             item.PlayerTextureArchive += offset;
+        }
+
+        public static void SetVariantByRace(DaggerfallUnityItem item, Races race)
+        {
+            int offset = (int)GetBodyMorphology(race);
+            item.CurrentVariant += offset;
         }
 
         public static void SetVariant(DaggerfallUnityItem item, int variant)

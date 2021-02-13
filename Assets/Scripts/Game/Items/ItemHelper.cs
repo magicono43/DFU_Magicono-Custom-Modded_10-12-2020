@@ -451,6 +451,9 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 // Assign imported texture
                 data.texture = tex;
+
+                // If there is an XML file included with replacing texture, use those width and height properties instead of inheriting vanilla texture props. 
+                TextureReplacement.CustomTextureReadPropsFromXML(item, data, out data.width, out data.height);
             }
             else
             {
@@ -468,6 +471,9 @@ namespace DaggerfallWorkshop.Game.Items
                 else
                     ImageReader.UpdateTexture(ref data);
             }
+
+            if (data.width == 0 && data.height == 0)
+                TextureReplacement.CustomTextureReadPropsFromXML(item, data, out data.width, out data.height);
 
             // Add to cache
             itemImages.Add(key, data);

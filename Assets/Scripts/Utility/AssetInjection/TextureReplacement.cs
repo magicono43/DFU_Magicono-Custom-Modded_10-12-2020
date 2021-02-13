@@ -852,6 +852,26 @@ namespace DaggerfallWorkshop.Utility.AssetInjection
                 rect = xml.GetRect("rect", rect, paperdollScale);
         }
 
+        public static void CustomTextureReadPropsFromXML(DaggerfallUnityItem item, ImageData imageData, out int width, out int height)
+        {
+            if (imageData.width > 0)
+                width = imageData.width;
+            else
+                width = 0;
+            if (imageData.height > 0)
+                height = imageData.height;
+            else
+                height = 0;
+
+            DyeColors dyeColor = item != null ? item.dyeColor : DyeColors.Unchanged;
+
+            string directory;
+            string name;
+            XMLManager xml;
+            if (MakeName(imageData, dyeColor, out directory, out name) && XMLManager.TryReadXml(directory, name, out xml))
+                xml.GetWHFromXML(out width, out height);
+        }
+
         /// <summary>
         /// Parses the ID from the name of a texture archive from classic Daggerfall.
         /// </summary>

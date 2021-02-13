@@ -160,6 +160,24 @@ namespace DaggerfallWorkshop.Utility.AssetInjection
                 );
         }
 
+        public void GetWHFromXML(out int width, out int height)
+        {
+            float w = 0f;
+            float h = 0f;
+
+            if (TryGetFloat("width", out w))
+                width = (int)w;
+            else
+                width = 0;
+
+            if (TryGetFloat("height", out h))
+                height = (int)h;
+            else
+                height = 0;
+
+            return;
+        }
+
         #endregion
 
         #region Private Methods

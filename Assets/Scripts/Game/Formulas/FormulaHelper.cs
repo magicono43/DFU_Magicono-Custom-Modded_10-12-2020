@@ -3181,6 +3181,9 @@ namespace DaggerfallWorkshop.Game.Formulas
                 if (armor != null)
                 {
                     reductionPercent = PercentageDamageReductionCalculation(armor, shieldBlockSuccess, critDamPen, damType);
+
+                    if (armor.ItemGroup == ItemGroups.Jewellery)
+                        reductionPercent = 1f;
                 }
             }
             return (int)Mathf.Round(damage * reductionPercent);

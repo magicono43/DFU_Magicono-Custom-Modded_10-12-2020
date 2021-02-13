@@ -207,6 +207,13 @@ namespace DaggerfallWorkshop.Game.UserInterface
                     bludResist = "B: " + bpAvB + "%";
                     slasResist = "S: " + bpAvS + "%";
                     pierResist = "P: " + bpAvP + "%";
+
+                    if (armor.ItemGroup == ItemGroups.Jewellery)
+                    {
+                        bludResist = "";
+                        slasResist = "";
+                        pierResist = "";
+                    }
                 }
                 armourLabelsB[bpIdx].Text = (!suppress) ? bludResist : string.Empty;
                 armourLabelsS[bpIdx].Text = (!suppress) ? slasResist : string.Empty;

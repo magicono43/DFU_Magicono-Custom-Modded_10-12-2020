@@ -403,15 +403,104 @@ namespace DaggerfallWorkshop.Game.Items
                 case Jewellery.Amulet:
                 case Jewellery.Torc:
                 case Jewellery.Cloth_amulet:
+                case Jewellery.Gold_Pendant:
+                case Jewellery.Amethyst_Pendant:
+                case Jewellery.Apatite_Pendant:
+                case Jewellery.Aquamarine_Pendant:
+                case Jewellery.Diamond_Pendant:
+                case Jewellery.Emerald_Pendant:
+                case Jewellery.Garnet_Pendant:
+                case Jewellery.Ruby_Pendant:
+                case Jewellery.Sapphire_Pendant:
+                case Jewellery.Spinel_Pendant:
+                case Jewellery.Topaz_Pendant:
+                case Jewellery.Zircon_Pendant:
                     return GetFirstSlot(EquipSlots.Amulet0, EquipSlots.Amulet1);
                 case Jewellery.Bracer:
                     return GetFirstSlot(EquipSlots.Bracer0, EquipSlots.Bracer1);
                 case Jewellery.Ring:
+                case Jewellery.Gold_Ring:
+                case Jewellery.Silver_Ring:
+                case Jewellery.Gold_Amethyst_Ring:
+                case Jewellery.Silver_Amethyst_Ring:
+                case Jewellery.Gold_Apatite_Ring:
+                case Jewellery.Silver_Apatite_Ring:
+                case Jewellery.Gold_Aquamarine_Ring:
+                case Jewellery.Silver_Aquamarine_Ring:
+                case Jewellery.Gold_Diamond_Ring:
+                case Jewellery.Silver_Diamond_Ring:
+                case Jewellery.Gold_Emerald_Ring:
+                case Jewellery.Silver_Emerald_Ring:
+                case Jewellery.Gold_Garnet_Ring:
+                case Jewellery.Silver_Garnet_Ring:
+                case Jewellery.Gold_Ruby_Ring:
+                case Jewellery.Silver_Ruby_Ring:
+                case Jewellery.Gold_Sapphire_Ring:
+                case Jewellery.Silver_Sapphire_Ring:
+                case Jewellery.Gold_Spinel_Ring:
+                case Jewellery.Silver_Spinel_Ring:
+                case Jewellery.Gold_Topaz_Ring:
+                case Jewellery.Silver_Topaz_Ring:
+                case Jewellery.Gold_Zircon_Ring:
+                case Jewellery.Silver_Zircon_Ring:
                     return GetFirstSlot(EquipSlots.Ring0, EquipSlots.Ring1);
                 case Jewellery.Bracelet:
+                case Jewellery.Amethyst_Encrusted_Bracelet:
+                case Jewellery.Apatite_Encrusted_Bracelet:
+                case Jewellery.Aquamarine_Encrusted_Bracelet:
+                case Jewellery.Diamond_Encrusted_Bracelet:
+                case Jewellery.Emerald_Encrusted_Bracelet:
+                case Jewellery.Garnet_Encrusted_Bracelet:
+                case Jewellery.Ruby_Encrusted_Bracelet:
+                case Jewellery.Sapphire_Encrusted_Bracelet:
+                case Jewellery.Spinel_Encrusted_Bracelet:
+                case Jewellery.Topaz_Encrusted_Bracelet:
+                case Jewellery.Zircon_Encrusted_Bracelet:
                     return GetFirstSlot(EquipSlots.Bracelet0, EquipSlots.Bracelet1);
                 case Jewellery.Mark:
+                case Jewellery.Amethyst_Earing:
+                case Jewellery.Apatite_Earing:
+                case Jewellery.Aquamarine_Earing:
+                case Jewellery.Diamond_Earing:
+                case Jewellery.Emerald_Earing:
+                case Jewellery.Garnet_Earing:
+                case Jewellery.Ruby_Earing:
+                case Jewellery.Sapphire_Earing:
+                case Jewellery.Spinel_Earing:
+                case Jewellery.Topaz_Earing:
+                case Jewellery.Zircon_Earing:
                     return GetFirstSlot(EquipSlots.Mark0, EquipSlots.Mark1);
+                case Jewellery.Gold_Tiara:
+                case Jewellery.Silver_Tiara:
+                case Jewellery.Gold_Ruby_Tiara:
+                case Jewellery.Silver_Ruby_Tiara:
+                case Jewellery.Gold_Emerald_Tiara:
+                case Jewellery.Silver_Emerald_Tiara:
+                case Jewellery.Gold_Sapphire_Tiara:
+                case Jewellery.Silver_Sapphire_Tiara:
+                case Jewellery.Gold_Diamond_Tiara:
+                case Jewellery.Silver_Diamond_Tiara:
+                case Jewellery.Gold_Garnet_Tiara:
+                case Jewellery.Silver_Garnet_Tiara:
+                case Jewellery.Gold_Apatite_Tiara:
+                case Jewellery.Silver_Apatite_Tiara:
+                case Jewellery.Gold_Amethyst_Tiara:
+                case Jewellery.Silver_Amethyst_Tiara:
+                case Jewellery.Gold_Aquamarine_Tiara:
+                case Jewellery.Silver_Aquamarine_Tiara:
+                case Jewellery.Gold_Topaz_Tiara:
+                case Jewellery.Silver_Topaz_Tiara:
+                case Jewellery.Gold_Zircon_Tiara:
+                case Jewellery.Silver_Zircon_Tiara:
+                case Jewellery.Gold_Spinel_Tiara:
+                case Jewellery.Silver_Spinel_Tiara:
+                case Jewellery.Gold_Basilisk_Eye_Tiara:
+                case Jewellery.Silver_Basilisk_Eye_Tiara:
+                case Jewellery.Gold_Crown:
+                case Jewellery.Silver_Crown:
+                case Jewellery.Gem_Encrusted_Gold_Crown:
+                case Jewellery.Gem_Encrusted_Silver_Crown:
+                    return EquipSlots.Head;
                 default:
                     return EquipSlots.None;
             }

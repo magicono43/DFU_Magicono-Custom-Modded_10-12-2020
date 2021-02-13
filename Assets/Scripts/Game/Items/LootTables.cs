@@ -422,7 +422,7 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 for (int i = 0; i < extraLootProps[6]; i++)
                 {
-                    items.Add(ItemBuilder.CreateRandomReligiousItem());
+                    items.Add(ItemBuilder.CreateRandomReligiousItem(level));
                 }
             }
 
