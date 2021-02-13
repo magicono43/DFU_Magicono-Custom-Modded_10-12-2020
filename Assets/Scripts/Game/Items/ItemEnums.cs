@@ -69,6 +69,12 @@ namespace DaggerfallWorkshop.Game.Items
         Travel_Books = 39,
         Informational_Books = 40,
         No_Topic_Books = 41,
+        Tiara_Jewelry = 42,
+        Crown_Jewelry = 43,
+        Ring_Jewelry = 44,
+        Earing_Jewelry = 45,
+        Neck_Jewelry = 46,
+        Bracelet_Jewelry = 47,
     }
 
     /// <summary>
@@ -626,6 +632,10 @@ namespace DaggerfallWorkshop.Game.Items
         Torc = 138,
         Cloth_amulet = 139,
         Wand = 140,
+    }
+
+    public enum Tiara_Jewelry
+    {
         Gold_Tiara = 4600,
         Silver_Tiara = 4601,
         Gold_Ruby_Tiara = 4602,
@@ -652,10 +662,18 @@ namespace DaggerfallWorkshop.Game.Items
         Silver_Spinel_Tiara = 4623,
         Gold_Basilisk_Eye_Tiara = 4624,
         Silver_Basilisk_Eye_Tiara = 4625,
+    }
+
+    public enum Crown_Jewelry
+    {
         Gold_Crown = 4626,
         Silver_Crown = 4627,
         Gem_Encrusted_Gold_Crown = 4628,
         Gem_Encrusted_Silver_Crown = 4629,
+    }
+
+    public enum Ring_Jewelry
+    {
         Gold_Ring = 4700,
         Silver_Ring = 4701,
         Gold_Amethyst_Ring = 4702,
@@ -680,6 +698,10 @@ namespace DaggerfallWorkshop.Game.Items
         Silver_Topaz_Ring = 4721,
         Gold_Zircon_Ring = 4722,
         Silver_Zircon_Ring = 4723,
+    }
+
+    public enum Earing_Jewelry
+    {
         Amethyst_Earing = 4724,
         Apatite_Earing = 4725,
         Aquamarine_Earing = 4726,
@@ -691,6 +713,10 @@ namespace DaggerfallWorkshop.Game.Items
         Spinel_Earing = 4732,
         Topaz_Earing = 4733,
         Zircon_Earing = 4734,
+    }
+
+    public enum Neck_Jewelry
+    {
         Gold_Pendant = 4735,
         Amethyst_Pendant = 4736,
         Apatite_Pendant = 4737,
@@ -703,6 +729,10 @@ namespace DaggerfallWorkshop.Game.Items
         Spinel_Pendant = 4744,
         Topaz_Pendant = 4745,
         Zircon_Pendant = 4746,
+    }
+
+    public enum Bracelet_Jewelry
+    {
         Amethyst_Encrusted_Bracelet = 4747,
         Apatite_Encrusted_Bracelet = 4748,
         Aquamarine_Encrusted_Bracelet = 4749,

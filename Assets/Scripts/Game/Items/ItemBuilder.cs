@@ -803,7 +803,7 @@ namespace DaggerfallWorkshop.Game.Items
             int groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
             DaggerfallUnityItem newItem = new DaggerfallUnityItem(ItemGroups.Jewellery, groupIndex);
 
-            if (newItem.TemplateIndex >= 4600 && newItem.TemplateIndex <= 4649)
+            if (newItem.TemplateIndex >= 4600 && newItem.TemplateIndex <= 4629)
                 ApplyWearableJewelrySettings(newItem, GameManager.Instance.PlayerEntity.Gender, GameManager.Instance.PlayerEntity.Race);
 
             return newItem;

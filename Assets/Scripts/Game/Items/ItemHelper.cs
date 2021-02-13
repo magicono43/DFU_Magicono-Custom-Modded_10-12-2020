@@ -1337,6 +1337,18 @@ namespace DaggerfallWorkshop.Game.Items
                     return Enum.GetValues(typeof(Informational_Books));
                 case ItemGroups.No_Topic_Books:
                     return Enum.GetValues(typeof(No_Topic_Books));
+                case ItemGroups.Tiara_Jewelry:
+                    return Enum.GetValues(typeof(Tiara_Jewelry));
+                case ItemGroups.Crown_Jewelry:
+                    return Enum.GetValues(typeof(Crown_Jewelry));
+                case ItemGroups.Ring_Jewelry:
+                    return Enum.GetValues(typeof(Ring_Jewelry));
+                case ItemGroups.Earing_Jewelry:
+                    return Enum.GetValues(typeof(Earing_Jewelry));
+                case ItemGroups.Neck_Jewelry:
+                    return Enum.GetValues(typeof(Neck_Jewelry));
+                case ItemGroups.Bracelet_Jewelry:
+                    return Enum.GetValues(typeof(Bracelet_Jewelry));
                 default:
                     throw new Exception("Error: Item group not found.");
             }

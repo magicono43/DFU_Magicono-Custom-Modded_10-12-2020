@@ -130,11 +130,11 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             { DFLocation.BuildingTypes.FurnitureStore, new List<ItemGroups>()
                 { ItemGroups.Furniture } },
             { DFLocation.BuildingTypes.GemStore, new List<ItemGroups>()
-                { ItemGroups.Gems, ItemGroups.Jewellery } },
+                { ItemGroups.Gems, ItemGroups.Jewellery, ItemGroups.Tiara_Jewelry, ItemGroups.Crown_Jewelry, ItemGroups.Ring_Jewelry, ItemGroups.Earing_Jewelry, ItemGroups.Neck_Jewelry, ItemGroups.Bracelet_Jewelry } },
             { DFLocation.BuildingTypes.GeneralStore, new List<ItemGroups>()
                 { ItemGroups.Books, ItemGroups.MensClothing, ItemGroups.WomensClothing, ItemGroups.Transportation, ItemGroups.Jewellery, ItemGroups.Weapons, ItemGroups.UselessItems2 } },
             { DFLocation.BuildingTypes.PawnShop, new List<ItemGroups>()
-                { ItemGroups.Armor, ItemGroups.Books, ItemGroups.MensClothing, ItemGroups.WomensClothing, ItemGroups.Gems, ItemGroups.Jewellery, ItemGroups.ReligiousItems, ItemGroups.Weapons, ItemGroups.UselessItems2, ItemGroups.Paintings } },
+                { ItemGroups.Armor, ItemGroups.Books, ItemGroups.MensClothing, ItemGroups.WomensClothing, ItemGroups.Gems, ItemGroups.Jewellery, ItemGroups.Tiara_Jewelry, ItemGroups.Crown_Jewelry, ItemGroups.Ring_Jewelry, ItemGroups.Earing_Jewelry, ItemGroups.Neck_Jewelry, ItemGroups.Bracelet_Jewelry, ItemGroups.ReligiousItems, ItemGroups.Weapons, ItemGroups.UselessItems2, ItemGroups.Paintings } },
             { DFLocation.BuildingTypes.WeaponSmith, new List<ItemGroups>()
                 { ItemGroups.Armor, ItemGroups.Weapons } },
         };
