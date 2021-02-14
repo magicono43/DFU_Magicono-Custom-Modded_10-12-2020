@@ -208,7 +208,7 @@ namespace DaggerfallWorkshop.Game.UserInterface
                     slasResist = "S: " + bpAvS + "%";
                     pierResist = "P: " + bpAvP + "%";
 
-                    if (armor.ItemGroup == ItemGroups.Jewellery)
+                    if (armor.ItemGroup == ItemGroups.Tiara_Jewelry || armor.ItemGroup == ItemGroups.Crown_Jewelry)
                     {
                         bludResist = "";
                         slasResist = "";
