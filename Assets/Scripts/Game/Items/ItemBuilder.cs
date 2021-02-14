@@ -719,7 +719,7 @@ namespace DaggerfallWorkshop.Game.Items
                 gemList.Add(gemDummyChecked);
             }
 
-            int chosenGemID = ChooseGemFromFilteredList(gemList, enemyLevel, playerLuck);
+            int chosenGemID = ChooseItemFromFilteredList(gemList, enemyLevel, playerLuck);
 
             // Create item
             DaggerfallUnityItem gem = new DaggerfallUnityItem(ItemGroups.Gems, chosenGemID);
@@ -727,86 +727,108 @@ namespace DaggerfallWorkshop.Game.Items
             return gem;
         }
 
-        public static int ChooseGemFromFilteredList(List<DaggerfallUnityItem> gemList, int enemyLevel = -1, int playerLuck = -1)
+        /// <summary>
+        /// Creates a random jewelry item from any of the slot groups.
+        /// Passing a non-jewelry slot group will return null.
+        /// </summary>
+        /// <returns>DaggerfallUnityItem</returns>
+        public static DaggerfallUnityItem CreateRandomJewelryOfSpecificSlot(ItemGroups jewelrySlot, int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
-            int[] gemRolls = new int[] { };
-            List<int> gemRollsList = new List<int>();
-
-            for (int i = 0; i < gemList.Count; i++)
+            List<DaggerfallUnityItem> jewelryList = new List<DaggerfallUnityItem>();
+            Array enumArray;
+            int jewelryID;
+            switch (jewelrySlot)
             {
-                int gemRarity = (gemList[i].rarity - 101) * -1; // This is to "flip" the rarity values, so 100 will become 1 and 1 will become 100. 
-                int arraystart = gemRollsList.Count;
-                int fillElements = 0;
-                if (enemyLevel != -1)
-                {
-                    if (gemRarity >= 60)
+                case ItemGroups.Jewellery:
+                case ItemGroups.Tiara_Jewelry:
+                case ItemGroups.Crown_Jewelry:
+                case ItemGroups.Ring_Jewelry:
+                case ItemGroups.Earing_Jewelry:
+                case ItemGroups.Neck_Jewelry:
+                case ItemGroups.Bracelet_Jewelry:
+                    enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(jewelrySlot);
+                    for (int i = 0; i < enumArray.Length; i++)
                     {
-                        if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (enemyLevel / 1.5f)), 1, 400);
-                        else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (enemyLevel / 2.5f)), 1, 400);
-                        else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (60f / enemyLevel)), 1, 400);
+                        jewelryID = (int)enumArray.GetValue(i);
+                        DaggerfallUnityItem jewelryDummyChecked = new DaggerfallUnityItem(jewelrySlot, i, true);
+                        if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(jewelryDummyChecked.TemplateIndex))
+                            continue;
+                        jewelryList.Add(jewelryDummyChecked);
                     }
-                    else if (gemRarity >= 35)
-                    {
-                        if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + enemyLevel), 1, 400);
-                        else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (enemyLevel / 2f)), 1, 400);
-                        else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
-                    }
-                    else
-                    {
-                        if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (enemyLevel / 2f)), 1, 400);
-                        else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
-                        else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity - (5f / enemyLevel)), 1, 400);
-                    }
-                }
-                else
-                {
-                    float luckMod = (playerLuck - 50) / 5f;
-
-                    if (gemRarity >= 60)
-                    {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((gemRarity * 2.5f) - (luckMod * 2)), 1, 400);
-                    }
-                    else if (gemRarity >= 35)
-                    {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((gemRarity * 1.5f) + luckMod), 1, 400);
-                    }
-                    else
-                    {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(gemRarity + (luckMod / 2)), 1, 400);
-                    }
-                }
-
-                gemRolls = FormulaHelper.FillArray(gemRollsList, arraystart, fillElements, i);
+                    break;
+                default:
+                    return null;
             }
 
-            int chosenGemIndex = FormulaHelper.PickOneOf(gemRolls);
+            int chosenJewelryID = ChooseItemFromFilteredList(jewelryList, enemyLevel, playerLuck);
 
-            return gemList[chosenGemIndex].GroupIndex;
+            // Create item
+            DaggerfallUnityItem jewelry = new DaggerfallUnityItem(jewelrySlot, chosenJewelryID);
+
+            if (jewelry.TemplateIndex >= 4600 && jewelry.TemplateIndex <= 4629)
+                ApplyWearableJewelrySettings(jewelry, GameManager.Instance.PlayerEntity.Gender, GameManager.Instance.PlayerEntity.Race);
+
+            return jewelry;
         }
 
         /// <summary>
-        /// Creates a new random jewellery.
+        /// Creates a random jewelry item of a random slot group.
         /// </summary>
-        /// <returns>DaggerfallUnityItem.</returns>
-        public static DaggerfallUnityItem CreateRandomJewellery()
+        /// <returns>DaggerfallUnityItem</returns>
+        public static DaggerfallUnityItem CreateRandomJewelryOfRandomSlot(int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
-            Array enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ItemGroups.Jewellery);
-            int groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
-            DaggerfallUnityItem newItem = new DaggerfallUnityItem(ItemGroups.Jewellery, groupIndex);
+            List<DaggerfallUnityItem> jewelryList = new List<DaggerfallUnityItem>();
+            ItemGroups itemGroup;
+            Array enumArray;
+            int jewelryID;
+            int group = FormulaHelper.PickOneOfCompact(0, 75, 1, 4, 2, 1, 3, 50, 4, 40, 5, 25, 6, 10);
+            switch (group)
+            {
+                case 0:
+                    itemGroup = ItemGroups.Jewellery;
+                    break;
+                case 1:
+                    itemGroup = ItemGroups.Tiara_Jewelry;
+                    break;
+                case 2:
+                    itemGroup = ItemGroups.Crown_Jewelry;
+                    break;
+                case 3:
+                    itemGroup = ItemGroups.Ring_Jewelry;
+                    break;
+                case 4:
+                    itemGroup = ItemGroups.Earing_Jewelry;
+                    break;
+                case 5:
+                    itemGroup = ItemGroups.Neck_Jewelry;
+                    break;
+                case 6:
+                    itemGroup = ItemGroups.Bracelet_Jewelry;
+                    break;
+                default:
+                    return null;
+            }
 
-            if (newItem.TemplateIndex >= 4600 && newItem.TemplateIndex <= 4629)
-                ApplyWearableJewelrySettings(newItem, GameManager.Instance.PlayerEntity.Gender, GameManager.Instance.PlayerEntity.Race);
+            // Randomise jewelry within group
+            enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(itemGroup);
+            for (int i = 0; i < enumArray.Length; i++)
+            {
+                jewelryID = (int)enumArray.GetValue(i);
+                DaggerfallUnityItem jewelryDummyChecked = new DaggerfallUnityItem(itemGroup, i, true);
+                if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(jewelryDummyChecked.TemplateIndex))
+                    continue;
+                jewelryList.Add(jewelryDummyChecked);
+            }
 
-            return newItem;
+            int chosenJewelryID = ChooseItemFromFilteredList(jewelryList, enemyLevel, playerLuck);
+
+            // Create item
+            DaggerfallUnityItem jewelry = new DaggerfallUnityItem(itemGroup, chosenJewelryID);
+
+            if (jewelry.TemplateIndex >= 4600 && jewelry.TemplateIndex <= 4629)
+                ApplyWearableJewelrySettings(jewelry, GameManager.Instance.PlayerEntity.Gender, GameManager.Instance.PlayerEntity.Race);
+
+            return jewelry;
         }
 
         /// <summary>Set gender, body morphology and material of armor</summary>
@@ -833,6 +855,72 @@ namespace DaggerfallWorkshop.Game.Items
             DaggerfallUnityItem newItem = new DaggerfallUnityItem(ItemGroups.Drugs, groupIndex);
 
             return newItem;
+        }
+
+        public static int ChooseItemFromFilteredList(List<DaggerfallUnityItem> itemList, int enemyLevel = -1, int playerLuck = -1)
+        {
+            int[] itemRolls = new int[] { };
+            List<int> itemRollsList = new List<int>();
+
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                int itemRarity = (itemList[i].rarity - 101) * -1; // This is to "flip" the rarity values, so 100 will become 1 and 1 will become 100. 
+                int arraystart = itemRollsList.Count;
+                int fillElements = 0;
+                if (enemyLevel != -1)
+                {
+                    if (itemRarity >= 60)
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity - (enemyLevel / 1.5f)), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity - (enemyLevel / 2.5f)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity + (60f / enemyLevel)), 1, 400);
+                    }
+                    else if (itemRarity >= 35)
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity + enemyLevel), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity + (enemyLevel / 2f)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity - (5f / enemyLevel)), 1, 400);
+                    }
+                    else
+                    {
+                        if (enemyLevel >= 21)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity + (enemyLevel / 2f)), 1, 400);
+                        else if (enemyLevel >= 11)
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity - (5f / enemyLevel)), 1, 400);
+                        else
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity - (5f / enemyLevel)), 1, 400);
+                    }
+                }
+                else
+                {
+                    float luckMod = (playerLuck - 50) / 5f;
+
+                    if (itemRarity >= 60)
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((itemRarity * 2.5f) - (luckMod * 2)), 1, 400);
+                    }
+                    else if (itemRarity >= 35)
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((itemRarity * 1.5f) + luckMod), 1, 400);
+                    }
+                    else
+                    {
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity + (luckMod / 2)), 1, 400);
+                    }
+                }
+
+                itemRolls = FormulaHelper.FillArray(itemRollsList, arraystart, fillElements, i);
+            }
+
+            int chosenItemIndex = FormulaHelper.PickOneOf(itemRolls);
+
+            return itemList[chosenItemIndex].GroupIndex;
         }
 
         /// <summary>
@@ -1126,7 +1214,7 @@ namespace DaggerfallWorkshop.Game.Items
             else if (group == ItemGroups.Gems)
                 newItem = CreateRandomGem();
             else // Only other possibility is jewellery
-                newItem = CreateRandomJewellery();
+                newItem = CreateRandomJewelryOfRandomSlot(-1, playerLuck);
 
             if (newItem == null)
                 throw new Exception("CreateRegularMagicItem() failed to create an item.");

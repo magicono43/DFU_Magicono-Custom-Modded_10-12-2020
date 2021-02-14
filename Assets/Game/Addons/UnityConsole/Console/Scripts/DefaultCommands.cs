@@ -1761,7 +1761,7 @@ namespace Wenzil.Console
                             newItem = ItemBuilder.CreateRandomGem(-1, playerLuck);
                             break;
                         case "jewel":
-                            newItem = ItemBuilder.CreateRandomJewellery();
+                            newItem = ItemBuilder.CreateRandomJewelryOfRandomSlot(-1, playerLuck);
                             break;
                         case "potion":
                             newItem = ItemBuilder.CreateRandomPotion();
