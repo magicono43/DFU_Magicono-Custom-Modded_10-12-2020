@@ -5056,7 +5056,8 @@ namespace DaggerfallWorkshop.Utility
                             equipTableProps[1] = FormulaHelper.PickOneOf((int)Weapons.Dagger, (int)Weapons.Tanto, (int)Weapons.Shortsword, (int)Weapons.Wakazashi, (int)Weapons.Short_Bow, (int)Weapons.Long_Bow, (int)Weapons.Battle_Axe, (int)Weapons.War_Axe);
                             equipTableProps[3] = FormulaHelper.PickOneOfCompact(0, 1, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2);
                             equipTableProps[4] = 1;
-                            equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
+                            //equipTableProps[5] = UnityEngine.Random.Range(128, 135 + 1);
+                            equipTableProps[5] = 135;
                             equipTableProps = ArmorSlotEquipCalculator(enemy, traits, equipTableProps);
                             equipTableProps[13] = 40;
                             equipTableProps[14] = 80;

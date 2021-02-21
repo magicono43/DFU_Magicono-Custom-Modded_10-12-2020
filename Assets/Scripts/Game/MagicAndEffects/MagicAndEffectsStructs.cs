@@ -246,13 +246,16 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         public byte maxDamage;
         public byte daysOfSymptomsMin; // 0xFF means never-ending
         public byte daysOfSymptomsMax;
+        public int infectionCyclesMin;
+        public int infectionCyclesMax;
 
         // Constructor
         public DiseaseData(byte STRp, byte INTp,
             byte WILp, byte AGIp, byte ENDp, byte PERp,
             byte SPDp, byte LUCp, byte HEAp, byte FATp,
             byte SPLp, byte minDamagep, byte maxDamagep,
-            byte daysOfSymptomsMinp, byte daysOfSymptomsMaxp)
+            byte daysOfSymptomsMinp, byte daysOfSymptomsMaxp,
+            int infectionCyclesMinp, int infectionCyclesMaxp)
         {
             STR = STRp;
             INT = INTp;
@@ -269,6 +272,8 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
             maxDamage = maxDamagep;
             daysOfSymptomsMin = daysOfSymptomsMinp;
             daysOfSymptomsMax = daysOfSymptomsMaxp;
+            infectionCyclesMin = infectionCyclesMinp;
+            infectionCyclesMax = infectionCyclesMaxp;
         }
     }
 

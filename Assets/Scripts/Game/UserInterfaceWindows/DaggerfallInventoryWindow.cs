@@ -24,6 +24,7 @@ using DaggerfallWorkshop.Game.Banking;
 using System.Linq;
 using DaggerfallConnect;
 using DaggerfallWorkshop.Game.Formulas;
+using DaggerfallWorkshop.Game.MagicAndEffects;
 
 namespace DaggerfallWorkshop.Game.UserInterfaceWindows
 {
@@ -1787,8 +1788,8 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             }
             else if (item.ItemGroup == ItemGroups.Drugs && collection != null)
             {
-                // Drug poison IDs are 136 through 139. Template indexes are 78 through 81, so add to that.
-                Formulas.FormulaHelper.InflictPoison(playerEntity, (Poisons)item.TemplateIndex + 58, true);
+                // Drug disease IDs are 17 through 20. Template indexes are 78 through 81, so subtract from that.
+                Formulas.FormulaHelper.InflictCustomDisease(playerEntity, (Diseases)item.TemplateIndex - 61, true); // Will work for now for just the vanilla drug items, will have to change later with custom ones. 
                 collection.RemoveItem(item);
             }
             else if (item.IsLightSource)

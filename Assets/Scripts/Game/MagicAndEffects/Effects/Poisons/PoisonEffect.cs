@@ -153,7 +153,9 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         {
             // Comparing keys should be enough for like-kind test
             // Child classes can override test if they need to
-            return (other.Key == Key);
+
+            //return (other.Key == Key);
+            return false; // Interkarma said this would allow the poison effects to "stacK", will have to see. 
         }
 
         #endregion

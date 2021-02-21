@@ -3446,12 +3446,9 @@ namespace DaggerfallWorkshop.Game.Formulas
 
             if (bypassResistance || SavingThrow(DFCareer.Elements.DiseaseOrPoison, DFCareer.EffectFlags.Poison, target, 0) != 0)
             {
-                if (target.Level != 1)
-                {
-                    // Infect target
-                    EntityEffectBundle bundle = effectManager.CreatePoison(poisonType);
-                    effectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
-                }
+                // Infect target
+                EntityEffectBundle bundle = effectManager.CreatePoison(poisonType);
+                effectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
             }
             else
             {
@@ -3902,12 +3899,12 @@ namespace DaggerfallWorkshop.Game.Formulas
 
             #region Enemies
 
-            /// <summary>
-            /// Inflict a classic disease onto player.
-            /// </summary>
-            /// <param name="target">Target entity - must be player.</param>
-            /// <param name="diseaseList">Array of disease indices matching Diseases enum.</param>
-            public static void InflictDisease(DaggerfallEntity target, byte[] diseaseList)
+        /// <summary>
+        /// Inflict a classic disease onto player.
+        /// </summary>
+        /// <param name="target">Target entity - must be player.</param>
+        /// <param name="diseaseList">Array of disease indices matching Diseases enum.</param>
+        public static void InflictDisease(DaggerfallEntity target, byte[] diseaseList)
         {
             // Must have a valid disease list
             if (diseaseList == null || diseaseList.Length == 0 || target.EntityBehaviour.EntityType != EntityTypes.Player)
@@ -3918,25 +3915,46 @@ namespace DaggerfallWorkshop.Game.Formulas
             if (target != playerEntity)
                 return;
 
-            // Player cannot catch diseases at level 1 in classic. Maybe to keep new players from dying at the start of the game.
-            if (playerEntity.Level != 1)
+            // Return if disease resisted
+            if (SavingThrow(DFCareer.Elements.DiseaseOrPoison, DFCareer.EffectFlags.Disease, target, 0) == 0)
+                return;
+
+            // Select a random disease from disease array and validate range
+            int diseaseIndex = UnityEngine.Random.Range(0, diseaseList.Length);
+            if (diseaseIndex < 0 || diseaseIndex > 16)
+                return;
+
+            // Infect player
+            Diseases diseaseType = (Diseases)diseaseList[diseaseIndex];
+            EntityEffectBundle bundle = GameManager.Instance.PlayerEffectManager.CreateDisease(diseaseType);
+            GameManager.Instance.PlayerEffectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
+
+            Debug.LogFormat("Infected player with disease {0}", diseaseType.ToString());
+        }
+
+        public static void InflictCustomDisease(DaggerfallEntity target, Diseases disease, bool bypassResistance = false)
+        {
+            // Target must be player
+            if (target.EntityBehaviour.EntityType != EntityTypes.Player)
+                return;
+
+            // Only allow player to catch a disease this way
+            PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+            if (target != playerEntity)
+                return;
+
+            if (!bypassResistance)
             {
                 // Return if disease resisted
                 if (SavingThrow(DFCareer.Elements.DiseaseOrPoison, DFCareer.EffectFlags.Disease, target, 0) == 0)
                     return;
-
-                // Select a random disease from disease array and validate range
-                int diseaseIndex = UnityEngine.Random.Range(0, diseaseList.Length);
-                if (diseaseIndex < 0 || diseaseIndex > 16)
-                    return;
-
-                // Infect player
-                Diseases diseaseType = (Diseases)diseaseList[diseaseIndex];
-                EntityEffectBundle bundle = GameManager.Instance.PlayerEffectManager.CreateDisease(diseaseType);
-                GameManager.Instance.PlayerEffectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
-
-                Debug.LogFormat("Infected player with disease {0}", diseaseType.ToString());
             }
+
+            // Infect player
+            EntityEffectBundle bundle = GameManager.Instance.PlayerEffectManager.CreateDisease(disease);
+            GameManager.Instance.PlayerEffectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
+
+            Debug.LogFormat("Infected player with disease {0}", disease.ToString());
         }
 
         public static void FatigueDamage(DaggerfallEntity target, int damage)

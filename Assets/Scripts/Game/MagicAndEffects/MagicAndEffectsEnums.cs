@@ -133,6 +133,15 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         Dementia = 14,
         Chrondiasis = 15,
         WizardFever = 16,
+        Indulcet = 17,
+        Sursum = 18,
+        Quaesto_Vil = 19,
+        Aegrotat = 20,
+        Moon_Sugar = 21,
+        Skooma = 22,
+        Incense_of_Mara = 23,
+        Sleeping_Tree_Sap = 24,
+        Tobacco = 25,
     }
 
     /// <summary>

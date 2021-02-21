@@ -34,7 +34,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         protected DiseaseData diseaseData;
         protected bool incubationOver = false;
         protected uint lastDay;
+        protected uint infectionRoundCounter;
+        protected int infectionCyclesPassed;
         protected int daysOfSymptomsLeft;
+        protected int infectionCyclesLeft;
 
         #endregion
 
@@ -86,7 +89,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         {
             // Target must be player entity greater than level 1 to acquire a disease
             DaggerfallEntityBehaviour host = GetPeeredEntityBehaviour(manager);
-            if (host.EntityType != EntityTypes.Player || host.Entity.Level < 2)
+            if (host.EntityType != EntityTypes.Player)
             {
                 EndDisease();
                 return;
@@ -95,10 +98,16 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             // Store first day of infection - diseases operate in 24-hour ticks from the very next day after infection
             lastDay = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime() / DaggerfallDateTime.MinutesPerDay;
 
+            // Will count up ever magic round, then depending on the specific disease parameters will either skip or execute an effect tick based on the "tick cycle" setting for said disease.
+            infectionRoundCounter = 0;
+            infectionCyclesPassed = 0;
+
             // If disease not permanent then set a range for how long stats will fall
             // Otherwise stats will continue to fall until cured
             if (!IsDiseasePermanent())
                 daysOfSymptomsLeft = (byte)UnityEngine.Random.Range(diseaseData.daysOfSymptomsMin, diseaseData.daysOfSymptomsMax + 1);
+
+            infectionCyclesLeft = UnityEngine.Random.Range(diseaseData.infectionCyclesMin, diseaseData.infectionCyclesMax + 1);
 
             base.Start(manager, caster);
         }
@@ -216,23 +225,23 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             // Disease data. Found in FALL.EXE (1.07.213) from offset 0x1C0053.
             DiseaseData[] diseaseDataSources =
             {              //  STR  INT  WIL  AGI  END  PER  SPD  LUC  HEA  FAT  SPL MIND  MAXD  MINS  MAXS
-                new DiseaseData( 1,   0,   0,   0,   1,   0,   0,   0,   1,   0,   0,   2,   10, 0xFF, 0xFF), // Witches' Pox
-                new DiseaseData( 1,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   3,   30, 0xFF, 0xFF), // Plague
-                new DiseaseData( 0,   0,   1,   0,   1,   0,   0,   0,   1,   0,   0,   5,   10, 0xFF, 0xFF), // Yellow Fever
-                new DiseaseData( 0,   0,   0,   0,   0,   0,   0,   0,   1,   0,   0,   1,    5, 0xFF, 0xFF), // Stomach Rot
-                new DiseaseData( 1,   0,   1,   1,   0,   0,   0,   0,   0,   0,   0,   2,   10, 0xFF, 0xFF), // Consumption
-                new DiseaseData( 0,   0,   1,   0,   0,   1,   0,   0,   1,   0,   0,   1,    5, 0xFF, 0xFF), // Brain Fever
-                new DiseaseData( 1,   0,   1,   1,   0,   0,   0,   0,   0,   0,   0,   2,   10, 0xFF, 0xFF), // Swamp Rot
-                new DiseaseData( 1,   0,   0,   1,   0,   0,   1,   0,   0,   0,   0,   5,   10,    3,   18), // Caliron's Curse
-                new DiseaseData( 1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   5,   30, 0xFF, 0xFF), // Cholera
-                new DiseaseData( 1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   0,   5,   30, 0xFF, 0xFF), // Leprosy
-                new DiseaseData( 1,   0,   0,   0,   1,   0,   0,   0,   1,   0,   0,   2,    4, 0xFF, 0xFF), // Wound Rot
-                new DiseaseData( 0,   0,   0,   0,   1,   1,   0,   0,   0,   1,   0,   2,   10, 0xFF, 0xFF), // Red Death
-                new DiseaseData( 0,   0,   1,   0,   0,   1,   0,   0,   1,   0,   0,   5,   10,    3,   18), // Blood Rot
-                new DiseaseData( 0,   1,   0,   0,   1,   0,   0,   0,   1,   0,   0,   2,   10, 0xFF, 0xFF), // Typhoid Fever
-                new DiseaseData( 0,   1,   1,   0,   0,   1,   0,   0,   0,   0,   0,   2,   10, 0xFF, 0xFF), // Dementia
-                new DiseaseData( 0,   1,   0,   0,   0,   0,   0,   0,   0,   0,   1,   5,   10, 0xFF, 0xFF), // Chrondiasis
-                new DiseaseData( 0,   1,   0,   0,   0,   0,   0,   0,   0,   0,   1,   2,    4,    3,   18), // Wizard Fever
+                new DiseaseData( 1,   0,   0,   0,   1,   0,   0,   0,   1,   0,   0,   2,   10, 0xFF, 0xFF, 0, 0), // Witches' Pox
+                new DiseaseData( 1,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   3,   30, 0xFF, 0xFF, 0, 0), // Plague
+                new DiseaseData( 0,   0,   1,   0,   1,   0,   0,   0,   1,   0,   0,   5,   10, 0xFF, 0xFF, 0, 0), // Yellow Fever
+                new DiseaseData( 0,   0,   0,   0,   0,   0,   0,   0,   1,   0,   0,   1,    5, 0xFF, 0xFF, 0, 0), // Stomach Rot
+                new DiseaseData( 1,   0,   1,   1,   0,   0,   0,   0,   0,   0,   0,   2,   10, 0xFF, 0xFF, 0, 0), // Consumption
+                new DiseaseData( 0,   0,   1,   0,   0,   1,   0,   0,   1,   0,   0,   1,    5, 0xFF, 0xFF, 0, 0), // Brain Fever
+                new DiseaseData( 1,   0,   1,   1,   0,   0,   0,   0,   0,   0,   0,   2,   10, 0xFF, 0xFF, 0, 0), // Swamp Rot
+                new DiseaseData( 1,   0,   0,   1,   0,   0,   1,   0,   0,   0,   0,   5,   10,    3,   18, 0, 0), // Caliron's Curse
+                new DiseaseData( 1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   5,   30, 0xFF, 0xFF, 0, 0), // Cholera
+                new DiseaseData( 1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   0,   5,   30, 0xFF, 0xFF, 0, 0), // Leprosy
+                new DiseaseData( 1,   0,   0,   0,   1,   0,   0,   0,   1,   0,   0,   2,    4, 0xFF, 0xFF, 0, 0), // Wound Rot
+                new DiseaseData( 0,   0,   0,   0,   1,   1,   0,   0,   0,   1,   0,   2,   10, 0xFF, 0xFF, 0, 0), // Red Death
+                new DiseaseData( 0,   0,   1,   0,   0,   1,   0,   0,   1,   0,   0,   5,   10,    3,   18, 0, 0), // Blood Rot
+                new DiseaseData( 0,   1,   0,   0,   1,   0,   0,   0,   1,   0,   0,   2,   10, 0xFF, 0xFF, 0, 0), // Typhoid Fever
+                new DiseaseData( 0,   1,   1,   0,   0,   1,   0,   0,   0,   0,   0,   2,   10, 0xFF, 0xFF, 0, 0), // Dementia
+                new DiseaseData( 0,   1,   0,   0,   0,   0,   0,   0,   0,   0,   1,   5,   10, 0xFF, 0xFF, 0, 0), // Chrondiasis
+                new DiseaseData( 0,   1,   0,   0,   0,   0,   0,   0,   0,   0,   1,   2,    4,    3,   18, 0, 0), // Wizard Fever
             };
 
             return diseaseDataSources[(int)diseaseType];
@@ -272,7 +281,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             public int forcedRoundsRemaining;
             public bool incubationOver;
             public uint lastDay;
+            public uint infectionRoundCounter;
+            public int infectionCyclesPassed;
             public int daysOfSymptomsLeft;
+            public int infectionCyclesLeft;
             public object customDiseaseData;
         }
 
@@ -282,7 +294,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             data.forcedRoundsRemaining = forcedRoundsRemaining;
             data.incubationOver = incubationOver;
             data.lastDay = lastDay;
+            data.infectionRoundCounter = infectionRoundCounter;
+            data.infectionCyclesPassed = infectionCyclesPassed;
             data.daysOfSymptomsLeft = daysOfSymptomsLeft;
+            data.infectionCyclesLeft = infectionCyclesLeft;
             data.customDiseaseData = GetCustomDiseaseSaveData();
 
             return data;
@@ -297,7 +312,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             forcedRoundsRemaining = data.forcedRoundsRemaining;
             incubationOver = data.incubationOver;
             lastDay = data.lastDay;
+            infectionRoundCounter = data.infectionRoundCounter;
+            infectionCyclesPassed = data.infectionCyclesPassed;
             daysOfSymptomsLeft = data.daysOfSymptomsLeft;
+            infectionCyclesLeft = data.infectionCyclesLeft;
             RestoreCustomDiseaseSaveData(data.customDiseaseData);
         }
 
