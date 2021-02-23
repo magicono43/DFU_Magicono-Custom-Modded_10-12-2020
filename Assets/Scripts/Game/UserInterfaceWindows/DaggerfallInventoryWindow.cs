@@ -1788,9 +1788,17 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             }
             else if (item.ItemGroup == ItemGroups.Drugs && collection != null)
             {
-                // Drug disease IDs are 17 through 20. Template indexes are 78 through 81, so subtract from that.
-                Formulas.FormulaHelper.InflictCustomDisease(playerEntity, (Diseases)item.TemplateIndex - 61, true); // Will work for now for just the vanilla drug items, will have to change later with custom ones. 
-                collection.RemoveItem(item);
+                if (item.TemplateIndex >= (int)Drugs.Indulcet && item.TemplateIndex <= (int)Drugs.Aegrotat)
+                {
+                    // Vanilla Drug disease IDs are 17 through 20. Template indexes are 78 through 81, so subtract from that.
+                    Formulas.FormulaHelper.InflictCustomDisease(playerEntity, (Diseases)item.TemplateIndex - 61, true);
+                    collection.RemoveOne(item);
+                }
+                else if (item.TemplateIndex >= (int)Drugs.Tobacco && item.TemplateIndex <= (int)Drugs.Sleeping_Tree_Sap)
+                {
+                    Formulas.FormulaHelper.InflictCustomDisease(playerEntity, (Diseases)item.TemplateIndex - 4396, true);
+                    collection.RemoveOne(item);
+                }
             }
             else if (item.IsLightSource)
             {

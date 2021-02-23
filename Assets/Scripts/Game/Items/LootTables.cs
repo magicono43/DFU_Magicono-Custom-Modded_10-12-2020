@@ -445,7 +445,7 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 for (int i = 0; i < extraLootProps[9]; i++)
                 {
-                    items.Add(ItemBuilder.CreateRandomDrug());
+                    items.Add(ItemBuilder.CreateRandomDrug(level));
                 }
             }
 
@@ -1117,7 +1117,7 @@ namespace DaggerfallWorkshop.Game.Items
                     case 2:
                         rolledStackSize = Random.Range(1, 5 + 1);
                         for (int i = 0; i < rolledStackSize; i++)
-                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel, -1, (int)MiscPlantIngredients.Bamboo, (int)MiscPlantIngredients.Palm, (int)MiscPlantIngredients.Aloe, (int)MiscPlantIngredients.Arrowroot, (int)MiscPlantIngredients.Black_Trumpet, (int)MiscPlantIngredients.Garlic, (int)MiscPlantIngredients.Giant_Puffball, (int)MiscPlantIngredients.Ginseng_Root, (int)MiscPlantIngredients.Beech_Mushrooms, (int)MiscPlantIngredients.Mint, (int)MiscPlantIngredients.Onion, (int)MiscPlantIngredients.Tobacco));
+                            targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.MiscPlantIngredients, enemyLevel, -1, (int)MiscPlantIngredients.Bamboo, (int)MiscPlantIngredients.Palm, (int)MiscPlantIngredients.Aloe, (int)MiscPlantIngredients.Arrowroot, (int)MiscPlantIngredients.Black_Trumpet, (int)MiscPlantIngredients.Garlic, (int)MiscPlantIngredients.Giant_Puffball, (int)MiscPlantIngredients.Ginseng_Root, (int)MiscPlantIngredients.Beech_Mushrooms, (int)MiscPlantIngredients.Mint, (int)MiscPlantIngredients.Onion));
                         rolledStackSize = Random.Range(1, 4 + 1);
                         for (int i = 0; i < rolledStackSize; i++)
                             targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FlowerPlantIngredients, enemyLevel, -1, (int)FlowerPlantIngredients.Fennel_Flower, (int)FlowerPlantIngredients.Dragons_Flower, (int)FlowerPlantIngredients.Foxglove_Flower, (int)FlowerPlantIngredients.Wild_Bergamot));

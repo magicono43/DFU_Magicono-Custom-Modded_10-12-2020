@@ -137,11 +137,11 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         Sursum = 18,
         Quaesto_Vil = 19,
         Aegrotat = 20,
-        Moon_Sugar = 21,
-        Skooma = 22,
-        Incense_of_Mara = 23,
-        Sleeping_Tree_Sap = 24,
-        Tobacco = 25,
+        Tobacco = 21,
+        Moon_Sugar = 22,
+        Skooma = 23,
+        Incense_of_Mara = 24,
+        Sleeping_Tree_Sap = 25,
     }
 
     /// <summary>

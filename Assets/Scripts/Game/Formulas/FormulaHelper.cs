@@ -4469,7 +4469,7 @@ namespace DaggerfallWorkshop.Game.Formulas
                 if (del(item))
                     return true; // Only return if override returns true
 
-            if (item.IsIngredient || item.IsPotion || item.IsBook ||
+            if (item.IsIngredient || item.IsPotion || item.IsBook || item.IsDrug ||
                 item.IsOfTemplate(ItemGroups.Currency, (int)Currency.Gold_pieces) ||
                 item.IsOfTemplate(ItemGroups.Weapons, (int)Weapons.Arrow) ||
                 item.IsOfTemplate(ItemGroups.UselessItems2, (int)UselessItems2.Oil) ||

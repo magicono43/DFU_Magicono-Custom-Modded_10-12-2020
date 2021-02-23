@@ -848,13 +848,26 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a new random drug.
         /// </summary>
         /// <returns>DaggerfallUnityItem.</returns>
-        public static DaggerfallUnityItem CreateRandomDrug()
+        public static DaggerfallUnityItem CreateRandomDrug(int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
-            Array enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ItemGroups.Drugs);
-            int groupIndex = UnityEngine.Random.Range(0, enumArray.Length);
-            DaggerfallUnityItem newItem = new DaggerfallUnityItem(ItemGroups.Drugs, groupIndex);
+            List<DaggerfallUnityItem> drugList = new List<DaggerfallUnityItem>();
 
-            return newItem;
+            Array enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(ItemGroups.Drugs);
+            for (int i = 0; i < enumArray.Length; i++)
+            {
+                int drugID = (int)enumArray.GetValue(i);
+                DaggerfallUnityItem drugDummyChecked = new DaggerfallUnityItem(ItemGroups.Drugs, i, true);
+                if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(drugDummyChecked.TemplateIndex))
+                    continue;
+                drugList.Add(drugDummyChecked);
+            }
+
+            int chosenDrugID = ChooseItemFromFilteredList(drugList, enemyLevel, playerLuck);
+
+            // Create item
+            DaggerfallUnityItem drug = new DaggerfallUnityItem(ItemGroups.Drugs, chosenDrugID);
+
+            return drug;
         }
 
         public static int ChooseItemFromFilteredList(List<DaggerfallUnityItem> itemList, int enemyLevel = -1, int playerLuck = -1)

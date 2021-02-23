@@ -365,6 +365,14 @@ namespace DaggerfallWorkshop.Game.Items
         }
 
         /// <summary>
+        /// Checks if this item is a drug.
+        /// </summary>
+        public bool IsDrug
+        {
+            get { return ItemGroup == ItemGroups.Drugs; }
+        }
+
+        /// <summary>
         /// Gets/sets the soul trapped in a soul trap.
         /// </summary>
         public MobileTypes TrappedSoulType

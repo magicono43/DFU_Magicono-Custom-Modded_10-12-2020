@@ -1776,7 +1776,7 @@ namespace Wenzil.Console
                             newItem = ItemBuilder.CreateRandomMagicItem(playerEntity.Gender, playerEntity.Race, -1, -1, playerLuck);
                             break;
                         case "drug":
-                            newItem = ItemBuilder.CreateRandomDrug();
+                            newItem = ItemBuilder.CreateRandomDrug(-1, playerLuck);
                             break;
                         case "map":
                             newItem = ItemBuilder.CreateItem(ItemGroups.MiscItems, (int)MiscItems.Map);

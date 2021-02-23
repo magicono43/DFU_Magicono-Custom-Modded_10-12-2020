@@ -92,7 +92,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             {
                 ChangeStatMod(DFCareer.Stats.Willpower, UnityEngine.Random.Range(3, 7 + 1));
                 ChangeStatMod(DFCareer.Stats.Agility, UnityEngine.Random.Range(3, 5 + 1));
-                ChangeStatMod(DFCareer.Stats.Endurance, UnityEngine.Random.Range(3, 4 + 1));
+                ChangeStatMod(DFCareer.Stats.Endurance, -UnityEngine.Random.Range(3, 4 + 1));
                 host.Entity.DecreaseHealth(UnityEngine.Random.Range(2, 5 + 1));
                 DaggerfallUI.AddHUDText("You feel more relaxed and limber", 4f);
                 return;

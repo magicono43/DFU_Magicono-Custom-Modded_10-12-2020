@@ -194,6 +194,11 @@ namespace DaggerfallWorkshop.Game.Items
         Sursum = 79,
         Quaesto_Vil = 80,
         Aegrotat = 81,
+        Tobacco = 4417,
+        Moon_Sugar = 4418,
+        Skooma = 4419,
+        Incense_of_Mara = 4420,
+        Sleeping_Tree_Sap = 4421,
     }
 
     public enum UselessItems1 //checked
@@ -490,7 +495,6 @@ namespace DaggerfallWorkshop.Game.Items
         Stinkhorn = 4414,
         Summer_Bolete = 4415,
         Tinder_Polypore = 4416,
-        Tobacco = 4417,
     }
 
     public enum FlowerPlantIngredients
