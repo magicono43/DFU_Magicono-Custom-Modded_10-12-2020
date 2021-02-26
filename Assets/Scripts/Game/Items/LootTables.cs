@@ -696,7 +696,7 @@ namespace DaggerfallWorkshop.Game.Items
                     AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 10, 0.5f, targetItems);
                     break;
                 case (int)DFRegion.DungeonTypes.Prison:
-                    AddSpecificRandomItems(ItemGroups.ReligiousItems, 25, 0.5f, targetItems, (int)ReligiousItems.Common_symbol, (int)ReligiousItems.Prayer_beads, (int)ReligiousItems.Bell);
+                    AddSpecificRandomItems(ItemGroups.ReligiousItems, 25, 0.5f, targetItems, (int)ReligiousItems.Common_symbol, (int)ReligiousItems.Prayer_beads);
                     break;
                 case (int)DFRegion.DungeonTypes.DesecratedTemple:
                     AddSpecificRandomItems(ItemGroups.Jewellery, 15, 0.5f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
@@ -716,7 +716,7 @@ namespace DaggerfallWorkshop.Game.Items
                     AddIngredGroupRandomItems(ItemGroups.FruitPlantIngredients, 40, 0.4f, targetItems);
                     AddIngredGroupRandomItems(ItemGroups.MiscPlantIngredients, 50, 0.4f, targetItems);
                     AddIngredGroupRandomItems(ItemGroups.FlowerPlantIngredients, 30, 0.5f, targetItems);
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 20, 0.3f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc, (int)Jewellery.Mark, (int)Jewellery.Cloth_amulet);
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 20, 0.3f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc, (int)Jewellery.Cloth_amulet);
                     break;
                 case (int)DFRegion.DungeonTypes.VampireHaunt:
                     AddSpecificRandomItems(ItemGroups.Jewellery, 15, 0.5f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
@@ -753,7 +753,7 @@ namespace DaggerfallWorkshop.Game.Items
                     AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 50, 0.5f, targetItems, (int)AnimalPartIngredients.Small_scorpion_stinger, (int)AnimalPartIngredients.Giant_scorpion_stinger);
                     break;
                 case (int)DFRegion.DungeonTypes.Cemetery:
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 25, 0.6f, targetItems, (int)Jewellery.Bracer, (int)Jewellery.Cloth_amulet, (int)Jewellery.Mark);
+                    AddSpecificRandomItems(ItemGroups.Jewellery, 25, 0.6f, targetItems, (int)Jewellery.Bracer, (int)Jewellery.Cloth_amulet);
                     AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 10, 0.6f, targetItems);
                     break;
                 default:
@@ -1521,7 +1521,7 @@ namespace DaggerfallWorkshop.Game.Items
                         targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.FruitPlantIngredients, enemyLevel));
                     rolledStackSize = FormulaHelper.PickOneOfCompact(1, 12, 2, 1);
                     for (int i = 0; i < rolledStackSize; i++)
-                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.SolventIngredients, enemyLevel, -1, (int)SolventIngredients.Ichor, (int)SolventIngredients.Elixir_vitae, (int)SolventIngredients.Holy_relic));
+                        targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(ItemGroups.SolventIngredients, enemyLevel, -1, (int)SolventIngredients.Ichor, (int)SolventIngredients.Elixir_vitae));
                 }
 
                 if (traits[2] == (int)MobilePersonalityInterests.Anthophile)

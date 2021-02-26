@@ -289,6 +289,9 @@ namespace DaggerfallWorkshop.Game.Items
                 case ItemGroups.Bracelet_Jewelry:
                     result = GetFirstSlot(EquipSlots.Bracelet0, EquipSlots.Bracelet1);
                     break;
+                case ItemGroups.Magic_Amplifiers:
+                    result = GetFirstSlot(EquipSlots.Mark0, EquipSlots.Mark1); // Will likely change later when I make scepters and wands possibly equip onto left-hand instead of an accessory slot, for not this is just for the mark item. 
+                    break;
                 case ItemGroups.Armor:
                     result = GetArmorSlot(item);
                     break;
@@ -426,8 +429,6 @@ namespace DaggerfallWorkshop.Game.Items
                     return GetFirstSlot(EquipSlots.Ring0, EquipSlots.Ring1);
                 case Jewellery.Bracelet:
                     return GetFirstSlot(EquipSlots.Bracelet0, EquipSlots.Bracelet1);
-                case Jewellery.Mark:
-                    return GetFirstSlot(EquipSlots.Mark0, EquipSlots.Mark1);
                 default:
                     return EquipSlots.None;
             }

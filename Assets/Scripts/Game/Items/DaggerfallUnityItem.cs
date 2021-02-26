@@ -861,6 +861,7 @@ namespace DaggerfallWorkshop.Game.Items
                 case ItemGroups.Earing_Jewelry:
                 case ItemGroups.Neck_Jewelry:
                 case ItemGroups.Bracelet_Jewelry:
+                case ItemGroups.Magic_Amplifiers:
                     return SoundClips.EquipJewellery;
                 case ItemGroups.Armor:
                     if (GetIsShield() || TemplateIndex == (int)Armor.Helm)

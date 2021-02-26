@@ -75,6 +75,18 @@ namespace DaggerfallWorkshop.Game.Items
         Earing_Jewelry = 45,
         Neck_Jewelry = 46,
         Bracelet_Jewelry = 47,
+        General_Tools = 48,
+        Repair_Tools = 49,
+        Musical_Instruments = 50,
+        Containers = 51,
+        Liquid_Containers = 52,
+        Magic_Amplifiers = 53,
+        Flavor_Tools = 54,
+        Toys = 55,
+        Sex_Toys = 56,
+        Corpse_Parts = 57,
+        Occult_Objects = 58,
+        Junk = 59,
     }
 
     /// <summary>
@@ -370,6 +382,8 @@ namespace DaggerfallWorkshop.Game.Items
         Small_tapestry = 243,
         Large_skins = 244,
         Small_skins = 245,
+        Tent = 4836,
+        Trunk = 4837,
     }
 
     public enum UselessItems2 //checked
@@ -382,12 +396,145 @@ namespace DaggerfallWorkshop.Game.Items
         Parchment = 279,
     }
 
+    public enum General_Tools
+    {
+        Compass = 4800,
+        Rope = 4801,
+        Matchbox = 4802,
+        Spade = 4803,
+        Pickaxe = 4804,
+        Fishing_Pole = 4805,
+        Fishing_Rod = 4806,
+        Smoking_Pipe = 4807,
+    }
+
+    public enum Repair_Tools
+    {
+        Whetstone = 4808,
+        Epoxy_Glue = 4809,
+        Sewing_Kit = 4810,
+        Armorers_Hammer = 4811,
+        Jewelers_Pliers = 4812,
+        Charging_Powder = 4813,
+    }
+
+    public enum Musical_Instruments
+    {
+        Lute = 4814,
+        Hand_Drum = 4815,
+        Flute = 4816,
+        Oboe = 4817,
+        Ney = 4818,
+    }
+
+    public enum Containers
+    {
+        Quiver = 4819,
+        Satchel = 4820,
+        Pouch = 4821,
+        Urn = 4822,
+        Bucket = 4823,
+        Barrel = 4824,
+        Lockbox = 4825,
+        Snuff_Box = 4826,
+    }
+
+    public enum Liquid_Containers
+    {
+        Empty_Bottle = 4827,
+        Hip_Flask = 4828,
+        Wooden_Cup = 4829,
+        Tin_Goblet = 4830,
+        Silver_Goblet = 4831,
+        Gold_Goblet = 4832,
+        Gem_Encrusted_Silver_Goblet = 4833,
+        Gem_Encrusted_Gold_Goblet = 4834,
+    }
+
+    public enum Magic_Amplifiers
+    {
+        Mark = 137,
+        Wand = 140,
+        Scepter = 4835,
+    }
+
+    public enum Flavor_Tools
+    {
+        Bell = 261,
+        Basket = 4838,
+        Bellows = 4839,
+        Broom = 4840,
+        Brush = 4841,
+        Cane = 4842,
+        Painters_Palette = 4843,
+        Frying_Pan = 4844,
+        Hour_Glass = 4845,
+        Magnifying_Glass = 4846,
+        Mallet = 4847,
+        Metal_Scoop = 4848,
+        Mirror = 4849,
+        Net = 4850,
+        Inside_Caliper = 4851,
+        Outside_Caliper = 4852,
+        Paint_Brush = 4853,
+        Proportional_Divider = 4854,
+        Quill_And_Ink_Well = 4855,
+        Scroll = 4856,
+        Scythe = 4857,
+        Shears = 4858,
+        Spectacles = 4859,
+        Spyglass = 4860,
+        Tongs = 4861,
+        Triangle_Ruler = 4862,
+        Trowel = 4863,
+        Wooden_Scoop = 4864,
+        Wooden_Shovel = 4865,
+        Wooden_Spoon = 4866,
+    }
+
+    public enum Toys
+    {
+        Doll = 4867,
+        Toy_Horse = 4868,
+        Toy_House = 4869,
+        Toy_Anvil = 4870,
+        Wooden_Puzzle_Box = 4871,
+    }
+
+    public enum Sex_Toys
+    {
+        Blindfold = 4872,
+        Gag = 4873,
+        Handcuffs = 4874,
+        Sex_Toy = 4875,
+    }
+
+    public enum Corpse_Parts
+    {
+        Bone = 4876,
+        Skeletal_Arm = 4877,
+        Animal_Carcass = 4878,
+        Animal_Skull = 4879,
+        Humanoid_Skull = 4880,
+    }
+
+    public enum Occult_Objects
+    {
+        Occult_Fetish = 4881,
+        Demonic_Figurine = 4882,
+    }
+
+    public enum Junk
+    {
+        Dirty_Rags = 4884,
+    }
+
     public enum ReligiousItems  //checked
     {
+        Holy_relic = 55,
         Prayer_beads = 258,
         Rare_symbol = 259,
         Common_symbol = 260,
-        Bell = 261,
         Holy_water = 262,
         Talisman = 263,
         Religious_item = 264,
@@ -397,6 +544,7 @@ namespace DaggerfallWorkshop.Game.Items
         Holy_candle = 269,
         Holy_dagger = 270,
         Holy_tome = 271,
+        Religious_Icon = 4883,
     }
 
     public enum Maps //checked
@@ -586,7 +734,6 @@ namespace DaggerfallWorkshop.Game.Items
 
     public enum SolventIngredients
     {
-        Holy_relic = 55,
         Pure_water = 59,
         Rain_water = 60,
         Elixir_vitae = 62,
@@ -632,10 +779,8 @@ namespace DaggerfallWorkshop.Game.Items
         Bracer = 134,
         Ring = 135,
         Bracelet = 136,
-        Mark = 137,
         Torc = 138,
         Cloth_amulet = 139,
-        Wand = 140,
     }
 
     public enum Tiara_Jewelry
