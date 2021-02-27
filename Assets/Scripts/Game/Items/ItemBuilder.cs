@@ -870,6 +870,35 @@ namespace DaggerfallWorkshop.Game.Items
             return drug;
         }
 
+        /// <summary>
+        /// Creates a new random item of specified itemgroup.
+        /// </summary>
+        /// <returns>DaggerfallUnityItem.</returns>
+        public static DaggerfallUnityItem CreateRandomItemOfItemgroup(ItemGroups itemGroup, int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
+        {
+            List<DaggerfallUnityItem> itemList = new List<DaggerfallUnityItem>();
+
+            Array enumArray = DaggerfallUnity.Instance.ItemHelper.GetEnumArray(itemGroup);
+            for (int i = 0; i < enumArray.Length; i++)
+            {
+                //int itemID = (int)enumArray.GetValue(i); // Apparently this line of code is unneeded?
+                DaggerfallUnityItem itemDummyChecked = new DaggerfallUnityItem(itemGroup, i, true);
+                if (discrimItemIDs.Length > 0 && discrimItemIDs.Contains(itemDummyChecked.TemplateIndex))
+                    continue;
+                itemList.Add(itemDummyChecked);
+            }
+
+            int chosenItemID = ChooseItemFromFilteredList(itemList, enemyLevel, playerLuck);
+
+            // Create item
+            DaggerfallUnityItem item = new DaggerfallUnityItem(itemGroup, chosenItemID);
+
+            if (item.TotalVariants >= 2)
+                item.CurrentVariant = UnityEngine.Random.Range(0, item.TotalVariants); // Only set random texture variant when item has more than 1 avaliable variant to be used. 
+
+            return item;
+        }
+
         public static int ChooseItemFromFilteredList(List<DaggerfallUnityItem> itemList, int enemyLevel = -1, int playerLuck = -1)
         {
             int[] itemRolls = new int[] { };

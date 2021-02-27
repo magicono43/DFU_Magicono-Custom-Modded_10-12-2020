@@ -1898,7 +1898,14 @@ namespace DaggerfallWorkshop.Game.Items
         {
             // Handle world texture
             if (UseWorldTexture())
-                return worldTextureRecord;
+            {
+                if (ItemTemplate.variants > 0)
+                {
+                    return currentVariant;
+                }
+                else
+                    return worldTextureRecord;
+            }
 
             // Use texture record retrieved from MAGIC.DEF for artifacts. Otherwise the below code will give the Oghma Infinium record 2, from the "Book" template.
             if (IsArtifact)
@@ -2006,6 +2013,54 @@ namespace DaggerfallWorkshop.Game.Items
 
             // Handle misc items
             if (itemGroup == ItemGroups.MiscItems)
+                return true;
+
+            // Handle General Tool items
+            if (itemGroup == ItemGroups.General_Tools)
+                return true;
+
+            // Handle Repair Tool items
+            if (itemGroup == ItemGroups.Repair_Tools)
+                return true;
+
+            // Handle Musical Instruments items
+            if (itemGroup == ItemGroups.Musical_Instruments)
+                return true;
+
+            // Handle Containers items
+            if (itemGroup == ItemGroups.Containers)
+                return true;
+
+            // Handle Liquid Containers items
+            if (itemGroup == ItemGroups.Liquid_Containers)
+                return true;
+
+            // Handle Magic Amplifiers items
+            if (itemGroup == ItemGroups.Magic_Amplifiers) // Will likely have to change this later if I ever make the scepters and wands equippable on the paper-doll. 
+                return true;
+
+            // Handle Flavor Tools items
+            if (itemGroup == ItemGroups.Flavor_Tools)
+                return true;
+
+            // Handle Toys items
+            if (itemGroup == ItemGroups.Toys)
+                return true;
+
+            // Handle Sex Toys items
+            if (itemGroup == ItemGroups.Sex_Toys)
+                return true;
+
+            // Handle Corpse Parts items
+            if (itemGroup == ItemGroups.Corpse_Parts)
+                return true;
+
+            // Handle Occult Objects items
+            if (itemGroup == ItemGroups.Occult_Objects)
+                return true;
+
+            // Handle Junk items
+            if (itemGroup == ItemGroups.Junk)
                 return true;
 
             return false;

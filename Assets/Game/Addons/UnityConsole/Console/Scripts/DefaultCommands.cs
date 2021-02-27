@@ -1708,7 +1708,7 @@ namespace Wenzil.Console
         {
             public static readonly string name = "add";
             public static readonly string description = "Adds n inventory items to the character, based on the given keyword. n = 1 by default";
-            public static readonly string usage = "add (book|weapon|armor|cloth|ingr|gem|jewel|potion|relig|soul|gold|magic|drug|map|torch|soultrap|ingot) [n]";
+            public static readonly string usage = "add (book|weapon|armor|cloth|ingr|gem|jewel|potion|relig|soul|gold|magic|drug|map|torch|soultrap|gentool|reptool|instrument|container|liqcontainer|magamp|flavtool|toy|sxtoy|corprt|occult|junk|ingot) [n]";
 
             public static string Execute(params string[] args)
             {
@@ -1786,6 +1786,42 @@ namespace Wenzil.Console
                             break;
                         case "soultrap":
                             newItem = ItemBuilder.CreateItem(ItemGroups.MiscItems, (int)MiscItems.Soul_trap);
+                            break;
+                        case "gentool":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.General_Tools, -1, -1, playerLuck);
+                            break;
+                        case "reptool":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Repair_Tools, -1, -1, playerLuck);
+                            break;
+                        case "instrument":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Musical_Instruments, -1, -1, playerLuck);
+                            break;
+                        case "container":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Containers, -1, -1, playerLuck);
+                            break;
+                        case "liqcontainer":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Liquid_Containers, -1, -1, playerLuck);
+                            break;
+                        case "magamp":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Magic_Amplifiers, -1, -1, playerLuck);
+                            break;
+                        case "flavtool":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Flavor_Tools, -1, -1, playerLuck);
+                            break;
+                        case "toy":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Toys, -1, -1, playerLuck);
+                            break;
+                        case "sxtoy":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Sex_Toys, -1, -1, playerLuck);
+                            break;
+                        case "corprt":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Corpse_Parts, -1, -1, playerLuck);
+                            break;
+                        case "occult":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Occult_Objects, -1, -1, playerLuck);
+                            break;
+                        case "junk":
+                            newItem = ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Junk, -1, -1, playerLuck);
                             break;
                         case "ingot":
                             newItem = ItemBuilder.CreateRandomIngot(-1, -1, playerLuck);
