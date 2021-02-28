@@ -125,15 +125,22 @@ namespace DaggerfallWorkshop.Game.Items
         /// <returns>DaggerfallUnityItem.</returns>
         public static DaggerfallUnityItem CreateItem(ItemGroups itemGroup, int templateIndex)
         {
+            DaggerfallUnityItem newItem = null;
+
             // Handle custom items
             if (templateIndex > ItemHelper.LastDFTemplate)
             {
                 // Allow custom item classes to be instantiated when registered
                 Type itemClassType;
                 if (DaggerfallUnity.Instance.ItemHelper.GetCustomItemClass(templateIndex, out itemClassType))
-                    return (DaggerfallUnityItem)Activator.CreateInstance(itemClassType);
+                    newItem = (DaggerfallUnityItem)Activator.CreateInstance(itemClassType);
                 else
-                    return new DaggerfallUnityItem(itemGroup, templateIndex);
+                    newItem = new DaggerfallUnityItem(itemGroup, templateIndex);
+
+                if (newItem.TotalVariants >= 2)
+                    newItem.CurrentVariant = UnityEngine.Random.Range(0, newItem.TotalVariants); // Only set random texture variant when item has more than 1 avaliable variant to be used. 
+
+                return newItem;
             }
 
             // Create classic item
@@ -143,7 +150,10 @@ namespace DaggerfallWorkshop.Game.Items
                 Debug.LogErrorFormat("ItemBuilder.CreateItem() encountered an item with an invalid GroupIndex. Check you're passing 'template index' matching a value in ItemEnums - e.g. (int)Weapons.Dagger NOT a 'group index' (e.g. 0).");
                 return null;
             }
-            DaggerfallUnityItem newItem = new DaggerfallUnityItem(itemGroup, groupIndex);
+            newItem = new DaggerfallUnityItem(itemGroup, groupIndex);
+
+            if (newItem.TotalVariants >= 2)
+                newItem.CurrentVariant = UnityEngine.Random.Range(0, newItem.TotalVariants); // Only set random texture variant when item has more than 1 avaliable variant to be used. 
 
             return newItem;
         }

@@ -5767,7 +5767,7 @@
         "capacityOrTarget": 0,
         "basePrice": 2,
         "enchantmentPoints": 0,
-        "rarity": 0,
+        "rarity": 5,
         "variants": 0,
         "drawOrderOrEffect": 0,
         "isBluntWeapon": false,

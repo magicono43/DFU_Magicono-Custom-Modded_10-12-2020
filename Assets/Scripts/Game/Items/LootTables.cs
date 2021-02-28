@@ -503,10 +503,10 @@ namespace DaggerfallWorkshop.Game.Items
             AddIngredientsBasedOnEnemy(AITarget, traits, items);
 
             // Extra flavor/junk items (mostly based on personality traits, if present)
-            /*if (traits[0] > -1 || traits[1] > -1 || traits[2] > -1)
+            if (traits[0] > -1 || traits[1] > -1 || traits[2] > -1)
             {
-                PersonalityTraitFlavorItemsGenerator(AITarget, traits, items); // Items not yet implemented.
-            }*/
+                PersonalityTraitFlavorItemsGenerator(AITarget, traits, items);
+            }
 
             return items.ToArray();
         }
@@ -781,37 +781,84 @@ namespace DaggerfallWorkshop.Game.Items
             {
                 if (traits[0] == (int)MobilePersonalityQuirks.Curious || traits[1] == (int)MobilePersonalityQuirks.Curious)
                 {
-                    int randRange = Random.Range(1, 3 + 1);
+                    int randRange = Random.Range(2, 4 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                    {
+                        if (Dice100.SuccessRoll(70))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, (int)UselessItems2.Parchment)); // Not sure best way how to do this part with the different item groups, so hopefully this will work for now. 
+                        else
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Flavor_Tools, FormulaHelper.PickOneOfCompact((int)Flavor_Tools.Scroll, 30, (int)Flavor_Tools.Spectacles, 55, (int)Flavor_Tools.Magnifying_Glass, 70)));
+                    }
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Addict || traits[1] == (int)MobilePersonalityQuirks.Addict)
                 {
-                    int randRange = Random.Range(2, 6 + 1);
+                    int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateRandomDrug(level, -1, (int)Drugs.Aegrotat, (int)Drugs.Incense_of_Mara, (int)Drugs.Sleeping_Tree_Sap));
+
+                    randRange = Random.Range(1, 3 + 1);
+                    for (int i = 0; i < randRange; i++)
+                    {
+                        if (Dice100.SuccessRoll(40))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.General_Tools, FormulaHelper.PickOneOfCompact((int)General_Tools.Smoking_Pipe, 20, (int)General_Tools.Matchbox, 10)));
+                        else if (Dice100.SuccessRoll(40))
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Containers, (int)Containers.Snuff_Box));
+                        else
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Flavor_Tools, (int)Flavor_Tools.Metal_Scoop));
+                    }
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Nyctophobic || traits[1] == (int)MobilePersonalityQuirks.Nyctophobic)
+                {
+                    int randRange = Random.Range(1, 2 + 1);
+                    for (int i = 0; i < randRange; i++)
+                    {
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.General_Tools, (int)General_Tools.Matchbox));
+                    }
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Hoarder || traits[1] == (int)MobilePersonalityQuirks.Hoarder)
                 {
-                    int randRange = Random.Range(6, 18 + 1);
+                    int randRange = Random.Range(6, 11 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                    {
+                        if (Dice100.SuccessRoll(70))
+                            targetItems.Add(ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Flavor_Tools, level, -1));
+                        else if (Dice100.SuccessRoll(50))
+                            targetItems.Add(ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Containers, level, -1, (int)Containers.Barrel, (int)Containers.Lockbox, (int)Containers.Snuff_Box));
+                        else if (Dice100.SuccessRoll(50))
+                            targetItems.Add(ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Liquid_Containers, level, -1, (int)Liquid_Containers.Gem_Encrusted_Silver_Goblet, (int)Liquid_Containers.Gem_Encrusted_Gold_Goblet));
+                        else
+                            targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Junk, (int)Junk.Dirty_Rags));
+                    }
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Vain || traits[1] == (int)MobilePersonalityQuirks.Vain)
                 {
-                    int randRange = Random.Range(2, 7 + 1);
+                    int randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished. 
+                        targetItems.Add(ItemBuilder.CreateRandomJewelryOfRandomSlot(level, -1, (int)Crown_Jewelry.Gem_Encrusted_Silver_Crown, (int)Crown_Jewelry.Gem_Encrusted_Gold_Crown));
+
+                    randRange = Random.Range(1, 3 + 1);
+                    for (int i = 0; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomGem(level, -1));
+
+                    randRange = Random.Range(1, 3 + 1);
+                    for (int i = 0; i < randRange; i++)
+                    {
+                        if (Dice100.SuccessRoll(15))
+                            targetItems.Add(ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Liquid_Containers, level, -1, (int)Liquid_Containers.Empty_Bottle, (int)Liquid_Containers.Wooden_Cup, (int)Liquid_Containers.Hip_Flask));
+                    }
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Untrusting || traits[1] == (int)MobilePersonalityQuirks.Untrusting)
                 {
-                    int randRange = Random.Range(1, 3 + 1);
+                    int randRange = Random.Range(1, 2 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, FormulaHelper.PickOneOfCompact(811, 1, 812, 1, 813, 1, 814, 1))); // Item ID will be whatever the respective item IDs are in their respective itemgroup Enum, when finished.
+                    {
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Containers, (int)Containers.Lockbox));
+                    }
                     // This won't work the same as the others, since it in theory will be placing existing items into a seperate lock-box inventory type of item, will need a lot of work on this one eventually.
                 }
 
