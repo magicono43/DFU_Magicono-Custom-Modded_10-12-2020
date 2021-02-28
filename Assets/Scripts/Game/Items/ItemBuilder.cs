@@ -676,6 +676,16 @@ namespace DaggerfallWorkshop.Game.Items
         }
 
         /// <summary>
+        /// Creates a random painting.
+        /// </summary>
+        public static DaggerfallUnityItem CreateRandomPainting()
+        {
+            DaggerfallUnityItem newPainting = new DaggerfallUnityItem(ItemGroups.Paintings, 0);
+
+            return newPainting;
+        }
+
+        /// <summary>
         /// Creates a new random religious item.
         /// </summary>
         /// <returns>DaggerfallUnityItem.</returns>
