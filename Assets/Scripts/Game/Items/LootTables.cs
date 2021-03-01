@@ -670,14 +670,14 @@ namespace DaggerfallWorkshop.Game.Items
             }
         }
 
-        public static void AddIngredGroupRandomItems(ItemGroups itemGroup, float chance, float chanceMod, List<DaggerfallUnityItem> targetItems)
+        public static void AddIngredGroupRandomItems(ItemGroups itemGroup, float chance, float chanceMod, List<DaggerfallUnityItem> targetItems, params int[] itemIndices)
         {
             PlayerEntity player = GameManager.Instance.PlayerEntity;
             int playerLuckRaw = player.Stats.LiveLuck;
 
             while (Dice100.SuccessRoll((int)chance))
             {
-                targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(itemGroup, -1, playerLuckRaw));
+                targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(itemGroup, -1, playerLuckRaw, itemIndices));
                 chance *= chanceMod;
             }
         }
@@ -687,86 +687,182 @@ namespace DaggerfallWorkshop.Game.Items
             switch (dungeonIndex)
             {
                 case (int)DFRegion.DungeonTypes.Crypt:
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 30, 0.6f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
-                    AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 20, 0.4f, targetItems);
+                    AddRandomJewelryItem(30, 0.6f, targetItems, (int)Crown_Jewelry.Gem_Encrusted_Silver_Crown, (int)Crown_Jewelry.Gem_Encrusted_Gold_Crown);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.ReligiousItems, 20, 0.4f, targetItems);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 60, 0.5f, targetItems, (int)Corpse_Parts.Animal_Carcass, (int)Corpse_Parts.Animal_Skull, (int)Corpse_Parts.Charred_Bone, (int)Corpse_Parts.Charred_Remains, (int)Corpse_Parts.Charred_Animal_Skull, (int)Corpse_Parts.Charred_Humanoid_Skull);
+                    AddSpecificRandomItems(ItemGroups.Containers, 20, 0.1f, targetItems, (int)Containers.Urn);
+                    AddSpecificRandomItems(ItemGroups.General_Tools, 20, 0.1f, targetItems, (int)General_Tools.Spade);
                     break;
                 case (int)DFRegion.DungeonTypes.OrcStronghold:
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 30, 0.3f, targetItems, (int)Corpse_Parts.Humanoid_Skull, (int)Corpse_Parts.Skeletal_Arm, (int)Corpse_Parts.Charred_Remains, (int)Corpse_Parts.Charred_Humanoid_Skull);
+                    AddSpecificRandomItems(ItemGroups.Liquid_Containers, 50, 0.6f, targetItems, (int)Liquid_Containers.Empty_Bottle, (int)Liquid_Containers.Wooden_Cup);
+                    AddSpecificRandomItems(ItemGroups.Containers, 15, 0.1f, targetItems, (int)Containers.Barrel, (int)Containers.Bucket, (int)Containers.Snuff_Box);
+                    AddSpecificRandomItems(ItemGroups.Repair_Tools, 15, 0.5f, targetItems, (int)Repair_Tools.Armorers_Hammer, (int)Repair_Tools.Whetstone);
+                    AddSpecificRandomItems(ItemGroups.Flavor_Tools, 30, 0.5f, targetItems, (int)Flavor_Tools.Bellows, (int)Flavor_Tools.Metal_Scoop, (int)Flavor_Tools.Tongs);
+                    AddSpecificRandomItems(ItemGroups.Junk, 30, 0.4f, targetItems, (int)Junk.Dirty_Rags, (int)Junk.Broken_Glass);
                     break;
                 case (int)DFRegion.DungeonTypes.HumanStronghold:
-                    AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 10, 0.5f, targetItems);
+                    AddRandomJewelryItem(10, 0.1f, targetItems, (int)Crown_Jewelry.Gem_Encrusted_Silver_Crown, (int)Crown_Jewelry.Gem_Encrusted_Gold_Crown, (int)Crown_Jewelry.Gold_Crown, (int)Crown_Jewelry.Silver_Crown);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.ReligiousItems, 10, 0.5f, targetItems);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 15, 0.2f, targetItems, (int)Corpse_Parts.Humanoid_Skull, (int)Corpse_Parts.Skeletal_Arm, (int)Corpse_Parts.Charred_Remains, (int)Corpse_Parts.Charred_Humanoid_Skull);
+                    AddSpecificRandomItems(ItemGroups.Liquid_Containers, 20, 0.4f, targetItems, (int)Liquid_Containers.Empty_Bottle, (int)Liquid_Containers.Wooden_Cup, (int)Liquid_Containers.Tin_Goblet);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Containers, 20, 0.4f, targetItems, (int)Containers.Lockbox, (int)Containers.Urn);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Repair_Tools, 10, 0.1f, targetItems, (int)Repair_Tools.Charging_Powder);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Flavor_Tools, 25, 0.3f, targetItems, (int)Flavor_Tools.Scythe, (int)Flavor_Tools.Net, (int)Flavor_Tools.Cane);
+                    AddSpecificRandomItems(ItemGroups.Junk, 15, 0.5f, targetItems, (int)Junk.Dirty_Rags, (int)Junk.Broken_Glass);
                     break;
                 case (int)DFRegion.DungeonTypes.Prison:
                     AddSpecificRandomItems(ItemGroups.ReligiousItems, 25, 0.5f, targetItems, (int)ReligiousItems.Common_symbol, (int)ReligiousItems.Prayer_beads);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 20, 0.5f, targetItems);
+                    AddSpecificRandomItems(ItemGroups.Liquid_Containers, 40, 0.6f, targetItems, (int)Liquid_Containers.Empty_Bottle, (int)Liquid_Containers.Wooden_Cup);
+                    AddSpecificRandomItems(ItemGroups.Containers, 20, 0.2f, targetItems, (int)Containers.Barrel, (int)Containers.Bucket, (int)Containers.Snuff_Box);
+                    AddSpecificRandomItems(ItemGroups.Sex_Toys, 60, 0.4f, targetItems, (int)Sex_Toys.Blindfold, (int)Sex_Toys.Handcuffs);
+                    AddSpecificRandomItems(ItemGroups.Flavor_Tools, 35, 0.4f, targetItems, (int)Flavor_Tools.Broom, (int)Flavor_Tools.Wooden_Scoop, (int)Flavor_Tools.Wooden_Shovel, (int)Flavor_Tools.Wooden_Spoon, (int)Flavor_Tools.Wooden_Bowl);
+                    AddSpecificRandomItems(ItemGroups.Junk, 45, 0.3f, targetItems, (int)Junk.Dirty_Rags, (int)Junk.Broken_Glass, (int)Junk.Feces);
                     break;
                 case (int)DFRegion.DungeonTypes.DesecratedTemple:
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 15, 0.5f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
-                    AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 45, 0.6f, targetItems);
+                    AddRandomJewelryItem(15, 0.5f, targetItems, (int)Crown_Jewelry.Gem_Encrusted_Silver_Crown, (int)Crown_Jewelry.Gem_Encrusted_Gold_Crown, (int)Crown_Jewelry.Gold_Crown, (int)Crown_Jewelry.Silver_Crown);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.ReligiousItems, 45, 0.6f, targetItems);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Occult_Objects, 15, 0.4f, targetItems);
+                    AddSpecificRandomItems(ItemGroups.Liquid_Containers, 15, 0.4f, targetItems, (int)Liquid_Containers.Silver_Goblet, (int)Liquid_Containers.Gold_Goblet);
+                    AddSpecificRandomItems(ItemGroups.Junk, 15, 0.5f, targetItems, (int)Junk.Masonry_Rubble);
                     break;
                 case (int)DFRegion.DungeonTypes.Mine:
+                    AddSpecificRandomItems(ItemGroups.General_Tools, 55, 0.6f, targetItems, (int)General_Tools.Pickaxe, (int)General_Tools.Spade, (int)General_Tools.Rope);
+                    AddSpecificRandomItems(ItemGroups.Containers, 35, 0.5f, targetItems, (int)Containers.Barrel, (int)Containers.Bucket);
+                    AddSpecificRandomItems(ItemGroups.Flavor_Tools, 30, 0.6f, targetItems, (int)Flavor_Tools.Mallet, (int)Flavor_Tools.Metal_Scoop, (int)Flavor_Tools.Wooden_Scoop, (int)Flavor_Tools.Wooden_Shovel);
+                    AddSpecificRandomItems(ItemGroups.Junk, 60, 0.4f, targetItems, (int)Junk.Rock_Rubble);
                     AddIngredGroupRandomItems(ItemGroups.MetalIngredients, 65, 0.4f, targetItems);
                     break;
                 case (int)DFRegion.DungeonTypes.NaturalCave:
-                    AddIngredGroupRandomItems(ItemGroups.MiscPlantIngredients, 45, 0.6f, targetItems);
-                    AddIngredGroupRandomItems(ItemGroups.FruitPlantIngredients, 25, 0.6f, targetItems);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 65, 0.4f, targetItems, (int)Corpse_Parts.Humanoid_Skull, (int)Corpse_Parts.Skeletal_Arm, (int)Corpse_Parts.Charred_Remains, (int)Corpse_Parts.Charred_Humanoid_Skull, (int)Corpse_Parts.Charred_Bone, (int)Corpse_Parts.Charred_Animal_Skull);
+                    AddSpecificRandomItems(ItemGroups.Containers, 20, 0.5f, targetItems, (int)Containers.Satchel, (int)Containers.Pouch);
+                    AddSpecificRandomItems(ItemGroups.Furniture, 10, 0.2f, targetItems, (int)Furniture.Tent);
+                    AddSpecificRandomItems(ItemGroups.Junk, 25, 0.4f, targetItems, (int)Junk.Feces, (int)Junk.Rock_Rubble, (int)Junk.Webbing);
+                    AddIngredGroupRandomItems(ItemGroups.MiscPlantIngredients, 45, 0.6f, targetItems, (int)MiscPlantIngredients.Aloe, (int)MiscPlantIngredients.Arrowroot, (int)MiscPlantIngredients.Bamboo, (int)MiscPlantIngredients.Bog_Beacon, (int)MiscPlantIngredients.Garlic, (int)MiscPlantIngredients.Giant_Puffball, (int)MiscPlantIngredients.Ginkgo_leaves, (int)MiscPlantIngredients.Ginseng_Root, (int)MiscPlantIngredients.Mint, (int)MiscPlantIngredients.Onion, (int)MiscPlantIngredients.Palm, (int)MiscPlantIngredients.Pine_branch, (int)MiscPlantIngredients.Root_bulb, (int)MiscPlantIngredients.Summer_Bolete, (int)MiscPlantIngredients.Tinder_Polypore);
+                    AddIngredGroupRandomItems(ItemGroups.FruitPlantIngredients, 25, 0.6f, targetItems, (int)FruitPlantIngredients.Banana, (int)FruitPlantIngredients.Cactus, (int)FruitPlantIngredients.Fig, (int)FruitPlantIngredients.Grapes, (int)FruitPlantIngredients.Kiwi, (int)FruitPlantIngredients.Lemon, (int)FruitPlantIngredients.Lime, (int)FruitPlantIngredients.Orange, (int)FruitPlantIngredients.Pear, (int)FruitPlantIngredients.Pomegranate);
                     AddSpecificRandomItems(ItemGroups.SolventIngredients, 25, 0.5f, targetItems, (int)SolventIngredients.Rain_water);
-                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 25, 0.5f, targetItems, (int)AnimalPartIngredients.Small_tooth, (int)AnimalPartIngredients.Big_tooth, (int)AnimalPartIngredients.Snake_venom, (int)AnimalPartIngredients.Small_scorpion_stinger);
+                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 25, 0.5f, targetItems, (int)AnimalPartIngredients.Small_tooth, (int)AnimalPartIngredients.Big_tooth, (int)AnimalPartIngredients.Snake_venom, (int)AnimalPartIngredients.Small_scorpion_stinger, (int)AnimalPartIngredients.Rat_Tail);
                     break;
                 case (int)DFRegion.DungeonTypes.Coven:
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Occult_Objects, 35, 0.6f, targetItems);
+                    AddRandomJewelryItem(20, 0.3f, targetItems, (int)Crown_Jewelry.Gem_Encrusted_Silver_Crown, (int)Crown_Jewelry.Gem_Encrusted_Gold_Crown, (int)Crown_Jewelry.Gold_Crown, (int)Crown_Jewelry.Silver_Crown);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 45, 0.5f, targetItems);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Magic_Amplifiers, 20, 0.4f, targetItems);
+                    AddSpecificRandomItems(ItemGroups.Flavor_Tools, 35, 0.3f, targetItems, (int)Flavor_Tools.Brush, (int)Flavor_Tools.Cane, (int)Flavor_Tools.Mirror);
+                    AddSpecificRandomItems(ItemGroups.Repair_Tools, 1, 0.1f, targetItems, (int)Repair_Tools.Charging_Powder);
                     AddIngredGroupRandomItems(ItemGroups.CreatureIngredients, 20, 0.5f, targetItems);
-                    AddIngredGroupRandomItems(ItemGroups.FruitPlantIngredients, 40, 0.4f, targetItems);
-                    AddIngredGroupRandomItems(ItemGroups.MiscPlantIngredients, 50, 0.4f, targetItems);
+                    AddIngredGroupRandomItems(ItemGroups.FruitPlantIngredients, 35, 0.4f, targetItems, (int)FruitPlantIngredients.Banana, (int)FruitPlantIngredients.Cactus, (int)FruitPlantIngredients.Fig, (int)FruitPlantIngredients.Grapes, (int)FruitPlantIngredients.Kiwi, (int)FruitPlantIngredients.Lemon, (int)FruitPlantIngredients.Lime, (int)FruitPlantIngredients.Orange, (int)FruitPlantIngredients.Pear, (int)FruitPlantIngredients.Pomegranate);
+                    AddIngredGroupRandomItems(ItemGroups.MiscPlantIngredients, 45, 0.4f, targetItems);
                     AddIngredGroupRandomItems(ItemGroups.FlowerPlantIngredients, 30, 0.5f, targetItems);
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 20, 0.3f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc, (int)Jewellery.Cloth_amulet);
                     break;
                 case (int)DFRegion.DungeonTypes.VampireHaunt:
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 15, 0.5f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
+                    AddRandomJewelryItem(15, 0.5f, targetItems, (int)Crown_Jewelry.Gem_Encrusted_Silver_Crown, (int)Crown_Jewelry.Gem_Encrusted_Gold_Crown, (int)Crown_Jewelry.Gold_Crown, (int)Crown_Jewelry.Silver_Crown);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 45, 0.5f, targetItems);
+                    AddSpecificRandomItems(ItemGroups.Sex_Toys, 35, 0.4f, targetItems, (int)Sex_Toys.Blindfold, (int)Sex_Toys.Handcuffs, (int)Sex_Toys.Gag);
+                    AddSpecificRandomItems(ItemGroups.Junk, 25, 0.3f, targetItems, (int)Junk.Dirty_Rags, (int)Junk.Webbing);
                     break;
                 case (int)DFRegion.DungeonTypes.Laboratory:
+                    AddSpecificRandomItems(ItemGroups.UselessItems2, 60, 0.6f, targetItems, (int)UselessItems2.Parchment);
+                    AddSpecificRandomItems(ItemGroups.Liquid_Containers, 60, 0.6f, targetItems, (int)Liquid_Containers.Empty_Bottle);
+                    AddSpecificRandomItems(ItemGroups.Flavor_Tools, 60, 0.6f, targetItems, (int)Flavor_Tools.Magnifying_Glass, (int)Flavor_Tools.Metal_Scoop, (int)Flavor_Tools.Quill_And_Ink_Well, (int)Flavor_Tools.Scroll, (int)Flavor_Tools.Spectacles);
+                    AddSpecificRandomItems(ItemGroups.Repair_Tools, 1, 0.1f, targetItems, (int)Repair_Tools.Charging_Powder);
+                    AddSpecificRandomItems(ItemGroups.Junk, 25, 0.3f, targetItems, (int)Junk.Broken_Glass);
                     AddIngredGroupRandomItems(ItemGroups.MetalIngredients, 20, 0.5f, targetItems);
-                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 25, 0.5f, targetItems, (int)CreatureIngredients.Basilisk_eye, (int)CreatureIngredients.Ectoplasm, (int)CreatureIngredients.Mummy_wrappings, (int)CreatureIngredients.Troll_blood, (int)CreatureIngredients.Wraith_essence, (int)CreatureIngredients.Orcs_blood, (int)CreatureIngredients.Nymph_hair, (int)CreatureIngredients.Gorgon_snake);
+                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 25, 0.5f, targetItems, (int)CreatureIngredients.Basilisk_eye, (int)CreatureIngredients.Ectoplasm, (int)CreatureIngredients.Mummy_wrappings, (int)CreatureIngredients.Troll_blood, (int)CreatureIngredients.Wraith_essence, (int)CreatureIngredients.Orcs_blood, (int)CreatureIngredients.Nymph_hair, (int)CreatureIngredients.Gorgon_snake, (int)CreatureIngredients.Bone_Meal, (int)CreatureIngredients.Dreugh_Wax, (int)CreatureIngredients.Imp_Heart);
                     AddSpecificRandomItems(ItemGroups.SolventIngredients, 35, 0.6f, targetItems, (int)SolventIngredients.Rain_water, (int)SolventIngredients.Pure_water, (int)SolventIngredients.Nectar);
                     AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 20, 0.6f, targetItems, (int)AnimalPartIngredients.Snake_venom, (int)AnimalPartIngredients.Spider_venom);
                     break;
                 case (int)DFRegion.DungeonTypes.HarpyNest:
-                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 75, 0.6f, targetItems, (int)CreatureIngredients.Harpy_Feather);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 55, 0.4f, targetItems, (int)Corpse_Parts.Humanoid_Skull, (int)Corpse_Parts.Skeletal_Arm, (int)Corpse_Parts.Charred_Animal_Skull, (int)Corpse_Parts.Charred_Bone, (int)Corpse_Parts.Charred_Humanoid_Skull, (int)Corpse_Parts.Charred_Remains);
+                    AddSpecificRandomItems(ItemGroups.Junk, 15, 0.3f, targetItems, (int)Junk.Feces);
+                    AddSpecificRandomItems(ItemGroups.CreatureIngredients, 75, 0.7f, targetItems, (int)CreatureIngredients.Harpy_Feather);
                     break;
                 case (int)DFRegion.DungeonTypes.RuinedCastle:
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 20, 0.7f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
-                    AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 15, 0.4f, targetItems);
+                    AddRandomJewelryItem(20, 0.7f, targetItems, (int)Crown_Jewelry.Gem_Encrusted_Silver_Crown, (int)Crown_Jewelry.Gem_Encrusted_Gold_Crown);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.ReligiousItems, 15, 0.4f, targetItems);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 20, 0.4f, targetItems);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Liquid_Containers, 20, 0.5f, targetItems, (int)Liquid_Containers.Empty_Bottle, (int)Liquid_Containers.Hip_Flask, (int)Liquid_Containers.Wooden_Cup);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Containers, 15, 0.5f, targetItems, (int)Containers.Lockbox, (int)Containers.Snuff_Box);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Flavor_Tools, 20, 0.5f, targetItems, (int)Flavor_Tools.Scythe, (int)Flavor_Tools.Net, (int)Flavor_Tools.Cane);
+                    AddSpecificRandomItems(ItemGroups.Junk, 20, 0.4f, targetItems, (int)Junk.Dirty_Rags, (int)Junk.Broken_Glass, (int)Junk.Masonry_Rubble);
                     break;
                 case (int)DFRegion.DungeonTypes.SpiderNest:
-                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 45, 0.5f, targetItems, (int)AnimalPartIngredients.Spider_venom);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 65, 0.4f, targetItems, (int)Corpse_Parts.Charred_Remains, (int)Corpse_Parts.Charred_Humanoid_Skull, (int)Corpse_Parts.Charred_Bone, (int)Corpse_Parts.Charred_Animal_Skull);
+                    AddSpecificRandomItems(ItemGroups.Junk, 65, 0.6f, targetItems, (int)Junk.Webbing, (int)Junk.Egg_Sack_Remains);
+                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 45, 0.5f, targetItems, (int)AnimalPartIngredients.Spider_venom, (int)AnimalPartIngredients.Rat_Tail);
                     break;
                 case (int)DFRegion.DungeonTypes.GiantStronghold:
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 45, 0.3f, targetItems);
+                    AddSpecificRandomItems(ItemGroups.Liquid_Containers, 30, 0.5f, targetItems, (int)Liquid_Containers.Empty_Bottle);
+                    AddSpecificRandomItems(ItemGroups.Junk, 35, 0.6f, targetItems, (int)Junk.Broken_Glass, (int)Junk.Feces);
                     break;
                 case (int)DFRegion.DungeonTypes.DragonsDen:
+                    AddRandomJewelryItem(15, 0.6f, targetItems, (int)Crown_Jewelry.Gem_Encrusted_Silver_Crown, (int)Crown_Jewelry.Gem_Encrusted_Gold_Crown);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 45, 0.3f, targetItems, (int)Corpse_Parts.Animal_Carcass, (int)Corpse_Parts.Animal_Skull, (int)Corpse_Parts.Bone, (int)Corpse_Parts.Humanoid_Skull, (int)Corpse_Parts.Skeletal_Arm);
+                    AddSpecificRandomItems(ItemGroups.Junk, 20, 0.6f, targetItems, (int)Junk.Masonry_Rubble);
                     AddSpecificRandomItems(ItemGroups.CreatureIngredients, 25, 0.5f, targetItems, (int)CreatureIngredients.Dragons_scales, (int)CreatureIngredients.Fairy_dragon_scales);
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 15, 0.6f, targetItems, (int)Jewellery.Amulet, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc);
                     break;
                 case (int)DFRegion.DungeonTypes.BarbarianStronghold:
-                    AddSpecificRandomItems(ItemGroups.Jewellery, 25, 0.5f, targetItems, (int)Jewellery.Bracelet, (int)Jewellery.Ring, (int)Jewellery.Torc, (int)Jewellery.Bracer, (int)Jewellery.Cloth_amulet);
+                    AddRandomJewelryItem(25, 0.5f, targetItems, (int)Crown_Jewelry.Gem_Encrusted_Silver_Crown, (int)Crown_Jewelry.Gem_Encrusted_Gold_Crown, (int)Crown_Jewelry.Gold_Crown, (int)Crown_Jewelry.Silver_Crown);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 25, 0.3f, targetItems);
+                    AddSpecificRandomItems(ItemGroups.Liquid_Containers, 40, 0.4f, targetItems, (int)Liquid_Containers.Empty_Bottle, (int)Liquid_Containers.Wooden_Cup, (int)Liquid_Containers.Hip_Flask, (int)Liquid_Containers.Tin_Goblet);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Containers, 25, 0.5f, targetItems, (int)Containers.Lockbox, (int)Containers.Urn);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Repair_Tools, 10, 0.1f, targetItems, (int)Repair_Tools.Sewing_Kit, (int)Repair_Tools.Jewelers_Pliers, (int)Repair_Tools.Armorers_Hammer, (int)Repair_Tools.Charging_Powder);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Flavor_Tools, 25, 0.3f, targetItems, (int)Flavor_Tools.Scythe, (int)Flavor_Tools.Cane, (int)Flavor_Tools.Broom, (int)Flavor_Tools.Brush, (int)Flavor_Tools.Inside_Caliper, (int)Flavor_Tools.Magnifying_Glass, (int)Flavor_Tools.Mirror, (int)Flavor_Tools.Outside_Caliper, (int)Flavor_Tools.Painters_Palette, (int)Flavor_Tools.Paint_Brush, (int)Flavor_Tools.Proportional_Divider, (int)Flavor_Tools.Quill_And_Ink_Well, (int)Flavor_Tools.Scroll, (int)Flavor_Tools.Spectacles, (int)Flavor_Tools.Triangle_Ruler);
+                    AddSpecificRandomItems(ItemGroups.Junk, 20, 0.5f, targetItems, (int)Junk.Broken_Glass, (int)Junk.Dirty_Rags);
                     break;
                 case (int)DFRegion.DungeonTypes.VolcanicCaves:
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 30, 0.4f, targetItems, (int)Corpse_Parts.Animal_Carcass, (int)Corpse_Parts.Animal_Skull, (int)Corpse_Parts.Bone, (int)Corpse_Parts.Humanoid_Skull, (int)Corpse_Parts.Skeletal_Arm);
+                    AddSpecificRandomItems(ItemGroups.Junk, 35, 0.4f, targetItems, (int)Junk.Rock_Rubble);
                     AddIngredGroupRandomItems(ItemGroups.MetalIngredients, 45, 0.6f, targetItems);
                     break;
                 case (int)DFRegion.DungeonTypes.ScorpionNest:
-                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 50, 0.5f, targetItems, (int)AnimalPartIngredients.Small_scorpion_stinger, (int)AnimalPartIngredients.Giant_scorpion_stinger);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 65, 0.4f, targetItems, (int)Corpse_Parts.Charred_Remains, (int)Corpse_Parts.Charred_Humanoid_Skull, (int)Corpse_Parts.Charred_Bone, (int)Corpse_Parts.Charred_Animal_Skull);
+                    AddSpecificRandomItems(ItemGroups.Junk, 55, 0.6f, targetItems, (int)Junk.Egg_Sack_Remains);
+                    AddSpecificRandomItems(ItemGroups.AnimalPartIngredients, 50, 0.5f, targetItems, (int)AnimalPartIngredients.Small_scorpion_stinger, (int)AnimalPartIngredients.Giant_scorpion_stinger, (int)AnimalPartIngredients.Rat_Tail);
                     break;
                 case (int)DFRegion.DungeonTypes.Cemetery:
                     AddSpecificRandomItems(ItemGroups.Jewellery, 25, 0.6f, targetItems, (int)Jewellery.Bracer, (int)Jewellery.Cloth_amulet);
-                    AddIngredGroupRandomItems(ItemGroups.ReligiousItems, 10, 0.6f, targetItems);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.ReligiousItems, 10, 0.6f, targetItems);
+                    AddRandomItemsOfSpecificGroup(ItemGroups.Corpse_Parts, 70, 0.5f, targetItems, (int)Corpse_Parts.Animal_Carcass, (int)Corpse_Parts.Animal_Skull, (int)Corpse_Parts.Charred_Bone, (int)Corpse_Parts.Charred_Remains, (int)Corpse_Parts.Charred_Animal_Skull, (int)Corpse_Parts.Charred_Humanoid_Skull);
+                    AddSpecificRandomItems(ItemGroups.Containers, 15, 0.3f, targetItems, (int)Containers.Urn);
+                    AddSpecificRandomItems(ItemGroups.General_Tools, 35, 0.1f, targetItems, (int)General_Tools.Spade);
+                    AddSpecificRandomItems(ItemGroups.Junk, 15, 0.6f, targetItems, (int)Junk.Webbing);
                     break;
                 default:
                     break;
             }
         }
 
-        public static void AddSpecificRandomItems(ItemGroups itemGroup, float chance, float chanceMod, List<DaggerfallUnityItem> targetItems, params int[] itemIndices) // params is extremely handy for my purposes.
+        public static void AddSpecificRandomItems(ItemGroups itemGroup, float chance, float chanceMod, List<DaggerfallUnityItem> targetItems, params int[] itemIndices)
         {
             while (Dice100.SuccessRoll((int)chance))
             {
                 int itemIndex = itemIndices[Random.Range(0, itemIndices.Length)];
                 targetItems.Add(ItemBuilder.CreateItem(itemGroup, itemIndex));
+                chance *= chanceMod;
+            }
+        }
+
+        public static void AddRandomItemsOfSpecificGroup(ItemGroups itemGroup, float chance, float chanceMod, List<DaggerfallUnityItem> targetItems, params int[] itemIndices) // params is extremely handy for my purposes.
+        {
+            int playerLuck = GameManager.Instance.PlayerEntity.Stats.LiveLuck;
+
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                targetItems.Add(ItemBuilder.CreateRandomItemOfItemgroup(itemGroup, -1, playerLuck, itemIndices));
+                chance *= chanceMod;
+            }
+        }
+
+        public static void AddRandomJewelryItem(float chance, float chanceMod, List<DaggerfallUnityItem> targetItems, params int[] itemIndices)
+        {
+            int playerLuck = GameManager.Instance.PlayerEntity.Stats.LiveLuck;
+
+            while (Dice100.SuccessRoll((int)chance))
+            {
+                targetItems.Add(ItemBuilder.CreateRandomJewelryOfRandomSlot(-1, playerLuck, itemIndices));
                 chance *= chanceMod;
             }
         }
@@ -875,6 +971,13 @@ namespace DaggerfallWorkshop.Game.Items
                         targetItems.Add(ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Musical_Instruments, level));
 
                     targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Flavor_Tools, FormulaHelper.PickOneOfCompact((int)Flavor_Tools.Brush, 90, (int)Flavor_Tools.Mirror, 45, (int)Flavor_Tools.Spyglass, 5)));
+                }
+
+                if (traits[0] == (int)MobilePersonalityQuirks.Necrophiliac || traits[1] == (int)MobilePersonalityQuirks.Necrophiliac)
+                {
+                    int randRange = Random.Range(2, 5 + 1);
+                    for (int i = 0; i < randRange; i++)
+                        targetItems.Add(ItemBuilder.CreateRandomItemOfItemgroup(ItemGroups.Corpse_Parts));
                 }
 
                 if (traits[0] == (int)MobilePersonalityQuirks.Alcoholic || traits[1] == (int)MobilePersonalityQuirks.Alcoholic)

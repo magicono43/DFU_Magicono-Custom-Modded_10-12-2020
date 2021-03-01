@@ -490,6 +490,7 @@ namespace DaggerfallWorkshop.Game.Items
         Wooden_Scoop = 4864,
         Wooden_Shovel = 4865,
         Wooden_Spoon = 4866,
+        Wooden_Bowl = 4885,
     }
 
     public enum Toys
@@ -516,6 +517,10 @@ namespace DaggerfallWorkshop.Game.Items
         Animal_Carcass = 4878,
         Animal_Skull = 4879,
         Humanoid_Skull = 4880,
+        Charred_Bone = 4886,
+        Charred_Remains = 4887,
+        Charred_Animal_Skull = 4888,
+        Charred_Humanoid_Skull = 4889,
     }
 
     public enum Occult_Objects
@@ -527,6 +532,12 @@ namespace DaggerfallWorkshop.Game.Items
     public enum Junk
     {
         Dirty_Rags = 4884,
+        Broken_Glass = 4890,
+        Feces = 4891,
+        Rock_Rubble = 4892,
+        Masonry_Rubble = 4893,
+        Egg_Sack_Remains = 4894,
+        Webbing = 4895,
     }
 
     public enum ReligiousItems  //checked
