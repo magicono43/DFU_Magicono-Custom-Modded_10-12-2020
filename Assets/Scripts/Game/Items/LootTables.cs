@@ -1088,7 +1088,7 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     int randRange = Random.Range(2, 4 + 1);
                     for (int i = 0; i < randRange; i++)
-                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Flavor_Tools, FormulaHelper.PickOneOfCompact((int)Flavor_Tools.Inside_Caliper, 1, (int)Flavor_Tools.Outside_Caliper, 1, (int)Flavor_Tools.Quill_And_Ink_Well, (int)Flavor_Tools.Proportional_Divider, (int)Flavor_Tools.Spyglass, (int)Flavor_Tools.Triangle_Ruler, (int)Flavor_Tools.Magnifying_Glass)));
+                        targetItems.Add(ItemBuilder.CreateItem(ItemGroups.Flavor_Tools, FormulaHelper.PickOneOfCompact((int)Flavor_Tools.Inside_Caliper, 60, (int)Flavor_Tools.Outside_Caliper, 60, (int)Flavor_Tools.Quill_And_Ink_Well, 50, (int)Flavor_Tools.Proportional_Divider, 70, (int)Flavor_Tools.Spyglass, 10, (int)Flavor_Tools.Triangle_Ruler, 70, (int)Flavor_Tools.Magnifying_Glass, 10)));
                     randRange = Random.Range(1, 3 + 1);
                     for (int i = 0; i < randRange; i++)
                         targetItems.Add(ItemBuilder.CreateItem(ItemGroups.UselessItems2, (int)UselessItems2.Parchment));
