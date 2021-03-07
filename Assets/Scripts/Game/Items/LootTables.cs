@@ -677,7 +677,7 @@ namespace DaggerfallWorkshop.Game.Items
 
             while (Dice100.SuccessRoll((int)chance))
             {
-                targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(itemGroup, -1, playerLuckRaw, itemIndices));
+                targetItems.Add(ItemBuilder.CreateRandomIngredientOfGroup(itemGroup, -1, -1, playerLuckRaw, itemIndices));
                 chance *= chanceMod;
             }
         }
@@ -851,7 +851,7 @@ namespace DaggerfallWorkshop.Game.Items
 
             while (Dice100.SuccessRoll((int)chance))
             {
-                targetItems.Add(ItemBuilder.CreateRandomItemOfItemgroup(itemGroup, -1, playerLuck, itemIndices));
+                targetItems.Add(ItemBuilder.CreateRandomItemOfItemgroup(itemGroup, -1, -1, playerLuck, itemIndices));
                 chance *= chanceMod;
             }
         }
@@ -862,7 +862,7 @@ namespace DaggerfallWorkshop.Game.Items
 
             while (Dice100.SuccessRoll((int)chance))
             {
-                targetItems.Add(ItemBuilder.CreateRandomJewelryOfRandomSlot(-1, playerLuck, itemIndices));
+                targetItems.Add(ItemBuilder.CreateRandomJewelryOfRandomSlot(-1, -1, playerLuck, itemIndices));
                 chance *= chanceMod;
             }
         }

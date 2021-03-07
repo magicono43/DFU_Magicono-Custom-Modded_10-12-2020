@@ -207,8 +207,20 @@ namespace DaggerfallWorkshop
             switch (buildingType)
             {
                 case DFLocation.BuildingTypes.Alchemist:
+                    float alchChance = 60;
+                    float alchChanceMod = 0.75f;
+                    while (Dice100.SuccessRoll((int)alchChance))
+                    {
+                        RandomlyAddPotion(100, items);
+                        alchChance *= alchChanceMod;
+                    }
+                    alchChance = 40;
+                    while (Dice100.SuccessRoll((int)alchChance))
+                    {
+                        RandomlyAddPotionRecipe(100, items);
+                        alchChance *= alchChanceMod;
+                    }
                     itemGroups = DaggerfallLootDataTables.itemGroupsAlchemist;
-                    RandomlyAddPotionRecipe(25, items);
                     break;
                 case DFLocation.BuildingTypes.Armorer:
                     itemGroups = DaggerfallLootDataTables.itemGroupsArmorer;
@@ -224,8 +236,10 @@ namespace DaggerfallWorkshop
                     break;
                 case DFLocation.BuildingTypes.GeneralStore:
                     itemGroups = DaggerfallLootDataTables.itemGroupsGeneralStore;
-                    items.AddItem(ItemBuilder.CreateItem(ItemGroups.Transportation, (int)Transportation.Horse));
-                    items.AddItem(ItemBuilder.CreateItem(ItemGroups.Transportation, (int)Transportation.Small_cart));
+                    if (Dice100.SuccessRoll(20))
+                        items.AddItem(ItemBuilder.CreateItem(ItemGroups.Transportation, (int)Transportation.Horse));
+                    if (Dice100.SuccessRoll(30))
+                        items.AddItem(ItemBuilder.CreateItem(ItemGroups.Transportation, (int)Transportation.Small_cart));
                     break;
                 case DFLocation.BuildingTypes.PawnShop:
                     itemGroups = DaggerfallLootDataTables.itemGroupsPawnShop;
@@ -235,99 +249,89 @@ namespace DaggerfallWorkshop
                     break;
             }
 
-            for (int i = 0; i < itemGroups.Length; i += 2)
+            for (int i = 0; i < itemGroups.Length; i += 2) // Alright, that makes more sense to me now at least, from what it seems at least. Odd values are the itemGroup, Even are the chance for that itemGroup, makes much more sense. 
             {
                 ItemGroups itemGroup = (ItemGroups)itemGroups[i];
-                int chanceMod = itemGroups[i + 1];
-                if (itemGroup == ItemGroups.MensClothing && playerEntity.Gender == Game.Entity.Genders.Female)
-                    itemGroup = ItemGroups.WomensClothing;
-                if (itemGroup == ItemGroups.WomensClothing && playerEntity.Gender == Game.Entity.Genders.Male)
-                    itemGroup = ItemGroups.MensClothing;
+                float chance = itemGroups[i + 1];
+                float chanceMod = 0.45f;
 
                 if (itemGroup != ItemGroups.Furniture && itemGroup != ItemGroups.UselessItems1)
                 {
-                    if (itemGroup == ItemGroups.Books)
+                    while (Dice100.SuccessRoll((int)chance)) // I think order will be, roll if item of group is generated, then actually pick the item of said group randomly and then continue from there until loop roll fails. 
                     {
-                        int qualityMod = (shopQuality + 3) / 5;
-                        if (qualityMod >= 4)
-                            --qualityMod;
-                        qualityMod++;
-                        for (int j = 0; j <= qualityMod; ++j)
+                        DaggerfallUnityItem item = null; // Don't forget to have weapons and armor and such have variable condition values depending on the quality of the store they were bought/generated in.
+                        chanceMod = Mathf.Clamp(chanceMod + 0.05f, 0.10f, 0.85f); // Will likely have to tweak this around and see how the results are. Possibly have shop quality modify these chance values as well. 
+                        if (itemGroup == ItemGroups.Weapons)
                         {
-                            items.AddItem(ItemBuilder.CreateRandomBook());
+                            item = ItemBuilder.CreateWeapon((Weapons)Random.Range((int)Weapons.Dagger, (int)Weapons.Arrow + 1), FormulaHelper.RandomMaterial(-1, shopQuality, playerLuck)); // May rework and give weapons different rarity values later.
                         }
+                        else if (itemGroup == ItemGroups.Armor)
+                        {
+                            item = ItemBuilder.CreateArmor(playerEntity.Gender, playerEntity.Race, (Armor)Random.Range((int)Armor.Cuirass, (int)Armor.Tower_Shield + 1), FormulaHelper.RandomArmorMaterial(-1, shopQuality, playerLuck));
+                        }
+                        else if (itemGroup == ItemGroups.MensClothing)
+                        {
+                            item = ItemBuilder.CreateMensClothing((MensClothing)Random.Range((int)MensClothing.Straps, (int)MensClothing.Champion_straps + 1), playerEntity.Race);
+                            item.dyeColor = ItemBuilder.RandomClothingDye();
+                        }
+                        else if (itemGroup == ItemGroups.WomensClothing)
+                        {
+                            item = ItemBuilder.CreateWomensClothing((WomensClothing)Random.Range((int)WomensClothing.Brassier, (int)WomensClothing.Vest + 1), playerEntity.Race);
+                            item.dyeColor = ItemBuilder.RandomClothingDye();
+                        }
+                        else if (itemGroup == ItemGroups.Books)
+                        {
+                            item = ItemBuilder.CreateRandomBookOfRandomSubject(-1, shopQuality, playerLuck);
+                        }
+                        else if (itemGroup == ItemGroups.MagicItems)
+                        {
+                            item = ItemBuilder.CreateRandomMagicItem(playerEntity.Gender, playerEntity.Race, -1, shopQuality, playerLuck);
+                        }
+                        else if ((int)itemGroup == (int)ItemGroups.Jewellery || ((int)itemGroup >= (int)ItemGroups.Tiara_Jewelry && (int)itemGroup <= (int)ItemGroups.Bracelet_Jewelry))
+                        {
+                            item = ItemBuilder.CreateRandomJewelryOfRandomSlot(-1, shopQuality, playerLuck);
+                        }
+                        else
+                        {
+                            item = ItemBuilder.CreateRandomItemOfItemgroup(itemGroup, -1, shopQuality, playerLuck);
+                            if (DaggerfallUnity.Settings.PlayerTorchFromItems && item.IsOfTemplate(ItemGroups.UselessItems2, (int)UselessItems2.Oil))
+                                item.stackCount = Random.Range(5, 20 + 1);  // Shops stock 5-20 bottles
+                        }
+                        items.AddItem(item);
+
+                        chance *= chanceMod; // Likely determine chanceMod by the itemGroup being currently ran. 
                     }
-                    else
+
+                    // Add any modded items registered in applicable groups
+                    int[] customItemTemplates = itemHelper.GetCustomItemsForGroup(itemGroup);
+                    for (int j = 0; j < customItemTemplates.Length; j++)
                     {
-                        System.Array enumArray = itemHelper.GetEnumArray(itemGroup);
-                        for (int j = 0; j < enumArray.Length; ++j)
+                        ItemTemplate itemTemplate = itemHelper.GetItemTemplate(itemGroup, customItemTemplates[j]);
+                        if (itemTemplate.rarity <= shopQuality)
                         {
-                            ItemTemplate itemTemplate = itemHelper.GetItemTemplate(itemGroup, j);
-                            if (itemTemplate.rarity <= shopQuality)
+                            int stockChance = (int)Mathf.Round(chance * 5 * (21 - itemTemplate.rarity) / 100);
+                            if (Dice100.SuccessRoll(stockChance))
                             {
-                                int stockChance = chanceMod * 5 * (21 - itemTemplate.rarity) / 100;
-                                if (Dice100.SuccessRoll(stockChance))
-                                {
-                                    DaggerfallUnityItem item = null;
-                                    if (itemGroup == ItemGroups.Weapons)
-                                        item = ItemBuilder.CreateWeapon(j + Weapons.Dagger, FormulaHelper.RandomMaterial(-1, shopQuality, playerLuck));
-                                    else if (itemGroup == ItemGroups.Armor)
-                                        item = ItemBuilder.CreateArmor(playerEntity.Gender, playerEntity.Race, j + Armor.Cuirass, FormulaHelper.RandomArmorMaterial(-1, shopQuality, playerLuck));
-                                    else if (itemGroup == ItemGroups.MensClothing)
-                                    {
-                                        item = ItemBuilder.CreateMensClothing(j + MensClothing.Straps, playerEntity.Race);
-                                        item.dyeColor = ItemBuilder.RandomClothingDye();
-                                    }
-                                    else if (itemGroup == ItemGroups.WomensClothing)
-                                    {
-                                        item = ItemBuilder.CreateWomensClothing(j + WomensClothing.Brassier, playerEntity.Race);
-                                        item.dyeColor = ItemBuilder.RandomClothingDye();
-                                    }
-                                    else if (itemGroup == ItemGroups.MagicItems)
-                                    {
-                                        item = ItemBuilder.CreateRandomMagicItem(playerEntity.Gender, playerEntity.Race, -1, shopQuality, playerLuck);
-                                    }
-                                    else
-                                    {
-                                        item = new DaggerfallUnityItem(itemGroup, j);
-                                        if (DaggerfallUnity.Settings.PlayerTorchFromItems && item.IsOfTemplate(ItemGroups.UselessItems2, (int)UselessItems2.Oil))
-                                            item.stackCount = Random.Range(5, 20 + 1);  // Shops stock 5-20 bottles
-                                    }
-                                    items.AddItem(item);
-                                }
-                            }
-                        }
-                        // Add any modded items registered in applicable groups
-                        int[] customItemTemplates = itemHelper.GetCustomItemsForGroup(itemGroup);
-                        for (int j = 0; j < customItemTemplates.Length; j++)
-                        {
-                            ItemTemplate itemTemplate = itemHelper.GetItemTemplate(itemGroup, customItemTemplates[j]);
-                            if (itemTemplate.rarity <= shopQuality)
-                            {
-                                int stockChance = chanceMod * 5 * (21 - itemTemplate.rarity) / 100;
-                                if (Dice100.SuccessRoll(stockChance))
-                                {
-                                    DaggerfallUnityItem item = ItemBuilder.CreateItem(itemGroup, customItemTemplates[j]);
+                                DaggerfallUnityItem item = ItemBuilder.CreateItem(itemGroup, customItemTemplates[j]);
 
-                                    // Setup specific group stats
-                                    if (itemGroup == ItemGroups.Weapons)
-                                    {
-                                        WeaponMaterialTypes material = FormulaHelper.RandomMaterial(-1, shopQuality, playerLuck);
-                                        ItemBuilder.ApplyWeaponMaterial(item, material);
-                                    }
-                                    else if (itemGroup == ItemGroups.Armor)
-                                    {
-                                        ArmorMaterialTypes material = FormulaHelper.RandomArmorMaterial(-1, shopQuality, playerLuck);
-                                        ItemBuilder.ApplyArmorSettings(item, playerEntity.Gender, playerEntity.Race, material);
-                                    }
-                                    else if (item.TemplateIndex == 810)
-                                    {
-                                        WeaponMaterialTypes material = FormulaHelper.RandomMaterial(-1, shopQuality, playerLuck);
-                                        ItemBuilder.ApplyIngotMaterial(item, material);
-                                    }
-
-                                    items.AddItem(item);
+                                // Setup specific group stats
+                                if (itemGroup == ItemGroups.Weapons)
+                                {
+                                    WeaponMaterialTypes material = FormulaHelper.RandomMaterial(-1, shopQuality, playerLuck);
+                                    ItemBuilder.ApplyWeaponMaterial(item, material);
                                 }
+                                else if (itemGroup == ItemGroups.Armor)
+                                {
+                                    ArmorMaterialTypes material = FormulaHelper.RandomArmorMaterial(-1, shopQuality, playerLuck);
+                                    ItemBuilder.ApplyArmorSettings(item, playerEntity.Gender, playerEntity.Race, material);
+                                }
+                                else if (item.TemplateIndex == 810)
+                                {
+                                    WeaponMaterialTypes material = FormulaHelper.RandomMaterial(-1, shopQuality, playerLuck);
+                                    ItemBuilder.ApplyIngotMaterial(item, material);
+                                }
+
+                                items.AddItem(item);
                             }
                         }
                     }

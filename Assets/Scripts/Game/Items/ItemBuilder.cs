@@ -492,7 +492,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// Passing a non-book subject group will return null.
         /// </summary>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomBookOfSpecificSubject(ItemGroups bookSubject, int enemyLevel = -1, int playerLuck = -1)
+        public static DaggerfallUnityItem CreateRandomBookOfSpecificSubject(ItemGroups bookSubject, int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1)
         {
             List<DaggerfallUnityItem> booksList = new List<DaggerfallUnityItem>();
             Array enumArray;
@@ -525,7 +525,7 @@ namespace DaggerfallWorkshop.Game.Items
                     return null;
             }
 
-            int chosenBookID = ChooseBookFromFilteredList(booksList, enemyLevel, playerLuck);
+            int chosenBookID = ChooseBookFromFilteredList(booksList, enemyLevel, shopQuality, playerLuck);
 
             // Create item
             DaggerfallUnityItem book = CreateBook(chosenBookID);
@@ -537,7 +537,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a random book of a random subject group.
         /// </summary>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomBookOfRandomSubject(int enemyLevel = -1, int playerLuck = -1)
+        public static DaggerfallUnityItem CreateRandomBookOfRandomSubject(int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1)
         {
             List<DaggerfallUnityItem> booksList = new List<DaggerfallUnityItem>();
             ItemGroups itemGroup;
@@ -601,7 +601,7 @@ namespace DaggerfallWorkshop.Game.Items
                 booksList.Add(bookChecked);
             }
 
-            int chosenBookID = ChooseBookFromFilteredList(booksList, enemyLevel, playerLuck);
+            int chosenBookID = ChooseBookFromFilteredList(booksList, enemyLevel, shopQuality, playerLuck);
 
             // Create item
             DaggerfallUnityItem book = CreateBook(chosenBookID);
@@ -609,7 +609,7 @@ namespace DaggerfallWorkshop.Game.Items
             return book;
         }
 
-        public static int ChooseBookFromFilteredList(List<DaggerfallUnityItem> bookList, int enemyLevel = -1, int playerLuck = -1)
+        public static int ChooseBookFromFilteredList(List<DaggerfallUnityItem> bookList, int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1)
         {
             int[] bookRolls = new int[] { };
             List<int> bookRollsList = new List<int>();
@@ -649,13 +649,38 @@ namespace DaggerfallWorkshop.Game.Items
                             fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity - (5f / enemyLevel)), 1, 400);
                     }
                 }
+                else if (shopQuality != -1)
+                {
+                    if (shopQuality < Mathf.Floor((((bookRarity - 21) * -1) - 4) / 5)) // This makes it so items with a higher rarity value than the shop quality in question will not be able to generate in that shop. 
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        float luckMod = (playerLuck - 50) / 5f;
+                        float qualityMod = shopQuality;
+
+                        if (bookRarity >= 15)
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((bookRarity * 2.5f) + ((qualityMod + luckMod) * 2)), 1, 400);
+                        }
+                        else if (bookRarity >= 8)
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((bookRarity * 1.5f) + (qualityMod + luckMod)), 1, 400);
+                        }
+                        else
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity - (qualityMod + luckMod)), 1, 400);
+                        }
+                    }
+                }
                 else
                 {
                     float luckMod = (playerLuck - 50) / 5f;
 
                     if (bookRarity >= 15)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((bookRarity * 2.5f) - (luckMod * 2)), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((bookRarity * 2.5f) + (luckMod * 2)), 1, 400);
                     }
                     else if (bookRarity >= 8)
                     {
@@ -663,7 +688,7 @@ namespace DaggerfallWorkshop.Game.Items
                     }
                     else
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity + (luckMod / 2)), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity - luckMod), 1, 400);
                     }
                 }
 
@@ -725,7 +750,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a new random gem.
         /// </summary>
         /// <returns>DaggerfallUnityItem.</returns>
-        public static DaggerfallUnityItem CreateRandomGem(int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
+        public static DaggerfallUnityItem CreateRandomGem(int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
             List<DaggerfallUnityItem> gemList = new List<DaggerfallUnityItem>();
 
@@ -739,7 +764,7 @@ namespace DaggerfallWorkshop.Game.Items
                 gemList.Add(gemDummyChecked);
             }
 
-            int chosenGemID = ChooseItemFromFilteredList(gemList, enemyLevel, playerLuck);
+            int chosenGemID = ChooseItemFromFilteredList(gemList, enemyLevel, shopQuality, playerLuck);
 
             // Create item
             DaggerfallUnityItem gem = new DaggerfallUnityItem(ItemGroups.Gems, chosenGemID);
@@ -752,7 +777,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// Passing a non-jewelry slot group will return null.
         /// </summary>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomJewelryOfSpecificSlot(ItemGroups jewelrySlot, int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
+        public static DaggerfallUnityItem CreateRandomJewelryOfSpecificSlot(ItemGroups jewelrySlot, int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
             List<DaggerfallUnityItem> jewelryList = new List<DaggerfallUnityItem>();
             Array enumArray;
@@ -780,7 +805,7 @@ namespace DaggerfallWorkshop.Game.Items
                     return null;
             }
 
-            int chosenJewelryID = ChooseItemFromFilteredList(jewelryList, enemyLevel, playerLuck);
+            int chosenJewelryID = ChooseItemFromFilteredList(jewelryList, enemyLevel, shopQuality, playerLuck);
 
             // Create item
             DaggerfallUnityItem jewelry = new DaggerfallUnityItem(jewelrySlot, chosenJewelryID);
@@ -795,7 +820,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a random jewelry item of a random slot group.
         /// </summary>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomJewelryOfRandomSlot(int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
+        public static DaggerfallUnityItem CreateRandomJewelryOfRandomSlot(int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
             List<DaggerfallUnityItem> jewelryList = new List<DaggerfallUnityItem>();
             ItemGroups itemGroup;
@@ -840,7 +865,7 @@ namespace DaggerfallWorkshop.Game.Items
                 jewelryList.Add(jewelryDummyChecked);
             }
 
-            int chosenJewelryID = ChooseItemFromFilteredList(jewelryList, enemyLevel, playerLuck);
+            int chosenJewelryID = ChooseItemFromFilteredList(jewelryList, enemyLevel, shopQuality, playerLuck);
 
             // Create item
             DaggerfallUnityItem jewelry = new DaggerfallUnityItem(itemGroup, chosenJewelryID);
@@ -868,7 +893,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a new random drug.
         /// </summary>
         /// <returns>DaggerfallUnityItem.</returns>
-        public static DaggerfallUnityItem CreateRandomDrug(int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
+        public static DaggerfallUnityItem CreateRandomDrug(int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
             List<DaggerfallUnityItem> drugList = new List<DaggerfallUnityItem>();
 
@@ -882,7 +907,7 @@ namespace DaggerfallWorkshop.Game.Items
                 drugList.Add(drugDummyChecked);
             }
 
-            int chosenDrugID = ChooseItemFromFilteredList(drugList, enemyLevel, playerLuck);
+            int chosenDrugID = ChooseItemFromFilteredList(drugList, enemyLevel, shopQuality, playerLuck);
 
             // Create item
             DaggerfallUnityItem drug = new DaggerfallUnityItem(ItemGroups.Drugs, chosenDrugID);
@@ -894,7 +919,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a new random item of specified itemgroup.
         /// </summary>
         /// <returns>DaggerfallUnityItem.</returns>
-        public static DaggerfallUnityItem CreateRandomItemOfItemgroup(ItemGroups itemGroup, int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
+        public static DaggerfallUnityItem CreateRandomItemOfItemgroup(ItemGroups itemGroup, int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
             List<DaggerfallUnityItem> itemList = new List<DaggerfallUnityItem>();
 
@@ -908,7 +933,7 @@ namespace DaggerfallWorkshop.Game.Items
                 itemList.Add(itemDummyChecked);
             }
 
-            int chosenItemID = ChooseItemFromFilteredList(itemList, enemyLevel, playerLuck);
+            int chosenItemID = ChooseItemFromFilteredList(itemList, enemyLevel, shopQuality, playerLuck);
 
             // Create item
             DaggerfallUnityItem item = new DaggerfallUnityItem(itemGroup, chosenItemID);
@@ -919,7 +944,7 @@ namespace DaggerfallWorkshop.Game.Items
             return item;
         }
 
-        public static int ChooseItemFromFilteredList(List<DaggerfallUnityItem> itemList, int enemyLevel = -1, int playerLuck = -1)
+        public static int ChooseItemFromFilteredList(List<DaggerfallUnityItem> itemList, int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1)
         {
             int[] itemRolls = new int[] { };
             List<int> itemRollsList = new List<int>();
@@ -959,13 +984,38 @@ namespace DaggerfallWorkshop.Game.Items
                             fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity - (5f / enemyLevel)), 1, 400);
                     }
                 }
+                else if (shopQuality != -1)
+                {
+                    if (shopQuality < Mathf.Floor((((itemRarity - 101) * -1) - 20) / 5)) // This makes it so items with a higher rarity value than the shop quality in question will not be able to generate in that shop. 
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        float luckMod = (playerLuck - 50) / 5f;
+                        float qualityMod = shopQuality;
+
+                        if (itemRarity >= 60)
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((itemRarity * 2.5f) + ((qualityMod + luckMod) * 2)), 1, 400);
+                        }
+                        else if (itemRarity >= 35)
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((itemRarity * 1.5f) + (qualityMod + luckMod)), 1, 400);
+                        }
+                        else
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity - (qualityMod + luckMod)), 1, 400);
+                        }
+                    }
+                }
                 else
                 {
                     float luckMod = (playerLuck - 50) / 5f;
 
                     if (itemRarity >= 60)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((itemRarity * 2.5f) - (luckMod * 2)), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((itemRarity * 2.5f) + (luckMod * 2)), 1, 400);
                     }
                     else if (itemRarity >= 35)
                     {
@@ -973,7 +1023,7 @@ namespace DaggerfallWorkshop.Game.Items
                     }
                     else
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity + (luckMod / 2)), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(itemRarity - luckMod), 1, 400);
                     }
                 }
 
@@ -1370,7 +1420,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// </summary>
         /// <param name="ingredientGroup">Ingredient group.</param>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomIngredientOfGroup(ItemGroups ingredientGroup, int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
+        public static DaggerfallUnityItem CreateRandomIngredientOfGroup(ItemGroups ingredientGroup, int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
             List<DaggerfallUnityItem> ingredientsList = new List<DaggerfallUnityItem>(); // Likely add a "params" as well as a bool to allow for certain ingredients to be selectively removed from the potential table of some enemies and such, control. 
             Array enumArray;
@@ -1398,7 +1448,7 @@ namespace DaggerfallWorkshop.Game.Items
                     return null;
             }
 
-            int chosenIngredID = ChooseIngredientFromFilteredList(ingredientsList, enemyLevel, playerLuck); // Possibly combine all these "FilteredList" methods into one later on if I change all the rarity values to something all equivalent. 
+            int chosenIngredID = ChooseIngredientFromFilteredList(ingredientsList, enemyLevel, shopQuality, playerLuck); // Possibly combine all these "FilteredList" methods into one later on if I change all the rarity values to something all equivalent. 
 
             // Create item
             DaggerfallUnityItem ingredient = new DaggerfallUnityItem(ingredientGroup, chosenIngredID);
@@ -1410,7 +1460,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// Creates a random ingredient from a random ingredient group.
         /// </summary>
         /// <returns>DaggerfallUnityItem</returns>
-        public static DaggerfallUnityItem CreateRandomIngredient(int enemyLevel = -1, int playerLuck = -1, params int[] discrimItemIDs)
+        public static DaggerfallUnityItem CreateRandomIngredient(int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1, params int[] discrimItemIDs)
         {
             // Randomise ingredient group
             List<DaggerfallUnityItem> ingredientsList = new List<DaggerfallUnityItem>();
@@ -1456,7 +1506,7 @@ namespace DaggerfallWorkshop.Game.Items
                 ingredientsList.Add(ingredDummyChecked);
             }
 
-            int chosenIngredID = ChooseIngredientFromFilteredList(ingredientsList, enemyLevel, playerLuck);
+            int chosenIngredID = ChooseIngredientFromFilteredList(ingredientsList, enemyLevel, shopQuality, playerLuck);
 
             // Create item
             DaggerfallUnityItem ingredient = new DaggerfallUnityItem(ingredientGroup, chosenIngredID);
@@ -1464,7 +1514,7 @@ namespace DaggerfallWorkshop.Game.Items
             return ingredient;
         }
 
-        public static int ChooseIngredientFromFilteredList(List<DaggerfallUnityItem> ingredList, int enemyLevel = -1, int playerLuck = -1)
+        public static int ChooseIngredientFromFilteredList(List<DaggerfallUnityItem> ingredList, int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1)
         {
             int[] ingredRolls = new int[] { };
             List<int> ingredRollsList = new List<int>();
@@ -1504,13 +1554,38 @@ namespace DaggerfallWorkshop.Game.Items
                             fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity - (5f / enemyLevel)), 1, 400);
                     }
                 }
+                else if (shopQuality != -1)
+                {
+                    if (shopQuality < Mathf.Floor((((ingredRarity - 101) * -1) - 20) / 5)) // This makes it so items with a higher rarity value than the shop quality in question will not be able to generate in that shop. 
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        float luckMod = (playerLuck - 50) / 5f;
+                        float qualityMod = shopQuality;
+
+                        if (ingredRarity >= 60)
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((ingredRarity * 2.5f) + ((qualityMod + luckMod) * 2)), 1, 400);
+                        }
+                        else if (ingredRarity >= 35)
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((ingredRarity * 1.5f) + (qualityMod + luckMod)), 1, 400);
+                        }
+                        else
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity - (qualityMod + luckMod)), 1, 400);
+                        }
+                    }
+                }
                 else
                 {
                     float luckMod = (playerLuck - 50) / 5f;
 
                     if (ingredRarity >= 60)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((ingredRarity * 2.5f) - (luckMod * 2)), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((ingredRarity * 2.5f) + (luckMod * 2)), 1, 400);
                     }
                     else if (ingredRarity >= 35)
                     {
@@ -1518,7 +1593,7 @@ namespace DaggerfallWorkshop.Game.Items
                     }
                     else
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity + (luckMod / 2)), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(ingredRarity - luckMod), 1, 400);
                     }
                 }
 
@@ -1586,7 +1661,7 @@ namespace DaggerfallWorkshop.Game.Items
         /// <summary>
         /// Creates a random potion from an array of filtered recipe types and set rarity.
         /// </summary>
-        public static DaggerfallUnityItem CreateRandomSpecificPotion(byte[,] allowedPots, int enemyLevel = -1, int playerLuck = -1)
+        public static DaggerfallUnityItem CreateRandomSpecificPotion(byte[,] allowedPots, int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1)
         {
             int[] potTypeRolls = new int[] { };
             List<int> potTypeRollsList = new List<int>();
@@ -1602,7 +1677,7 @@ namespace DaggerfallWorkshop.Game.Items
 
             List<DaggerfallUnityItem> filteredPotList = GetPotTypeRecipeKeyList(FormulaHelper.PickOneOf(potTypeRolls));
 
-            int chosenPotionRecipeKey = ChoosePotionFromFilteredList(filteredPotList, enemyLevel, playerLuck);
+            int chosenPotionRecipeKey = ChoosePotionFromFilteredList(filteredPotList, enemyLevel, shopQuality, playerLuck);
 
             return CreatePotion(chosenPotionRecipeKey);
         }
@@ -1692,7 +1767,7 @@ namespace DaggerfallWorkshop.Game.Items
             return filteredPotions;
         }
 
-        public static int ChoosePotionFromFilteredList(List<DaggerfallUnityItem> potList, int enemyLevel = -1, int playerLuck = -1)
+        public static int ChoosePotionFromFilteredList(List<DaggerfallUnityItem> potList, int enemyLevel = -1, int shopQuality = -1, int playerLuck = -1)
         {
             int[] potRolls = new int[] { };
             List<int> potRollsList = new List<int>();
@@ -1708,29 +1783,54 @@ namespace DaggerfallWorkshop.Game.Items
                     if (potionRecipe.Rarity >= 30)
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 1.5f)), 1, 300);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 1.5f)), 1, 400);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 2.5f)), 1, 300);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 2.5f)), 1, 400);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (120f / enemyLevel)), 1, 300);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (120f / enemyLevel)), 1, 400);
                     }
                     else if (potionRecipe.Rarity >= 15)
                     {
                         if (enemyLevel >= 21)
                             fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + enemyLevel), 1, 300);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 300);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 400);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 300);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 400);
                     }
                     else
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 300);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 400);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (5f / enemyLevel)), 1, 300);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (5f / enemyLevel)), 1, 400);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 300);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 400);
+                    }
+                }
+                else if (shopQuality != -1)
+                {
+                    if (shopQuality < Mathf.Floor((potionRecipe.Rarity - 12) / 5)) // This makes it so items with a higher rarity value than the shop quality in question will not be able to generate in that shop. 
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        float luckMod = (playerLuck - 50) / 5f;
+                        float qualityMod = shopQuality;
+
+                        if (potionRecipe.Rarity >= 30)
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRecipe.Rarity * 2.5f) + ((qualityMod + luckMod) * 2)), 1, 400);
+                        }
+                        else if (potionRecipe.Rarity >= 15)
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRecipe.Rarity * 1.5f) + (qualityMod + luckMod)), 1, 400);
+                        }
+                        else
+                        {
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (qualityMod + luckMod)), 1, 400);
+                        }
                     }
                 }
                 else
@@ -1739,15 +1839,15 @@ namespace DaggerfallWorkshop.Game.Items
 
                     if (potionRecipe.Rarity >= 30)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (luckMod * 2)), 1, 300);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRecipe.Rarity * 2.5f) + (luckMod * 2)), 1, 400);
                     }
                     else if (potionRecipe.Rarity >= 15)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + luckMod), 1, 300);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRecipe.Rarity * 1.5f) + luckMod), 1, 400);
                     }
                     else
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (luckMod / 2)), 1, 300);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - luckMod), 1, 400);
                     }
                 }
 

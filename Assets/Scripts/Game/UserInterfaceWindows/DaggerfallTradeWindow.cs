@@ -117,12 +117,12 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
         bool isStealDeferred = false;
         bool isModeActionDeferred = false;
 
-        static Dictionary<DFLocation.BuildingTypes, List<ItemGroups>> storeBuysItemType = new Dictionary<DFLocation.BuildingTypes, List<ItemGroups>>()
+        static Dictionary<DFLocation.BuildingTypes, List<ItemGroups>> storeBuysItemType = new Dictionary<DFLocation.BuildingTypes, List<ItemGroups>>() // See if I can make this specify items within Itemgroups. 
         {
             { DFLocation.BuildingTypes.Alchemist, new List<ItemGroups>()
-                { ItemGroups.Gems, ItemGroups.MiscPlantIngredients, ItemGroups.FlowerPlantIngredients, ItemGroups.FruitPlantIngredients, ItemGroups.AnimalPartIngredients, ItemGroups.CreatureIngredients, ItemGroups.SolventIngredients, ItemGroups.MetalIngredients } },
+                { ItemGroups.Gems, ItemGroups.MiscPlantIngredients, ItemGroups.FlowerPlantIngredients, ItemGroups.FruitPlantIngredients, ItemGroups.AnimalPartIngredients, ItemGroups.CreatureIngredients, ItemGroups.SolventIngredients, ItemGroups.MetalIngredients, ItemGroups.UselessItems1, ItemGroups.MiscItems } }, // Testing to see if this allows potions and potion recipes to be sold to alchemist shops. 
             { DFLocation.BuildingTypes.Armorer, new List<ItemGroups>()
-                { ItemGroups.Armor, ItemGroups.Weapons } },
+                { ItemGroups.Armor, ItemGroups.Weapons, ItemGroups.Repair_Tools } },
             { DFLocation.BuildingTypes.Bookseller, new List<ItemGroups>()
                 { ItemGroups.Books } },
             { DFLocation.BuildingTypes.ClothingStore, new List<ItemGroups>()
@@ -132,11 +132,11 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             { DFLocation.BuildingTypes.GemStore, new List<ItemGroups>()
                 { ItemGroups.Gems, ItemGroups.Jewellery, ItemGroups.Tiara_Jewelry, ItemGroups.Crown_Jewelry, ItemGroups.Ring_Jewelry, ItemGroups.Earing_Jewelry, ItemGroups.Neck_Jewelry, ItemGroups.Bracelet_Jewelry, ItemGroups.Magic_Amplifiers } },
             { DFLocation.BuildingTypes.GeneralStore, new List<ItemGroups>()
-                { ItemGroups.Books, ItemGroups.MensClothing, ItemGroups.WomensClothing, ItemGroups.Transportation, ItemGroups.Jewellery, ItemGroups.Weapons, ItemGroups.UselessItems2 } },
+                { ItemGroups.Books, ItemGroups.MensClothing, ItemGroups.WomensClothing, ItemGroups.Transportation, ItemGroups.Jewellery, ItemGroups.Armor, ItemGroups.Weapons, ItemGroups.UselessItems2, ItemGroups.General_Tools, ItemGroups.Repair_Tools, ItemGroups.Liquid_Containers, ItemGroups.Flavor_Tools } },
             { DFLocation.BuildingTypes.PawnShop, new List<ItemGroups>()
-                { ItemGroups.Armor, ItemGroups.Books, ItemGroups.MensClothing, ItemGroups.WomensClothing, ItemGroups.Gems, ItemGroups.Jewellery, ItemGroups.Tiara_Jewelry, ItemGroups.Crown_Jewelry, ItemGroups.Ring_Jewelry, ItemGroups.Earing_Jewelry, ItemGroups.Neck_Jewelry, ItemGroups.Bracelet_Jewelry, ItemGroups.Magic_Amplifiers, ItemGroups.ReligiousItems, ItemGroups.Weapons, ItemGroups.UselessItems2, ItemGroups.Paintings } },
+                { ItemGroups.Armor, ItemGroups.Books, ItemGroups.MensClothing, ItemGroups.WomensClothing, ItemGroups.Gems, ItemGroups.Jewellery, ItemGroups.Tiara_Jewelry, ItemGroups.Crown_Jewelry, ItemGroups.Ring_Jewelry, ItemGroups.Earing_Jewelry, ItemGroups.Neck_Jewelry, ItemGroups.Bracelet_Jewelry, ItemGroups.Magic_Amplifiers, ItemGroups.ReligiousItems, ItemGroups.Weapons, ItemGroups.UselessItems2, ItemGroups.Paintings, ItemGroups.General_Tools, ItemGroups.Repair_Tools, ItemGroups.Musical_Instruments, ItemGroups.Containers, ItemGroups.Toys, ItemGroups.Sex_Toys, ItemGroups.Corpse_Parts, ItemGroups.Occult_Objects, ItemGroups.Junk, ItemGroups.Liquid_Containers, ItemGroups.Flavor_Tools } },
             { DFLocation.BuildingTypes.WeaponSmith, new List<ItemGroups>()
-                { ItemGroups.Armor, ItemGroups.Weapons } },
+                { ItemGroups.Armor, ItemGroups.Weapons, ItemGroups.Repair_Tools } },
         };
 
         #endregion
