@@ -527,6 +527,9 @@ namespace DaggerfallWorkshop.Game.Items
 
             int chosenBookID = ChooseBookFromFilteredList(booksList, enemyLevel, shopQuality, playerLuck);
 
+            if (chosenBookID == -1)
+                return null;
+
             // Create item
             DaggerfallUnityItem book = CreateBook(chosenBookID);
 
@@ -602,6 +605,9 @@ namespace DaggerfallWorkshop.Game.Items
             }
 
             int chosenBookID = ChooseBookFromFilteredList(booksList, enemyLevel, shopQuality, playerLuck);
+
+            if (chosenBookID == -1)
+                return null;
 
             // Create item
             DaggerfallUnityItem book = CreateBook(chosenBookID);
@@ -695,7 +701,13 @@ namespace DaggerfallWorkshop.Game.Items
                 bookRolls = FormulaHelper.FillArray(bookRollsList, arraystart, fillElements, i);
             }
 
-            int chosenBookIndex = FormulaHelper.PickOneOf(bookRolls);
+            int chosenBookIndex = -1;
+
+            if (bookRolls.Length > 0)
+                chosenBookIndex = FormulaHelper.PickOneOf(bookRolls);
+
+            if (chosenBookIndex == -1)
+                return -1;
 
             return bookList[chosenBookIndex].message;
         }
@@ -766,6 +778,9 @@ namespace DaggerfallWorkshop.Game.Items
 
             int chosenGemID = ChooseItemFromFilteredList(gemList, enemyLevel, shopQuality, playerLuck);
 
+            if (chosenGemID == -1)
+                return null;
+
             // Create item
             DaggerfallUnityItem gem = new DaggerfallUnityItem(ItemGroups.Gems, chosenGemID);
 
@@ -806,6 +821,9 @@ namespace DaggerfallWorkshop.Game.Items
             }
 
             int chosenJewelryID = ChooseItemFromFilteredList(jewelryList, enemyLevel, shopQuality, playerLuck);
+
+            if (chosenJewelryID == -1)
+                return null;
 
             // Create item
             DaggerfallUnityItem jewelry = new DaggerfallUnityItem(jewelrySlot, chosenJewelryID);
@@ -867,6 +885,9 @@ namespace DaggerfallWorkshop.Game.Items
 
             int chosenJewelryID = ChooseItemFromFilteredList(jewelryList, enemyLevel, shopQuality, playerLuck);
 
+            if (chosenJewelryID == -1)
+                return null;
+
             // Create item
             DaggerfallUnityItem jewelry = new DaggerfallUnityItem(itemGroup, chosenJewelryID);
 
@@ -909,6 +930,9 @@ namespace DaggerfallWorkshop.Game.Items
 
             int chosenDrugID = ChooseItemFromFilteredList(drugList, enemyLevel, shopQuality, playerLuck);
 
+            if (chosenDrugID == -1)
+                return null;
+
             // Create item
             DaggerfallUnityItem drug = new DaggerfallUnityItem(ItemGroups.Drugs, chosenDrugID);
 
@@ -934,6 +958,9 @@ namespace DaggerfallWorkshop.Game.Items
             }
 
             int chosenItemID = ChooseItemFromFilteredList(itemList, enemyLevel, shopQuality, playerLuck);
+
+            if (chosenItemID == -1)
+                return null;
 
             // Create item
             DaggerfallUnityItem item = new DaggerfallUnityItem(itemGroup, chosenItemID);
@@ -1030,7 +1057,13 @@ namespace DaggerfallWorkshop.Game.Items
                 itemRolls = FormulaHelper.FillArray(itemRollsList, arraystart, fillElements, i);
             }
 
-            int chosenItemIndex = FormulaHelper.PickOneOf(itemRolls);
+            int chosenItemIndex = -1;
+
+            if (itemRolls.Length > 0)
+                chosenItemIndex = FormulaHelper.PickOneOf(itemRolls);
+
+            if (chosenItemIndex == -1)
+                return -1;
 
             return itemList[chosenItemIndex].GroupIndex;
         }
@@ -1448,7 +1481,10 @@ namespace DaggerfallWorkshop.Game.Items
                     return null;
             }
 
-            int chosenIngredID = ChooseIngredientFromFilteredList(ingredientsList, enemyLevel, shopQuality, playerLuck); // Possibly combine all these "FilteredList" methods into one later on if I change all the rarity values to something all equivalent. 
+            int chosenIngredID = ChooseIngredientFromFilteredList(ingredientsList, enemyLevel, shopQuality, playerLuck); // Possibly combine all these "FilteredList" methods into one later on if I change all the rarity values to something all equivalent.
+
+            if (chosenIngredID == -1)
+                return null;
 
             // Create item
             DaggerfallUnityItem ingredient = new DaggerfallUnityItem(ingredientGroup, chosenIngredID);
@@ -1507,6 +1543,9 @@ namespace DaggerfallWorkshop.Game.Items
             }
 
             int chosenIngredID = ChooseIngredientFromFilteredList(ingredientsList, enemyLevel, shopQuality, playerLuck);
+
+            if (chosenIngredID == -1)
+                return null;
 
             // Create item
             DaggerfallUnityItem ingredient = new DaggerfallUnityItem(ingredientGroup, chosenIngredID);
@@ -1600,7 +1639,13 @@ namespace DaggerfallWorkshop.Game.Items
                 ingredRolls = FormulaHelper.FillArray(ingredRollsList, arraystart, fillElements, i);
             }
 
-            int chosenIngredIndex = FormulaHelper.PickOneOf(ingredRolls);
+            int chosenIngredIndex = -1;
+
+            if (ingredRolls.Length > 0)
+                chosenIngredIndex = FormulaHelper.PickOneOf(ingredRolls);
+
+            if (chosenIngredIndex == -1)
+                return -1;
 
             return ingredList[chosenIngredIndex].GroupIndex;
         }
@@ -1678,6 +1723,9 @@ namespace DaggerfallWorkshop.Game.Items
             List<DaggerfallUnityItem> filteredPotList = GetPotTypeRecipeKeyList(FormulaHelper.PickOneOf(potTypeRolls));
 
             int chosenPotionRecipeKey = ChoosePotionFromFilteredList(filteredPotList, enemyLevel, shopQuality, playerLuck);
+
+            if (chosenPotionRecipeKey == -1)
+                return null;
 
             return CreatePotion(chosenPotionRecipeKey);
         }
@@ -1854,7 +1902,13 @@ namespace DaggerfallWorkshop.Game.Items
                 potRolls = FormulaHelper.FillArray(potRollsList, arraystart, fillElements, i);
             }
 
-            int chosenPotIndex = FormulaHelper.PickOneOf(potRolls);
+            int chosenPotIndex = -1;
+
+            if (potRolls.Length > 0)
+                chosenPotIndex = FormulaHelper.PickOneOf(potRolls);
+
+            if (chosenPotIndex == -1)
+                return -1;
 
             return potList[chosenPotIndex].PotionRecipeKey;
         }

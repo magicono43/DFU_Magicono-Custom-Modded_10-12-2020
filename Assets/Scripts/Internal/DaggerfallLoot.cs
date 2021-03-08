@@ -203,6 +203,7 @@ namespace DaggerfallWorkshop
             int playerLuck = playerEntity.Stats.LiveLuck;
             ItemHelper itemHelper = DaggerfallUnity.Instance.ItemHelper;
             byte[] itemGroups = { 0 };
+            int[] discrimItems = new int[] { };
 
             switch (buildingType)
             {
@@ -224,6 +225,7 @@ namespace DaggerfallWorkshop
                     break;
                 case DFLocation.BuildingTypes.Armorer:
                     itemGroups = DaggerfallLootDataTables.itemGroupsArmorer;
+                    discrimItems = new int[] { (int)Repair_Tools.Charging_Powder, (int)Repair_Tools.Epoxy_Glue, (int)Repair_Tools.Whetstone };
                     break;
                 case DFLocation.BuildingTypes.Bookseller:
                     itemGroups = DaggerfallLootDataTables.itemGroupsBookseller;
@@ -235,17 +237,20 @@ namespace DaggerfallWorkshop
                     itemGroups = DaggerfallLootDataTables.itemGroupsGemStore;
                     break;
                 case DFLocation.BuildingTypes.GeneralStore:
-                    itemGroups = DaggerfallLootDataTables.itemGroupsGeneralStore;
                     if (Dice100.SuccessRoll(20))
                         items.AddItem(ItemBuilder.CreateItem(ItemGroups.Transportation, (int)Transportation.Horse));
                     if (Dice100.SuccessRoll(30))
                         items.AddItem(ItemBuilder.CreateItem(ItemGroups.Transportation, (int)Transportation.Small_cart));
+                    itemGroups = DaggerfallLootDataTables.itemGroupsGeneralStore;
+                    discrimItems = new int[] { (int)Containers.Barrel, (int)Containers.Lockbox, (int)Liquid_Containers.Gem_Encrusted_Gold_Goblet, (int)Liquid_Containers.Gem_Encrusted_Silver_Goblet, (int)Liquid_Containers.Gold_Goblet, (int)Liquid_Containers.Silver_Goblet };
                     break;
                 case DFLocation.BuildingTypes.PawnShop:
                     itemGroups = DaggerfallLootDataTables.itemGroupsPawnShop;
+                    discrimItems = new int[] { (int)Containers.Barrel, (int)Containers.Bucket, (int)Containers.Urn, (int)Containers.Urn, (int)Containers.Snuff_Box, (int)Containers.Quiver, (int)Liquid_Containers.Empty_Bottle, (int)Liquid_Containers.Wooden_Cup, (int)Liquid_Containers.Tin_Goblet };
                     break;
                 case DFLocation.BuildingTypes.WeaponSmith:
                     itemGroups = DaggerfallLootDataTables.itemGroupsWeaponSmith;
+                    discrimItems = new int[] { (int)Repair_Tools.Charging_Powder, (int)Repair_Tools.Armorers_Hammer, (int)Repair_Tools.Jewelers_Pliers, (int)Repair_Tools.Sewing_Kit };
                     break;
             }
 
@@ -289,12 +294,12 @@ namespace DaggerfallWorkshop
                         }
                         else if ((int)itemGroup == (int)ItemGroups.Jewellery || ((int)itemGroup >= (int)ItemGroups.Tiara_Jewelry && (int)itemGroup <= (int)ItemGroups.Bracelet_Jewelry))
                         {
-                            item = ItemBuilder.CreateRandomJewelryOfRandomSlot(-1, shopQuality, playerLuck);
+                            item = ItemBuilder.CreateRandomJewelryOfRandomSlot(-1, shopQuality, playerLuck, discrimItems);
                         }
                         else
                         {
-                            item = ItemBuilder.CreateRandomItemOfItemgroup(itemGroup, -1, shopQuality, playerLuck);
-                            if (DaggerfallUnity.Settings.PlayerTorchFromItems && item.IsOfTemplate(ItemGroups.UselessItems2, (int)UselessItems2.Oil))
+                            item = ItemBuilder.CreateRandomItemOfItemgroup(itemGroup, -1, shopQuality, playerLuck, discrimItems); // For filter could make a method to populate the discrimItem para values and just change them based on shop types, maybe.
+                            if (item != null && DaggerfallUnity.Settings.PlayerTorchFromItems && item.IsOfTemplate(ItemGroups.UselessItems2, (int)UselessItems2.Oil))
                                 item.stackCount = Random.Range(5, 20 + 1);  // Shops stock 5-20 bottles
                         }
                         items.AddItem(item);
