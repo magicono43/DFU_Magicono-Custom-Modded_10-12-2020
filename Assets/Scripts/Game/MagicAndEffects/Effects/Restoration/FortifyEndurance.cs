@@ -65,7 +65,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Sanguine's Endurance",
                 80,
                 0,
-                20,
+                80,
                 sanguineEnduranceSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FlowerPlantIngredients.Red_rose,

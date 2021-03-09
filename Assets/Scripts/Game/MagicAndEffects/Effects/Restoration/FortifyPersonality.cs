@@ -66,7 +66,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Dibella's Allure",
                 96,
                 0,
-                20,
+                80,
                 dibellaAllureSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FlowerPlantIngredients.Red_rose,

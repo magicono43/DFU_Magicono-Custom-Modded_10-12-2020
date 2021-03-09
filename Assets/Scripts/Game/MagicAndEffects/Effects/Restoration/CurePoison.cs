@@ -47,7 +47,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Cure Poison",
                 34,
                 0,
-                30,
+                40,
                 curePoisonSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FruitPlantIngredients.Green_berries,

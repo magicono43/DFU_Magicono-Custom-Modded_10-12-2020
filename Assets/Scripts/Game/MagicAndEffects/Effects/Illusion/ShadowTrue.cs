@@ -50,7 +50,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "True Shadow Form",
                 82,
                 0,
-                15,
+                85,
                 trueShadowFormSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FlowerPlantIngredients.Black_rose,

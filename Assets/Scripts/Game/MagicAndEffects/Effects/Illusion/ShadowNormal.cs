@@ -50,7 +50,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Lesser Shadow Form",
                 28,
                 0,
-                25,
+                45,
                 lesserShadowFormSettings,
                 (int)Items.SolventIngredients.Pure_water,
                 (int)Items.FruitPlantIngredients.Fig,

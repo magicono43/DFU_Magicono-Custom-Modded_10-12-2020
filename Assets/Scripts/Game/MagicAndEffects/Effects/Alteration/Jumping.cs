@@ -47,7 +47,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Spring Shoes",
                 19,
                 0,
-                40,
+                30,
                 springShoesSettings,
                 (int)Items.SolventIngredients.Nectar,
                 (int)Items.FlowerPlantIngredients.Yellow_rose,

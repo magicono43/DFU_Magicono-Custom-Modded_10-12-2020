@@ -622,12 +622,12 @@ namespace DaggerfallWorkshop.Game.Items
 
             for (int i = 0; i < bookList.Count; i++)
             {
-                int bookRarity = (bookList[i].rarity - 21) * -1; // This is to "flip" the rarity values, so 20 will become 1 and 1 will become 20. 
+                int bookRarity = (bookList[i].rarity - 101) * -1; // This is to "flip" the rarity values, so 20 will become 1 and 1 will become 20. 
                 int arraystart = bookRollsList.Count;
                 int fillElements = 0;
                 if (enemyLevel != -1)
                 {
-                    if (bookRarity >= 15)
+                    if (bookRarity >= 60)
                     {
                         if (enemyLevel >= 21)
                             fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity - (enemyLevel / 1.5f)), 1, 400);
@@ -636,7 +636,7 @@ namespace DaggerfallWorkshop.Game.Items
                         else
                             fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity + (60f / enemyLevel)), 1, 400);
                     }
-                    else if (bookRarity >= 8)
+                    else if (bookRarity >= 35)
                     {
                         if (enemyLevel >= 21)
                             fillElements = (int)Mathf.Clamp(Mathf.Ceil(bookRarity + enemyLevel), 1, 400);
@@ -657,7 +657,7 @@ namespace DaggerfallWorkshop.Game.Items
                 }
                 else if (shopQuality != -1)
                 {
-                    if (shopQuality < Mathf.Floor((((bookRarity - 21) * -1) - 4) / 5)) // This makes it so items with a higher rarity value than the shop quality in question will not be able to generate in that shop. 
+                    if (shopQuality < Mathf.Floor((((bookRarity - 101) * -1) - 20) / 5)) // This makes it so items with a higher rarity value than the shop quality in question will not be able to generate in that shop. 
                     {
                         continue;
                     }
@@ -666,11 +666,11 @@ namespace DaggerfallWorkshop.Game.Items
                         float luckMod = (playerLuck - 50) / 5f;
                         float qualityMod = shopQuality;
 
-                        if (bookRarity >= 15)
+                        if (bookRarity >= 60)
                         {
                             fillElements = (int)Mathf.Clamp(Mathf.Ceil((bookRarity * 2.5f) + ((qualityMod + luckMod) * 2)), 1, 400);
                         }
-                        else if (bookRarity >= 8)
+                        else if (bookRarity >= 35)
                         {
                             fillElements = (int)Mathf.Clamp(Mathf.Ceil((bookRarity * 1.5f) + (qualityMod + luckMod)), 1, 400);
                         }
@@ -684,11 +684,11 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     float luckMod = (playerLuck - 50) / 5f;
 
-                    if (bookRarity >= 15)
+                    if (bookRarity >= 60)
                     {
                         fillElements = (int)Mathf.Clamp(Mathf.Ceil((bookRarity * 2.5f) + (luckMod * 2)), 1, 400);
                     }
-                    else if (bookRarity >= 8)
+                    else if (bookRarity >= 35)
                     {
                         fillElements = (int)Mathf.Clamp(Mathf.Ceil((bookRarity * 1.5f) + luckMod), 1, 400);
                     }
@@ -1824,41 +1824,42 @@ namespace DaggerfallWorkshop.Game.Items
             for (int i = 0; i < potList.Count; i++)
             {
                 MagicAndEffects.PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(potList[i].PotionRecipeKey);
+                int potionRarity = (potionRecipe.Rarity - 101) * -1; // This is to "flip" the rarity values, so 100 will become 1 and 1 will become 100. 
                 int arraystart = potRollsList.Count;
                 int fillElements = 0;
                 if (enemyLevel != -1)
                 {
-                    if (potionRecipe.Rarity >= 30)
+                    if (potionRarity >= 60)
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 1.5f)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity - (enemyLevel / 1.5f)), 1, 400);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (enemyLevel / 2.5f)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity - (enemyLevel / 2.5f)), 1, 400);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (120f / enemyLevel)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity + (120f / enemyLevel)), 1, 400);
                     }
-                    else if (potionRecipe.Rarity >= 15)
+                    else if (potionRarity >= 35)
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + enemyLevel), 1, 300);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity + enemyLevel), 1, 300);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity + (enemyLevel / 2f)), 1, 400);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity - (10f / enemyLevel)), 1, 400);
                     }
                     else
                     {
                         if (enemyLevel >= 21)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity + (enemyLevel / 2f)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity + (enemyLevel / 2f)), 1, 400);
                         else if (enemyLevel >= 11)
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (5f / enemyLevel)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity - (5f / enemyLevel)), 1, 400);
                         else
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (10f / enemyLevel)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity - (10f / enemyLevel)), 1, 400);
                     }
                 }
                 else if (shopQuality != -1)
                 {
-                    if (shopQuality < Mathf.Floor((potionRecipe.Rarity - 12) / 5)) // This makes it so items with a higher rarity value than the shop quality in question will not be able to generate in that shop. 
+                    if (shopQuality < Mathf.Floor((((potionRarity - 101) * -1) - 20) / 5)) // This makes it so items with a higher rarity value than the shop quality in question will not be able to generate in that shop. 
                     {
                         continue;
                     }
@@ -1867,17 +1868,17 @@ namespace DaggerfallWorkshop.Game.Items
                         float luckMod = (playerLuck - 50) / 5f;
                         float qualityMod = shopQuality;
 
-                        if (potionRecipe.Rarity >= 30)
+                        if (potionRarity >= 60)
                         {
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRecipe.Rarity * 2.5f) + ((qualityMod + luckMod) * 2)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRarity * 2.5f) + ((qualityMod + luckMod) * 2)), 1, 400);
                         }
-                        else if (potionRecipe.Rarity >= 15)
+                        else if (potionRarity >= 35)
                         {
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRecipe.Rarity * 1.5f) + (qualityMod + luckMod)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRarity * 1.5f) + (qualityMod + luckMod)), 1, 400);
                         }
                         else
                         {
-                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - (qualityMod + luckMod)), 1, 400);
+                            fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity - (qualityMod + luckMod)), 1, 400);
                         }
                     }
                 }
@@ -1885,17 +1886,17 @@ namespace DaggerfallWorkshop.Game.Items
                 {
                     float luckMod = (playerLuck - 50) / 5f;
 
-                    if (potionRecipe.Rarity >= 30)
+                    if (potionRarity >= 60)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRecipe.Rarity * 2.5f) + (luckMod * 2)), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRarity * 2.5f) + (luckMod * 2)), 1, 400);
                     }
-                    else if (potionRecipe.Rarity >= 15)
+                    else if (potionRarity >= 35)
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRecipe.Rarity * 1.5f) + luckMod), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil((potionRarity * 1.5f) + luckMod), 1, 400);
                     }
                     else
                     {
-                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRecipe.Rarity - luckMod), 1, 400);
+                        fillElements = (int)Mathf.Clamp(Mathf.Ceil(potionRarity - luckMod), 1, 400);
                     }
                 }
 

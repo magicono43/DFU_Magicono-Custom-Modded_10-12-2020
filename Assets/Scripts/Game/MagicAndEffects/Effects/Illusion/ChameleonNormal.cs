@@ -50,7 +50,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Lesser Chameleon Form",
                 18,
                 0,
-                35,
+                30,
                 lesserChameleonFormSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.FruitPlantIngredients.Green_berries,

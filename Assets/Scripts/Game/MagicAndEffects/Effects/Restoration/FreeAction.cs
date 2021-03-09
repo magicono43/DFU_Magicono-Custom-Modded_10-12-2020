@@ -46,7 +46,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Free Action",
                 165,
                 0,
-                15,
+                75,
                 freeActionSettings,
                 (int)Items.SolventIngredients.Ichor,
                 (int)Items.MiscPlantIngredients.Bamboo,

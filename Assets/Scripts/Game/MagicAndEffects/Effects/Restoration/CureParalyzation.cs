@@ -46,7 +46,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Cure Paralysis",
                 28,
                 0,
-                40,
+                35,
                 cureParalysisSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.FruitPlantIngredients.Yellow_berries,

@@ -48,7 +48,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
                 "Safe Landing",
                 16,
                 0,
-                40,
+                25,
                 safeLandingSettings,
                 (int)Items.SolventIngredients.Rain_water,
                 (int)Items.MiscPlantIngredients.Green_leaves,
