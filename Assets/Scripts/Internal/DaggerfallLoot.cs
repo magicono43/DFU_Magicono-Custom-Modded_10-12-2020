@@ -430,5 +430,63 @@ namespace DaggerfallWorkshop
                 }
             }
         }
+
+        public void StockMerchantMagicItems(PlayerGPS.DiscoveredBuilding buildingData, bool onlySoulGems = false)
+        {
+            stockedDate = CreateStockedDate(DaggerfallUnity.Instance.WorldTime.Now);
+            items.Clear();
+
+            int buildingQuality = buildingData.quality;
+            Game.Entity.PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+            int playerLuck = playerEntity.Stats.LiveLuck;
+            int numOfItems = (buildingData.quality / 2) + 1;
+
+            if (!onlySoulGems)
+            {
+                for (int i = 0; i <= numOfItems; i++)
+                {
+                    // Create magic item which is already identified
+                    DaggerfallUnityItem magicItem = ItemBuilder.CreateRandomMagicItem(playerEntity.Gender, playerEntity.Race, -1, buildingQuality, playerLuck);
+                    magicItem.IdentifyItem();
+                    items.AddItem(magicItem);
+                }
+                items.AddItem(ItemBuilder.CreateItem(ItemGroups.MiscItems, (int)MiscItems.Spellbook));
+            }
+
+            if (onlySoulGems)
+                numOfItems *= 2;
+
+            for (int i = 0; i <= numOfItems; i++)
+            {
+                DaggerfallUnityItem magicItem;
+                if (Dice100.FailedRoll(25))
+                {
+                    // Empty soul trap
+                    magicItem = ItemBuilder.CreateItem(ItemGroups.MiscItems, (int)MiscItems.Soul_trap);
+                    magicItem.value = 5000;
+                    magicItem.TrappedSoulType = MobileTypes.None;
+                }
+                else
+                {
+                    // Filled soul trap
+                    magicItem = ItemBuilder.CreateRandomlyFilledSoulTrap();
+                }
+                items.AddItem(magicItem);
+            }
+        }
+
+        public void StockMerchantGuildPotions(PlayerGPS.DiscoveredBuilding buildingData) // I'll want to work on this more at some point, but for now it works well enough for testing at least. 
+        {
+            stockedDate = CreateStockedDate(DaggerfallUnity.Instance.WorldTime.Now);
+            items.Clear();
+
+            int buildingQuality = buildingData.quality;
+            Game.Entity.PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+            int playerLuck = playerEntity.Stats.LiveLuck;
+
+            int n = buildingQuality * 3;
+            while (n-- >= 0)
+                items.AddItem(ItemBuilder.CreateRandomPotion(UnityEngine.Random.Range(1, 3)));
+        }
     }
 }

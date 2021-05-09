@@ -613,7 +613,8 @@ namespace DaggerfallWorkshop.Utility
             int textureRecord,
             ulong loadID = 0,
             EnemyEntity enemyEntity = null,
-            bool adjustPosition = true)
+            bool adjustPosition = true,
+            string npcName = "")
         {
             // Setup initial loot container prefab
             GameObject go = InstantiatePrefab(DaggerfallUnity.Instance.Option_LootContainerPrefab.gameObject, containerType.ToString(), parent, position);
@@ -649,6 +650,11 @@ namespace DaggerfallWorkshop.Utility
                 {
                     loot.entityName = TextManager.Instance.GetLocalizedEnemyName(enemyEntity.MobileEnemy.ID);
                     loot.isEnemyClass = (enemyEntity.EntityType == EntityTypes.EnemyClass);
+                }
+                if (npcName != "")
+                {
+                    loot.entityName = npcName;
+                    loot.customDrop = true;
                 }
             }
 

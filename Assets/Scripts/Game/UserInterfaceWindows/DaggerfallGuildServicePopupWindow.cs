@@ -227,65 +227,6 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
 
         #region Private Methods
 
-        ItemCollection GetMerchantMagicItems(bool onlySoulGems = false)
-        {
-            PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
-            ItemCollection items = new ItemCollection();
-            int playerLuck = playerEntity.Stats.LiveLuck;
-            int hallQuality = buildingDiscoveryData.quality;
-            int numOfItems = (buildingDiscoveryData.quality / 2) + 1;
-
-            // Seed random from game time to rotate magic stock every 24 game hours
-            // This more or less resolves issue of magic item stock not being deterministic every time player opens window
-            // Doesn't match classic exactly as classic stocking method unknown, but should be "good enough" for now
-            int seed = (int)(DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime() / DaggerfallDateTime.MinutesPerDay);
-            UnityEngine.Random.InitState(seed);
-
-            if (!onlySoulGems)
-            {
-                for (int i = 0; i <= numOfItems; i++)
-                {
-                    // Create magic item which is already identified
-                    DaggerfallUnityItem magicItem = ItemBuilder.CreateRandomMagicItem(playerEntity.Gender, playerEntity.Race, -1, hallQuality, playerLuck);
-                    magicItem.IdentifyItem();
-                    items.AddItem(magicItem);
-                }
-                items.AddItem(ItemBuilder.CreateItem(ItemGroups.MiscItems, (int)MiscItems.Spellbook));
-            }
-
-            if (guild.CanAccessService(GuildServices.BuySoulgems))
-            {
-                for (int i = 0; i <= numOfItems; i++)
-                {
-                    DaggerfallUnityItem magicItem;
-                    if (Dice100.FailedRoll(25))
-                    {
-                        // Empty soul trap
-                        magicItem = ItemBuilder.CreateItem(ItemGroups.MiscItems, (int)MiscItems.Soul_trap);
-                        magicItem.value = 5000;
-                        magicItem.TrappedSoulType = MobileTypes.None;
-                    }
-                    else
-                    {
-                        // Filled soul trap
-                        magicItem = ItemBuilder.CreateRandomlyFilledSoulTrap();
-                    }
-                    items.AddItem(magicItem);
-                }
-            }
-            return items;
-        }
-
-        // TODO: classic seems to generate each time player select buy potions.. should we make more persistent for DFU?
-        ItemCollection GetMerchantPotions()
-        {
-            ItemCollection potions = new ItemCollection();
-            int n = buildingDiscoveryData.quality;
-            while (n-- >= 0)
-                potions.AddItem(ItemBuilder.CreateRandomPotion(UnityEngine.Random.Range(1, 5)));
-            return potions;
-        }
-
         void LoadTextures(bool member)
         {
             baseTexture = ImageReader.GetTexture(member ? memberTextureName : baseTextureName);
@@ -317,6 +258,9 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
 
         private void DoGuildService()
         {
+            DaggerfallLoot[] lootContainers = null;
+            ItemCollection guildShopInventory = null;
+
             // Check access to service
             if (!guild.CanAccessService(service))
             {
@@ -364,9 +308,19 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                     break;
 
                 case GuildServices.BuyPotions:
+                    lootContainers = UnityEngine.Object.FindObjectsOfType<DaggerfallLoot>();
+                    for (int i = 0; i < lootContainers.Length; i++)
+                    {
+                        DaggerfallLoot lootContainer = lootContainers[i];
+                        if (lootContainer.entityName == serviceNPC.DisplayName)
+                        {
+                            guildShopInventory = lootContainer.Items;
+                        }
+                    }
+
                     CloseWindow();
                     tradeWindow = (DaggerfallTradeWindow)UIWindowFactory.GetInstanceWithArgs(UIWindowType.Trade, new object[] { uiManager, this, DaggerfallTradeWindow.WindowModes.Buy, guild });
-                    tradeWindow.MerchantItems = GetMerchantPotions();
+                    tradeWindow.MerchantItems = guildShopInventory;
                     uiManager.PushWindow(tradeWindow);
                     break;
 
@@ -389,9 +343,19 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                     break;
 
                 case GuildServices.BuyMagicItems:   // TODO: switch items depending on npcService?
+                    lootContainers = UnityEngine.Object.FindObjectsOfType<DaggerfallLoot>();
+                    for (int i = 0; i < lootContainers.Length; i++)
+                    {
+                        DaggerfallLoot lootContainer = lootContainers[i];
+                        if (lootContainer.entityName == serviceNPC.DisplayName)
+                        {
+                            guildShopInventory = lootContainer.Items;
+                        }
+                    }
+
                     CloseWindow();
                     tradeWindow = (DaggerfallTradeWindow)UIWindowFactory.GetInstanceWithArgs(UIWindowType.Trade, new object[] { uiManager, this, DaggerfallTradeWindow.WindowModes.Buy, guild });
-                    tradeWindow.MerchantItems = GetMerchantMagicItems();
+                    tradeWindow.MerchantItems = guildShopInventory;
                     uiManager.PushWindow(tradeWindow);
                     break;
 
@@ -433,9 +397,19 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                     break;
 
                 case GuildServices.BuySoulgems:
+                    lootContainers = UnityEngine.Object.FindObjectsOfType<DaggerfallLoot>();
+                    for (int i = 0; i < lootContainers.Length; i++)
+                    {
+                        DaggerfallLoot lootContainer = lootContainers[i];
+                        if (lootContainer.entityName == serviceNPC.DisplayName)
+                        {
+                            guildShopInventory = lootContainer.Items;
+                        }
+                    }
+
                     CloseWindow();
                     tradeWindow = (DaggerfallTradeWindow)UIWindowFactory.GetInstanceWithArgs(UIWindowType.Trade, new object[] { uiManager, this, DaggerfallTradeWindow.WindowModes.Buy, guild });
-                    tradeWindow.MerchantItems = GetMerchantMagicItems(true);
+                    tradeWindow.MerchantItems = guildShopInventory;
                     uiManager.PushWindow(tradeWindow);
                     break;
 

@@ -1433,6 +1433,145 @@ namespace DaggerfallWorkshop.Game
                             return;
                         }
                     }
+
+                    // Generate "shelf" for the stock of this NPC and their respective guild service
+                    if (factionData.id == (int)GuildNpcServices.MG_BuyMagicItems || factionData.id == (int)GuildNpcServices.TJu_BuyMagicItems ||
+                        factionData.id == (int)GuildNpcServices.DB_BuySoulgems || factionData.id == (int)GuildNpcServices.TAr_BuySoulgems)
+                    {
+                        // "Parse" all of the loot containers in the current scene/cell and use that info to determine if a new loot-pile should be generated for a guild service owner.
+                        DaggerfallLoot[] lootContainers = FindObjectsOfType<DaggerfallLoot>();
+
+                        if (lootContainers.Length <= 0) // If no loot-piles currently in scene, create new one for guild service stock.
+                        {
+                            // Generate a new loot-pile
+                            DaggerfallLoot loot = GameObjectHelper.CreateLootContainer(
+                                LootContainerTypes.CorpseMarker,
+                                InventoryContainerImages.Merchant,
+                                new Vector3(0, 0, 0),
+                                npc.transform,
+                                DaggerfallLootDataTables.academicArchive,
+                                0, DaggerfallUnity.NextUID,
+                                null, true, npc.DisplayName);
+
+                            // Stock guild shop shelf
+                            if (factionData.id == (int)GuildNpcServices.DB_BuySoulgems || factionData.id == (int)GuildNpcServices.TAr_BuySoulgems)
+                            {
+                                if (loot.stockedDate < DaggerfallLoot.CreateStockedDate(DaggerfallUnity.Instance.WorldTime.Now))
+                                    loot.StockMerchantMagicItems(playerEnterExit.BuildingDiscoveryData, true);
+                            }
+                            else
+                            {
+                                if (loot.stockedDate < DaggerfallLoot.CreateStockedDate(DaggerfallUnity.Instance.WorldTime.Now))
+                                    loot.StockMerchantMagicItems(playerEnterExit.BuildingDiscoveryData);
+                            }
+                        }
+                        else
+                        {
+                            int count = 0;
+                            for (int i = 0; i < lootContainers.Length; i++)
+                            {
+                                DaggerfallLoot lootContainer = lootContainers[i];
+                                if (lootContainer.entityName == npc.DisplayName && lootContainer.stockedDate < DaggerfallLoot.CreateStockedDate(DaggerfallUnity.Instance.WorldTime.Now))
+                                {
+                                    if (factionData.id == (int)GuildNpcServices.DB_BuySoulgems || factionData.id == (int)GuildNpcServices.TAr_BuySoulgems)
+                                        lootContainer.StockMerchantMagicItems(playerEnterExit.BuildingDiscoveryData, true); // If a loot-pile stockDate is expired and attached to NPC, restock same loot-pile
+                                    else
+                                        lootContainer.StockMerchantMagicItems(playerEnterExit.BuildingDiscoveryData);
+                                }
+                                else if (lootContainer.entityName == npc.DisplayName) // If a loot-pile is attached to NPC, but not expired, do nothing (which keeps from making new pile as well.)
+                                {
+                                    // Do nothing.
+                                }
+                                else // If a loot-pile is not attached to NPC, increment counter.
+                                    count++;
+                            }
+
+                            if (count == lootContainers.Length) // If counter is equal to total lootContainers length, create a new loot-pile, otherwise no new loot-pile is created.
+                            {
+                                // Generate a new loot-pile
+                                DaggerfallLoot loot = GameObjectHelper.CreateLootContainer(
+                                    LootContainerTypes.CorpseMarker,
+                                    InventoryContainerImages.Merchant,
+                                    new Vector3(0, 0, 0),
+                                    npc.transform,
+                                    DaggerfallLootDataTables.academicArchive,
+                                    0, DaggerfallUnity.NextUID,
+                                    null, true, npc.DisplayName);
+
+                                // Stock guild shop shelf
+                                if (factionData.id == (int)GuildNpcServices.DB_BuySoulgems || factionData.id == (int)GuildNpcServices.TAr_BuySoulgems)
+                                {
+                                    if (loot.stockedDate < DaggerfallLoot.CreateStockedDate(DaggerfallUnity.Instance.WorldTime.Now))
+                                        loot.StockMerchantMagicItems(playerEnterExit.BuildingDiscoveryData, true);
+                                }
+                                else
+                                {
+                                    if (loot.stockedDate < DaggerfallLoot.CreateStockedDate(DaggerfallUnity.Instance.WorldTime.Now))
+                                        loot.StockMerchantMagicItems(playerEnterExit.BuildingDiscoveryData);
+                                }
+                            }
+                        }
+                    }
+                    else if (factionData.id == (int)GuildNpcServices.DB_BuyPotions ||
+                        factionData.id == (int)GuildNpcServices.TAk_BuyPotions || factionData.id == (int)GuildNpcServices.TAr_BuyPotions || factionData.id == (int)GuildNpcServices.TDi_BuyPotions ||
+                        factionData.id == (int)GuildNpcServices.TMa_BuyPotions || factionData.id == (int)GuildNpcServices.TSt_BuyPotions || factionData.id == (int)GuildNpcServices.TZe_BuyPotions)
+                    {
+                        // "Parse" all of the loot containers in the current scene/cell and use that info to determine if a new loot-pile should be generated for a guild service owner.
+                        DaggerfallLoot[] lootContainers = FindObjectsOfType<DaggerfallLoot>();
+
+                        if (lootContainers.Length <= 0) // If no loot-piles currently in scene, create new one for guild service stock.
+                        {
+                            // Generate a new loot-pile
+                            DaggerfallLoot loot = GameObjectHelper.CreateLootContainer(
+                                LootContainerTypes.CorpseMarker,
+                                InventoryContainerImages.Merchant,
+                                new Vector3(0, 0, 0),
+                                npc.transform,
+                                DaggerfallLootDataTables.boxesNbottlesArchive,
+                                0, DaggerfallUnity.NextUID,
+                                null, true, npc.DisplayName);
+
+                            // Stock guild shop shelf
+                            if (loot.stockedDate < DaggerfallLoot.CreateStockedDate(DaggerfallUnity.Instance.WorldTime.Now))
+                                loot.StockMerchantGuildPotions(playerEnterExit.BuildingDiscoveryData);
+                        }
+                        else
+                        {
+                            int count = 0;
+                            for (int i = 0; i < lootContainers.Length; i++)
+                            {
+                                DaggerfallLoot lootContainer = lootContainers[i];
+                                if (lootContainer.entityName == npc.DisplayName && lootContainer.stockedDate < DaggerfallLoot.CreateStockedDate(DaggerfallUnity.Instance.WorldTime.Now))
+                                {
+                                    lootContainer.StockMerchantGuildPotions(playerEnterExit.BuildingDiscoveryData); // If a loot-pile stockDate is expired and attached to NPC, restock same loot-pile
+                                }
+                                else if (lootContainer.entityName == npc.DisplayName) // If a loot-pile is attached to NPC, but not expired, do nothing (which keeps from making new pile as well.)
+                                {
+                                    // Do nothing.
+                                }
+                                else // If a loot-pile is not attached to NPC, increment counter.
+                                    count++;
+                            }
+
+                            if (count == lootContainers.Length) // If counter is equal to total lootContainers length, create a new loot-pile, otherwise no new loot-pile is created.
+                            {
+                                // Generate a new loot-pile
+                                DaggerfallLoot loot = GameObjectHelper.CreateLootContainer(
+                                    LootContainerTypes.CorpseMarker,
+                                    InventoryContainerImages.Merchant,
+                                    new Vector3(0, 0, 0),
+                                    npc.transform,
+                                    DaggerfallLootDataTables.boxesNbottlesArchive,
+                                    0, DaggerfallUnity.NextUID,
+                                    null, true, npc.DisplayName);
+
+                                // Stock guild shop shelf
+                                if (loot.stockedDate < DaggerfallLoot.CreateStockedDate(DaggerfallUnity.Instance.WorldTime.Now))
+                                    loot.StockMerchantGuildPotions(playerEnterExit.BuildingDiscoveryData);
+                            }
+                        }
+                    }
+
                     // Popup guild service menu.
                     uiManager.PushWindow(UIWindowFactory.GetInstanceWithArgs(UIWindowType.GuildServicePopup, new object[] { uiManager, npc, guildGroup, playerEnterExit.BuildingDiscoveryData.factionID }));
                 }
