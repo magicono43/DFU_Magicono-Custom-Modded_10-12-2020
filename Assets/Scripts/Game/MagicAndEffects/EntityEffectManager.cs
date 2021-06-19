@@ -63,6 +63,8 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         DaggerfallEntityBehaviour entityBehaviour = null;
         EntityTypes entityType;
 
+        GameObject summonedEntity = null;
+
         readonly List<LiveEffectBundle> instancedBundles = new List<LiveEffectBundle>();
         readonly List<LiveEffectBundle> bundlesToRemove = new List<LiveEffectBundle>();
         bool wipeAllBundles = false;
@@ -141,6 +143,17 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         public LiveEffectBundle[] PoisonBundles
         {
             get { return GetPoisonBundles(); }
+        }
+
+        public bool HasAttachedSummonedEntity
+        {
+            get { return (summonedEntity != null); }
+        }
+
+        public GameObject AttachedSummonedEntity
+        {
+            get { return summonedEntity; }
+            set { summonedEntity = value; }
         }
 
         #endregion

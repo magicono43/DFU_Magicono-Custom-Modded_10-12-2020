@@ -28,12 +28,12 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
         public override void Start(EntityEffectManager manager, DaggerfallEntityBehaviour caster = null)
         {
             base.Start(manager, caster);
+            StartSummon();
         }
 
         public override void ConstantEffect()
         {
             base.ConstantEffect();
-            StartSummon();
         }
 
         public override void Resume(EntityEffectManager.EffectSaveData_v1 effectData, EntityEffectManager manager, DaggerfallEntityBehaviour caster = null)
@@ -68,35 +68,19 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 
             // Part where monster ally is actually created
             UnityEngine.GameObject player = GameManager.Instance.PlayerObject;
-            int id = 0;
-            int team = 0;
-            UnityEngine.GameObject[] mobile = DaggerfallWorkshop.Utility.GameObjectHelper.CreateFoeGameObjects(player.transform.position + player.transform.forward * 2, (MobileTypes)id, 1);
+            UnityEngine.GameObject[] mobile = DaggerfallWorkshop.Utility.GameObjectHelper.CreateFoeGameObjects(player.transform.position + player.transform.forward * 2, (MobileTypes)(int)monsterCareer, 1, MobileReactions.Hostile, null, true);
 
             DaggerfallEntityBehaviour behaviour = mobile[0].GetComponent<DaggerfallEntityBehaviour>();
             EnemyEntity entity = behaviour.Entity as EnemyEntity;
-            if (args.Length > 1)
-            {
-                entity.Team = (MobileTeams)team;
-            }
-            else
-                team = (int)entity.Team;
 
-            if (args.Length > 2)
-            {
-                entity.Level = level;
-            }
-            else
-                level = entity.Level;
-
-            mobile[0].transform.LookAt(mobile[0].transform.position + (mobile[0].transform.position - player.transform.position));
+            //mobile[0].transform.LookAt(mobile[0].transform.position + (mobile[0].transform.position - player.transform.position));
             mobile[0].SetActive(true);
-
-            return string.Format("Created {0} on team {1} of level {2}", (MobileTypes)id, (MobileTeams)team, level);
+            manager.AttachedSummonedEntity = mobile[0];
 
             // Output "You Summoned Something" if the host manager is player
             if (awakeAlert && manager.EntityBehaviour == GameManager.Instance.PlayerEntityBehaviour)
             {
-                DaggerfallUI.AddHUDText("You Summon An Ally", 1.5f); // Change to say exactly what you summoned, rat, etc.
+                DaggerfallUI.AddHUDText(string.Format("You Summon A {0}", (MobileTypes)monsterCareer), 1.5f);
                 awakeAlert = false;
             }
         }
@@ -108,7 +92,10 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
             if (!entityBehaviour)
                 return;
 
-            entityBehaviour.Entity.IsSilenced = false;
+            UnityEngine.GameObject summonedEntity = manager.AttachedSummonedEntity;
+            UnityEngine.GameObject.Destroy(summonedEntity);
+            manager.AttachedSummonedEntity = null;
+            ResignAsIncumbent();
         }
 
         #region Serialization

@@ -15,7 +15,7 @@ using DaggerfallConnect.Arena2;
 namespace DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects
 {
     /// <summary>
-    /// Fortify Attribute - Luck
+    /// Summon - Rat
     /// </summary>
     public class SummonRat : SummonEffect
     {
